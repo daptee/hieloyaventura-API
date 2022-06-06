@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
+use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\UserController;
@@ -25,7 +27,16 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::prefix('lenguages')->controller(LenguageController::class)->group(function () {
         Route::get('/', 'index');
     });
+    Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+    });
+    Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+    });
 });
+
 
 Route::get('/lenguage/{locale}', function ($locale) {
     if (!in_array($locale, ['en', 'es', 'por'])) {
