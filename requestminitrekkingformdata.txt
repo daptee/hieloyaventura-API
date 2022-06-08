@@ -1,0 +1,143 @@
+link_map:{{$randomUrl}}
+code_excurtion: {{$randomCountryCode}}
+price: 22500
+price_children: {{$randomPrice}}
+price_special: {{$randomPrice}}
+is_transfer: 1
+characteristics[0][icon_id]:
+characteristics[0][icon][file]:
+characteristics[0][icon][name]:
+characteristics[0][characteristic_type]:characteristics
+characteristics[0][order]:
+characteristics[0][translables][0][lenguage_id]:1
+characteristics[0][translables][0][name]:Característica de la actividad
+characteristics[0][translables][0][description]:
+characteristics[0][characteristics][0][translables][0][lenguage_id]:1
+characteristics[0][characteristics][0][translables][0][description]:La duración de la actividad es de aproximadamente 9.30hs. Se recomienda no organizar otros planes para ese día.
+characteristics[0][characteristics][0][icon][file]:
+characteristics[0][characteristics][0][icon][name]:
+characteristics[0][characteristics][0][order]:1
+characteristics[0][characteristics][1][translables][0][lenguage_id]:1
+characteristics[0][characteristics][1][translables][0][description]:La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo
+characteristics[0][characteristics][1][icon][file]:
+characteristics[0][characteristics][1][icon][name]:
+characteristics[0][characteristics][1][order]:2
+characteristics[0][characteristics][2][translables][0][lenguage_id]:1
+characteristics[0][characteristics][2][translables][0][description]:Opcional traslado con guía y visita de una hora aproximadamente a pasarelas.
+characteristics[0][characteristics][2][icon][file]:
+characteristics[0][characteristics][2][icon][name]:
+characteristics[0][characteristics][2][order]:3
+characteristics[0][characteristics][3][translables][0][lenguage_id]:1
+characteristics[0][characteristics][3][translables][0][description]:Nuestros guías hablan español e inglés.
+characteristics[0][characteristics][3][icon][file]:
+characteristics[0][characteristics][3][icon][name]:
+characteristics[0][characteristics][3][order]:4
+characteristics[0][characteristics][4][translables][0][lenguage_id]:1
+characteristics[0][characteristics][4][translables][0][description]:Solo apto para personas de 8 a 65 años. Sin excepción.
+characteristics[0][characteristics][4][icon][file]:
+characteristics[0][characteristics][4][icon][name]:
+characteristics[0][characteristics][4][order]:5
+characteristics[0][characteristics][5][translables][0][lenguage_id]:1
+characteristics[0][characteristics][5][translables][0][description]:Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar 3 horas, siendo parte del trayecto sobre el hielo y con crampones
+characteristics[0][characteristics][5][icon][file]:
+characteristics[0][characteristics][5][icon][name]:
+characteristics[0][characteristics][5][order]:6
+characteristics[1][icon_id]:
+characteristics[1][icon][file]:
+characteristics[1][icon][name]:
+characteristics[1][characteristic_type]:about
+characteristics[1][order]:
+characteristics[1][translables][0][lenguage_id]:1
+characteristics[1][translables][0][name]:Sobre esta experiencia
+characteristics[1][translables][0][description]:La excursión comienza con la búsqueda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los guías de turismo les brindarán información sobre el lugar, el glaciar y la excursión. <b>Una vez en el puerto “Bajo de las Sombras” (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 20 minutos de navegación frente a la imponente cara sur del Glaciar Perito Moreno. <b>Al desembarcar serán recibidos por nuestros expertos guías de montaña, quienes los conducirán a un acogedor refugio con una vista privilegiada del glaciar. A partir de aquí, ¡comienza el trekking! Iniciaremos el recorrido con una caminata por la costa del lago y con la vista posada en el glaciar para no perdernos la oportunidad de ver desprendimientos. Luego, los guías brindarán una charla sobre glaciología. <b>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo enmarcando el paisaje, se organizarán subgrupos de un máximo de 20 personas cada uno y se les colocarán los crampones y cascos provistos por la empresa. Esta excursión es altamente personalizada (un guía cada 10 pasajeros máximo). Una vez sobre el glaciar, recibirán una charla de seguridad y caminarán para disfrutar de este paraíso helado declarado Patrimonio de la Humanidad (1981). <b>El circuito sobre el glaciar es de dificultad media, la superficie del hielo es irregular pero firme y segura. Durante la caminata se podrá apreciar una variedad de formaciones típicas de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. <b>Al finalizar la caminata sobre el hielo, se recorrerá la zona periglaciar y la morena lateral desde donde obtendrán una vista panorámica del Glaciar Perito Moreno, las montañas y del lago. Luego, se emprenderá el regreso por un sendero que atraviesa el exuberante bosque andino patagónico, completando así las TRES HORAS DE CAMINATA POR LA COSTA DEL LAGO, MORRENA, HIELO Y BOSQUE (de las cuales, una hora aproximadamente es sobre el hielo glaciar). Al llegar al refugio los invitaremos con una bebida caliente y les haremos entrega de un souvenir. Poco tiempo después embarcarán para regresar al Puerto Bajo de las Sombras, pero antes contemplarán desde el barco las enormes paredes del glaciar. <b>La duración de la excursión con el traslado es de alrededor de diez horas en total e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. Allí podrán disfrutar de la espectacular vista panorámica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el Minitrekking dura cuatro horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida. <b>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. ¡Esto nos permite disfrutar de experiencias irrepetibles en el glaciar más lindo del mundo! ¡Los esperamos!
+characteristics[2][icon_id]:
+characteristics[2][icon][file]:
+characteristics[2][icon][name]:
+characteristics[2][characteristic_type]:before_buying
+characteristics[2][order]:
+characteristics[2][translables][0][lenguage_id]:1
+characteristics[2][translables][0][name]:Importante, antes de comprar
+characteristics[2][characteristics][0][translables][0][description]:Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar personas con:
+characteristics[2][characteristics][0][translables][0][lenguage_id]:1
+characteristics[2][characteristics][0][order]:0
+characteristics[2][characteristics][1][characteristics][0][translables][0][lenguage_id]:1
+characteristics[2][characteristics][1][characteristics][0][translables][0][description]:Obesidad (Índice de Masa Corporal igual o mayor a 30). Mas info.
+characteristics[2][characteristics][1][characteristics][0][icon][file]:
+characteristics[2][characteristics][1][characteristics][0][icon][name]:
+characteristics[2][characteristics][1][characteristics][0][characteristic_type]:point
+characteristics[2][characteristics][1][characteristics][0][order]:1
+characteristics[2][characteristics][1][characteristics][1][translables][0][lenguage_id]:1
+characteristics[2][characteristics][1][characteristics][1][translables][0][description]:Mujeres embarazadas.
+characteristics[2][characteristics][1][characteristics][1][icon][file]:
+characteristics[2][characteristics][1][characteristics][1][icon][name]:
+characteristics[2][characteristics][1][characteristics][1][characteristic_type]:point
+characteristics[2][characteristics][1][characteristics][1][order]:2
+characteristics[2][characteristics][1][characteristics][2][translables][0][lenguage_id]:1
+characteristics[2][characteristics][1][characteristics][2][translables][0][description]:Personas con cualquier grado o tipo de discapacidad física o mental que afecte su atención, marcha y/o coordinación.
+characteristics[2][characteristics][1][characteristics][2][icon][file]:
+characteristics[2][characteristics][1][characteristics][2][icon][name]:
+characteristics[2][characteristics][1][characteristics][2][characteristic_type]:point
+characteristics[2][characteristics][1][characteristics][2][order]:3
+characteristics[2][characteristics][1][characteristics][3][translables][0][lenguage_id]:1
+characteristics[2][characteristics][1][characteristics][3][translables][0][description]:Personas que sufran enfermedades cardiovasculares centrales o periféricas, que sus capacidades cardíacas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras prótesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y múltiples).
+characteristics[2][characteristics][1][characteristics][3][icon][file]:
+characteristics[2][characteristics][1][characteristics][3][icon][name]:
+characteristics[2][characteristics][1][characteristics][3][characteristic_type]:point
+characteristics[2][characteristics][1][characteristics][3][order]:4
+characteristics[2][characteristics][1][characteristics][4][translables][0][lenguage_id]:1
+characteristics[2][characteristics][1][characteristics][4][translables][0][description]:Personas que padezcan enfermedades provocadas de discapacidades respiratorias (EPOC, asma, enfisema, etc.)
+characteristics[2][characteristics][1][characteristics][4][icon][file]:
+characteristics[2][characteristics][1][characteristics][4][icon][name]:
+characteristics[2][characteristics][1][characteristics][4][characteristic_type]:point
+characteristics[2][characteristics][1][characteristics][4][order]:52e
+characteristics[2][characteristics][2][translables][0][description]:Los niños deben tener la capacidad psicofísica suficiente de para caminar 3 horas, de las cuales 1 hora y media es sobre el hielo con crampones.
+characteristics[2][characteristics][2][translables][0][lenguage_id]:1
+characteristics[2][characteristics][2][order]:6
+characteristics[3][characteristic_type]:itinerary
+characteristics[3][translables][0][lenguage_id]:1
+characteristics[3][translables][0][name]:Itinerario de la excursión
+characteristics[3][translables][0][description]:
+characteristics[3][characteristics][0][characteristics][0][translables][0][lenguage_id]:1
+characteristics[3][characteristics][0][characteristics][0][translables][0][name]:Salida a El Calafate
+characteristics[3][characteristics][0][characteristics][0][translables][0][description]:70 Km al Glaciar
+characteristics[3][characteristics][0][characteristics][0][icon][file]:
+characteristics[3][characteristics][0][characteristics][0][icon][name]:
+characteristics[3][characteristics][0][characteristics][0][order]:1
+characteristics[3][characteristics][0][characteristics][1][translables][0][lenguage_id]:1
+characteristics[3][characteristics][0][characteristics][1][translables][0][name]:Embarque en Puerto
+characteristics[3][characteristics][0][characteristics][1][translables][0][description]:20 min navegación
+characteristics[3][characteristics][0][characteristics][1][icon][file]:
+characteristics[3][characteristics][0][characteristics][1][icon][name]:
+characteristics[3][characteristics][0][characteristics][1][order]:2
+characteristics[3][characteristics][0][characteristics][2][translables][0][lenguage_id]:1
+characteristics[3][characteristics][0][characteristics][2][translables][0][name]:Trekking por la costa, el glaciar y el bosque
+characteristics[3][characteristics][0][characteristics][2][translables][0][description]:Trekking por la costa, el glaciar y el bosque
+characteristics[3][characteristics][0][characteristics][2][icon][file]:
+characteristics[3][characteristics][0][characteristics][2][icon][name]:
+characteristics[3][characteristics][0][characteristics][2][order]:3
+characteristics[3][characteristics][1][characteristics][0][translables][0][lenguage_id]:1
+characteristics[3][characteristics][1][characteristics][0][translables][0][name]:OPCIONAL CON TRASLADO
+characteristics[3][characteristics][1][characteristics][0][characteristic_type]:color_point
+characteristics[3][characteristics][1][characteristics][0][order]:1
+characteristics[3][characteristics][1][characteristics][1][translables][0][lenguage_id]:1
+characteristics[3][characteristics][1][characteristics][1][translables][0][name]:TOUR INCLUIDO
+characteristics[3][characteristics][1][characteristics][1][characteristic_type]:color_point
+characteristics[3][characteristics][1][characteristics][1][order]:2
+characteristics[4][characteristic_type]:carry
+characteristics[4][translables][0][lenguage_id]:1
+characteristics[4][translables][0][name]:Que llevar en la excursión
+characteristics[4][characteristics][0][translables][0][lenguage_id]:1
+characteristics[4][characteristics][0][translables][0][description]:Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.
+characteristics[4][characteristics][0][icon][file]:
+characteristics[4][characteristics][0][icon][name]:
+characteristics[4][characteristics][0][order]:1
+characteristics[4][characteristics][1][translables][0][lenguage_id]:1
+characteristics[4][characteristics][1][translables][0][description]:Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.
+characteristics[4][characteristics][1][icon][file]:
+characteristics[4][characteristics][1][icon][name]:
+characteristics[4][characteristics][1][order]:2
+characteristics[4][characteristics][2][translables][0][lenguage_id]:1
+characteristics[4][characteristics][2][translables][0][description]:Deberás presentar tu entrada al Parque Nacional. Podés comprarla acá (Seleccionar: “Acceso Corredor Rio Mitre y Glaciar Perito Moreno”) o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.
+characteristics[4][characteristics][2][icon][file]:
+characteristics[4][characteristics][2][icon][name]:
+characteristics[4][characteristics][2][order]:3
