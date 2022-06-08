@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Helpers\UploadFileHelper;
 use App\Http\Requests\StoreCharacteristicRequest;
 use App\Http\Requests\StoreCharacteristicTranslableRequest;
+use App\Http\Requests\StoreCharacteristicTypeRequest;
 use App\Http\Requests\StoreExcurtionRequest;
 use App\Http\Requests\UpdateExcurtionRequest;
 use App\Models\Characteristic;
 use App\Models\CharacteristicTranslable;
+use App\Models\CharacteristicType;
 use App\Models\Excurtion;
 use App\Models\ExcurtionCharacteristic;
 use App\Models\Icon;
+use App\Models\PictureExcurtion;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -70,11 +73,17 @@ class ExcurtionController extends Controller
     {
         $message = "Error al crear en la {$this->s}.";
         $data = $request->all();
-
+// dd($data);
         $new_excurtion = new $this->model($data);
         DB::beginTransaction();
         try {
             $new_excurtion->save();
+            if (isset($data['pictures'])) {
+                foreach ($data['pictures'] as $picture) {
+                    $link = UploadFileHelper::createFiles($picture['icon']['file'], 'pictureExcurtion', 'image', '');
+                    PictureExcurtion::create(['link' => $link, 'excurtion_id' => $new_excurtion->id]);
+                }
+            }
             foreach ($data['characteristics'] as $characteristic) {
                 self::addCharacteristic($characteristic, $new_excurtion->id, null);
             }
@@ -94,6 +103,10 @@ class ExcurtionController extends Controller
     public function addCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
     {
         new StoreCharacteristicRequest($characteristic);
+        if (isset($characteristic['characteristic_type'])) {
+            new StoreCharacteristicTypeRequest(['name' => $characteristic['characteristic_type']]);
+            $characteristic['characteristic_type_id'] = CharacteristicType::firstOrCreate(['name' => $characteristic['characteristic_type']])->id;
+        }
         $new_characteristic = Characteristic::create($characteristic + ['characteristic_id' => $characteristic_id]);
 
         if (isset($item['icon'])) {
@@ -101,25 +114,30 @@ class ExcurtionController extends Controller
             Icon::create(['link' => $link] + $item['icon']['name']);
         }
 
-        foreach ($characteristic['translables'] as $translable) {
-            new StoreCharacteristicTranslableRequest($translable);
-            CharacteristicTranslable::create($translable + ['characteristic_id' => $new_characteristic->id]);
+        if (isset($characteristic['translables'])) {
+            foreach ($characteristic['translables'] as $translable) {
+                new StoreCharacteristicTranslableRequest($translable);
+                CharacteristicTranslable::create($translable + ['characteristic_id' => $new_characteristic->id]);
 
-            $description = json_decode($translable['description'], true);
-            if (!is_array($description)) {
-                continue;
-            }
-            foreach (json_decode($translable['description'], true) as $item) {
-                if (isset($item['icon'])) {
-                    $link = UploadFileHelper::createFiles($item['icon']['file'], 'icons', $item['icon']['name'], '');
-                    Icon::create(['link' => $link] + $item['icon']['name']);
+                if (isset($translable['description'])) {
+                    $description = json_decode($translable['description'], true);
+                    if (!is_array($description)) {
+                        continue;
+                    }
+                    foreach (json_decode($translable['description'], true) as $item) {
+                        if (isset($item['icon'])) {
+                            $link = UploadFileHelper::createFiles($item['icon']['file'], 'icons', $item['icon']['name'], '');
+                            Icon::create(['link' => $link] + $item['icon']['name']);
+                        }
+                    }
                 }
             }
         }
+
         ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
         if (isset($characteristic['characteristics'])) {
             foreach ($characteristic['characteristics'] as $characteristic_new) {
-                self::addCharacteristic($characteristic_new, null , $new_characteristic->id);
+                self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
             }
         }
     }
@@ -129,9 +147,18 @@ class ExcurtionController extends Controller
      * @param  \App\Models\Excurtion  $excurtion
      * @return \Illuminate\Http\Response
      */
-    public function show(Excurtion $excurtion)
+    public function show(Excurtion $excurtion, $id)
     {
-        //
+        try {
+            $data = $this->model::with($this->model::SHOW)->findOrFail($id);
+        } catch (ModelNotFoundException $error) {
+            return response(["message" => $this->message_404], 404);
+        } catch (Exception $error) {
+            return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
+        }
+        // dd($data);
+        $message = $this->message_show_200;
+        return response(compact("message", "data"));
     }
 
     /**

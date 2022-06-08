@@ -61,6 +61,12 @@ return [
             'url' => env('APP_URL') . '/storage/iconsCharacteristics',
             'visibility' => 'public',
         ],
+        'pictureExcurtion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pictureExcurtion/'),
+            'url' => env('APP_URL') . '/storage/pictureExcurtion',
+            'visibility' => 'public',
+        ],
 
     ],
 

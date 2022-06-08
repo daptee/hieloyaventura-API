@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CharacteristicType extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        'name',
+    ];
+
 }

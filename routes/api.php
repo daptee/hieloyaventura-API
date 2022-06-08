@@ -6,6 +6,7 @@ use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\UserController;
+use App\Models\Lenguage;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
         Route::get('/', 'index');
+        Route::get('/{id}', 'show');
         Route::post('/', 'store');
     });
     Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
@@ -39,7 +41,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 
 Route::get('/lenguage/{locale}', function ($locale) {
-    if (!in_array($locale, ['en', 'es', 'por'])) {
+    if (!in_array($locale, Lenguage::get()->pluck('id')->toArray())) {
         abort(400);
     }
     App::setLocale($locale);
