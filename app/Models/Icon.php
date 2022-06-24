@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Icon extends Model
 {
     use HasFactory;
+
+    const SHOW = [];
+    const INDEX = [];
+
+    protected $fillable = [
+        'link',
+        'name',
+    ];
+
 }

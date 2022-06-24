@@ -3,17 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\UploadFileHelper;
-use App\Http\Requests\StoreCharacteristicRequest;
-use App\Http\Requests\StoreCharacteristicTranslableRequest;
-use App\Http\Requests\StoreCharacteristicTypeRequest;
 use App\Http\Requests\StoreExcurtionRequest;
 use App\Http\Requests\UpdateExcurtionRequest;
 use App\Models\Characteristic;
-use App\Models\CharacteristicTranslable;
-use App\Models\CharacteristicType;
 use App\Models\Excurtion;
-use App\Models\ExcurtionCharacteristic;
-use App\Models\Icon;
 use App\Models\PictureExcurtion;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,9 +16,9 @@ use Illuminate\Support\Facades\DB;
 class ExcurtionController extends Controller
 {
     public $model = Excurtion::class;
-    public $s = "excurcion"; //sustantivo singular
-    public $sp = "excurciones"; //sustantivo plural
-    public $ss = "excurcion/es"; //sustantivo sigular/plural
+    public $s = "excursion"; //sustantivo singular
+    public $sp = "excursiones"; //sustantivo plural
+    public $ss = "excursion/es"; //sustantivo sigular/plural
     public $v = "a"; //verbo ej:encontrado/a
     public $pr = "la"; //preposicion singular
     public $prp = "las"; //preposicion plural
@@ -73,7 +66,7 @@ class ExcurtionController extends Controller
     {
         $message = "Error al crear en la {$this->s}.";
         $data = $request->all();
-// dd($data);
+
         $new_excurtion = new $this->model($data);
         DB::beginTransaction();
         try {
@@ -85,7 +78,7 @@ class ExcurtionController extends Controller
                 }
             }
             foreach ($data['characteristics'] as $characteristic) {
-                self::addCharacteristic($characteristic, $new_excurtion->id, null);
+                Characteristic::addCharacteristic($characteristic, $new_excurtion->id, null);
             }
             $data = $this->model::with($this->model::SHOW)->findOrFail($new_excurtion->id);
         } catch (ModelNotFoundException $error) {
@@ -100,47 +93,6 @@ class ExcurtionController extends Controller
         return response(compact("message", "data"));
     }
 
-    public function addCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
-    {
-        new StoreCharacteristicRequest($characteristic);
-        if (isset($characteristic['characteristic_type'])) {
-            new StoreCharacteristicTypeRequest(['name' => $characteristic['characteristic_type']]);
-            $characteristic['characteristic_type_id'] = CharacteristicType::firstOrCreate(['name' => $characteristic['characteristic_type']])->id;
-        }
-        $new_characteristic = Characteristic::create($characteristic + ['characteristic_id' => $characteristic_id]);
-
-        if (isset($item['icon'])) {
-            $link = UploadFileHelper::createFiles($item['icon']['file'], 'icons', $item['icon']['name'], '');
-            Icon::create(['link' => $link] + $item['icon']['name']);
-        }
-
-        if (isset($characteristic['translables'])) {
-            foreach ($characteristic['translables'] as $translable) {
-                new StoreCharacteristicTranslableRequest($translable);
-                CharacteristicTranslable::create($translable + ['characteristic_id' => $new_characteristic->id]);
-
-                if (isset($translable['description'])) {
-                    $description = json_decode($translable['description'], true);
-                    if (!is_array($description)) {
-                        continue;
-                    }
-                    foreach (json_decode($translable['description'], true) as $item) {
-                        if (isset($item['icon'])) {
-                            $link = UploadFileHelper::createFiles($item['icon']['file'], 'icons', $item['icon']['name'], '');
-                            Icon::create(['link' => $link] + $item['icon']['name']);
-                        }
-                    }
-                }
-            }
-        }
-
-        ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
-        if (isset($characteristic['characteristics'])) {
-            foreach ($characteristic['characteristics'] as $characteristic_new) {
-                self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
-            }
-        }
-    }
     /**
      * Display the specified resource.
      *
@@ -156,7 +108,6 @@ class ExcurtionController extends Controller
         } catch (Exception $error) {
             return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
         }
-        // dd($data);
         $message = $this->message_show_200;
         return response(compact("message", "data"));
     }
@@ -179,9 +130,36 @@ class ExcurtionController extends Controller
      * @param  \App\Models\Excurtion  $excurtion
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateExcurtionRequest $request, Excurtion $excurtion)
+    public function update(UpdateExcurtionRequest $request, $id)
     {
-        //
+        $message = "Error al editar {$this->s}.";
+        $datos = $request->all();
+
+        DB::beginTransaction();
+        try {
+            $data = $this->model::findOrFail($id);
+            $data->fill($datos);
+            if (isset($datos['characteristics'])) {
+                foreach ($datos['characteristics'] as $characteristic) {
+                    if (isset($characteristic['id'])) {
+                        Characteristic::updateCharacteristic($characteristic);
+                        continue;
+                    }
+                    Characteristic::addCharacteristic($characteristic, $id);
+                }
+            }
+            $data->save();
+        } catch (ModelNotFoundException $error) {
+            DB::rollBack();
+            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            DB::rollBack();
+            return response(["message" => $message, "error" => $error->getMessage()], 500);
+        }
+        DB::commit();
+        $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
+        $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
+        return response(compact("message", "data"));
     }
 
     /**

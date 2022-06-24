@@ -32,6 +32,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('/', 'index');
         Route::get('/{id}', 'show');
         Route::post('/', 'store');
+        Route::post('/{id}', 'update');
     });
     Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
         Route::get('/', 'index');
