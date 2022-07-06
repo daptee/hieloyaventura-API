@@ -14,11 +14,10 @@ Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'authenticate');
 });
+Route::get('faqs', [FaqController::class, 'index']);
 
 Route::group(['middleware' => ['jwt.verify']], function () {
-    Route::resource('faqs', FaqController::class)->only([
-        'index', 'store',
-    ]);
+    Route::post('faqs', [FaqController::class, 'store']);
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 
     Route::prefix('consults')->controller(ConsultController::class)->group(function () {
