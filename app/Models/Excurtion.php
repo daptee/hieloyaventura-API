@@ -10,7 +10,7 @@ class Excurtion extends Model
 {
     use HasFactory;
     const INDEX = [];
-    const SHOW = ['characteristics'];
+    const SHOW = ['characteristics.characteristic_translables'];
 
     protected $fillable = [
         'link_map',
@@ -19,6 +19,7 @@ class Excurtion extends Model
         'price_children',
         'price_special',
         'is_transfer',
+        'name',
     ];
     /**
      * Get all of the characteristics for the Excurtion

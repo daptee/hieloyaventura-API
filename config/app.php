@@ -82,8 +82,8 @@ return [
     |
     */
 
-    'locale' => 'spa',
-    'fallback_locale' => 'en',
+    'locale' => '1',
+    'fallback_locale' => '2',
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

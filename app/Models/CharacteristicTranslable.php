@@ -24,8 +24,9 @@ class CharacteristicTranslable extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope('request_lenguage', function (Builder $builder) {
-            $builder->where('lenguage_id', App::getLocale() ?? 1);
-        });
+        dd(App::getLocale());
+        // static::addGlobalScope('request_lenguage', function (Builder $builder) {
+        //     $builder->where('lenguage_id', App::getLocale() ?? 1);
+        // });
     }
 }

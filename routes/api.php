@@ -41,6 +41,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 
 Route::get('/lenguage/{locale}', function ($locale) {
+    //1 => spanish
+    //2 => english
+    //3 => portugueis
     if (!in_array($locale, Lenguage::get()->pluck('id')->toArray())) {
         abort(400);
     }

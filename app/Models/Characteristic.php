@@ -14,9 +14,9 @@ class Characteristic extends Model
 {
     use HasFactory;
     const INDEX = [];
-    const SHOW = ['characteristics'];
+    const SHOW = ['characteristics', 'characteristic_translables'];
 
-    protected $with = ['characteristics'];
+    protected $with = ['characteristics', 'characteristic_translables'];
 
     protected $fillable = [
         'name',

@@ -141,3 +141,7 @@ characteristics[4][characteristics][2][translables][0][description]:Deberás pre
 characteristics[4][characteristics][2][icon][file]:
 characteristics[4][characteristics][2][icon][name]:
 characteristics[4][characteristics][2][order]:3
+characteristics[5][characteristic_type]:tittle
+characteristics[5][order]:
+characteristics[5][translables][0][lenguage_id]:1
+characteristics[5][translables][0][name]:Minitrekking
