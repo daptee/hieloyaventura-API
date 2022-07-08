@@ -20,6 +20,9 @@ class Excurtion extends Model
         'price_special',
         'is_transfer',
         'name',
+        'external_id',
+        'validity_from',
+        'validity_to',
     ];
     /**
      * Get all of the characteristics for the Excurtion

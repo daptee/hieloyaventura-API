@@ -15,6 +15,10 @@ Route::controller(UserController::class)->group(function () {
     Route::post('login', 'authenticate');
 });
 Route::get('faqs', [FaqController::class, 'index']);
+Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{id}', 'show');
+});
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('faqs', [FaqController::class, 'store']);
@@ -28,8 +32,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('/', 'index');
     });
     Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::get('/{id}', 'show');
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
     });
