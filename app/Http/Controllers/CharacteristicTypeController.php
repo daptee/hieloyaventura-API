@@ -20,6 +20,10 @@ class CharacteristicTypeController extends Controller
     public $v = "o"; //verbo ej:encontrado/a
     public $pr = "el"; //preposicion singular
     public $prp = "los"; //preposicion plural
+    public $message_show_500 = "Item no encontrado";
+    public $message_show_200 = "Item encontrado";
+    public $message_store_500 = "Item no creado";
+    public $message_store_200 = "Creado.";
 
     public function index(Request $request)
     {

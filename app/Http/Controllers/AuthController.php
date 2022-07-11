@@ -11,6 +11,7 @@ use JWT;
 use App\Services\JwtService;
 use App\Models\User;
 use App\Models\Module;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller{
 
@@ -18,7 +19,7 @@ class AuthController extends Controller{
 
         $credentials = $request->only('email', 'password');
         try{
-            $user = User::where('email' , $credentials['email'])->where('status',1)->get();
+            $user = User::where('email' , $credentials['email'])->get();
 
             if($user->count() == 0)
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
@@ -30,6 +31,7 @@ class AuthController extends Controller{
           return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
 
+// Session::put('applocale', $request);
         return $this->respondWithToken($token,$credentials['email']);
     }
 
@@ -51,28 +53,28 @@ class AuthController extends Controller{
 
     protected function respondWithToken($token,$email){
         $expire_in = config('jwt.ttl');
-        $user  = User::where('email' , $email )->with('departments','role','concessionaire')->first();
-        $modules = Module::all();
+        $user  = User::where('email' , $email )->first();
+        // $modules = Module::all();
 
-        $modules_user = [];
-        foreach ($modules as $module){
-            $module_user['action'] = [];
-            $module_user['id'] = $module->id;
-            $module_user['name'] = $module->name;
-            $module_user['status'] = $module->status;
-            $actions = $user->role->actions->where("module_id",$module->id);
+        // $modules_user = [];
+        // foreach ($modules as $module){
+        //     $module_user['action'] = [];
+        //     $module_user['id'] = $module->id;
+        //     $module_user['name'] = $module->name;
+        //     $module_user['status'] = $module->status;
+        //     $actions = $user->role->actions->where("module_id",$module->id);
 
-            if($actions->count() == 0)
-                continue;
+        //     if($actions->count() == 0)
+        //         continue;
 
-            $module_user['actions'] = $actions;
+        //     $module_user['actions'] = $actions;
 
-            $modules_user[] = $module_user;
-        }
+        //     $modules_user[] = $module_user;
+        // }
 
         $data = [
             'user' => $user,
-            'modules' => $modules_user
+            // 'modules' => $modules_user
         ];
 
         return response()->json([

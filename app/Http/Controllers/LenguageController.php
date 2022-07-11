@@ -8,6 +8,7 @@ use App\Models\Lenguage;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class LenguageController extends Controller
 {

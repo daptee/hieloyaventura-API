@@ -52,7 +52,7 @@ class ExcurtionController extends Controller
                     $data->$key($value);
                 }
             }
-            $data = $this->model::with($this->model::INDEX)->get();
+            $data = $data->get();
         } catch (ModelNotFoundException $error) {
             return response(["message" => $this->message_404], 404);
         } catch (Exception $error) {
@@ -103,6 +103,24 @@ class ExcurtionController extends Controller
     {
         try {
             $data = $this->model::with($this->model::SHOW)->findOrFail($id);
+        } catch (ModelNotFoundException $error) {
+            return response(["message" => $this->message_404], 404);
+        } catch (Exception $error) {
+            return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
+        }
+        $message = $this->message_show_200;
+        return response(compact("message", "data"));
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Excurtion  $excurtion
+     * @return \Illuminate\Http\Response
+     */
+    public function showByExternalId(Excurtion $excurtion, $id)
+    {
+        try {
+            $data = $this->model::with($this->model::SHOW)->where('external_id', $id)->firstOrFail();
         } catch (ModelNotFoundException $error) {
             return response(["message" => $this->message_404], 404);
         } catch (Exception $error) {

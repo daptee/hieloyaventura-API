@@ -11,6 +11,7 @@ class Consult extends Model
 
     const SHOW = [];
     const INDEX = [];
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
         'email',

@@ -8,6 +8,7 @@ use App\Http\Requests\StoreCharacteristicTranslableRequest;
 use App\Http\Requests\StoreCharacteristicTypeRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Characteristic extends Model
@@ -18,6 +19,7 @@ class Characteristic extends Model
 
     protected $with = ['characteristics', 'characteristic_translables'];
 
+    protected $hidden = ['created_at', 'updated_at'];
     protected $fillable = [
         'name',
         'link',
@@ -32,6 +34,10 @@ class Characteristic extends Model
     public function characteristic_translables(): HasMany
     {
         return $this->hasMany(CharacteristicTranslable::class, 'characteristic_id', 'id');
+    }
+    public function characteristic_type(): BelongsTo
+    {
+        return $this->belongsTo(CharacteristicType::class, 'characteristic_type_id', 'id');
     }
 
     public static function updateCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)

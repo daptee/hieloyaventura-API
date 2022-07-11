@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PictureExcurtion extends Model
 {
     use HasFactory;
+    protected $hidden = ['created_at', 'updated_at'];
+
 }

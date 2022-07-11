@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExcurtionCharacteristic extends Model
 {
     use HasFactory;
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
         'characteristic_id',

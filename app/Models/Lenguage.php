@@ -15,6 +15,7 @@ class Lenguage extends Model
     const SPA = 1;
     const EN = 2;
     const POR = 3;
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
         'name',
