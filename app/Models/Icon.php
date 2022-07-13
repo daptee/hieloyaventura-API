@@ -11,11 +11,10 @@ class Icon extends Model
 
     const SHOW = [];
     const INDEX = [];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at', 'link'];
 
     protected $fillable = [
         'link',
         'name',
     ];
-
 }

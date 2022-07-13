@@ -42,6 +42,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
     });
+    Route::prefix('icons')->controller(ExcurtionController::class)->group(function () {
+        Route::post('/', 'store');
+        Route::post('/{id}', 'update');
+    });
     Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');

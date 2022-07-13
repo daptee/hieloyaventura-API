@@ -4,14 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Excurtion extends Model
 {
     use HasFactory;
-    const INDEX = [];
-    const SHOW = ['characteristics.characteristic_translables', 'characteristics.characteristic_type'];
+    const INDEX = [
+        'characteristics.characteristic_translables',
+        'characteristics.characteristic_type',
+        'characteristics.icon',
+        'pictures',
+    ];
+    const SHOW = self::INDEX + [];
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
@@ -25,26 +31,20 @@ class Excurtion extends Model
         'external_id',
         'validity_from',
         'validity_to',
+        'icon_id',
     ];
-    /**
-     * Get all of the characteristics for the Excurtion
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
     public function characteristics(): HasManyThrough
     {
         return $this->hasManyThrough(Characteristic::class, ExcurtionCharacteristic::class, 'excurtion_id', 'id', 'id', 'characteristic_id');
     }
-    /**
-     * Get all of the pictures for the Excurtion
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function pictures(): HasMany
     {
         return $this->hasMany(PictureExcurtion::class, 'excurtion_id', 'id');
     }
-
+    public function icon(): BelongsTo
+    {
+        return $this->belongsTo(Icon::class, 'icon_id', 'id');
+    }
     public function scopeExternal($query, $external_id)
     {
         return $query->where('external_id', $external_id);

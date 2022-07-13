@@ -10,4 +10,9 @@ class PictureExcurtion extends Model
     use HasFactory;
     protected $hidden = ['created_at', 'updated_at'];
 
+    protected $fillable = [
+        'link',
+        'order',
+        'excurtion_id',
+    ];
 }

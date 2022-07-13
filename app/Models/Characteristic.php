@@ -25,6 +25,7 @@ class Characteristic extends Model
         'link',
         'characteristic_id',
         'characteristic_type_id',
+        'icon_id',
     ];
 
     public function characteristics(): HasMany
@@ -38,6 +39,10 @@ class Characteristic extends Model
     public function characteristic_type(): BelongsTo
     {
         return $this->belongsTo(CharacteristicType::class, 'characteristic_type_id', 'id');
+    }
+    public function icon(): BelongsTo
+    {
+        return $this->belongsTo(Icon::class, 'icon_id', 'id');
     }
 
     public static function updateCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
@@ -54,7 +59,7 @@ class Characteristic extends Model
             } else {
                 if ($characteristic['icon']['file'] != null) {
                     $link = UploadFileHelper::createFiles($characteristic['icon']['file'], 'iconsCharacteristics', $characteristic['icon']['name'], '');
-                    $icon = Icon::create(['link' => $link] + ['name' => $characteristic['icon']['name']]);
+                    $icon = Icon::create(['name' => $characteristic['icon']['name']]);
                     $update_characteristic->fill(['icon_id' => $icon->id]);
                 }
             }
@@ -85,7 +90,7 @@ class Characteristic extends Model
                         if (isset($item['icon'])) {
                             if ($characteristic['icon']['file'] != null) {
                                 $link = UploadFileHelper::createFiles($item['icon']['file'], 'iconsCharacteristics', $item['icon']['name'], '');
-                                Icon::create(['link' => $link] + ['name' => $item['icon']['name']]);
+                                Icon::create(['name' => $item['icon']['name']]);
                             }
                         }
                     }
@@ -106,7 +111,7 @@ class Characteristic extends Model
         if (isset($characteristic['icon'])) {
             if ($characteristic['icon']['file'] != null) {
                 $link = UploadFileHelper::createFiles($characteristic['icon']['file'], 'iconsCharacteristics', $characteristic['icon']['name'], '');
-                Icon::create(['link' => $link] + ['name' => $characteristic['icon']['name']]);
+                Icon::create(['name' => $characteristic['icon']['name']]);
             }
         }
 
@@ -126,7 +131,7 @@ class Characteristic extends Model
                         if (isset($item['icon'])) {
                             if ($characteristic['icon']['file'] != null) {
                                 $link = UploadFileHelper::createFiles($item['icon']['file'], 'iconsCharacteristics', $item['icon']['name'], '');
-                                Icon::create(['link' => $link] + ['name' => $item['icon']['name']]);
+                                Icon::create(['name' => $item['icon']['name']]);
                             }
                         }
                     }
