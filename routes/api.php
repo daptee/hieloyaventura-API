@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
 use App\Http\Controllers\ExcurtionController;
@@ -41,6 +42,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
+    });
+    Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
+        Route::post('/', 'store');
+        Route::put('/{id}', 'update');
     });
     Route::prefix('icons')->controller(ExcurtionController::class)->group(function () {
         Route::post('/', 'store');

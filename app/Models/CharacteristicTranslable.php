@@ -18,9 +18,9 @@ class CharacteristicTranslable extends Model
         'description',
     ];
 
-    protected $casts = [
-        'description' => 'array',
-    ];
+    // protected $casts = [
+    //     'description' => 'array',
+    // ];
 
     protected static function booted()
     {

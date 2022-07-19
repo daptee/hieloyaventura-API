@@ -14,5 +14,6 @@ class PictureExcurtion extends Model
         'link',
         'order',
         'excurtion_id',
+        'type',
     ];
 }

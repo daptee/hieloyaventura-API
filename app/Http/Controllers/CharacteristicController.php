@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCharacteristicRequest;
 use App\Http\Requests\UpdateCharacteristicRequest;
 use App\Models\Characteristic;
+use App\Models\ExcurtionCharacteristic;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class CharacteristicController extends Controller
 {
@@ -56,6 +58,9 @@ class CharacteristicController extends Controller
         $data = new $this->model($data);
         try {
             $data->save();
+            if (isset($data['excurtion_id'])) {
+                ExcurtionCharacteristic::create(['excurtion_id' => $data['excurtion_id'], 'characteristic_id' => $data->id]);
+            }
             $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
         } catch (ModelNotFoundException $error) {
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
@@ -91,15 +96,31 @@ class CharacteristicController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCharacteristicRequest  $request
-     * @param  \App\Models\Characteristic  $characteristic
+     * @param  \App\Http\Requests\UpdateExcurtionRequest  $request
+     * @param  \App\Models\Excurtion  $excurtion
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCharacteristicRequest $request, Characteristic $characteristic)
+    public function update(UpdateCharacteristicRequest $request, $id)
     {
-        //
-    }
+        $message = "Error al editar {$this->s}.";
+        $datos = $request->all();
 
+        DB::beginTransaction();
+        try {
+            $this->model::findOrFail($id);
+            Characteristic::updateCharacteristic2($datos + ['id' => $id]);
+        } catch (ModelNotFoundException $error) {
+            DB::rollBack();
+            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            DB::rollBack();
+            return response(["message" => $message, "error" => $error->getMessage()], 500);
+        }
+        DB::commit();
+        $data = $this->model::with($this->model::SHOW)->findOrFail($id);
+        $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
+        return response(compact("message", "data"));
+    }
     /**
      * Remove the specified resource from storage.
      *

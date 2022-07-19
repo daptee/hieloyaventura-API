@@ -6,6 +6,7 @@ use App\Helpers\UploadFileHelper;
 use App\Http\Requests\StoreCharacteristicRequest;
 use App\Http\Requests\StoreCharacteristicTranslableRequest;
 use App\Http\Requests\StoreCharacteristicTypeRequest;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,8 +21,8 @@ class Characteristic extends Model
     protected $with = ['characteristics', 'characteristic_translables'];
 
     protected $hidden = ['created_at', 'updated_at'];
+
     protected $fillable = [
-        'name',
         'link',
         'characteristic_id',
         'characteristic_type_id',
@@ -45,6 +46,37 @@ class Characteristic extends Model
         return $this->belongsTo(Icon::class, 'icon_id', 'id');
     }
 
+    public static function updateCharacteristic2(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
+    {
+        try {
+            if (isset($data['borrar'])) {
+                Characteristic::withoutGlobalScopes()->destroy($characteristic['id']);
+                return;
+            }
+            $data = Characteristic::findOrFail($characteristic['id']);
+            $data->fill($characteristic);
+            $data->save();
+
+            if (isset($characteristic['characteristics'])) {
+                self::addCharacteristic($characteristic['characteristics'], null, $data->id);
+            }
+            if (isset($characteristic['translables'])) {
+                foreach ($characteristic['translables'] as $translable) {
+                    if (isset($translable['borrar'])) {
+                        CharacteristicTranslable::withoutGlobalScopes()->destroy($translable['id']);
+                        continue;
+                    }
+                    if (isset($translable['id'])) {
+                        CharacteristicTranslable::whereId($translable['id'])->update($translable);
+                        continue;
+                    }
+                    CharacteristicTranslable::updateOrCreate(['characteristic_id' => $data->id, 'lenguage_id' => $translable['lenguage_id']], $translable);
+                }
+            }
+        } catch (Exception $e) {
+            throw new Exception($e);
+        }
+    }
     public static function updateCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
     {
         if (isset($data['borrar'])) {
@@ -102,48 +134,52 @@ class Characteristic extends Model
     }
     public static function addCharacteristic(array $characteristic, $new_excurtion_id = null, $characteristic_id = null)
     {
-        new StoreCharacteristicRequest($characteristic);
-        if (isset($characteristic['characteristic_type'])) {
-            new StoreCharacteristicTypeRequest(['name' => $characteristic['characteristic_type']]);
-            $characteristic['characteristic_type_id'] = CharacteristicType::firstOrCreate(['name' => $characteristic['characteristic_type']])->id;
-        }
-
-        if (isset($characteristic['icon'])) {
-            if ($characteristic['icon']['file'] != null) {
-                $link = UploadFileHelper::createFiles($characteristic['icon']['file'], 'iconsCharacteristics', $characteristic['icon']['name'], '');
-                Icon::create(['name' => $characteristic['icon']['name']]);
+        try {
+            new StoreCharacteristicRequest($characteristic);
+            if (isset($characteristic['characteristic_type'])) {
+                new StoreCharacteristicTypeRequest(['name' => $characteristic['characteristic_type']]);
+                $characteristic['characteristic_type_id'] = CharacteristicType::firstOrCreate(['name' => $characteristic['characteristic_type']])->id;
             }
-        }
 
-        $new_characteristic = Characteristic::create($characteristic + ['characteristic_id' => $characteristic_id]);
+            if (isset($characteristic['icon'])) {
+                if ($characteristic['icon']['file'] != null) {
+                    $link = UploadFileHelper::createFiles($characteristic['icon']['file'], 'iconsCharacteristics', $characteristic['icon']['name'], '');
+                    Icon::create(['name' => $characteristic['icon']['name']]);
+                }
+            }
 
-        if (isset($characteristic['translables'])) {
-            foreach ($characteristic['translables'] as $translable) {
-                new StoreCharacteristicTranslableRequest($translable);
-                CharacteristicTranslable::create($translable + ['characteristic_id' => $new_characteristic->id]);
+            $new_characteristic = Characteristic::create($characteristic + ['characteristic_id' => $characteristic_id]);
 
-                if (isset($translable['description'])) {
-                    $description = json_decode($translable['description'], true);
-                    if (!is_array($description)) {
-                        continue;
-                    }
-                    foreach (json_decode($translable['description'], true) as $item) {
-                        if (isset($item['icon'])) {
-                            if ($characteristic['icon']['file'] != null) {
-                                $link = UploadFileHelper::createFiles($item['icon']['file'], 'iconsCharacteristics', $item['icon']['name'], '');
-                                Icon::create(['name' => $item['icon']['name']]);
+            if (isset($characteristic['translables'])) {
+                foreach ($characteristic['translables'] as $translable) {
+                    new StoreCharacteristicTranslableRequest($translable);
+                    CharacteristicTranslable::create($translable + ['characteristic_id' => $new_characteristic->id]);
+
+                    if (isset($translable['description'])) {
+                        $description = json_decode($translable['description'], true);
+                        if (!is_array($description)) {
+                            continue;
+                        }
+                        foreach (json_decode($translable['description'], true) as $item) {
+                            if (isset($item['icon'])) {
+                                if ($characteristic['icon']['file'] != null) {
+                                    $link = UploadFileHelper::createFiles($item['icon']['file'], 'iconsCharacteristics', $item['icon']['name'], '');
+                                    Icon::create(['name' => $item['icon']['name']]);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
-        if (isset($characteristic['characteristics'])) {
-            foreach ($characteristic['characteristics'] as $characteristic_new) {
-                self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
+            ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
+            if (isset($characteristic['characteristics'])) {
+                foreach ($characteristic['characteristics'] as $characteristic_new) {
+                    self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
+                }
             }
+        } catch (Exception $th) {
+            throw new Exception($th);
         }
     }
 }
