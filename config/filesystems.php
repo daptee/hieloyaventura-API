@@ -58,13 +58,13 @@ return [
         'iconsCharacteristics' => [
             'driver' => 'local',
             'root' => storage_path('app/public/iconsCharacteristics/'),
-            'url' => env('APP_URL') . '/storage/iconsCharacteristics',
+            'url' => env('APP_URL') . '/storage/app/public/iconsCharacteristics',
             'visibility' => 'public',
         ],
         'pictureExcurtion' => [
             'driver' => 'local',
             'root' => storage_path('app/public/pictureExcurtion/'),
-            'url' => env('APP_URL') . '/storage/pictureExcurtion',
+            'url' => env('APP_URL') . '/storage/app/public/pictureExcurtion',
             'visibility' => 'public',
         ],
 

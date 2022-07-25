@@ -66,19 +66,23 @@ class ExcurtionController extends Controller
     public function store(StoreExcurtionRequest $request)
     {
         $message = "Error al crear en la {$this->s}.";
-        $data = $request->all();
+        $datos = $request->all();
 
-        $new_excurtion = new $this->model($data);
+        $new_excurtion = new $this->model($datos);
         DB::beginTransaction();
         try {
             $new_excurtion->save();
-            if (isset($data['pictures'])) {
-                foreach ($data['pictures'] as $picture) {
-                    $link = UploadFileHelper::createFiles($picture['icon']['file'], 'pictureExcurtion', 'image', '');
-                    PictureExcurtion::create(['link' => $link, 'excurtion_id' => $new_excurtion->id]);
+            if (isset($datos['pictures'])) {
+                foreach ($datos['pictures'] as $pic) {
+                    if ($pic['file'] != null) {
+                        $link = UploadFileHelper::createFiles($pic['file'], 'pictureExcurtion', $pic['name'], '');
+                        PictureExcurtion::create($pic + ['excurtion_id' => $new_excurtion->id, 'link' => $link]);
+                        continue;
+                    }
+                    PictureExcurtion::create($pic + ['excurtion_id' => $new_excurtion->id]);
                 }
             }
-            foreach ($data['characteristics'] as $characteristic) {
+            foreach ($datos['characteristics'] as $characteristic) {
                 Characteristic::addCharacteristic($characteristic, $new_excurtion->id, null);
             }
             $data = $this->model::with($this->model::SHOW)->findOrFail($new_excurtion->id);
@@ -165,6 +169,14 @@ class ExcurtionController extends Controller
                         continue;
                     }
                     Characteristic::addCharacteristic($characteristic, $id);
+                }
+            }
+            if (isset($datos['pictures'])) {
+                foreach ($datos['pictures'] as $pic) {
+                    if ($pic['file'] != null) {
+                        $link = UploadFileHelper::createFiles($pic['file'], 'pictureExcurtion', $pic['name'], '');
+                        PictureExcurtion::create($pic);
+                    }
                 }
             }
             $data->save();

@@ -27,6 +27,7 @@ class Characteristic extends Model
         'characteristic_id',
         'characteristic_type_id',
         'icon_id',
+        'icon',
     ];
 
     public function characteristics(): HasMany

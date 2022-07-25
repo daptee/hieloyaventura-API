@@ -31,7 +31,7 @@ class Excurtion extends Model
         'external_id',
         'validity_from',
         'validity_to',
-        'icon_id',
+        'icon',
     ];
     public function characteristics(): HasManyThrough
     {

@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('picture_excurtions', function (Blueprint $table) {
-            $table->string('type', 20)->nullable();
+        Schema::table('excurtions', function (Blueprint $table) {
+            $table->dropForeign('excurtions_icon_id_foreign');
+            $table->dropColumn('icon_id');
+            $table->string('icon', 20)->nullable();
         });
     }
 
@@ -25,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('pictures_excurtions', function (Blueprint $table) {
+        Schema::table('excurtions', function (Blueprint $table) {
             //
         });
     }
