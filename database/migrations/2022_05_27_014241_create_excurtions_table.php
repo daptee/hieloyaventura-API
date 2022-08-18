@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('excurtions', function (Blueprint $table) {
-            $table->id();
-            $table->string('link_map', 255)->nullable();
-            $table->string('code_excurtion', 255)->nullable();
-            $table->decimal('price', 10, 2)->nullable();
-            $table->decimal('price_children', 10, 2)->nullable();
-            $table->decimal('price_special', 10, 2)->nullable();
-            $table->unsignedTinyInteger('is_transfer')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('excurtions')) {
+            Schema::create('excurtions', function (Blueprint $table) {
+                $table->id();
+                $table->string('link_map', 255)->nullable();
+                $table->string('code_excurtion', 255)->nullable();
+                $table->decimal('price', 10, 2)->nullable();
+                $table->decimal('price_children', 10, 2)->nullable();
+                $table->decimal('price_special', 10, 2)->nullable();
+                $table->unsignedTinyInteger('is_transfer')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

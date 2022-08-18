@@ -8,9 +8,9 @@ use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserReservationController;
 use App\Models\Lenguage;
 use App\Models\User;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -30,7 +30,7 @@ Route::prefix('excurtions')->controller(ExcurtionController::class)->group(funct
 
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('faqs', [FaqController::class, 'store']);
-    Route::post('logout', 'App\Http\Controllers\AuthController@logout');
+    Route::post('logout', [AuthController::class, 'logout']);
 
     Route::prefix('consults')->controller(ConsultController::class)->group(function () {
         Route::get('/', 'index');
@@ -45,7 +45,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
         Route::post('/', 'store');
+        Route::post('/array', 'storeArray');
+        Route::post('/{id}/excurtion', 'arrayAddToExcurtion');
         Route::put('/{id}', 'update');
+        Route::put('/{id}/array', 'updateArray');
     });
     Route::prefix('icons')->controller(ExcurtionController::class)->group(function () {
         Route::post('/', 'store');
@@ -54,6 +57,17 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
+    });
+    Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
+        Route::post('/', 'store');
+        Route::post('/{id}', 'update');
+    });
+    Route::prefix('nationalities')->controller(LenguageController::class)->group(function () {
+        Route::get('/', 'index');
+    });
+    Route::prefix('users')->controller(UserController::class)->group(function () {
+        Route::post('/', 'store');
+        Route::post('/{id}', 'update');
     });
 });
 

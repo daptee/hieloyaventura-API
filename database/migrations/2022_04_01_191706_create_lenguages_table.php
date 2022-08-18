@@ -14,11 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lenguages', function (Blueprint $table) {
-            $table->tinyIncrements('id');
-            $table->string('name', 30);
-            $table->string('abreviation', 10);
-        });
+        if (!Schema::hasTable('lenguages')) {
+            Schema::create('lenguages', function (Blueprint $table) {
+                $table->tinyIncrements('id');
+                $table->string('name', 30);
+                $table->string('abreviation', 10);
+            });
+        }
         Lenguage::create([
             'abreviation' => 'spa',
             'name' => 'Español',

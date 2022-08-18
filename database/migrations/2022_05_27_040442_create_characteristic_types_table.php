@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('characteristic_types', function (Blueprint $table) {
-            $table->tinyIncrements('id');
-            $table->string('name', 255)->nullable();
-        });
+        if (!Schema::hasTable('characteristic_types')) {
+            Schema::create('characteristic_types', function (Blueprint $table) {
+                $table->tinyIncrements('id');
+                $table->string('name', 255)->nullable();
+            });
+        }
     }
 
     /**

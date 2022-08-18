@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('icons', function (Blueprint $table) {
-            $table->string('link', 255)->nullable()->change();
-        });
+        if (!Schema::hasColumn('icons', 'link')) {
+            Schema::table('icons', function (Blueprint $table) {
+                $table->string('link', 255)->nullable()->change();
+            });
+        }
     }
 
     /**

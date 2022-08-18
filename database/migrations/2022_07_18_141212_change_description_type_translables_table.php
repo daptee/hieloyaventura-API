@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('characteristic_translables', function (Blueprint $table) {
-            $table->longText('description')->nullable()->change();
-        });
+        if (!Schema::hasColumn('characteristic_translables', 'description')) {
+            Schema::table('characteristic_translables', function (Blueprint $table) {
+                $table->longText('description')->nullable()->change();
+            });
+        }
     }
 
     /**

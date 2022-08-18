@@ -51,4 +51,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public static function createUser($data)
+    {
+        return User::create($data);
+    }
 }

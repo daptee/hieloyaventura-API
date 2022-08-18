@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('characteristics', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('icon_id')->nullable();
-            $table->unsignedTinyInteger('characteristic_type_id')->nullable();
-            $table->unsignedTinyInteger('order')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('characteristics')) {
+            Schema::create('characteristics', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('icon_id')->nullable();
+                $table->unsignedTinyInteger('characteristic_type_id')->nullable();
+                $table->unsignedTinyInteger('order')->nullable();
+                $table->timestamps();
 
-            $table->foreign('icon_id')->references('id')->on('icons')->onDelete('no action');
-            $table->foreign('characteristic_type_id')->references('id')->on('characteristic_types')->onDelete('no action');
-        });
+                $table->foreign('icon_id')->references('id')->on('icons')->onDelete('no action');
+                $table->foreign('characteristic_type_id')->references('id')->on('characteristic_types')->onDelete('no action');
+            });
+        }
     }
 
     /**

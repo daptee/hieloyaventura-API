@@ -16,7 +16,7 @@ class Characteristic extends Model
 {
     use HasFactory;
     const INDEX = [];
-    const SHOW = ['characteristics', 'characteristic_translables'];
+    const SHOW = ['characteristics', 'characteristic_translables', 'characteristic_type'];
 
     protected $with = ['characteristics', 'characteristic_translables'];
 
@@ -179,6 +179,7 @@ class Characteristic extends Model
                     self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
                 }
             }
+            return Characteristic::with(Characteristic::SHOW)->findOrFail($new_characteristic->id);
         } catch (Exception $th) {
             throw new Exception($th);
         }

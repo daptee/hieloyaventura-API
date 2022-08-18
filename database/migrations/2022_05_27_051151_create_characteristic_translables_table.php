@@ -13,17 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('characteristic_translables', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedTinyInteger('lenguage_id')->nullable();
-            $table->unsignedBigInteger('characteristic_id')->nullable();
-            $table->string('name', 255)->nullable();
-            $table->json('description')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('characteristic_translables')) {
+            Schema::create('characteristic_translables', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedTinyInteger('lenguage_id')->nullable();
+                $table->unsignedBigInteger('characteristic_id')->nullable();
+                $table->string('name', 255)->nullable();
+                $table->json('description')->nullable();
+                $table->timestamps();
 
-            $table->foreign('lenguage_id')->references('id')->on('lenguages')->onDelete('no action');
-            $table->foreign('characteristic_id')->references('id')->on('characteristics')->onDelete('no action');
-        });
+                $table->foreign('lenguage_id')->references('id')->on('lenguages')->onDelete('no action');
+                $table->foreign('characteristic_id')->references('id')->on('characteristics')->onDelete('no action');
+            });
+        }
     }
 
     /**

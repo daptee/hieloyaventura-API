@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('excurtion_characteristics', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('excurtion_id')->nullable();
-            $table->unsignedBigInteger('characteristic_id')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('excurtion_characteristics')) {
+            Schema::create('excurtion_characteristics', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('excurtion_id')->nullable();
+                $table->unsignedBigInteger('characteristic_id')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('picture_excurtions', function (Blueprint $table) {
-            $table->string('type', 20)->nullable();
-        });
+        if (!Schema::hasColumn('picture_excurtions', 'type')) {
+            Schema::table('picture_excurtions', function (Blueprint $table) {
+                $table->string('type', 20)->nullable();
+            });
+        }
     }
 
     /**

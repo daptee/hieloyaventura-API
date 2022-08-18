@@ -13,10 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('excurtions', function (Blueprint $table) {
-            $table->dateTime('validity_from')->nullable();
-            $table->dateTime('validity_to')->nullable();
-        });
+        if (!Schema::hasColumn('excurtions', 'validity_from')) {
+            Schema::table('excurtions', function (Blueprint $table) {
+                $table->dateTime('validity_from')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('excurtions', 'validity_to')) {
+            Schema::table('excurtions', function (Blueprint $table) {
+                $table->dateTime('validity_to')->nullable();
+            });
+        }
     }
 
     /**

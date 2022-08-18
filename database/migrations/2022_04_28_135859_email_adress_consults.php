@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('email_adress_consult', function (Blueprint $table) {
-            $table->tinyIncrements('id');
-            $table->string('email', 255)->default('text');
-        });
+        if (!Schema::hasTable('email_adress_consult')) {
+            Schema::create('email_adress_consult', function (Blueprint $table) {
+                $table->tinyIncrements('id');
+                $table->string('email', 255)->default('text');
+            });
+        }
     }
 
     /**

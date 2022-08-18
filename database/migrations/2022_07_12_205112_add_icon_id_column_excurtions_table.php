@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('excurtions', function (Blueprint $table) {
-            $table->unsignedBigInteger('icon_id')->nullable();
-            $table->foreign('icon_id')->references('id')->on('icons')->onDelete('no action');
-        });
+        if (!Schema::hasColumn('excurtions', 'icon_id')) {
+            Schema::table('excurtions', function (Blueprint $table) {
+                $table->unsignedBigInteger('icon_id')->nullable();
+                $table->foreign('icon_id')->references('id')->on('icons')->onDelete('no action');
+            });
+        }
     }
 
     /**

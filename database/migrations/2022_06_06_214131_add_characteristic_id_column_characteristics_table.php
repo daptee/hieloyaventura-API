@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('characteristics', function (Blueprint $table) {
-            $table->unsignedBigInteger('characteristic_id')->nullable();
+        if (!Schema::hasColumn('characteristics', 'characteristic_id')) {
+            Schema::table('characteristics', function (Blueprint $table) {
+                $table->unsignedBigInteger('characteristic_id')->nullable();
 
-            $table->foreign('characteristic_id')->references('id')->on('characteristics')->onDelete('no action');
-        });
+                $table->foreign('characteristic_id')->references('id')->on('characteristics')->onDelete('no action');
+            });
+        }
     }
 
     /**

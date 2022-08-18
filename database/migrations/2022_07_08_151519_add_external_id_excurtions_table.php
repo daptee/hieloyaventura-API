@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('excurtions', function (Blueprint $table) {
-            $table->bigInteger('external_id')->nullable()->unsigned();
-        });
+        if (!Schema::hasColumn('excurtions', 'external_id')) {
+            Schema::table('excurtions', function (Blueprint $table) {
+                $table->bigInteger('external_id')->nullable()->unsigned();
+            });
+        }
     }
 
     /**

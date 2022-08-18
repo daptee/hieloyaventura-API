@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('excurtions', function (Blueprint $table) {
-            $table->dropForeign('excurtions_icon_id_foreign');
-            $table->dropColumn('icon_id');
-            $table->string('icon', 20)->nullable();
-        });
+        if (!Schema::hasColumn('excurtions', 'icon')) {
+            Schema::table('excurtions', function (Blueprint $table) {
+                $table->dropForeign('excurtions_icon_id_foreign');
+                $table->dropColumn('icon_id');
+                $table->string('icon', 20)->nullable();
+            });
+        }
     }
 
     /**

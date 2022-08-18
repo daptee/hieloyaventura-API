@@ -13,13 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('consults', function (Blueprint $table) {
-            $table->id();
-            $table->string('email');
-            $table->string('name', 100)->nullable();
-            $table->longText('message');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('consults')) {
+            Schema::create('consults', function (Blueprint $table) {
+                $table->id();
+                $table->string('email');
+                $table->string('name', 100)->nullable();
+                $table->longText('message');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

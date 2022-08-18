@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedTinyInteger('lenguage_id')->nullable();
-            $table->foreign('lenguage_id')->references('id')->on('lenguages')->onDelete('no action');
-        });
+        if (!Schema::hasColumn('users', 'lenguage_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->unsignedTinyInteger('lenguage_id')->nullable();
+                $table->foreign('lenguage_id')->references('id')->on('lenguages')->onDelete('no action');
+            });
+        }
     }
 
     /**

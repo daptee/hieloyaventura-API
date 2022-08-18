@@ -8,6 +8,7 @@ use App\Models\Characteristic;
 use App\Models\ExcurtionCharacteristic;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CharacteristicController extends Controller
@@ -53,13 +54,13 @@ class CharacteristicController extends Controller
     public function store(StoreCharacteristicRequest $request)
     {
         $message = "Error al crear en la {$this->s}.";
-        $data = $request->all();
+        $datos = $request->all();
 
-        $data = new $this->model($data);
+        $data = new $this->model($datos);
         try {
             $data->save();
-            if (isset($data['excurtion_id'])) {
-                ExcurtionCharacteristic::create(['excurtion_id' => $data['excurtion_id'], 'characteristic_id' => $data->id]);
+            if (isset($datos['excurtion_id'])) {
+                ExcurtionCharacteristic::create(['excurtion_id' => $datos['excurtion_id'], 'characteristic_id' => $data->id]);
             }
             $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
         } catch (ModelNotFoundException $error) {
@@ -93,6 +94,70 @@ class CharacteristicController extends Controller
         //
     }
 
+    public function arrayAddToExcurtion(Request $request, $id)
+    {
+        $message = "Error al crear en la {$this->s}.";
+        $datos = $request->all();
+        try {
+            foreach ($datos as $characteristic) {
+                $result[] = Characteristic::addCharacteristic($characteristic, $id, null);
+            }
+        } catch (ModelNotFoundException $error) {
+            return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            return response(compact("message", $error->getMessage()), 500);
+        }
+        $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
+        return response(compact("message", "result"));
+
+    }
+    public function storeArray(Request $request)
+    {
+        $message = "Error al crear en la {$this->s}.";
+        $datos = $request->all();
+        $result = [];
+        try {
+            foreach ($datos as $characteristic) {
+                $data = new $this->model($characteristic);
+                $data->save();
+                if (isset($characteristic['excurtion_id'])) {
+                    ExcurtionCharacteristic::create(['excurtion_id' => $characteristic['excurtion_id'], 'characteristic_id' => $data->id]);
+                }
+                $result[] = $this->model::with($this->model::SHOW)->findOrFail($data->id);
+            }
+        } catch (ModelNotFoundException $error) {
+            return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            return response(compact("message", $error->getMessage()), 500);
+        }
+        $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
+        return response(compact("message", "result"));
+
+    }
+    public function updateArray(Request $request, $id)
+    {
+
+        $message = "Error al editar {$this->s}.";
+        $datos = $request->all();
+
+        DB::beginTransaction();
+        try {
+            $this->model::findOrFail($id);
+            foreach ($datos as $characteristic) {
+                Characteristic::updateCharacteristic2($characteristic + ['id' => $id]);
+            }
+        } catch (ModelNotFoundException $error) {
+            DB::rollBack();
+            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            DB::rollBack();
+            return response(["message" => $message, "error" => $error->getMessage()], 500);
+        }
+        DB::commit();
+        $data = $this->model::with($this->model::SHOW)->findOrFail($id);
+        $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
+        return response(compact("message", "data"));
+    }
     /**
      * Update the specified resource in storage.
      *
