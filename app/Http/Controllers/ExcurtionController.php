@@ -175,7 +175,7 @@ class ExcurtionController extends Controller
                 foreach ($datos['pictures'] as $pic) {
                     if ($pic['file'] != null) {
                         $link = UploadFileHelper::createFiles($pic['file'], 'pictureExcurtion', $pic['name'], '');
-                        PictureExcurtion::create($pic);
+                        PictureExcurtion::create($pic + ['link' => $link, 'excurtion_id' => $id]);
                     }
                 }
             }

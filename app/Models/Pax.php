@@ -14,6 +14,16 @@ class Pax extends Model
         'name',
         'lastname',
         'dni',
+        'birthdate',
     ];
     use HasFactory;
+
+    protected $appends = [
+        'full_name'
+    ];
+
+    public function getFullNameAttribute()
+    {
+        return $this->name . ' ' . $this->lastname;
+    }
 }
