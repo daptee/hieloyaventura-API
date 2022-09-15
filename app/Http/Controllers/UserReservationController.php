@@ -80,9 +80,15 @@ class UserReservationController extends Controller
         try {
             if (isset($datos['user'])) {
                 $pass = Hash::make(Str::random(8));
-                $user = User::createUser($datos['user'] + [
-                    'password' => $pass,
-                ]);
+                
+                $user = User::where('email', $datos['user']['email'])->first();
+                if (!$user) {
+                    $user = User::createUser($datos['user'] + [
+                        'password' => $pass,
+                    ]);
+                }
+
+
                 try {
                     Mail::to($datos['user']['email'])->send(new RegistrationPassword($pass));
                 } catch (\Throwable $th) {
@@ -109,7 +115,7 @@ class UserReservationController extends Controller
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            dd( $error->getMessage(), $error->getLine());
+            \Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
             return response(compact("message"), 500);
         }
         DB::commit();
