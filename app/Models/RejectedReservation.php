@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class RejectedReservation extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_reservation_id',
+        'payment_id',
+        'data'
+    ];
 }
