@@ -92,12 +92,16 @@ class UserReservationController extends Controller
                 try {
                     Mail::to($datos['user']['email'])->send(new RegistrationPassword($pass));
                 } catch (\Throwable $th) {
+                    \Log::debug(print_r($th->getMessage(), true));
                 }
             }
+            
             $data = new $this->model($datos + [
-                "reservation_status_id" => ReservationStatus::STARTED,
-                "user_id" => $datos['user_id'] ?? $user->id,
+                "reservation_status_id" => ReservationStatus::STARTED
             ]);
+
+            $data->user_id = $datos['user_id'] ?? $user->id;
+
             $data->save();
             if (isset($datos['paxs'])) {
                 foreach ($datos['paxs'] as $pax) {
@@ -109,6 +113,9 @@ class UserReservationController extends Controller
                     ReservationPax::create($paxs + ['user_reservation_id' => $data->id]);
                 }
             }
+
+            //biling data reservation
+            //cantact data reservation
             $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
@@ -132,7 +139,7 @@ class UserReservationController extends Controller
      */
     public function show(UserReservation $userReservation)
     {
-        //
+        return $userReservation;
     }
 
     /**
@@ -155,46 +162,76 @@ class UserReservationController extends Controller
      */
     public function update(UpdateUserReservationRequest $request, UserReservation $id)
     {
-        $message = "Error al editar {$this->s}.";
-        $datos = $request->all();
 
+
+        // actualizar el status de user reservation
+
+
+        $datos = $request->only(['reservation_status_id', 'payment_id', 'payment_details']);
+
+        if ($datos['reservation_status_id'] == ReservationStatus::COMPLETED) {
+            $id->is_paid = 1;
+            $id->reservation_status_id =  ReservationStatus::COMPLETED;
+        } else if ($datos['reservation_status_id'] == ReservationStatus::REJECTED) {
+            $id->is_paid = 0;
+            $id->reservation_status_id =  ReservationStatus::REJECTED;
+
+            RejectedReservation::create([
+                'user_reservation_id'   => $id->id,
+                'payment_id'            => $datos['payment_id'],
+                'data'                  => $datos['payment_details']
+            ]);
+        }
         DB::beginTransaction();
         try {
-            if (isset($datos['user'])) {
-                $user = User::createUser($datos['user']);
-            }
-            $id->update($datos + ['user_id' => $datos['user_id']]);
-
-            $data = UserReservation::with(['user'])->findOrFail($id->id);
-            if ($id->reservation_status_id == ReservationStatus::REJECTED) {
-                RejectedReservation::create([
-                    'reservation_id' => $id->id,
-                ]);
-            }
-            if ($id->reservation_status_id == ReservationStatus::COMPLETED) {
-                $data->title = "Factura de compra";
-                try {
-                    $pdf = PDF::loadView('emails.bill', compact('data'));
-
-                    Mail::send('emails.bill', compact('data'), function ($message) use ($data, $pdf) {
-                        $message->to($data->user->email, $data->user->email)
-                            ->subject($data->title)
-                            ->attachData($pdf->output(), "Billing.pdf");
-                    });
-                } catch (\Throwable$th) {
-                }
-            }
-        } catch (ModelNotFoundException $error) {
-            DB::rollBack();
-            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+            $id->save();
         } catch (Exception $error) {
             DB::rollBack();
-            return response(["message" => $message, "error" => $error->getMessage() . $error->getLine()], 500);
-        }
-        DB::commit();
-        $data = $this->model::with($this->model::SHOW)->findOrFail($id->id);
-        $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
-        return response(compact("message", "data"));
+            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+        } 
+
+        return response()->json(["La reserva fue actualizada con éxito", $id]);
+
+        // $message = "Error al editar {$this->s}.";
+        // $datos = $request->all();
+
+        // DB::beginTransaction();
+        // try {
+        //     if (isset($datos['user'])) {
+        //         $user = User::createUser($datos['user']);
+        //     }
+        //     $id->update($datos + ['user_id' => $datos['user_id']]);
+
+        //     $data = UserReservation::with(['user'])->findOrFail($id->id);
+        //     if ($id->reservation_status_id == ReservationStatus::REJECTED) {
+        //         RejectedReservation::create([
+        //             'reservation_id' => $id->id,
+        //         ]);
+        //     }
+        //     if ($id->reservation_status_id == ReservationStatus::COMPLETED) {
+        //         $data->title = "Factura de compra";
+        //         try {
+        //             $pdf = PDF::loadView('emails.bill', compact('data'));
+
+        //             Mail::send('emails.bill', compact('data'), function ($message) use ($data, $pdf) {
+        //                 $message->to($data->user->email, $data->user->email)
+        //                     ->subject($data->title)
+        //                     ->attachData($pdf->output(), "Billing.pdf");
+        //             });
+        //         } catch (\Throwable$th) {
+        //         }
+        //     }
+        // } catch (ModelNotFoundException $error) {
+        //     DB::rollBack();
+        //     return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+        // } catch (Exception $error) {
+        //     DB::rollBack();
+        //     return response(["message" => $message, "error" => $error->getMessage() . $error->getLine()], 500);
+        // }
+        // DB::commit();
+        // $data = $this->model::with($this->model::SHOW)->findOrFail($id->id);
+        // $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
+        // return response(compact("message", "data"));
     }
 
     /**

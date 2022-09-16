@@ -24,7 +24,9 @@ class UpdateUserReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'reservation_status_id' => 'required|integer', 
+            'payment_id' => 'required', 
+            'payment_details' => 'required|string'
         ];
     }
 }
