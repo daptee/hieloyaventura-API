@@ -25,7 +25,7 @@ class StoreUserReservationRequest extends FormRequest
     {
         return [
             'user_id' => 'nullable',
-            'hotel_id' => 'nullable|required_if:is_transfer,1',
+            'hotel_id' => 'nullable|integer|required_if:is_transfer,1',
             'excurtion_id' => 'nullable',
             'reservation_status_id' => 'nullable',
             'turn_id' => 'nullable',
