@@ -11,7 +11,6 @@ class RejectedReservation extends Model
 
     protected $fillable = [
         'user_reservation_id',
-        'payment_id',
         'data'
     ];
 }

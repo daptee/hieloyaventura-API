@@ -162,35 +162,39 @@ class UserReservationController extends Controller
      */
     public function update(UpdateUserReservationRequest $request, UserReservation $id)
     {
-
-
-        // actualizar el status de user reservation
-
+        $userReservation = $id;
 
         $datos = $request->only(['reservation_status_id', 'payment_id', 'payment_details']);
 
-        if ($datos['reservation_status_id'] == ReservationStatus::COMPLETED) {
-            $id->is_paid = 1;
-            $id->reservation_status_id =  ReservationStatus::COMPLETED;
-        } else if ($datos['reservation_status_id'] == ReservationStatus::REJECTED) {
-            $id->is_paid = 0;
-            $id->reservation_status_id =  ReservationStatus::REJECTED;
-
-            RejectedReservation::create([
-                'user_reservation_id'   => $id->id,
-                'payment_id'            => $datos['payment_id'],
-                'data'                  => $datos['payment_details']
-            ]);
-        }
         DB::beginTransaction();
         try {
-            $id->save();
+            switch ($datos['reservation_status_id']) {
+                case ReservationStatus::COMPLETED:
+                    $userReservation->is_paid = 1;
+                    $userReservation->reservation_status_id =  ReservationStatus::COMPLETED;
+                    break;
+                case ReservationStatus::REJECTED:
+                    $userReservation->is_paid = 0;
+                    $userReservation->reservation_status_id =  ReservationStatus::REJECTED;
+
+                    RejectedReservation::create([
+                        'user_reservation_id'   => $userReservation->id,
+                        'data'                  => $datos['payment_details']
+                    ]);
+                    break;
+                default:
+                    return response(["message" => "El update solo recibe estatus de REJECTED o COMPLETED Error: URU0001", "error" => "EL reservation_status_id no es valido"], 422);
+                    break;
+            }
+       
+            $userReservation->save();
+        DB::commit();
         } catch (Exception $error) {
             DB::rollBack();
-            return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
+            return response(["message" => "Tuvimos un problema en el servidor Error: URU0002", "error" => $error->getMessage()], 500);
         } 
 
-        return response()->json(["La reserva fue actualizada con éxito", $id]);
+        return response()->json(["La reserva fue actualizada con éxito", $userReservation]);
 
         // $message = "Error al editar {$this->s}.";
         // $datos = $request->all();
