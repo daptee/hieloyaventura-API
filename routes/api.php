@@ -63,11 +63,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
     });
-    Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-    });
     Route::prefix('nationalities')->controller(LenguageController::class)->group(function () {
         Route::get('/', 'index');
     });
@@ -76,6 +71,13 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/{id}', 'update');
     });
     Route::get('send-email-pdf', [PDFController::class, 'index']);
+});
+
+Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'store');
+    Route::get('/{userReservation}', 'show');
+    Route::put('/{id}', 'update');
 });
 
 Route::get('/lenguages/{locale}', function ($locale) {
