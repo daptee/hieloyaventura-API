@@ -19,6 +19,7 @@ class UserReservation extends Model
     const INDEX = [];
 
     protected $fillable = [
+        'reservation_number',
         'user_id',
         'hotel_id',
         'excurtion_id',

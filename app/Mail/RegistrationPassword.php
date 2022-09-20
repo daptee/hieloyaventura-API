@@ -12,7 +12,7 @@ class RegistrationPassword extends Mailable
     use Queueable, SerializesModels;
     public $subjet = "Contraseña generada";
 
-    public $mensaje;
+    public $messaged;
 
     /**
      * Create a new message instance.
@@ -21,7 +21,7 @@ class RegistrationPassword extends Mailable
      */
     public function __construct($pass)
     {
-        $this->mensaje = "Su contraseña es <bold>$pass</bold>.";
+        $this->messaged = "Su contraseña es <bold>$pass</bold>.";
     }
 
     /**
@@ -32,10 +32,11 @@ class RegistrationPassword extends Mailable
     public function build()
     {
         return $this->from('info@hieloyaventuras.com.ar', 'Hielo y aventuras')
+                    // ->attach('/path/to/file')
                     ->replyTo('info@hieloyaventuras.com.ar')
                     ->subject('Contraseña generada')
-                    // ->view('mail.mailestados')
-                    // ->with(["mensaje" => $this->mensaje])
+                    ->view('emails.consults.consult')
+                    ->with(["messaged" => $this->messaged])
                     ;
     }
 }

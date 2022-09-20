@@ -24,6 +24,7 @@ class StoreUserReservationRequest extends FormRequest
     public function rules()
     {
         return [
+            'reservation_number' => 'required',
             'user_id' => 'nullable',
             'hotel_id' => 'nullable|integer|required_if:is_transfer,1',
             'excurtion_id' => 'nullable',
