@@ -123,7 +123,7 @@ class UserReservationController extends Controller
         } catch (Exception $error) {
             DB::rollBack();
             \Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
-            return response([compact("message"), "error" => "URC0001"], 500);
+            return response(["message" => $message, "error" => "URC0001"], 500);
         }
         DB::commit();
 
