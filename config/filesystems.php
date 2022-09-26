@@ -63,8 +63,8 @@ return [
         ],
         'pictureExcurtion' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/pictureExcurtion/'),
-            'url' => env('APP_URL') . '/storage/app/public/pictureExcurtion',
+            'root' => public_path('store/pictureExcurtion/'),
+            'url' => env('APP_URL') . '/store/pictureExcurtion',
             'visibility' => 'public',
         ],
 
