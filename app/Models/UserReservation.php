@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class UserReservation extends Model
 {
@@ -17,6 +18,8 @@ class UserReservation extends Model
         'user',
         'status',
         'excurtion',
+        'billing_data',
+        'contact_data'
     ];
     const INDEX = [];
 
@@ -51,5 +54,15 @@ class UserReservation extends Model
     public function excurtion(): BelongsTo
     {
         return $this->belongsTo(Excurtion::class, 'excurtion_id', 'id');
+    }
+
+    public function billing_data(): HasOne
+    {
+        return $this->hasOne(BillingDataReservation::class, 'user_reservation_id', 'id');
+    }
+
+    public function contact_data(): HasOne
+    {
+        return $this->hasOne(ContactDataReservation::class, 'user_reservation_id', 'id');
     }
 }
