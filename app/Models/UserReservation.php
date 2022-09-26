@@ -15,7 +15,6 @@ class UserReservation extends Model
 
     const SHOW = [
         'user',
-        'hotel',
         'status',
         'excurtion',
     ];
@@ -43,18 +42,12 @@ class UserReservation extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function hotel(): BelongsTo
-    {
-        return $this->belongsTo(Hotel::class, 'hotel_id', 'id');
-    }
+    
     public function status(): BelongsTo
     {
         return $this->belongsTo(ReservationStatus::class, 'reservation_status_id', 'id');
     }
-    public function turn(): BelongsTo
-    {
-        return $this->belongsTo(Turn::class, 'turn_id', 'id');
-    }
+    
     public function excurtion(): BelongsTo
     {
         return $this->belongsTo(Excurtion::class, 'excurtion_id', 'id');
