@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class UserReservation extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'turn' => 'datetime:H:i'
+    ];
+
     const SHOW = [
         'user',
         'hotel',
         'status',
-        'turn',
         'excurtion',
     ];
     const INDEX = [];
@@ -24,7 +27,8 @@ class UserReservation extends Model
         'hotel_id',
         'excurtion_id',
         'reservation_status_id',
-        'turn_id',
+        'date',
+        'turn',
         'hotel_name',
         'price',
         'children_price',
