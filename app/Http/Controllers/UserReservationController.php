@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Mail\RegistrationPassword;
+use App\Models\BillingDataReservation;
+use App\Models\ContactDataReservation;
 use App\Models\Pax;
 use App\Models\RejectedReservation;
 use App\Models\ReservationPax;
@@ -115,7 +117,15 @@ class UserReservationController extends Controller
             }
 
             //biling data reservation
+                if(isset($datos['billing_data'])){
+                    BillingDataReservation::create($datos['billing_data'] + ['user_reservation_id' => $data->id]);
+                }
             //cantact data reservation
+                if(isset($datos['contact_data'])){
+                    ContactDataReservation::create($datos['contact_data'] + ['user_reservation_id' => $data->id]);
+                }
+            //
+
             $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
