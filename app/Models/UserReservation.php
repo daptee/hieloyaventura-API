@@ -21,7 +21,12 @@ class UserReservation extends Model
         'billing_data',
         'contact_data'
     ];
-    const INDEX = [];
+    const INDEX = [
+        'status',
+        'excurtion',
+        'paxes',
+        'reservation_paxes'
+    ];
 
     protected $fillable = [
         'reservation_number',
@@ -64,5 +69,15 @@ class UserReservation extends Model
     public function contact_data(): HasOne
     {
         return $this->hasOne(ContactDataReservation::class, 'user_reservation_id', 'id');
+    }
+
+    public function paxes()
+    {
+        return $this->hasMany(Pax::class, 'user_reservation_id', 'id');
+    }
+
+    public function reservation_paxes()
+    {
+        return $this->hasMany(ReservationPax::class, 'user_reservation_id', 'id');
     }
 }

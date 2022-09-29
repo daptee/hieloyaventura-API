@@ -48,7 +48,8 @@ class UserReservationController extends Controller
                     $data->$key($value);
                 }
             }
-            $data = $this->model::with($this->model::INDEX)->get();
+            $data = $data->where('user_id', auth()->user()->id);
+            $data = $data->get();
         } catch (ModelNotFoundException $error) {
             return response(["message" => "No se encontraron " . $this->sp . "."], 404);
         } catch (Exception $error) {

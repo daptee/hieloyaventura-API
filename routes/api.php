@@ -74,7 +74,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/', 'index')->middleware(['jwt.verify']);
     Route::post('/', 'store');
     Route::get('/{userReservation}', 'show');
     Route::put('/{id}', 'update');
