@@ -82,27 +82,24 @@ class UserReservationController extends Controller
         try {
             DB::beginTransaction();
                 // Crear un usuario si se manda "create_user" en true
-                    if ($datos['create_user'] and isset($datos['contact_data'])) {
-                        
-                        $user = User::where('email', $datos['contact_data']['email'])->first();
-                        if (!$user) {
-                            $pass = Str::random(8);
-                            $passHashed = Hash::make($pass);
-                            $user = User::createUser($datos['contact_data'] + [
-                                'password' => $passHashed,
-                            ]);
-                            //Email de Bienvenida
-                                try {
-                                    Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass));
-                                } catch (\Throwable $th) {
-                                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-                                }
-                            //
-                            //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email'] 
-                            //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
-                                // ...
-                            //
-                        }
+                $user = User::where('email', $datos['contact_data']['email'])->first();
+                    if ($datos['create_user'] and isset($datos['contact_data']) and !$user) {
+                        $pass = Str::random(8);
+                        $passHashed = Hash::make($pass);
+                        $user = User::createUser($datos['contact_data'] + [
+                            'password' => $passHashed,
+                        ]);
+                        //Email de Bienvenida
+                            try {
+                                Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass));
+                            } catch (\Throwable $th) {
+                                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                            }
+                        //
+                        //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email'] 
+                        //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
+                            // ...
+                        //
                     }
                 //
                 
