@@ -10,6 +10,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -87,4 +89,33 @@ class UserController extends Controller
             return response()->json(['token_absent'], $e->getStatusCode());
         }
         return response()->json(compact('user'));
-    }}
+    }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+
+        $datos = $request->only([
+            "name",
+            "email",
+            "nationality_id",
+            "dni",
+            "phone"
+            // "lenguage_id",
+            // "birth_date",
+        ]);
+
+        $user = $user->fill($datos);
+
+        try {
+            DB::beginTransaction();
+                $user->save();
+            DB::commit();
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            return response(["message" => "Error en el servidor al actualizar los datos del usuario", "error" => "UCU0001"], 500);
+        }
+
+        return response()->json($user);
+    }
+}
