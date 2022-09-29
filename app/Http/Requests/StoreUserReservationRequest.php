@@ -40,6 +40,17 @@ class StoreUserReservationRequest extends FormRequest
             'reservation' => 'accepted',
             'notifications' => 'accepted',
             'paxs' => 'nullable|array',
+            
+            'billing_data' => 'required',
+            'billing_data.name' => 'required',
+
+            'contact_data' => 'required',
+            'contact_data.name' => 'required',
+            'contact_data.email' => 'required',
+            'contact_data.lenguage_id' => 'required',
+
+            'create_user' => 'required|boolean'
+
         ];
     }
 }
