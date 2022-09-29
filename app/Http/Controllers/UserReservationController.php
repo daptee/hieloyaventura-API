@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PDF;
@@ -78,67 +79,80 @@ class UserReservationController extends Controller
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
-        DB::beginTransaction();
         try {
-            if (isset($datos['user'])) {
-                $pass = Hash::make(Str::random(8));
+            DB::beginTransaction();
+                // Crear un usuario si se manda "create_user" en true
+                    if ($datos['create_user'] and isset($datos['contact_data'])) {
+                        
+                        $user = User::where('email', $datos['contact_data']['email'])->first();
+                        if (!$user) {
+                            $pass = Str::random(8);
+                            $passHashed = Hash::make($pass);
+                            $user = User::createUser($datos['contact_data'] + [
+                                'password' => $passHashed,
+                            ]);
+                            //Email de Bienvenida
+                                try {
+                                    Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass));
+                                } catch (\Throwable $th) {
+                                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                                }
+                            //
+                            //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email'] 
+                            //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
+                                // ...
+                            //
+                        }
+                    }
+                //
                 
-                $user = User::where('email', $datos['user']['email'])->first();
-                if (!$user) {
-                    $user = User::createUser($datos['user'] + [
-                        'password' => $pass,
-                    ]);
-                }
+                //Creo el registro en user_reservations
+                    $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
+                    $newUserReservation->user_id = $datos['user_id'] ?? (isset($user) ? $user->id : null);
+                    $newUserReservation->save();
+                //
 
-
-                try {
-                    Mail::to($datos['user']['email'])->send(new RegistrationPassword($pass));
-                } catch (\Throwable $th) {
-                    \Log::debug(print_r($th->getMessage(), true));
-                }
-            }
-            
-            $data = new $this->model($datos + [
-                "reservation_status_id" => ReservationStatus::STARTED
-            ]);
-
-            $data->user_id = $datos['user_id'] ?? $user->id;
-
-            $data->save();
-            if (isset($datos['paxs'])) {
-                foreach ($datos['paxs'] as $pax) {
-                    Pax::create($pax + ['user_reservation_id' => $data->id]);
-                }
-            }
-            if (isset($datos['paxs_reservation'])) {
-                foreach ($datos['paxs_reservation'] as $paxs) {
-                    ReservationPax::create($paxs + ['user_reservation_id' => $data->id]);
-                }
-            }
-
-            //biling data reservation
-                if(isset($datos['billing_data'])){
-                    BillingDataReservation::create($datos['billing_data'] + ['user_reservation_id' => $data->id]);
-                }
-            //cantact data reservation
-                if(isset($datos['contact_data'])){
-                    ContactDataReservation::create($datos['contact_data'] + ['user_reservation_id' => $data->id]);
-                }
-            //
-
-            $data = $this->model::with($this->model::SHOW)->findOrFail($data->id);
+                //Creo los registros de los pasajeros en paxes
+                    if (isset($datos['paxs'])) {
+                        foreach ($datos['paxs'] as $pax) {
+                            Pax::create($pax + ['user_reservation_id' => $newUserReservation->id]);
+                        }
+                    }
+                //
+                //Creo los registros de los pasajeros en reservation_paxes
+                    if (isset($datos['paxs_reservation'])) {
+                        foreach ($datos['paxs_reservation'] as $paxs) {
+                            ReservationPax::create($paxs + ['user_reservation_id' => $newUserReservation->id]);
+                        }
+                    }
+                //
+                    //Pasar el last name como nullable porque en el name le pasará el fullname y el lastname se completará en null o vacio
+                //biling data reservation
+                    if(isset($datos['billing_data'])) {
+                        BillingDataReservation::create($datos['billing_data'] + ['user_reservation_id' => $newUserReservation->id]);
+                    }
+                //contact data reservation
+                    if(isset($datos['contact_data'])) {
+                        ContactDataReservation::create($datos['contact_data'] + ['user_reservation_id' => $newUserReservation->id]);
+                    }
+                //
+                
+            DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            \Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
-        DB::commit();
 
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
-        return response(compact("message", "data"));
+        $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
+        //Mandar email con el PDF adjunto
+            // ...
+        //
+        return response(compact("message", "newUserReservation"));
     }
 
     /**
