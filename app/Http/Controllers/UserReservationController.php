@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Mail\RegistrationPassword;
+use App\Mail\UserReservation as MailUserReservation;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
 use App\Models\Pax;
@@ -13,6 +14,7 @@ use App\Models\ReservationPax;
 use App\Models\ReservationStatus;
 use App\Models\User;
 use App\Models\UserReservation;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -22,6 +24,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use PDF;
+use setasign\Fpdi\Fpdi;
 
 class UserReservationController extends Controller
 {
@@ -148,7 +151,27 @@ class UserReservationController extends Controller
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
         //Mandar email con el PDF adjunto
-            // ...
+            try {
+                Carbon::setLocale('es');
+                $date = $newUserReservation->date;
+                $dateFormated = $date->translatedFormat('l j \d\e F');
+
+                Mail::to($datos['contact_data']['email'])->send(
+                    new MailUserReservation($datos['contact_data']['email'],
+                                            $this->createPdf(
+                                                public_path("Hoja 2 - vacia.pdf"), 
+                                                $newUserReservation->reservation_number, 
+                                                $newUserReservation->contact_data->name, 
+                                                $newUserReservation->is_transfer, 
+                                                $newUserReservation->reservation_paxes->sum('quantity'), 
+                                                $dateFormated,
+                                                $newUserReservation->turn->format('H:i\h\s'), 
+                                                $newUserReservation->hotel_name, 
+                                                public_path('logo-minitrekking.png'))
+                                            ));
+            } catch (\Throwable $th) {
+                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            }
         //
         return response(compact("message", "newUserReservation"));
     }
@@ -269,5 +292,107 @@ class UserReservationController extends Controller
     public function destroy(UserReservation $userReservation)
     {
         //
+    }
+
+    private function createPdf($pdfBase, $reservationNumber, $contactName, $withTranslation, $amountOfPaxs, $reservationDate, $reservationTurn, $hotelName, $pathExcurtionLogo)
+    {
+        // initiate FPDI
+        $pdf = new Fpdi();
+        // add a page
+        $pdf->AddPage();
+        // set the source file
+        $pdf->setSourceFile($pdfBase);
+        // import page 1
+        $tplId = $pdf->importPage(1);
+        // use the imported page and place it at point 10,10 with a width of 100 mm
+        $pdf->useTemplate($tplId, 0, 0, 210);
+
+
+        //Textos
+        $reservationNumber = iconv('UTF-8', 'cp1250', $reservationNumber);
+        $contactName = iconv('UTF-8', 'cp1250', $contactName);
+        $withTranslation = $withTranslation ? 'con traslado' : '';
+        $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $amountOfPaxs . 'x Minitrekking ' . $withTranslation);
+        $reservationDate = iconv('UTF-8', 'cp1250', $reservationDate);
+        $reservationTurn = iconv('UTF-8', 'cp1250', $reservationTurn);
+        
+        $hotelName = iconv('UTF-8', 'cp1250', $hotelName);
+        
+        $pathToSavePdf = public_path("reservation-$reservationNumber.pdf");
+        
+        $details01 = iconv('UTF-8', 'cp1250', 'Por favor, recordá, que el tiempo de espera del pick up puede ');
+        $details02 = iconv('UTF-8', 'cp1250', 'ser de hasta 40 minutos.');
+        
+        $excurtionName = iconv('UTF-8', 'cp1250', 'Minitreking');
+
+        // now write some text above the imported page
+        //Nro de reserva
+            $pdf->SetFont('Helvetica');
+            $pdf->SetTextColor(54, 134, 195);
+            $pdf->SetXY(40, 61.4);
+            $pdf->Write(0, $reservationNumber);
+
+        //nombre del contact data
+            $pdf->SetFont('Helvetica');
+            $pdf->SetXY(55, 74);
+            $pdf->Write(0, $contactName);
+
+        //cantidad (pasajeros) y nombre de la excursion
+            $pdf->SetFont('Helvetica');
+            $pdf->SetXY(19, 82);
+            $pdf->Write(0, $amountPaxesWithDeatails);
+
+
+        //Fecha de la reserva
+            $pdf->SetFont('Helvetica');
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->SetXY(22, 92.5);
+            $pdf->Write(0, $reservationDate);
+        //Hora de la reserva
+            $pdf->SetFont('Helvetica');
+            $pdf->SetXY(85, 92.5);
+            $pdf->Write(0, $reservationTurn);
+
+        //si hay translado poner lo del hotel
+        if ($withTranslation) {
+            
+            $pdf->SetFont('Helvetica','', 12);
+            $pdf->SetTextColor(0, 0, 0);
+            $pdf->SetXY(28, 105);
+            $str = iconv('UTF-8', 'cp1250', 'El dia de la excursión, el pick up pasará a buscarte ');
+            $pdf->Write(0, $str);
+            
+            $pdf->SetXY(28, 110);
+            $str = iconv('UTF-8', 'cp1250', 'por el hotel: ');
+            $pdf->Write(0, $str);
+            //si hay translado poner lo del hotel
+            $pdf->SetFont('Helvetica','', 12);
+            $pdf->SetTextColor(54, 134, 195);
+            $pdf->Write(0, $hotelName);
+            $pdf->Image(public_path('ubicacion.png'), 20, 102, 5);
+        }
+
+        //Img
+        $pdf->Image($pathExcurtionLogo, 160, 70, 25);
+
+        //Nombre de la excursion
+        $pdf->SetFont('Helvetica','', 18);
+        $pdf->SetXY(157, 105);
+        $pdf->Write(0, $excurtionName);
+
+        //Texto informativo 1
+        $pdf->SetFont('Helvetica','', 12);
+        $pdf->SetTextColor(42, 42, 42);
+        $pdf->SetXY(12, 145);
+        $pdf->Write(0, $details01);
+        //Texto informativo 1.1
+        $pdf->SetXY(12, 150);
+        $pdf->Write(0, $details02);
+
+        // $pdf->Output();  
+        $pdf->Output($pathToSavePdf, "F");  
+
+        return $pathToSavePdf;
+
     }
 }
