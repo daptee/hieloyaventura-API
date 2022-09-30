@@ -309,7 +309,7 @@ class UserReservationController extends Controller
 
 
         //Textos
-        $reservationNumber = iconv('UTF-8', 'cp1250', $reservationNumber);
+        $reservationNumber = iconv('UTF-8', 'cp1250', "#$reservationNumber");
         $contactName = iconv('UTF-8', 'cp1250', $contactName);
         $withTranslation = $withTranslation ? 'con traslado' : '';
         $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $amountOfPaxs . 'x Minitrekking ' . $withTranslation);
@@ -377,7 +377,9 @@ class UserReservationController extends Controller
 
         //Nombre de la excursion
         $pdf->SetFont('Helvetica','', 18);
+        
         $pdf->SetXY(157, 105);
+        $pdf->SetTextColor(54, 134, 195);
         $pdf->Write(0, $excurtionName);
 
         //Texto informativo 1
