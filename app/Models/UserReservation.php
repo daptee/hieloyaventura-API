@@ -11,7 +11,8 @@ class UserReservation extends Model
 {
     use HasFactory;
     protected $casts = [
-        'turn' => 'datetime:H:i'
+        'turn' => 'datetime:H:i',
+        'date' => 'datetime:Y-m-d'
     ];
 
     const SHOW = [
