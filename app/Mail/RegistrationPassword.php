@@ -37,7 +37,7 @@ class RegistrationPassword extends Mailable
      */
     public function build()
     {
-        return $this->from('info@hieloyaventuras.com.ar', 'Hielo y aventuras')
+        return $this->from('info@hieloyaventuras.com.ar', 'Hielo y Aventura')
                     ->replyTo('info@hieloyaventuras.com.ar')
                     ->subject('Bienvenido a hielo y aventura')
                     ->view('emails.welcome')
