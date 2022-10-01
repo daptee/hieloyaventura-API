@@ -34,7 +34,7 @@ class UserReservation extends Mailable
      */
     public function build()
     {
-        return $this->from('info@hieloyaventuras.com.ar', 'Hielo y aventuras')
+        return $this->from('info@hieloyaventuras.com.ar', 'Hielo y Aventura')
                     ->attach($this->pathPdf)
                     ->replyTo('info@hieloyaventuras.com.ar')
                     ->subject($this->subject)
