@@ -23,6 +23,8 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::put('user_edit', 'update')->middleware(['jwt.verify']);
+    Route::put('new_password', 'updatePassword')->middleware(['jwt.verify']);
+
 });
 Route::get('faqs', [FaqController::class, 'index']);
 Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {

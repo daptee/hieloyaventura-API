@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserPasswordRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -11,87 +13,77 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public $model = CharacteristicType::class;
-    public $s = "usuarios"; //sustantivo singular
-    public $sp = "usuarios"; //sustantivo plural
-    public $ss = "usuario/s"; //sustantivo sigular/plural
-    public $v = "o"; //verbo ej:encontrado/a
-    public $pr = "el"; //preposicion singular
-    public $prp = "los"; //preposicion plural
-    public $message_show_500 = "Item no encontrado";
-    public $message_show_200 = "Item encontrado";
-    public $message_store_500 = "Item no creado";
-    public $message_store_200 = "Creado.";
 
     public function index(Request $request)
     {
-        try {
-            $data = $this->model::with($this->model::INDEX);
-            foreach ($request->all() as $key => $value) {
-                if (method_exists($this->model, 'scope' . $key)) {
-                    $data->$key($value);
-                }
-            }
-            $data = $this->model::with($this->model::INDEX)->get();
-        } catch (ModelNotFoundException $error) {
-            return response(["message" => $this->message_404], 404);
-        } catch (Exception $error) {
-            return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
-        }
-        $message = $this->message_show_500;
-        return response(compact("message", "data"));
+        // try {
+        //     $data = $this->model::with($this->model::INDEX);
+        //     foreach ($request->all() as $key => $value) {
+        //         if (method_exists($this->model, 'scope' . $key)) {
+        //             $data->$key($value);
+        //         }
+        //     }
+        //     $data = $this->model::with($this->model::INDEX)->get();
+        // } catch (ModelNotFoundException $error) {
+        //     return response(["message" => $this->message_404], 404);
+        // } catch (Exception $error) {
+        //     return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
+        // }
+        // $message = $this->message_show_500;
+        // return response(compact("message", "data"));
     }
 
     public function store(StoreUserRequest $request)
     {
-        $message = "Error al crear en la {$this->s}.";
-        $data = $request->all();
+        // $message = "Error al crear en la {$this->s}.";
+        // $data = $request->all();
 
-        $new = new $this->model($data);
-        try {
-            $new->save();
-            $data = $this->model::with($this->model::SHOW)->findOrFail($new->id);
-        } catch (ModelNotFoundException $error) {
-            return response(["message" => $this->message_404, "error" => $error->getMessage()], 404);
-        } catch (Exception $error) {
-            return response(["message" => $this->message_store_500, "error" => $error->getMessage()], 500);
-        }
-        $message = $this->message_show_200;
-        return response(compact("message", "data"));
+        // $new = new $this->model($data);
+        // try {
+        //     $new->save();
+        //     $data = $this->model::with($this->model::SHOW)->findOrFail($new->id);
+        // } catch (ModelNotFoundException $error) {
+        //     return response(["message" => $this->message_404, "error" => $error->getMessage()], 404);
+        // } catch (Exception $error) {
+        //     return response(["message" => $this->message_store_500, "error" => $error->getMessage()], 500);
+        // }
+        // $message = $this->message_show_200;
+        // return response(compact("message", "data"));
     }
     public function authenticate(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 400);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'could_not_create_token'], 500);
-        }
-        return response()->json(compact('token'));
+        // $credentials = $request->only('email', 'password');
+        // try {
+        //     if (!$token = JWTAuth::attempt($credentials)) {
+        //         return response()->json(['error' => 'invalid_credentials'], 400);
+        //     }
+        // } catch (JWTException $e) {
+        //     return response()->json(['error' => 'could_not_create_token'], 500);
+        // }
+        // return response()->json(compact('token'));
     }
     public function getAuthenticatedUser()
     {
-        try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['user_not_found'], 404);
-            }
-        } catch (TokenExpiredException $e) {
-            return response()->json(['token_expired'], $e->getStatusCode());
-        } catch (TokenInvalidException $e) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
-        } catch (JWTException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
-        }
-        return response()->json(compact('user'));
+        // try {
+        //     if (!$user = JWTAuth::parseToken()->authenticate()) {
+        //         return response()->json(['user_not_found'], 404);
+        //     }
+        // } catch (TokenExpiredException $e) {
+        //     return response()->json(['token_expired'], $e->getStatusCode());
+        // } catch (TokenInvalidException $e) {
+        //     return response()->json(['token_invalid'], $e->getStatusCode());
+        // } catch (JWTException $e) {
+        //     return response()->json(['token_absent'], $e->getStatusCode());
+        // }
+        // return response()->json(compact('user'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
         $user = auth()->user();
 
@@ -117,5 +109,38 @@ class UserController extends Controller
         }
 
         return response()->json($user);
+    }
+
+    public function updatePassword(UpdateUserPasswordRequest $request)
+    {
+        $user = auth()->user();
+
+        $credentials = [
+            'email' => $user->email, 
+            'password' => $request->current_password
+        ];
+
+        try{
+            if ($token = JWTAuth::attempt($credentials)) {
+                DB::beginTransaction();
+                    $new_password_hashed = Hash::make($request->new_password);
+                    $user->password = $new_password_hashed;
+
+                    $user->save();
+                DB::commit();
+            } else {
+                return response()->json(['message' => 'Contraseña actual no válida.'], 422);
+            }
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            Log::error(print_r($e->getMessage(), true));
+        }
+
+        return response()->json([
+            'message' => 'La contraseña se actualizó con éxito', 
+            'user' => $user,
+            'token' => $token
+        ]);
     }
 }
