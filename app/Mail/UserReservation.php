@@ -34,9 +34,9 @@ class UserReservation extends Mailable
      */
     public function build()
     {
-        return $this->from('info@hieloyaventuras.com.ar', 'Hielo y Aventura')
+        return $this->from('No-responder@hieloyaventura.com', 'Hielo y Aventura')
                     ->attach($this->pathPdf)
-                    ->replyTo('info@hieloyaventuras.com.ar')
+                    ->replyTo('No-responder@hieloyaventura.com')
                     ->subject($this->subject)
                     ->view('emails.user-reservation')
                     ->with(["msg" => "El pago fue exitoso."])
