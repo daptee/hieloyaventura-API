@@ -160,10 +160,10 @@ class UserReservationController extends Controller
                         'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
                     );
                     $newUserReservation =  UserReservation::find($newUserReservation->id);
-                    $newUserReservation->pdf = $pathReservationPdf;
+                    $newUserReservation->pdf = $pathReservationPdf['urlToSave'];
                     $newUserReservation->save();
 
-                    Mail::to($datos['contact_data']['email'])->send(new MailUserReservation($datos['contact_data']['email'], $pathReservationPdf));
+                    Mail::to($datos['contact_data']['email'])->send(new MailUserReservation($datos['contact_data']['email'], $pathReservationPdf['pathToSavePdf']));
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();
@@ -417,7 +417,10 @@ class UserReservationController extends Controller
         // $pdf->Output();  
         $pdf->Output($pathToSavePdf, "F");  
 
-        return $urlToSave;
+        return [
+            'urlToSave' => $urlToSave, 
+            'pathToSavePdf' => $pathToSavePdf
+        ];
 
     }
 }
