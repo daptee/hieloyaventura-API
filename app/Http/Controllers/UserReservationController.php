@@ -159,7 +159,6 @@ class UserReservationController extends Controller
                         public_path('logo-minitrekking.png'),
                         'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
                     );
-                    $newUserReservation =  UserReservation::find($newUserReservation->id);
                     $newUserReservation->pdf = $pathReservationPdf['urlToSave'];
                     $newUserReservation->save();
 
