@@ -155,8 +155,6 @@ class UserReservationController extends Controller
                 DB::beginTransaction();
                     $pathReservationPdf = $this->createPdf(
                         $newUserReservation,
-                        public_path("Hoja 2 - vacia.pdf"),
-                        public_path('logo-minitrekking.png'),
                         'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
                     );
                     $newUserReservation->pdf = $pathReservationPdf['urlToSave'];
@@ -289,8 +287,13 @@ class UserReservationController extends Controller
     {
         //
     }
+
+    // public function testpdf()
+    // {
+    //     $userReservation = UserReservation::first()
+    // }
     
-    private function createPdf($newUserReservation, $pdfBase, $pathExcurtionLogo, $details)
+    private function createPdf($newUserReservation, $details)
     {
         Carbon::setLocale('es');
         $date = $newUserReservation->date;
@@ -300,9 +303,18 @@ class UserReservationController extends Controller
         $dateFormated = "$dayText $dayNumber de $month";
 
         $excurtionName = $newUserReservation->excurtion->name;
+        $pathExcurtionLogo = $newUserReservation->excurtion->icon ? public_path($newUserReservation->excurtion->icon) : public_path('excursions/logos-default/logo-minitrekking-default.png');
+        
+        // ENG-01 / ESP-05 / PORTU-03
+        $pdfBase = public_path("Hoja 2 - vacia.pdf");//public_path("excursions/minitrekking/pdfs/con-trf/MINI_CT_ESP-05.pdf");
 
         // initiate FPDI
         $pdf = new Fpdi();
+
+        // $pdf->AddPage();
+        // // set the source file
+        // $pdf->setSourceFile($pdfBase);
+
         // add a page
         $pdf->AddPage();
         // set the source file
@@ -421,5 +433,5 @@ class UserReservationController extends Controller
             'pathToSavePdf' => $pathToSavePdf
         ];
 
-    }
+    }   
 }
