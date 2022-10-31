@@ -55,6 +55,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/', 'store');
         Route::post('/array', 'storeArray');
         Route::post('/{id}/excurtion', 'arrayAddToExcurtion');
+        Route::get('/{id}', 'show');
         Route::put('/{id}', 'update');
         Route::put('/{id}/array', 'updateArray');
     });
@@ -78,10 +79,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
     Route::get('/', 'index')->middleware(['jwt.verify']);
-    Route::post('/', 'store');
+    // Route::post('/', 'store');
     Route::get('/{userReservation}', 'show');
     Route::put('/{id}', 'update');
 });
+
+Route::post('users_reservations/',[UserReservationController::class, 'store']);
 
 Route::get('/lenguages/{locale}', function ($locale) {
     //1 => spanish
@@ -109,3 +112,5 @@ Route::get('/clear-cache', function() {
         "message" => "Cache cleared successfully"
     ]);
 });
+
+// Route::get('test', [UserReservationController::class, 'testpdf']);
