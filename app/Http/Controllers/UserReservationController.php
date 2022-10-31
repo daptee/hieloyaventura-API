@@ -288,10 +288,17 @@ class UserReservationController extends Controller
         //
     }
 
-    // public function testpdf()
-    // {
-    //     $userReservation = UserReservation::first()
-    // }
+    public function testpdf()
+    {
+        $userReservation = UserReservation::latest()->first();
+
+        $pathReservationPdf = $this->createPdf($userReservation,'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.');
+        
+        $userReservation->pdf = $pathReservationPdf['urlToSave'];
+        $userReservation->save();
+
+        return response()->json($userReservation);
+    }
     
     private function createPdf($newUserReservation, $details)
     {
@@ -303,7 +310,7 @@ class UserReservationController extends Controller
         $dateFormated = "$dayText $dayNumber de $month";
 
         $excurtionName = $newUserReservation->excurtion->name;
-        $pathExcurtionLogo = $newUserReservation->excurtion->icon ? public_path($newUserReservation->excurtion->icon) : public_path('excursions/logos-default/logo-minitrekking-default.png');
+        $pathExcurtionLogo = public_path($newUserReservation->excurtion->icon);
         
         // ENG-01 / ESP-05 / PORTU-03
         $pdfBase = public_path("Hoja 2 - vacia.pdf");//public_path("excursions/minitrekking/pdfs/con-trf/MINI_CT_ESP-05.pdf");
@@ -338,8 +345,8 @@ class UserReservationController extends Controller
         $details                 = iconv('UTF-8', 'cp1250', $details);
         $excurtionName           = iconv('UTF-8', 'cp1250', $excurtionName);
         $namePdf                 = "reservation-$newUserReservation->id" . "-$newUserReservation->reservation_number.pdf";
-        $pathToSavePdf           = public_path("reservas/$namePdf");
-        $urlToSave               = url("reservas/$namePdf");
+        $pathToSavePdf           = public_path("reservations/$namePdf");
+        $urlToSave               = url("reservations/$namePdf");
 
         // now write some text above the imported page
         //Nro de reserva

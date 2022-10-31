@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Excurtion extends Model
 {
@@ -33,6 +34,14 @@ class Excurtion extends Model
         'validity_to',
         'icon',
     ];
+
+   /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['icon_link'];
+
     public function characteristics(): HasManyThrough
     {
         return $this->hasManyThrough(Characteristic::class, ExcurtionCharacteristic::class, 'excurtion_id', 'id', 'id', 'characteristic_id');
@@ -48,5 +57,17 @@ class Excurtion extends Model
     public function scopeExternal($query, $external_id)
     {
         return $query->where('external_id', $external_id);
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function iconLink(): Attribute
+    {
+        return new Attribute(
+            get: fn () => public_path($this->icon),
+        );
     }
 }
