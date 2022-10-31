@@ -67,7 +67,7 @@ class Excurtion extends Model
     protected function iconLink(): Attribute
     {
         return new Attribute(
-            get: fn () => public_path($this->icon),
+            get: fn () => url($this->icon),
         );
     }
 }
