@@ -12,3 +12,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+/docker
+/docker-compose.yml
+composer.phar
+hya-db.sql
+/public/reservations
