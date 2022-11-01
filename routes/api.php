@@ -79,12 +79,12 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
     Route::get('/', 'index')->middleware(['jwt.verify']);
-    // Route::post('/', 'store');
+    Route::post('/', 'store');
     Route::get('/{userReservation}', 'show');
     Route::put('/{id}', 'update');
 });
 
-Route::post('users_reservations/',[UserReservationController::class, 'store']);
+Route::post('users_reservations2/',[UserReservationController::class, 'store']);
 
 Route::get('/lenguages/{locale}', function ($locale) {
     //1 => spanish
