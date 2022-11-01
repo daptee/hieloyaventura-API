@@ -106,6 +106,7 @@ Route::prefix('consults')->controller(ConsultController::class)->group(function 
     Route::post('/', 'store');
 });
 Route::get('/clear-cache', function() {
+    Artisan::call('config:clear');
     Artisan::call('optimize');
 
     return response()->json([
