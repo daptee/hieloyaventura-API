@@ -25,7 +25,8 @@ class UpdateUserReservationRequest extends FormRequest
     {
         return [
             'reservation_status_id' => 'required|integer',
-            'payment_details' => 'required_if:reservation_status_id,1|string'
+            'payment_details' => 'required_if:reservation_status_id,1|string',
+            'email' => 'email'
         ];
     }
 }

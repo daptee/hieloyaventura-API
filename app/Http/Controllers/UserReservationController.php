@@ -150,23 +150,7 @@ class UserReservationController extends Controller
 
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
-        //Mandar email con el PDF adjunto
-            try {
-                DB::beginTransaction();
-                    $pathReservationPdf = $this->createPdf(
-                        $newUserReservation,
-                        'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
-                    );
-                    $newUserReservation->pdf = $pathReservationPdf['urlToSave'];
-                    $newUserReservation->save();
-
-                    Mail::to($datos['contact_data']['email'])->send(new MailUserReservation($datos['contact_data']['email'], $pathReservationPdf['pathToSavePdf']));
-                DB::commit();
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-            }
-        //
+        
         return response(compact("message", "newUserReservation"));
     }
 
@@ -203,7 +187,7 @@ class UserReservationController extends Controller
     {
         $userReservation = $id;
 
-        $datos = $request->only(['reservation_status_id', 'payment_id', 'payment_details']);
+        $datos = $request->only(['reservation_status_id', 'payment_id', 'payment_details', 'email']);
 
         DB::beginTransaction();
         try {
@@ -211,6 +195,30 @@ class UserReservationController extends Controller
                 case ReservationStatus::COMPLETED:
                     $userReservation->is_paid = 1;
                     $userReservation->reservation_status_id =  ReservationStatus::COMPLETED;
+
+                    //Mandar email con el PDF adjunto
+                        try {
+                            DB::beginTransaction();
+                                $pathReservationPdf = $this->createPdf(
+                                    $userReservation,
+                                    'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
+                                );
+                                $userReservation->pdf = $pathReservationPdf['urlToSave'];
+                                $userReservation->save();
+
+                                DB::commit();
+                        } catch (\Throwable $th) {
+                            DB::rollBack();
+                            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                        }
+                        
+                        try{
+                            $mailTo = $datos['email'] ?? $userReservation->contact_data->email;
+                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf']));
+                        } catch (\Throwable $th) {
+                            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                        }
+                    //
                     break;
                 case ReservationStatus::REJECTED:
                     $userReservation->is_paid = 0;

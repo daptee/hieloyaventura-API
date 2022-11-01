@@ -17,6 +17,7 @@ class ContactDataReservation extends Model
         'name',
         'phone',
         'lastname',
+        'email',
         'dni',
         'nationality_id'
     ];
