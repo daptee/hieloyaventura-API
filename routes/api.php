@@ -10,10 +10,13 @@ use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
+use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -114,4 +117,15 @@ Route::get('/clear-cache', function() {
     ]);
 });
 
-// Route::get('test', [UserReservationController::class, 'testpdf']);
+// Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
+
+Route::get('test-mail', function() {
+    try {
+        $text = "Algo para el mail";
+        Mail::to("javierjeanpieres@gmail.com")->send(new TestMail("javierjeanpieres@gmail.com", $text));
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+    }
+
+    return 'hi';
+});
