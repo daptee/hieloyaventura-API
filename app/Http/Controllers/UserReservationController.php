@@ -296,21 +296,25 @@ class UserReservationController extends Controller
         //
     }
 
-    public function testpdf()
-    {
-        $userReservation = UserReservation::latest()->first();
+    // public function testpdf($trf, $excursion)
+    // {
+    //     $userReservation = UserReservation::latest()->first();
+    //     $userReservation->is_transfer = $trf;
+    //     $userReservation->excurtion_id = $excursion;
 
-        $pathReservationPdf = $this->createPdf($userReservation,'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.');
+    //     $pathReservationPdf = $this->createPdf($userReservation,'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.');
         
-        $userReservation->pdf = $pathReservationPdf['urlToSave'];
-        $userReservation->save();
+    //     $userReservation->pdf = $pathReservationPdf['urlToSave'];
+    //     $userReservation->save();
 
-        return response()->json($userReservation);
-    }
+    //     return response()->json($userReservation);
+    // }
     
     private function createPdf($newUserReservation, $details)
     {
         Carbon::setLocale('es');
+        $languageToPdf = "ES";
+
         $date = $newUserReservation->date;
         $dayText = ucfirst($date->translatedFormat('l'));
         $dayNumber = $date->format('j');
@@ -320,23 +324,27 @@ class UserReservationController extends Controller
         $excurtionName = $newUserReservation->excurtion->name;
         $pathExcurtionLogo = public_path($newUserReservation->excurtion->icon);
         
-        // ENG-01 / ESP-05 / PORTU-03
-        $pdfBase = public_path("Hoja 2 - vacia.pdf");//public_path("excursions/minitrekking/pdfs/con-trf/MINI_CT_ESP-05.pdf");
+
+        $firstPage = $this->withOrWithoutTrf($excurtionName, $newUserReservation->is_transfer, $languageToPdf);
+        $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
 
         // initiate FPDI
         $pdf = new Fpdi();
 
-        // $pdf->AddPage();
-        // // set the source file
-        // $pdf->setSourceFile($pdfBase);
+        $pdf->AddPage();
+        // set the source file
+        $pdf->setSourceFile($firstPage);
+        $tplId1 = $pdf->importPage(1);
+
+        $pdf->useTemplate($tplId1, -8, -8, 227);
 
         // add a page
         $pdf->AddPage();
         // set the source file
-        $pdf->setSourceFile($pdfBase);
+        $pdf->setSourceFile($secondPage);
         // import page 1
         $tplId = $pdf->importPage(1);
-        // use the imported page and place it at point 10,10 with a width of 100 mm
+        // use the imported page
         $pdf->useTemplate($tplId, 0, 0, 210);
 
 
@@ -449,4 +457,13 @@ class UserReservationController extends Controller
         ];
 
     }   
+
+    private function withOrWithoutTrf( $excursionName, $transfer, $language = 'ES')
+    {
+        $withOrWithoutTrf = $transfer ? 'con-trf' : 'sin-trf' ;
+
+        $excursionName = strtolower($excursionName);
+
+        return public_path("excursions/$excursionName/pdfs/$withOrWithoutTrf/$language.pdf");
+    }
 }
