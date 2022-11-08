@@ -143,7 +143,7 @@ class Characteristic extends Model
             }
 
             if (isset($characteristic['icon'])) {
-                if ($characteristic['icon']['file'] != null) {
+                if (isset($characteristic['icon']['file']) and $characteristic['icon']['file'] != null) {
                     $link = UploadFileHelper::createFiles($characteristic['icon']['file'], 'iconsCharacteristics', $characteristic['icon']['name'], '');
                     Icon::create(['name' => $characteristic['icon']['name']]);
                 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class CharacteristicTranslable extends Model
 {
@@ -22,10 +23,25 @@ class CharacteristicTranslable extends Model
     //     'description' => 'array',
     // ];
 
-    protected static function booted()
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope('request_lenguage', function (Builder $builder) {
+    //         $builder->where('lenguage_id', Session::get('applocale') ?? 1);
+    //     });
+    // }
+
+    protected $appends = ['language_code'];
+
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function languageCode(): Attribute
     {
-        static::addGlobalScope('request_lenguage', function (Builder $builder) {
-            $builder->where('lenguage_id', Session::get('applocale') ?? 1);
-        });
+        return new Attribute(
+            get: fn () => Lenguage::find($this->lenguage_id)->abreviation,
+        );
     }
 }

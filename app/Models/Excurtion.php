@@ -25,8 +25,6 @@ class Excurtion extends Model
         'link_map',
         'code_excurtion',
         'price',
-        'price_children',
-        'price_special',
         'is_transfer',
         'name',
         'external_id',
@@ -46,6 +44,12 @@ class Excurtion extends Model
     {
         return $this->hasManyThrough(Characteristic::class, ExcurtionCharacteristic::class, 'excurtion_id', 'id', 'id', 'characteristic_id');
     }
+
+    public function characteristics2()
+    {
+        return $this->belongsToMany(Characteristic::class, ExcurtionCharacteristic::class, 'excurtion_id', 'characteristic_id');
+    }
+
     public function pictures(): HasMany
     {
         return $this->hasMany(PictureExcurtion::class, 'excurtion_id', 'id');

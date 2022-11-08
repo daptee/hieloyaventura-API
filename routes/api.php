@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
+use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
@@ -129,3 +130,5 @@ Route::get('test-mail', function() {
 
     return 'hi';
 });
+
+Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
