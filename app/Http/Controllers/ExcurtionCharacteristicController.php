@@ -645,6 +645,7 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
+            
         //
 
         return $characteristics;
