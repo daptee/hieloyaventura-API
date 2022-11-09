@@ -630,14 +630,14 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ];
         //9 restrictions
-            $characteristic['characteristics'][] = [
+            $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => "restrictions",
                 "order" => null,
                 "icon" => null,
 
                 "characteristics" => [],
-                "characteristic_translables" => [
+                "translables" => [
                     [
                         "lenguage_id" => 1,
                         "name" => "Restricciones importantes antes de comprar",
@@ -645,7 +645,7 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-            
+
         //
 
         return $characteristics;
