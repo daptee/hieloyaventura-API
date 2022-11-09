@@ -19,16 +19,14 @@ class CharacteristicTranslable extends Model
         'description',
     ];
 
-    // protected $casts = [
-    //     'description' => 'array',
-    // ];
-
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope('request_lenguage', function (Builder $builder) {
-    //         $builder->where('lenguage_id', Session::get('applocale') ?? 1);
-    //     });
-    // }
+    protected static function booted()
+    {
+        if (Session::has('language-id')) {
+            static::addGlobalScope('request_lenguage', function (Builder $builder) {
+                $builder->where('lenguage_id', Session::get('language-id') ?? 1);
+            });
+        }
+    }
 
     protected $appends = ['language_code'];
 

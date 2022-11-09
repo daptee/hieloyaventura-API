@@ -116,6 +116,30 @@ class ExcurtionController extends Controller
         $message = $this->message_show_200;
         return response(compact("message", "data"));
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Excurtion  $excurtion
+     * @return \Illuminate\Http\Response
+     */
+    public function showByLanguage(Excurtion $excurtion, $id, $language)
+    {
+        try {
+            session()->flash('language-id', $language);
+            $data = $this->model::with($this->model::SHOW)->findOrFail($id);
+
+            // ->with(['user' => function ($query) {
+            //     $query->select('id', 'username');
+            // }])
+        } catch (ModelNotFoundException $error) {
+            return response(["message" => $this->message_404], 404);
+        } catch (Exception $error) {
+            return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
+        }
+        $message = $this->message_show_200;
+        return response(compact("message", "data"));
+    }
     /**
      * Display the specified resource.
      *

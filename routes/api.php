@@ -34,6 +34,7 @@ Route::get('faqs', [FaqController::class, 'index']);
 Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
+    Route::get('/{id}/{language}', 'showByLanguage');
     Route::get('/by-external-id/{id}', 'showByExternalId');
 });
 
