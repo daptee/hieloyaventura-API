@@ -98,6 +98,20 @@ class ExcurtionCharacteristicController extends Controller
      * 5- Itinerario (en vertical en la página)
      * 7- Qué llevar en la exursión
      * 9- Antes de comprar
+     * 10 comparison_sail_perito
+     * 11- comparison_trekking_ice
+     * 12- comparison_dificult
+     * 14- comparison_fissures
+     * 15- comparison_seracs
+     * 16- comparison_sinks
+     * 17- comparison_caves
+     * 18- comparison_laggons
+     * 19- comparison_group_size
+     * 20- comparison_lagoon_coast_trekking
+     * 21- comparison_forest_trekking
+     * 22- comparison_food_included
+     * 23- comparison_hotel_transfer
+     * 25- comparison_current_price
      */
 
     private function datos()
