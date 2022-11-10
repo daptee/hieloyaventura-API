@@ -52,7 +52,13 @@ class ExcurtionCharacteristicController extends Controller
         
         try {
             DB::beginTransaction();
-            // $excurtion->characteristics2()->delete();
+
+            // return $excurtion->characteristics2->pluck('id');
+            
+            // foreach ($excurtion->characteristics2 as $characteristic) {
+            //     $this->deleteCharacteristics($characteristic);
+            // }
+
             $excurtion->characteristics2()->detach();
 
                 foreach ($datos['characteristics'] as $characteristic) {
@@ -71,6 +77,20 @@ class ExcurtionCharacteristicController extends Controller
         return response(compact("message", "data"));
     }
 
+    private function deleteCharacteristics($characteristic)
+    {
+        foreach ($characteristic->characteristics as $charact) {
+
+            if ($charact->characteristics->count() > 0) {
+                return 
+                $this->deleteCharacteristics($charact);
+            }
+
+        }
+        
+        $characteristic->delete();
+    }
+
     /**
      * 1- Caracteristica
      * 2- About (sobre está experiencia)
@@ -84,7 +104,7 @@ class ExcurtionCharacteristicController extends Controller
     {
         $characteristics = [];
 
-        //1 characteristics
+        //1 characteristics //Traducir de acá para abajo
             $characteristics['characteristics'][] = [
                 # Generales"1"
                 "icon_id" =>  NULL,
@@ -125,7 +145,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La duración de la actividad es de aproximadamente 9.30hs. Se recomienda no organizar otros planes para ese día."
+                                    "description" =>  '<p>Aproximadamente 12 horas (Día completo)</p>'
                                 ],
                                 [
                                     # INGLES
@@ -147,7 +167,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo"
+                                    "description" =>  "<p>Desde el 15 de septiembre hasta el 30 de abril</p>"
                                 
                                 ],
                                 [
@@ -170,7 +190,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo"
+                                    "description" =>  '<p>Opcional traslado con guía y visita de una hora aproximadamente a pasarelas.</p>'
                                 
                                 ],
                                 [
@@ -193,7 +213,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo"
+                                    "description" =>  "<p>Nuestros guías hablan español e inglés.</p>"
                                 
                                 ],
                                 [
@@ -216,7 +236,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo"
+                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 18 a 50 años.</span> Sin exepción.</p>'
                                 
                                 ],
                                 [
@@ -239,7 +259,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo"
+                                    "description" =>  "<p>ALTA. Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar al menos 7 horas y media, siendo parte del trayecto sobre el hielo con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
@@ -608,7 +628,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "icon_id" => null,
-                            "characteristic_type_id" => null,
+                            "characteristic_type" => null,
                             "order" => null,
                             "icon" => '$ticket',
                             "characteristics" => [],
@@ -645,6 +665,357 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
+
+        //10 comparison_sail_perito
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sail_perito",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //11 comparison_trekking_ice
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_trekking_ice",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "3 horas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "3 horas"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "3 horas"
+                    ]
+                ]
+            ];
+        //12 comparison_dificult
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_dificult",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Dificultad",
+                        "description" => "Alta"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Dificultad",
+                        "description" => "Alta"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Dificultad",
+                        "description" => "Alta"
+                    ]
+                ]
+            ];
+        //14 comparison_fissures
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_fissures",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de grietas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de grietas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista de grietas",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //15 comparison_seracs
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_seracs",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de Seracs",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //16 comparison_sinks
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sinks",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de sumideros",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de sumideros",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista de sumideros",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //17 comparison_caves
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_caves",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de cuevas",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de cuevas",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista de cuevas",
+                        "description" => "eventualmente"
+                    ]
+                ]
+            ];
+        //18 comparison_laggons
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_laggons",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de lagunas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de lagunas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista de lagunas",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //19 comparison_group_size
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_group_size",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Tamaño de grupo",
+                        "description" => "10"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Tamaño de grupo",
+                        "description" => "10"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Tamaño de grupo",
+                        "description" => "10"
+                    ]
+                ]
+            ];
+        //20 comparison_lagoon_coast_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_lagoon_coast_trekking",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //21 comparison_forest_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_forest_trekking",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por bosque",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking por bosque",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking por bosque",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //22 comparison_food_included
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_food_included",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //23 comparison_hotel_transfer
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_hotel_transfer",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "optativo"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "optativo"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "optativo"
+                    ]
+                ]
+            ];
+        //25 comparison_current_price
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_current_price",
+                "order" => null,
+                "icon" => null,                
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Precio actual",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Precio actual",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Precio actual",
+                        "description" => null
+                    ]
+                ]
+            ];
+
+
+        
 
         //
 
