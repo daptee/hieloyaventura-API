@@ -118,7 +118,7 @@ class ExcurtionCharacteristicController extends Controller
     {
         $characteristics = [];
 
-        //1 characteristics //Traducir de acá para abajo
+        //1 characteristics 
             $characteristics['characteristics'][] = [
                 # Generales"1"
                 "icon_id" =>  NULL,
@@ -164,12 +164,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Approximately 12 hours (Full day)</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
                                 ]
                             ]
                         ],
@@ -187,12 +187,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  "<p>From September 15th to April 30th.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  "<p>A partir de 15 de Setembro até 30 de abril</p>"
                                 ]
                             ]
                         ],
@@ -210,12 +210,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Optional transfer with guide, including a visit of about one hour to the walkways.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas.</p>"
                                 ]
                             ]
                         ],
@@ -233,12 +233,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Our guides speak Spanish and English.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  "<p>Nossos guias falam espanhol e inglês.</p>"
                                 ]
                             ]
                         ],                    
@@ -256,12 +256,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 50 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 18 e 50 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
                         ],
@@ -278,12 +278,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  ""
+                                    "description" =>  "<p>HIGH. In order to have a great experience on the Glacier, you should have the psychophysical capacity required to walk for at least 7 hours and a half, partly on ice and with crampons.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  ""
+                                    "description" =>  "<p>ALTA. Para que você tenha uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar, pelos menos, 7 horas e meia, uma parte do percorrido sobre gelo e com grampos.</p>"
                                 ]
                             ]
                         ]
@@ -377,12 +377,12 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "",
+                                        "description" => '<li>Obese persons.&nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "",
+                                        "description" => '<li>Pessoas obesas <a href="https://hieloyaventura.com/faq-es/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
                                     ]
                                 ]
                             ],
@@ -397,6 +397,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => null,
                                         "description" => "<li>Mujeres embarazadas.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>Pregnant women.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Mulheres grávidas.</li>",
                                     ]
                                 ]
                             ],
@@ -411,6 +421,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => null,
                                         "description" => "<li>Personas con cualquier grado o tipo de discapacidad física o mental que afecte su atención, marcha y/o coordinación.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People with any degree of physical or mental disability that affects their attention, ability to walk and/or coordination.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com qualquer grau ou tipo de deficiência física ou mental que possa afetar sua atenção, marcha e/ou coordenação.</li>",
                                     ]
                                 ]
                             ],
@@ -425,6 +445,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => null,
                                         "description" => "<li>Personas que sufran enfermedades cardiovasculares centrales o periféricas, que sus capacidades cardíacas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras prótesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y múltiples).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People who suffer from central or peripheral heart or vascular diseases, whose heart or vascular capabilities are limited, or people with stents, bypass, pacemaker or other prosthesis. Example: anticoagulant medication, stage 3 varicose veins (multiple thick varicose veins that can be noticed).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).</li>",
                                     ]
                                 ]
                             ],
@@ -439,6 +469,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => null,
                                         "description" => "<li>Personas que padezcan enfermedades provocadas de discapacidades respiratorias (EPOC, asma, enfisema, etc.)</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People who suffer from diseases causing respiratory impairment (COPD, asthma, emphysema, etc.).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com doenças que provoquem deficiências respiratórias (EPOC, asma, enfisema, etc.).</li>",
                                     ]
                                 ]
                             ]
@@ -465,17 +505,27 @@ class ExcurtionCharacteristicController extends Controller
                         "lenguage_id" => 1,
                         "name" => "A TENER EN CUENTA ANTES DE COMPRAR",
                         "description" => "<p><strong>Debido al grado de esfuerzo y dificultad (ALTA, con pronunciadas subidas y bajadas en un terreno irregular) que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar:</strong></p>"
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
+                        "description" => "<p><strong>Due to the effort and difficulty levels (HIGH, with steep and uneven ascents and descents) of this activity, and in order to preserve their health, the following persons cannot take the tour:</strong></p>"
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "LEVAR EM CONTA ANTES DE COMPRAR",
+                        "description" => "<p><strong>Devido ao nível de esforço e dificuldade da atividade (ALTA, com subidas e descidas pronunciadas e irregulares), e visando a proteger sua saúde, as pessoas a seguir não podem participar da excursão:</strong></p>"
                     ]
                 ]
             ];
 
-        //5 itinerary
+        //5 itinerary ////traducir todas estás características
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => 'itinerary',
                 "order" => null,
                 
-                "characteristics" => [
+                "characteristics" => [ //traducir todas estás características
                     [
                         "icon_id" => null,
                         "order" => null,
@@ -491,6 +541,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => "Salida de El Calafate",
                                         "description" => "80km de lagos, estepa y bosques."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Salida de El Calafate",
+                                        "description" => "80km de lagos, estepa y bosques."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Salida de El Calafate",
+                                        "description" => "80km de lagos, estepa y bosques."
                                     ]
                                 ]
                             ],
@@ -502,6 +562,16 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
+                                        "name" => "Embarque en Puerto",
+                                        "description" => "20 minutos de navegación frente al Glaciar."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Embarque en Puerto",
+                                        "description" => "20 minutos de navegación frente al Glaciar."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
                                         "name" => "Embarque en Puerto",
                                         "description" => "20 minutos de navegación frente al Glaciar."
                                     ]
@@ -517,6 +587,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => "Trekking sobre el glaciar",
                                         "description" => "Caminata con crampones de aproximadamente 3 horas."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Trekking sobre el glaciar",
+                                        "description" => "Caminata con crampones de aproximadamente 3 horas."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Trekking sobre el glaciar",
+                                        "description" => "Caminata con crampones de aproximadamente 3 horas."
                                     ]
                                 ]
                             ],
@@ -528,6 +608,16 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
+                                        "name" => "Regreso al Puerto",
+                                        "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Regreso al Puerto",
+                                        "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
                                         "name" => "Regreso al Puerto",
                                         "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
                                     ]
@@ -543,6 +633,16 @@ class ExcurtionCharacteristicController extends Controller
                                         "lenguage_id" => 1,
                                         "name" => "Visita a Pasarelas",
                                         "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Visita a Pasarelas",
+                                        "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Visita a Pasarelas",
+                                        "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
                                     ]
                                 ]
                             ],
@@ -554,6 +654,16 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
+                                        "name" => "Regreso a El Calafate",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Regreso a El Calafate",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
                                         "name" => "Regreso a El Calafate",
                                         "description" => ""
                                     ]
@@ -575,6 +685,16 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
+                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
                                         "name" => "OPCIONAL CON TRASLADO",
                                         "description" => null
                                     ]
@@ -600,7 +720,17 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Itinerario de la excursión",
+                        "name" => "Itinerario Big Ice",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Big Ice itinerary",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Itinerário Big Ice",
                         "description" => null
                     ]
                 ]
@@ -624,6 +754,16 @@ class ExcurtionCharacteristicController extends Controller
                                     "lenguage_id" => 1,
                                     "name" => null,
                                     "description" => "<p>Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => "<p>Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => "<p>Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.</p>"
                                 ]
                             ]
                         ],
@@ -635,6 +775,16 @@ class ExcurtionCharacteristicController extends Controller
                             "translables" => [
                                 [
                                     "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => "<p>Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => "<p>Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 3,
                                     "name" => null,
                                     "description" => "<p>Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
                                 ]
@@ -651,6 +801,16 @@ class ExcurtionCharacteristicController extends Controller
                                     "lenguage_id" => 1,
                                     "name" => null,
                                     "description" => "<p>Deberás presentar tu entrada al Parque Nacional. Podés comprarla <span class='text-primary'>acá (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')</span> o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => "<p>Deberás presentar tu entrada al Parque Nacional. Podés comprarla <span class='text-primary'>acá (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')</span> o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => "<p>Deberás presentar tu entrada al Parque Nacional. Podés comprarla <span class='text-primary'>acá (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')</span> o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>"
                                 ]
                             ]
                         ]
@@ -658,6 +818,16 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" => 1,
+                            "name" => "Que llevar en la excursión",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 2,
+                            "name" => "Que llevar en la excursión",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 3,
                             "name" => "Que llevar en la excursión",
                             "description" => null
                         ]
@@ -674,6 +844,16 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
+                    ],
+                    [
+                        "lenguage_id" => 3,
                         "name" => "Restricciones importantes antes de comprar",
                         "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
                     ]
@@ -795,6 +975,16 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => "1",
+                        "name" => "Vista de Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Vista de Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
                         "name" => "Vista de Seracs",
                         "description" => "1"
                     ]
