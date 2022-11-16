@@ -123,13 +123,13 @@ Route::get('/clear-cache', function() {
 
 Route::get('test-mail', function() {
     try {
-        $text = "Algo para el mail";
-        Mail::to("javierjeanpieres@gmail.com")->send(new TestMail("javierjeanpieres@gmail.com", $text));
+        $text = "Test de envio de mail Hielo y Aventura";
+        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
     }
 
-    return 'hi';
+    return 'Test realizado';
 });
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);

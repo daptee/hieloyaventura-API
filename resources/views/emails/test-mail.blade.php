@@ -7,7 +7,7 @@
     <title>Test Mail</title>
 </head>
 <body>
-    <h1>Hi Jean</h1>
+    <h1>Test de prueba</h1>
         <p>{{ $text }}</p>
 </body>
 </html>
