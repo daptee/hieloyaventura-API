@@ -59,7 +59,7 @@ class ExcurtionCharacteristicController extends Controller
                     Characteristic::addCharacteristic($characteristic, $excurtion->id, null);
                 }
 
-                $this->clearDatabase();
+                // $this->clearDatabase();
             DB::commit();
         }  catch (Exception $error) {
             DB::rollBack();
@@ -1562,7 +1562,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" => 1,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "About",
                             "description" => '<p><span style="color: #3686c3;"><strong>El Safari Azul</strong></span> está pensado para aquellos que, además de navegar frente al Glaciar Perito Moreno, <span style="color: #3686c3;"><strong>sueñan con acercarse al hielo glaciar!</strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p>La excursión comienza en El Calafate cuando el bus parte con destino al <span style="color: #3686c3;"><strong>Parque Nacional Los Glaciares.</strong></span> Una vez en el Puerto Bajo de las Sombras, a solo 7 km de las pasarelas, tomaremos un barco para cruzar el Lago Rico y, luego de navegar 20 minutos, desembarcaremos en la costa opuesta.</p>
@@ -1623,7 +1623,7 @@ class ExcurtionCharacteristicController extends Controller
                     ]
             ];
 
-        //3 before_buying  <----- IMPORTANTE: Chequear con seba  ----->
+        //3 before_buying 
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => "before_buying",
@@ -2068,17 +2068,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Trekking sobre hielo",
-                        "description" => "3 horas"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Ice trekking",
-                        "description" => "3 hours"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Trekking no gelo",
-                        "description" => "3 horas"
+                        "description" => "0"
                     ]
                 ]
             ];
@@ -2120,17 +2120,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Vista de grietas",
-                        "description" => "1"
+                        "description" => "Desde el barco"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "view of cracks",
-                        "description" => "1"
+                        "description" => "From the ship"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "visão de rachaduras",
-                        "description" => "1"
+                        "description" => "Do barco"
                     ]
                 ]
             ];
