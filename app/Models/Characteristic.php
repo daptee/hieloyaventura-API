@@ -173,7 +173,9 @@ class Characteristic extends Model
                 }
             }
 
-            ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
+            if(!is_null($new_excurtion_id)){
+                ExcurtionCharacteristic::create(['characteristic_id' => $new_characteristic->id, 'excurtion_id' => $new_excurtion_id]);
+            }
             if (isset($characteristic['characteristics'])) {
                 foreach ($characteristic['characteristics'] as $characteristic_new) {
                     self::addCharacteristic($characteristic_new, null, $new_characteristic->id);
