@@ -2030,368 +2030,368 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
-        //10 comparison_sail_perito 
-            // $characteristics['characteristics'][] = [
-            //     "icon_id" => null,
-            //     "characteristic_type" => "comparison_sail_perito",
-            //     "order" => null,
-            //     "icon" => null,
+        // 10 comparison_sail_perito 
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sail_perito",
+                "order" => null,
+                "icon" => null,
 
-            //     "characteristics" => [],
-            //     "translables" => [
-            //         [
-            //             "lenguage_id" => "1",
-            //             "name" => "Navega frente al Glaciar Perito Moreno",
-            //             "description" => "1"
-            //         ],
-            //         [
-            //             "lenguage_id" => "2",
-            //             "name" => "Navega frente al Glaciar Perito Moreno",
-            //             "description" => "1"
-            //         ],
-            //         [
-            //             "lenguage_id" => "3",
-            //             "name" => "Navega frente al Glaciar Perito Moreno",
-            //             "description" => "1"
-            //         ]
-            //     ]
-            // ];
-        //11 comparison_trekking_ice 
-            // $characteristics['characteristics'][] = [
-            //     "icon_id" => null,
-            //     "characteristic_type" => "comparison_trekking_ice",
-            //     "order" => null,
-            //     "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Sail in front of the Perito Moreno Glacier",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Navegue em frente ao Glaciar Perito Moreno",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        // 11 comparison_trekking_ice 
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_trekking_ice",
+                "order" => null,
+                "icon" => null,
 
-            //     "characteristics" => [],
-            //     "translables" => [
-            //         [
-            //             "lenguage_id" => "1",
-            //             "name" => "Trekking sobre hielo",
-            //             "description" => "3 horas"
-            //         ],
-            //         [
-            //             "lenguage_id" => "2",
-            //             "name" => "Trekking sobre hielo",
-            //             "description" => "3 horas"
-            //         ],
-            //         [
-            //             "lenguage_id" => "3",
-            //             "name" => "Trekking sobre hielo",
-            //             "description" => "3 horas"
-            //         ]
-            //     ]
-            // ];
-        //12 comparison_dificult
-            // $characteristics['characteristics'][] = [
-            //     "icon_id" => null,
-            //     "characteristic_type" => "comparison_dificult",
-            //     "order" => null,
-            //     "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "3 horas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Ice trekking",
+                        "description" => "3 hours"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking no gelo",
+                        "description" => "3 horas"
+                    ]
+                ]
+            ];
+        // 12 comparison_dificult
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_dificult",
+                "order" => null,
+                "icon" => null,
 
-            //     "characteristics" => [],
-            //     "translables" => [
-            //         [
-            //             "lenguage_id" => "1",
-            //             "name" => "Dificultad",
-            //             "description" => "Alta"
-            //         ],
-            //         [
-            //             "lenguage_id" => "2",
-            //             "name" => "Dificultad",
-            //             "description" => "Alta"
-            //         ],
-            //         [
-            //             "lenguage_id" => "3",
-            //             "name" => "Dificultad",
-            //             "description" => "Alta"
-            //         ]
-            //     ]
-            // ];
-        //14 comparison_fissures
-            // $characteristics['characteristics'][] = [
-            //     "icon_id" => null,
-            //     "characteristic_type" => "comparison_fissures",
-            //     "order" => null,
-            //     "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Dificultad",
+                        "description" => "Baja"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Difficulty",
+                        "description" => "Low"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Dificuldade",
+                        "description" => "baixa"
+                    ]
+                ]
+            ];
+        // 14 comparison_fissures
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_fissures",
+                "order" => null,
+                "icon" => null,
 
-            //     "characteristics" => [],
-            //     "translables" => [
-            //         [
-            //             "lenguage_id" => "2",
-            //             "name" => "Vista de grietas",
-            //             "description" => "1"
-            //         ],
-            //         [
-            //             "lenguage_id" => "2",
-            //             "name" => "Vista de grietas",
-            //             "description" => "1"
-            //         ],
-            //         [
-            //             "lenguage_id" => "3",
-            //             "name" => "Vista de grietas",
-            //             "description" => "1"
-            //         ]
-            //     ]
-            // ];
-        // //15 comparison_seracs
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_seracs",
-        //         "order" => null,
-        //         "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de grietas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "view of cracks",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "visão de rachaduras",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //15 comparison_seracs
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_seracs",
+                "order" => null,
+                "icon" => null,
 
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Vista de Seracs",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Vista de Seracs",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Vista de Seracs",
-        //                 "description" => "1"
-        //             ]
-        //         ]
-        //     ];
-        // //16 comparison_sinks
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_sinks",
-        //         "order" => null,
-        //         "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão de Seracs",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //16 comparison_sinks
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sinks",
+                "order" => null,
+                "icon" => null,
 
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Vista de sumideros",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Vista de sumideros",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Vista de sumideros",
-        //                 "description" => "1"
-        //             ]
-        //         ]
-        //     ];
-        // //17 comparison_caves
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_caves",
-        //         "order" => null,
-        //         "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de sumideros",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of sinkholes",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão dos sumidouros",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //17 comparison_caves
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_caves",
+                "order" => null,
+                "icon" => null,
 
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Vista de cuevas",
-        //                 "description" => "eventualmente"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Vista de cuevas",
-        //                 "description" => "eventualmente"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Vista de cuevas",
-        //                 "description" => "eventualmente"
-        //             ]
-        //         ]
-        //     ];
-        // //18 comparison_laggons
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_laggons",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Vista de lagunas",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Vista de lagunas",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Vista de lagunas",
-        //                 "description" => "1"
-        //             ]
-        //         ]
-        //     ];
-        // //19 comparison_group_size
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_group_size",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Tamaño de grupo",
-        //                 "description" => "10"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Tamaño de grupo",
-        //                 "description" => "10"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Tamaño de grupo",
-        //                 "description" => "10"
-        //             ]
-        //         ]
-        //     ];
-        // //20 comparison_lagoon_coast_trekking
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_lagoon_coast_trekking",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Trekking por costa del lago",
-        //                 "description" => "0"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Trekking por costa del lago",
-        //                 "description" => "0"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Trekking por costa del lago",
-        //                 "description" => "0"
-        //             ]
-        //         ]
-        //     ];
-        // //21 comparison_forest_trekking
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_forest_trekking",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Trekking por bosque",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Trekking por bosque",
-        //                 "description" => "1"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Trekking por bosque",
-        //                 "description" => "1"
-        //             ]
-        //         ]
-        //     ];
-        // //22 comparison_food_included
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_food_included",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Comida incluida",
-        //                 "description" => "0"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Comida incluida",
-        //                 "description" => "0"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Comida incluida",
-        //                 "description" => "0"
-        //             ]
-        //         ]
-        //     ];
-        // //23 comparison_hotel_transfer
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_hotel_transfer",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Traslado desde el hotel",
-        //                 "description" => "optativo"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Traslado desde el hotel",
-        //                 "description" => "optativo"
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Traslado desde el hotel",
-        //                 "description" => "optativo"
-        //             ]
-        //         ]
-        //     ];
-        // //25 comparison_current_price
-        //     $characteristics['characteristics'][] = [
-        //         "icon_id" => null,
-        //         "characteristic_type" => "comparison_current_price",
-        //         "order" => null,
-        //         "icon" => null,
-        //         "characteristics" => [],
-        //         "translables" => [
-        //             [
-        //                 "lenguage_id" => "1",
-        //                 "name" => "Precio actual",
-        //                 "description" => null
-        //             ],
-        //             [
-        //                 "lenguage_id" => "2",
-        //                 "name" => "Precio actual",
-        //                 "description" => null
-        //             ],
-        //             [
-        //                 "lenguage_id" => "3",
-        //                 "name" => "Precio actual",
-        //                 "description" => null
-        //             ]
-        //         ]
-        //     ];
-
-
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de cuevas",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "view of caves",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "vista das cavernas",
+                        "description" => "eventualmente"
+                    ]
+                ]
+            ];
+        //18 comparison_laggons
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_laggons",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de lagunas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of lagoons",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista das lagoas",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //19 comparison_group_size
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_group_size",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Tamaño de grupo",
+                        "description" => "10"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "group size",
+                        "description" => "10"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Tamanho do grupo",
+                        "description" => "10"
+                    ]
+                ]
+            ];
+        //20 comparison_lagoon_coast_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_lagoon_coast_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking along the lake coast",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking ao longo da costa do lago",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //21 comparison_forest_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_forest_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por bosque",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "trekking through forest",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "trekking pela floresta",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //22 comparison_food_included
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_food_included",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Lunch included",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Almoço incluso",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //23 comparison_hotel_transfer
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_hotel_transfer",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "optativo"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Transfer from the hotel",
+                        "description" => "optativo"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Traslado do hotel",
+                        "description" => "optativo"
+                    ]
+                ]
+            ];
+        //25 comparison_current_price
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_current_price",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Precio actual",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Actual Price",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Preço real",
+                        "description" => null
+                    ]
+                ]
+            ];
 
 
-        // //
+
+
+        //
 
         return $characteristics;
     }
