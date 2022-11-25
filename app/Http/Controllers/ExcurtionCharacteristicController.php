@@ -244,17 +244,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  '<p>Aproximadamente 12 horas (Día completo)</p>'
+                                    "name"        =>  '<p>Aproximadamente 12 horas (Día completo)</p>',
+                                    "description" =>  '<p>La actividad es de todo el día, y cuenta con 7 horas y media de caminata.</p>'
                                 ],
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>Approximately 12 hours (Full day)</p>"
+                                    "name"        =>  "<p>Approximately 12 hours (Full day)</p>",
+                                    "description" =>  "<p>The activity is all day, and has 7 hours and a half of walking.</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
+                                    "name"        =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>",
+                                    "description" =>  "<p>A atividade é o dia todo, e tem 7 horas e meia de caminhada.</p>"
                                 ]
                             ]
                         ],
@@ -266,18 +269,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "<p>Desde el 15 de septiembre hasta el 30 de abril</p>"
-
+                                    "name"        =>  "<p>Desde el 15 de septiembre hasta el 30 de abril</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Septiembre al 30 de Abril</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>From September 15th to April 30th.</p>"
+                                    "name"        =>  "<p>From September 15th to April 30th.</p>",
+                                    "description" =>  "<p>The availability of this excursion is from September 15 to April 30</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  "<p>A partir de 15 de Setembro até 30 de abril</p>"
+                                    "name"        =>  "<p>A partir de 15 de Setembro até 30 de abril</p>",
+                                    "description" =>  "<p>A disponibilidade desta excursão é de 15 de setembro a 30 de abril</p>"
                                 ]
                             ]
                         ],
@@ -289,17 +294,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  '<p>Traslado opcional</p>',
                                     "description" =>  '<p>Opcional traslado con guía y visita de una hora aproximadamente a pasarelas.</p>'
-
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  '<p>Optional transfer</p>',
                                     "description" =>  "<p>Optional transfer with guide, including a visit of about one hour to the walkways.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  '<p>Transferência opcional</p>',
                                     "description" =>  "<p>Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas.</p>"
                                 ]
                             ]
@@ -312,17 +319,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Guías español e inglés.</p>",
                                     "description" =>  "<p>Nuestros guías hablan español e inglés.</p>"
-
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Spanish and English guides.</p>",
                                     "description" =>  "<p>Our guides speak Spanish and English.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Guias em espanhol e inglês</p>",
                                     "description" =>  "<p>Nossos guias falam espanhol e inglês.</p>"
                                 ]
                             ]
@@ -335,17 +344,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Apto para 18 a 50 años</p>",
                                     "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 18 a 50 años.</span> Sin exepción.</p>'
-
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Adequado para 18 a 50 anos</p>",
                                     "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 50 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Suitable for 18 to 50 years old</p>",
                                     "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 18 e 50 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
@@ -358,16 +369,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Complejidad alta</p>",
                                     "description" =>  "<p>ALTA. Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar al menos 7 horas y media, siendo parte del trayecto sobre el hielo con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>High complexity</p>",
                                     "description" =>  "<p>HIGH. In order to have a great experience on the Glacier, you should have the psychophysical capacity required to walk for at least 7 hours and a half, partly on ice and with crampons.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Alta complexidade</p>",
                                     "description" =>  "<p>ALTA. Para que você tenha uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar, pelos menos, 7 horas e meia, uma parte do percorrido sobre gelo e com grampos.</p>"
                                 ]
                             ]
