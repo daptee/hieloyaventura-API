@@ -1799,13 +1799,13 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
-        //5 itinerary ////traducir todas estás características
+        //5 itinerary
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => 'itinerary',
                 "order" => null,
 
-                "characteristics" => [ //traducir todas estás características
+                "characteristics" => [
                     [
                         "icon_id" => null,
                         "order" => null,
@@ -1820,17 +1820,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Salida de El Calafate",
-                                        "description" => "80km de lagos, estepa y bosques"
+                                        "description" => "80km"
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => "Departure from El Calafate",
-                                        "description" => "80km of lakes, steppes and forests"
+                                        "description" => "80km"
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => "Partida de El Calafate",
-                                        "description" => "80km de lagos, estepes e florestas"
+                                        "description" => "80km"
                                     ]
                                 ]
                             ],
@@ -2071,12 +2071,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => "<p>Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.</p>"
+                                    "description" => "<p>Wear comfortable and warm clothes. A rain jacket, long waterproof trousers, trekking boots, a medium-size backpack (40Lts), sunglasses, sunscreen, gloves, a wool hat.</p>"
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => "<p>Vestir ropa cómoda y abrigada. Campera y pantalón impermeable, calzado deportivo o botas de trekking impermeables. El clima es cambiante y hay que estar preparado para no mojarse ni pasar frío. Lentes de sol, protector solar, guantes, gorro.</p>"
+                                    "description" => "<p>Vestir roupa confort&aacute;vel e quente. Casaco imperme&aacute;vel, cal&ccedil;as cumpridas e imperme&aacute;veis, botasde trekking imperme&aacute;veis, mochila m&eacute;dia (40 litros), &oacute;culosde sol, protetor solar, luvas e gorro</p>"
                                 ]
                             ]
                         ],
@@ -2094,12 +2094,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => "<p>Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
+                                    "description" => "<p>Bring food and drink for the day. The company does not sell food and drinks.</p>"
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => "<p>Llevar comida y bebida para el día. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
+                                    "description" => "<p>Levar comida e bebida para todo o dia. A empresa n&atilde;o oferece servi&ccedil;o de venda de comidas nem bebidas.</p>"
                                 ]
                             ]
                         ],
@@ -2118,12 +2118,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => "<p>Deberás presentar tu entrada al Parque Nacional. Podés comprarla <span class='text-primary'>acá (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')</span> o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>"
+                                    "description" => '<p>Tickets must be exhibited at the entrance of the Parque Nacional. You can buy your ticket here&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Select: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;or pay it in cash (in Argentine pesos) when you arrive at the Parque Nacional.</p>'
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => "<p>Deberás presentar tu entrada al Parque Nacional. Podés comprarla <span class='text-primary'>acá (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')</span> o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>"
+                                    "description" => '<p>Voc&ecirc; dever&aacute; apresentar seu ingresso ao Parque Nacional. Pode comprar o ingresso aqui&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Selecionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;ou pagar com dinheiro (pesos argentinos) ao chegar ao Parque Nacional.</p>'
                                 ]
                             ]
                         ]
@@ -2131,17 +2131,17 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" => 1,
-                            "name" => "Que llevar en la excursión",
+                            "name" => "Que llevar en la excursión?",
                             "description" => null
                         ],
                         [
                             "lenguage_id" => 2,
-                            "name" => "Que llevar en la excursión",
+                            "name" => "What to bring?",
                             "description" => null
                         ],
                         [
                             "lenguage_id" => 3,
-                            "name" => "Que llevar en la excursión",
+                            "name" => "O que É PRECISO levar?",
                             "description" => null
                         ]
                     ]
