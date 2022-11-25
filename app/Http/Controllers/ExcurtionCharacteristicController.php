@@ -1154,7 +1154,7 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "2",
                         "name" => "Vista de cuevas",
-                        "description" => "eventualmente"
+                        "description" => "eventually"
                     ],
                     [
                         "lenguage_id" => "3",
@@ -1304,12 +1304,12 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "2",
                         "name" => "Traslado desde el hotel",
-                        "description" => "optativo"
+                        "description" => "optional"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Traslado desde el hotel",
-                        "description" => "optativo"
+                        "description" => "opcional"
                     ]
                 ]
             ];
@@ -1324,17 +1324,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Precio actual",
-                        "description" => null
+                        "description" => 80000
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Precio actual",
-                        "description" => null
+                        "description" => 80000
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Precio actual",
-                        "description" => null
+                        "description" => 80000
                     ]
                 ]
             ];
@@ -2172,17 +2172,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Vista de sumideros",
-                        "description" => "1"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "View of sinkholes",
-                        "description" => "1"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Visão dos sumidouros",
-                        "description" => "1"
+                        "description" => "0"
                     ]
                 ]
             ];
@@ -2198,17 +2198,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Vista de cuevas",
-                        "description" => "eventualmente"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "view of caves",
-                        "description" => "eventualmente"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "vista das cavernas",
-                        "description" => "eventualmente"
+                        "description" => "0"
                     ]
                 ]
             ];
@@ -2223,17 +2223,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Vista de lagunas",
-                        "description" => "1"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "View of lagoons",
-                        "description" => "1"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Vista das lagoas",
-                        "description" => "1"
+                        "description" => "0"
                     ]
                 ]
             ];
@@ -2248,17 +2248,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Tamaño de grupo",
-                        "description" => "10"
+                        "description" => "hasta 50"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "group size",
-                        "description" => "10"
+                        "description" => "up to 50"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Tamanho do grupo",
-                        "description" => "10"
+                        "description" => "até 50"
                     ]
                 ]
             ];
@@ -2273,17 +2273,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Trekking por costa del lago",
-                        "description" => "0"
+                        "description" => "1"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Trekking along the lake coast",
-                        "description" => "0"
+                        "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Trekking ao longo da costa do lago",
-                        "description" => "0"
+                        "description" => "1"
                     ]
                 ]
             ];
@@ -2353,12 +2353,12 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "2",
                         "name" => "Transfer from the hotel",
-                        "description" => "optativo"
+                        "description" => "optional"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Traslado do hotel",
-                        "description" => "optativo"
+                        "description" => "opcional"
                     ]
                 ]
             ];
@@ -2373,17 +2373,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Precio actual",
-                        "description" => null
+                        "description" => 15000
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Actual Price",
-                        "description" => null
+                        "description" => 15000
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Preço real",
-                        "description" => null
+                        "description" => 15000
                     ]
                 ]
             ];
