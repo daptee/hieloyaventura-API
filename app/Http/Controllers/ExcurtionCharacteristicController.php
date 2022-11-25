@@ -811,12 +811,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "name" => "OPTIONAL WITH TRANSFER",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "name" => "OPCIONAL COM TRANSFER",
                                         "description" => null
                                     ]
                                 ]
@@ -830,6 +830,16 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "TOUR INCLUIDO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "TOUR INCLUDED",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "PASSEIO INCLUÍDO",
                                         "description" => null
                                     ]
                                 ]
@@ -1829,17 +1839,17 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Opcional de traslado",
+                                        "name" => "OPCIONAL CON TRASLADO",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Optional transfer service",
+                                        "name" => "OPTIONAL WITH TRANSFER",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Opcional de traslado",
+                                        "name" => "OPCIONAL COM TRANSFER",
                                         "description" => null
                                     ]
                                 ]
@@ -1852,17 +1862,17 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Tour incluido",
+                                        "name" => "TOUR INCLUIDO",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Tour included",
+                                        "name" => "TOUR INCLUDED",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Passeio Incluído",
+                                        "name" => "PASSEIO INCLUÍDO",
                                         "description" => null
                                     ]
                                 ]
@@ -2441,20 +2451,20 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 #ESPAÑOL
                                 "lenguage_id" =>  "1",
-                                "name"        =>  "Duración CON traslado y pasarelas",
-                                "description" =>  '<p>Aproximadamente 1 hora</p>'
+                                "name"        =>  "<p>Aproximadamente 1 hora</p>",
+                                "description" =>  '<p>La duracion de la actividad es aproximadamente 1 hora.</p>'
                             ],
                             [
                                 # INGLES
                                 "lenguage_id" =>  "2",
-                                "name"        =>  "Duration WITH transfer and walkways",  
-                                "description" =>  "<p>Approximately 1 hour</p>"
+                                "name"        =>  "<p>Approximately 1 hour</p>",  
+                                "description" =>  "<p>The duration of the activity is approximately 1 hour.</p>"
                             ],
                             [
                                 # PORTUGUÉS
                                 "lenguage_id" =>  "3",
-                                "name"        =>  "Duração COM traslado e passarelas",  
-                                "description" =>  "<p>Aproximadamente 1 hora</p>"
+                                "name"        =>  "<p>Aproximadamente 1 hora</p>",  
+                                "description" =>  "<p>A duração da atividade é de aproximadamente 1 hora.</p>"
                             ]
                         ]
                     ],
@@ -2491,18 +2501,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "<p>Opera todo el año</p>"
-
+                                    "name" =>  "<p>Opera todo el año</p>",
+                                    "description" => "<p>Esta actividad opera todo el año</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>Operates all year</p>"
+                                    "name" =>  "<p>Operates all year</p>",
+                                    "description" => "<p>This activity operates throughout the year</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  "<p>Año inteiro</p>"
+                                    "name" =>  "<p>Año inteiro</p>",
+                                    "description" => "<p>Esta atividade funciona durante todo o ano</p>"
                                 ]
                             ]
                         ],
@@ -2514,17 +2526,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Traslado no incluido</p>",                                    
                                     "description" =>  '<p>El traslado terrestre desde “El Calafate” al puerto “Bajo de las Sombras” NO está incluido.</p>'
-
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Transfer not included</p>",                                    
                                     "description" =>  "<p>Transfer from “El Calafate” to “Bajo de las Sombras” port is NOT included.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Transferência não incluída</p>",                                    
                                     "description" =>  "<p>A traslado de “El Calafate” ao porto “Bajo de las Sombras” NÃO está incluída.</p>"
                                 ]
                             ]
@@ -2537,18 +2551,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "<p>Nuestros guías hablan español.</p>"
-
+                                    "name"        =>  "<p>Nuestros guías hablan español.</p>",
+                                    "description" =>  "<p>Nuestros guías hablan principalmente español, aunque algunos también hablan ingles.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>Our guides can speak Spanish.</p>"
+                                    "name"        =>  "<p>Our guides can speak Spanish.</p>",
+                                    "description" =>  "<p>Our guides speak mainly Spanish, although some also speak English</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  "<p>Nossos guias falam espanhol.</p>"
+                                    "name"        =>  "<p>Nossos guias falam espanhol.</p>",
+                                    "description" =>  "<p>Nossos guias falam principalmente espanhol, embora alguns também falem inglês.</p>"
                                 ]
                             ]
                         ],
@@ -2560,18 +2576,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  '<p>Sin limites de edad</p>'
-
+                                    "name"        =>  '<p>Sin limites de edad</p>',
+                                    "description" =>  '<p>Esta excursion no presenta una limitacion de edad. Cualquier persona puede realizarla.</p>'
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  '<p>No age limit</p>'
+                                    "name"        =>  '<p>No age limit</p>',
+                                    "description" =>  '<p>This excursion does not present an age limitation. Anyone can do it.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  '<p>Sem limite de idade</p>'
+                                    "name"        =>  '<p>Sem limite de idade</p>',
+                                    "description" =>  '<p>Esta excursão não apresenta limite de idade. Qualquer um pode fazer isso.</p>'
                                 ]
                             ]
                         ],
@@ -2583,16 +2601,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Complejidad nula</p>",
                                     "description" =>  "<p>Esta excursion no requiere esfuerzo físico.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>zero complexity</p>",
                                     "description" =>  "<p>No physical effort required.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>complexidade zero</p>",
                                     "description" =>  "<p>Esta excursão não exige esforço físico.</p>"
                                 ]
                             ]
@@ -2658,7 +2679,7 @@ class ExcurtionCharacteristicController extends Controller
                     ]
             ];
 
-        //3 before_buying   <----- Seguir viendo con Seba ---->
+        //3 before_buying 
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => "before_buying",
@@ -2780,22 +2801,76 @@ class ExcurtionCharacteristicController extends Controller
                             ]
                         ],
                         "translables" => []
+                    ],
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => null,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "OPTIONAL WITH TRANSFER",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "OPCIONAL COM TRANSFER",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => null,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "TOUR INCLUIDO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "TOUR INCLUDED",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "PASSEIO INCLUÍDO",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
                     ]
                 ],
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Itinerario Safari Azul",
+                        "name" => "Itinerario Safari Nautico",
                         "description" => "Este itinerario es orientativo y puede variar el orden."
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Safari Azul Itineray",
+                        "name" => "Safari Nautico Itineray",
                         "description" => "This itinerary is merely illustrative and the order of activities may change."
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Itinerário Safari Azul",
+                        "name" => "Itinerário Safari Nautico",
                         "description" => "Este itinerário é apenas orientativo e a ordem pode mudar."
                     ]
                 ]
