@@ -118,7 +118,7 @@ class ExcurtionCharacteristicController extends Controller
                 return $this->bigIce();
                 break;
             case 3:
-                // return $this->();
+                return $this->safariNautico();
                 break;
             case 4:
                 return $this->safariAzul();
@@ -997,12 +997,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "name" => "Sail in front of the Perito Moreno Glacier",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "name" => "Navegue em frente ao Glaciar Perito Moreno",
                         "description" => "1"
                     ]
                 ]
@@ -1023,12 +1023,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Trekking sobre hielo",
+                        "name" => "Ice trekking",
                         "description" => "3 horas"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Trekking sobre hielo",
+                        "name" => "Trekking no gelo",
                         "description" => "3 horas"
                     ]
                 ]
@@ -1049,13 +1049,13 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Dificultad",
-                        "description" => "Alta"
+                        "name" => "Difficulty",
+                        "description" => "Low"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Dificultad",
-                        "description" => "Alta"
+                        "name" => "Dificuldade",
+                        "description" => "Baixa"
                     ]
                 ]
             ];
@@ -1069,18 +1069,18 @@ class ExcurtionCharacteristicController extends Controller
                 "characteristics" => [],
                 "translables" => [
                     [
-                        "lenguage_id" => "2",
+                        "lenguage_id" => "1",
                         "name" => "Vista de grietas",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Vista de grietas",
+                        "name" => "View of cracks",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Vista de grietas",
+                        "name" => "Visão de rachaduras",
                         "description" => "1"
                     ]
                 ]
@@ -1101,12 +1101,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Vista de Seracs",
+                        "name" => "View of Seracs",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Vista de Seracs",
+                        "name" => "Visão de Seracs",
                         "description" => "1"
                     ]
                 ]
@@ -1127,12 +1127,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Vista de sumideros",
+                        "name" => "View of sinkholes",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Vista de sumideros",
+                        "name" => "Visão dos sumidouros",
                         "description" => "1"
                     ]
                 ]
@@ -1153,12 +1153,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Vista de cuevas",
+                        "name" => "View of caves",
                         "description" => "eventually"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Vista de cuevas",
+                        "name" => "Vista das cavernas",
                         "description" => "eventualmente"
                     ]
                 ]
@@ -1178,12 +1178,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Vista de lagunas",
+                        "name" => "View of lagoons",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Vista de lagunas",
+                        "name" => "Vista das lagoas",
                         "description" => "1"
                     ]
                 ]
@@ -1203,12 +1203,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Tamaño de grupo",
+                        "name" => "Group size",
                         "description" => "10"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Tamaño de grupo",
+                        "name" => "Tamanho do grupo",
                         "description" => "10"
                     ]
                 ]
@@ -1228,12 +1228,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Trekking por costa del lago",
+                        "name" => "Trekking along the lake coast",
                         "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Trekking por costa del lago",
+                        "name" => "Trekking ao longo da costa do lago",
                         "description" => "0"
                     ]
                 ]
@@ -1253,12 +1253,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Trekking por bosque",
+                        "name" => "Trekking through forest",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Trekking por bosque",
+                        "name" => "Trekking pela floresta",
                         "description" => "1"
                     ]
                 ]
@@ -1278,12 +1278,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Comida incluida",
+                        "name" => "Lunch included",
                         "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Comida incluida",
+                        "name" => "Almoço incluso",
                         "description" => "0"
                     ]
                 ]
@@ -1303,12 +1303,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Traslado desde el hotel",
+                        "name" => "Transfer from the hotel",
                         "description" => "optional"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Traslado desde el hotel",
+                        "name" => "Traslado do hotel",
                         "description" => "opcional"
                     ]
                 ]
@@ -1328,12 +1328,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "Precio actual",
+                        "name" => "Actual Price",
                         "description" => 80000
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "Precio actual",
+                        "name" => "Preço real",
                         "description" => 80000
                     ]
                 ]
@@ -2104,7 +2104,7 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "3",
                         "name" => "Dificuldade",
-                        "description" => "baixa"
+                        "description" => "Baixa"
                     ]
                 ]
             ];
@@ -2124,12 +2124,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "view of cracks",
+                        "name" => "View of cracks",
                         "description" => "From the ship"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "visão de rachaduras",
+                        "name" => "Visão de rachaduras",
                         "description" => "Do barco"
                     ]
                 ]
@@ -2252,7 +2252,7 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "group size",
+                        "name" => "Group size",
                         "description" => "up to 50"
                     ],
                     [
@@ -2302,12 +2302,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "2",
-                        "name" => "trekking through forest",
+                        "name" => "Trekking through forest",
                         "description" => "1"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "trekking pela floresta",
+                        "name" => "Trekking pela floresta",
                         "description" => "1"
                     ]
                 ]
@@ -2384,6 +2384,916 @@ class ExcurtionCharacteristicController extends Controller
                         "lenguage_id" => "3",
                         "name" => "Preço real",
                         "description" => 15000
+                    ]
+                ]
+            ];
+
+
+
+
+        //
+
+        return $characteristics;
+    }
+
+    public function safariNautico()
+    {
+        $characteristics = [];
+
+        //1 characteristics
+            $characteristics['characteristics'][] = [
+                # Generales"1"
+                "icon_id" =>  NULL,
+                "icon" =>  NULL,
+                "characteristic_type" =>  "characteristics",
+                "order" =>  NULL,
+                #
+
+                # translables
+                    "translables" => [
+                        [
+                            "lenguage_id" =>  1,
+                            "name" =>  "Característica de la actividad",
+                            "description" =>  NULL
+                        ],
+                        [
+                            "lenguage_id" =>  2,
+                            "name" =>  "Activity characteristic",
+                            "description" =>  NULL
+                        ],
+                        [
+                            "lenguage_id" =>  3,
+                            "name" =>  "Característica da atividade",
+                            "description" =>  NULL
+                        ]
+                    ],
+                #
+
+                # Las 6 características o ḿas
+                #Translables
+                "characteristics" =>
+                [
+                    #$clockConTraslado
+                    [
+                        "icon" =>  '$clock',
+                        "order" =>  "1",
+                        "translables" =>  [
+                            [
+                                #ESPAÑOL
+                                "lenguage_id" =>  "1",
+                                "name"        =>  "Duración CON traslado y pasarelas",
+                                "description" =>  '<p>Aproximadamente 1 hora</p>'
+                            ],
+                            [
+                                # INGLES
+                                "lenguage_id" =>  "2",
+                                "name"        =>  "Duration WITH transfer and walkways",  
+                                "description" =>  "<p>Approximately 1 hour</p>"
+                            ],
+                            [
+                                # PORTUGUÉS
+                                "lenguage_id" =>  "3",
+                                "name"        =>  "Duração COM traslado e passarelas",  
+                                "description" =>  "<p>Aproximadamente 1 hora</p>"
+                            ]
+                        ]
+                    ],
+                    #$clockSinTraslado
+                    // [
+                    //     "icon" =>  '$clock',
+                    //     "order" =>  "1",
+                    //     "translables" =>  [
+                    //         [
+                    //             #ESPAÑOL
+                    //             "lenguage_id" =>  "1",
+                    //             "name"        =>  "Duración SIN traslado y pasarelas",
+                    //             "description" =>  '<p>Aproximadamente 2.45 horas</p>'
+                    //         ],
+                    //         [
+                    //             # INGLES
+                    //             "lenguage_id" =>  "2",
+                    //             "name"        =>  "Duration WITHOUT transfer and walkways",
+                    //             "description" =>  "<p>Approximately 12 hours (Full day)</p>"
+                    //         ],
+                    //         [
+                    //             # PORTUGUÉS
+                    //             "lenguage_id" =>  "3",
+                    //             "name"        =>  "Duração SEM traslado e passarelas",
+                    //             "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
+                    //         ]
+                    //     ]
+                    // ],
+                    #$calendar
+                        [
+                            "icon" =>  '$calendar',
+                            "order" =>  "2",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "description" =>  "<p>Opera todo el año</p>"
+
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "description" =>  "<p>Operates all year</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "description" =>  "<p>Año inteiro</p>"
+                                ]
+                            ]
+                        ],
+                    #$bus
+                        [
+                            "icon" =>  '$bus',
+                            "order" =>  "3",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "description" =>  '<p>El traslado terrestre desde “El Calafate” al puerto “Bajo de las Sombras” NO está incluido.</p>'
+
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "description" =>  "<p>Transfer from “El Calafate” to “Bajo de las Sombras” port is NOT included.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "description" =>  "<p>A traslado de “El Calafate” ao porto “Bajo de las Sombras” NÃO está incluída.</p>"
+                                ]
+                            ]
+                        ],
+                    #$guide
+                        [
+                            "icon" =>  '$guide',
+                            "order" =>  "4",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "description" =>  "<p>Nuestros guías hablan español.</p>"
+
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "description" =>  "<p>Our guides can speak Spanish.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "description" =>  "<p>Nossos guias falam espanhol.</p>"
+                                ]
+                            ]
+                        ],
+                    #$age
+                        [
+                            "icon" =>  '$age',
+                            "order" =>  "5",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "description" =>  '<p>Sin limites de edad</p>'
+
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "description" =>  '<p>No age limit</p>'
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "description" =>  '<p>Sem limite de idade</p>'
+                                ]
+                            ]
+                        ],
+                    #$complexity
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "6",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "description" =>  "<p>Esta excursion no requiere esfuerzo físico.</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "description" =>  "<p>No physical effort required.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "description" =>  "<p>Esta excursão não exige esforço físico.</p>"
+                                ]
+                            ]
+                        ]
+                ]
+            ];
+
+        //2 about
+            $characteristics['characteristics'][] = [
+                    "icon_id" => null,
+                    "icon" => null,
+                    "characteristic_type" =>  "about",
+                    "order" => null,
+
+                    "characteristics" => [],
+                    "translables" => [
+                        [
+                            "lenguage_id" => 1,
+                            "name" => "About",
+                            "description" => '<p>La excursi&oacute;n comienza en el&nbsp;<span style="color: #2471B9;"><strong>puerto &ldquo;Bajo de las Sombras&rdquo;</strong></span>, ubicado en la Ruta 11, Km 70.9, a una hora y media de El Calafate y a solo 7km del Glaciar. El pasajero deber&aacute;&nbsp;<span style="color: #2471B9;"><strong>llegar por sus medios</strong></span>&nbsp;hasta el puerto y una vez all&iacute;, se embarcar&aacute; para&nbsp;<span style="color: #2471B9;"><strong>navegar</strong></span>&nbsp;por el Lago Rico, donde se podr&aacute; apreciar la impresionante&nbsp;<strong><span style="color: #2471B9;">pared de hielo del Glaciar Perito Moreno</span>&nbsp;</strong>y los t&eacute;mpanos que provienen de &eacute;l.</p>
+                            <p>&nbsp;</p>
+                            <p>Esta navegaci&oacute;n tiene una duraci&oacute;n de&nbsp;<span style="color: #2471B9;"><strong>una hora</strong></span>&nbsp;y brinda la posibilidad de&nbsp;<strong>observar</strong>&nbsp;desde nuestras&nbsp;<span style="color: #2471B9;"><strong>confortables embarcaciones</strong></span>, y con una perspectiva totalmente diferente, las impresionantes paredes del Glaciar Perito Moreno y sus&nbsp;<span style="color: #2471B9;"><strong>continuos y estruendosos derrumbes</strong></span>&nbsp;sobre las aguas del Lago Rico.</p>
+                            <p>&nbsp;</p>
+                            <p>A 400 metros de la pared sur del Glaciar Perito Moreno, el barco se detiene por unos minutos para poder observar m&aacute;s detalladamente el paisaje. &iexcl;Mas cerca de la&nbsp;<span style="color: #2471B9;"><strong>pared de la ruptura</strong></span>, imposible!</p>
+                            <p>&nbsp;</p>
+                            <p>El&nbsp;<strong>Safari N&aacute;utico</strong>&nbsp;es una navegaci&oacute;n&nbsp;<span style="color: #2471B9;"><strong>apta para todas las edades</strong></span>&nbsp;y se puede realizar los&nbsp;<span style="color: #2471B9;"><strong>365 d&iacute;as del a&ntilde;o.</strong></span></p>
+                            <p>&nbsp;</p>
+                            <p>Esta excursi&oacute;n est&aacute; orientada a personas que quieren contemplar la magia del hielo e inmortalizarla en la memoria, observando cada detalle de la pared de hielo y su entorno.</p>
+                            <p>&nbsp;</p>
+                            <p>Salidas desde puerto &ldquo;Bajo de las sombras&rdquo;: 10:00, 11:30 y 14:30 hs. (consultar por otras salidas)</p>
+                            <p style="text-align: justify;">&nbsp;</p>'
+                        ],
+                        [
+                            "lenguage_id" => 2,
+                            "name" => "Sobre esta experiencia",
+                            "description" => '<p>The tour begins at the&nbsp;<span style="color: #2471B9;"><strong>&ldquo;Bajo de las Sombras&rdquo; port</strong></span>&nbsp;located in Ruta 11, Km 70.9, one hour and a half from El Calafate and just 7km from the glacier. You must get to the port by&nbsp;<span style="color: #2471B9;"><strong>your own means</strong></span>&nbsp;and, once there, you will board the catamaran boat to navigate the Lago Rico where your will be able to appreciate the amazing&nbsp;<span style="color: #2471B9;"><strong>ice wall of the Perito Moreno Glacier</strong></span>&nbsp;and its icebergs.</p>
+                            <p>&nbsp;</p>
+                            <p>In our&nbsp;<strong><span style="color: #2471B9;">comfortable</span>&nbsp;</strong>catamaran boat and with a completely different perspective, this&nbsp;<span style="color: #2471B9;"><strong>one-hour trip</strong></span>&nbsp;offers the possibility to&nbsp;<span style="color: #2471B9;"><strong>observe</strong></span>&nbsp;the spectacular ice walls of the Perito Moreno Glacier and its&nbsp;<span style="color: #2471B9;"><strong>continuous and thunderous collapses</strong></span>&nbsp;over the Lago Rico.</p>
+                            <p>&nbsp;</p>
+                            <p>400 meters from the southern wall of the Perito Moreno Glacier, the boat stops for a few minutes to take a closer look at the landscape. You couldn&rsquo;t get any closer to the&nbsp;<span style="color: #2471B9;"><strong>walls of the rupture</strong>!</span></p>
+                            <p>&nbsp;</p>
+                            <p>The &ldquo;<strong>Safari N&aacute;utico&rdquo;</strong>&nbsp;is a navigation&nbsp;<span style="color: #2471B9;"><strong>suitable for all ages</strong></span>&nbsp;and it can be done&nbsp;<span style="color: #2471B9;"><strong>year-round.</strong></span></p>
+                            <p>&nbsp;</p>
+                            <p>This tour is designed for people who want to enjoy the magic of the ice and to remember that experience forever, observing every detail of the ice wall and its surroundings.<br />Departures from &ldquo;Bajo de las Sombras&rdquo; port: 10:00, 11:30 and 14:30 hs. (Contact us about other departures)</p>
+                            <p style="text-align: justify;">&nbsp;</p>'
+                        ],
+                        [
+                            "lenguage_id" => 3,
+                            "name" => "Sobre esta experiencia",
+                            "description" => '<p>A excurs&atilde;o come&ccedil;a no&nbsp;<span style="color: #2471B9;"><strong>porto &ldquo;Bajo de las Sombras&rdquo;</strong></span>&nbsp;localizado no quil&ocirc;metro 70,9 da Ruta 11, a uma hora e meia da cidade de El Calafate, e a apenas 7 km da geleira. O passageiro dever&aacute; chegar ao porto por&nbsp;<span style="color: #2471B9;"><strong>seus pr&oacute;prios meios</strong></span>. Ali, se embarcar&aacute; para navegar pelo Lago Rico e poder&aacute; apreciar a impressionante parede de gelo da Geleira Perito Moreno e os blocos de gelo que se desprendem.&nbsp;</p>
+                            <p>&nbsp;</p>
+                            <p>A navega&ccedil;&atilde;o dura&nbsp;<span style="color: #2471B9;"><strong>uma hora</strong></span>&nbsp;e oferece a oportunidade de&nbsp;<span style="color: #2471B9;"><strong>contemplar</strong></span>, em nossas&nbsp;<span style="color: #2471B9;"><strong>confort&aacute;veis embarca&ccedil;&otilde;es</strong></span>, e de uma perspectiva inteiramente diferente, as impressionantes paredes da Geleira Perito Moreno e seus&nbsp;<span style="color: #2471B9;"><strong>cont&iacute;nuos e estrondosos desabamentos</strong></span>&nbsp;sobre as &aacute;guas do Lago Rico.</p>
+                            <p>&nbsp;</p>
+                            <p>A 400 metros da parede sul da geleira, o barco se det&eacute;m alguns minutos para contemplar cada detalhe da paisagem. &Eacute; imposs&iacute;vel estar mais pr&oacute;ximo da&nbsp;<span style="color: #2471B9;"><strong>parede do desabamento</strong>!</span></p>
+                            <p>&nbsp;</p>
+                            <p>O &ldquo;<strong><span style="color: #2471B9;">Safari n&aacute;utico</span>&rdquo;</strong>&nbsp;&eacute; um tipo de navega&ccedil;&atilde;o&nbsp;<span style="color: #2471B9;"><strong>apta para todas as idades</strong></span>&nbsp;e est&aacute; dispon&iacute;vel nos&nbsp;<strong><span style="background-color: #2471B9;">365 dias do ano</span>.</strong></p>
+                            <p>&nbsp;</p>
+                            <p>Esta excurs&atilde;o est&aacute; destinada a pessoas que desejam contemplar a magia do gelo e guardar em sua mem&oacute;ria cada detalhe da parede de gelo e de seu entorno.</p>
+                            <p>&nbsp;</p>
+                            <p>Saidas desde porto &ldquo;Bajo de las Sombras&rdquo;:&nbsp;10:00, 11:30 y 14:30&nbsp;hs. (Contacte-nos sobre outras partidas)</p>
+                            <p style="text-align: justify;">&nbsp;</p>'
+                        ]
+                    ]
+            ];
+
+        //3 before_buying   <----- Seguir viendo con Seba ---->
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "before_buying",
+                "order" => null,
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "A TENER EN CUENTA ANTES DE COMPRAR",
+                        "description" => '<p><span style="color: #2471B9;"><strong>Para realizar esta excursi&oacute;n deber&aacute;s acercarte por tus propios medios al Puerto Bajo las Sombras</strong></span>, ubicado en la Ruta 11 km 70.9. Te sugerimos salir con 1 hora y media de anticipaci&oacute;n de El Calafate para llegar a horario. El camino dentro del Parque Nacional es sinuoso y por seguridad, te recomendamos respetar los l&iacute;mites de velocidad se&ntilde;alados.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>Los tickets pueden ser comprados online o en el puerto antes de embarcar. En los meses de verano, recomendamos realizar la compra anticipadamente.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
+                        "description" => '<p><strong><span style="color: #2471B9;">To do the tour you should get to the Bajo las Sombras Port</span>,&nbsp;</strong>located on Ruta 11 km 70.9, by your own means. We suggest setting off from El Calafate one hour in advance to be able to get on time. The road within the National Park is winding so, for your safety, we recommend that you comply with the speed limits.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>The tickets can be bought online or in the port before boarding. In the summer months, we recommend buying the tickets in advance.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>Not included:&nbsp;</strong>National Park&rsquo;s entrance fee.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "LEVAR EM CONTA ANTES DE COMPRAR",
+                        "description" => '<p><strong><span style="color: #2471B9;">Para participar desta excurs&atilde;o voc&ecirc; dever&aacute; ir, por seus pr&oacute;prios meios, para o Porto Bajos las Sombras</span>,&nbsp;</strong>localizado no quil&ocirc;metro 70,9 da Ruta 11. &Eacute; recomend&aacute;vel sair da cidade de El Calafate com una antecipa&ccedil;&atilde;o de uma hora e meia, para chegar a tempo. O caminho no Parque Nacional &eacute; sinuoso e, para sua seguran&ccedil;a, recomendamos respeitar os limites de velocidade indicados.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>Os t&iacute;quetes podem ser adquiridos online ou no porto, antes de se embarcar. Recomendamos adquirir os t&iacute;quetes antecipadamente, nos meses de ver&atilde;o.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>N&atilde;o inclu&iacute;do:&nbsp;</strong>Ingresso ao Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ]
+                ]
+            ];
+
+        //5 itinerary ////traducir todas estás características
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'itinerary',
+                "order" => null,
+
+                "characteristics" => [ //traducir todas estás características
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$stairs',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Embarque en Puerto las Sombras",
+                                        "description" => "Salidas disponibles: 10:30 / 11:30 y 14:30 (consultar por otras salidas)"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Boarding in Puerto las Sombras",
+                                        "description" => "Departures available: 10:30 / 11:30 and 14:30 (ask for other departures)"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Embarque no Porto las Sombras",
+                                        "description" => "Saídas disponíveis: 10h30 / 11h30 e 14h30 (consultar outras saídas)"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_ship',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Navegación",
+                                        "description" => "1hs de navegacion frente a la pared sur del glaciar"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Navegating",
+                                        "description" => "1-hour navigation in front of the southern wall of the Glacier"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Navegação",
+                                        "description" => "1 hora de navegação em frente à parede sul da geleira"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$stairs',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Desembarco y fin de la excursión",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Disembarkation and end of the excursion",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Desembarque e fim da excursão",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Itinerario Safari Azul",
+                        "description" => "Este itinerario es orientativo y puede variar el orden."
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Safari Azul Itineray",
+                        "description" => "This itinerary is merely illustrative and the order of activities may change."
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Itinerário Safari Azul",
+                        "description" => "Este itinerário é apenas orientativo e a ordem pode mudar."
+                    ]
+                ]
+            ];
+
+        //7 carry
+            $characteristics['characteristics'][] =
+                [
+                    "icon_id" => null,
+                    "characteristic_type" => "carry",
+                    "order" => null,
+                    "icon" => null,
+                    "characteristics" => [
+                        [
+                            "icon_id" => null,
+                            "order" => null,
+                            "icon" => '$cloth',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => '<p>Vestir ropa c&oacute;moda y abrigada. Campera, calzado deportivo o botas de trekking, lentes de sol, protector solar, guantes, gorro.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => '<p>Wear comfortable and warm clothes. A jacket, sports shoes or trekking boots, sunglasses, sunscreen, gloves, a wool hat.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => '<p>Roupa confort&aacute;vel e quente. Casaco, cal&ccedil;ado esportivo ou botas de trekking, &oacute;culos de sol, protetor solar, luvas e gorro.</p>'
+                                ]
+                            ]
+                        ],
+                        [
+                            "icon_id" => null,
+                            "order" => null,
+                            "icon" => '$food',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => '<p>Llevar comida y bebida para el d&iacute;a. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => '<p>Bring food and drink for the day. The company does not sell food and drinks</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => '<p>Levar comida e bebida para todo o dia. A empresa n&atilde;o oferece servi&ccedil;o de venda de comidas nem bebidas.</p>'
+                                ]
+                            ]
+                        ],
+                        [
+                            "icon_id" => null,
+                            "characteristic_type" => null,
+                            "order" => null,
+                            "icon" => '$ticket',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => '<p>Deber&aacute;s presentar tu entrada al Parque Nacional. Pod&eacute;s comprarla&nbsp;<a href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>ac&aacute;<span style="color: #2471B9;"> (Seleccionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</span></strong></a>&nbsp;o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => '<p>Tickets must be exhibited at the entrance of the Parque Nacional. You can buy your ticket here&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Select: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;or pay it in cash (in Argentine pesos) when you arrive at the Parque Nacional.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => '<p>Voc&ecirc; dever&aacute; apresentar seu ingresso ao Parque Nacional. Pode comprar o ingresso aqui&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Selecionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a>&nbsp;</span>ou pagar com dinheiro (pesos argentinos) ao chegar ao Parque Nacional.</p>'
+                                ]
+                            ]
+                        ]
+                    ],
+                    "translables" => [
+                        [
+                            "lenguage_id" => 1,
+                            "name" => "¿Qué llevar?",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 2,
+                            "name" => "What to bring?",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 3,
+                            "name" => "O que É PRECISO levar?",
+                            "description" => null
+                        ]
+                    ]
+                ];
+        //9 restrictions
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "restrictions",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => '<p><span style="color: #2471B9;"><strong>Para realizar esta excursi&oacute;n deber&aacute;s acercarte por tus propios medios al Puerto Bajo las Sombras</strong></span>, ubicado en la Ruta 11 km 70.9. Te sugerimos salir con 1 hora y media de anticipaci&oacute;n de El Calafate para llegar a horario. El camino dentro del Parque Nacional es sinuoso y por seguridad, te recomendamos respetar los l&iacute;mites de velocidad se&ntilde;alados.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>Los tickets pueden ser comprados online o en el puerto antes de embarcar. En los meses de verano, recomendamos realizar la compra anticipadamente.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => '<p><strong><span style="color: #2471B9;">To do the tour you should get to the Bajo las Sombras Port</span>,&nbsp;</strong>located on Ruta 11 km 70.9, by your own means. We suggest setting off from El Calafate one hour in advance to be able to get on time. The road within the National Park is winding so, for your safety, we recommend that you comply with the speed limits.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>The tickets can be bought online or in the port before boarding. In the summer months, we recommend buying the tickets in advance.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>Not included:&nbsp;</strong>National Park&rsquo;s entrance fee.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => '<p><strong><span style="color: #2471B9;">Para participar desta excurs&atilde;o voc&ecirc; dever&aacute; ir, por seus pr&oacute;prios meios, para o Porto Bajos las Sombras</span>,&nbsp;</strong>localizado no quil&ocirc;metro 70,9 da Ruta 11. &Eacute; recomend&aacute;vel sair da cidade de El Calafate com una antecipa&ccedil;&atilde;o de uma hora e meia, para chegar a tempo. O caminho no Parque Nacional &eacute; sinuoso e, para sua seguran&ccedil;a, recomendamos respeitar os limites de velocidade indicados.</p>
+                        <p>&nbsp;</p>
+                        <p><span style="color: #2471B9;"><strong>Os t&iacute;quetes podem ser adquiridos online ou no porto, antes de se embarcar. Recomendamos adquirir os t&iacute;quetes antecipadamente, nos meses de ver&atilde;o.</strong></span></p>
+                        <p>&nbsp;</p>
+                        <p><strong>N&atilde;o inclu&iacute;do:&nbsp;</strong>Ingresso ao Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>'
+                    ]
+                ]
+            ];
+
+        // 10 comparison_sail_perito 
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sail_perito",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Sail in front of the Perito Moreno Glacier",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Navegue em frente ao Glaciar Perito Moreno",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        // 11 comparison_trekking_ice 
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_trekking_ice",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Ice trekking",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking no gelo",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        // 12 comparison_dificult
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_dificult",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Dificultad",
+                        "description" => "Baja"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Difficulty",
+                        "description" => "Low"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Dificuldade",
+                        "description" => "baixa"
+                    ]
+                ]
+            ];
+        // 14 comparison_fissures
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_fissures",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de grietas",
+                        "description" => "Desde el barco"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "view of cracks",
+                        "description" => "From the ship"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "visão de rachaduras",
+                        "description" => "Do barco"
+                    ]
+                ]
+            ];
+        //15 comparison_seracs
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_seracs",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de Seracs",
+                        "description" => "Desde el barco"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of Seracs",
+                        "description" => "From the ship"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão de Seracs",
+                        "description" => "Do barco"
+                    ]
+                ]
+            ];
+        //16 comparison_sinks
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sinks",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de sumideros",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of sinkholes",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão dos sumidouros",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //17 comparison_caves
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_caves",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de cuevas",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "view of caves",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "vista das cavernas",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //18 comparison_laggons
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_laggons",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de lagunas",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of lagoons",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista das lagoas",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //19 comparison_group_size
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_group_size",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Tamaño de grupo",
+                        "description" => "hasta 150"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "group size",
+                        "description" => "up to 150"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Tamanho do grupo",
+                        "description" => "até 150"
+                    ]
+                ]
+            ];
+        //20 comparison_lagoon_coast_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_lagoon_coast_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking along the lake coast",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking ao longo da costa do lago",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //21 comparison_forest_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_forest_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por bosque",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "trekking through forest",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "trekking pela floresta",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //22 comparison_food_included
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_food_included",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Lunch included",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Almoço incluso",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //23 comparison_hotel_transfer
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_hotel_transfer",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Transfer from the hotel",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Traslado do hotel",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //25 comparison_current_price
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_current_price",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Precio actual",
+                        "description" => 6000
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Actual Price",
+                        "description" => 6000
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Preço real",
+                        "description" => 6000
                     ]
                 ]
             ];
