@@ -112,7 +112,7 @@ class ExcurtionCharacteristicController extends Controller
     {
         switch ($excurtion_id) {
             case 1:
-                // return $this->bigIce();
+                return $this->minitrekking();
                 break;
             case 2:
                 return $this->bigIce();
@@ -199,6 +199,1151 @@ class ExcurtionCharacteristicController extends Controller
      * 23- comparison_hotel_transfer
      * 25- comparison_current_price
      */
+
+    public function minitrekking()
+    {
+        $characteristics = [];
+
+        //1 characteristics
+            $characteristics['characteristics'][] = [
+                # Generales"1"
+                "icon_id" =>  NULL,
+                "icon" =>  NULL,
+                "characteristic_type" =>  "characteristics",
+                "order" =>  NULL,
+                #
+
+                # translables
+                    "translables" => [
+                        [
+                            "lenguage_id" =>  1,
+                            "name" =>  "Característica de la actividad",
+                            "description" =>  NULL
+                        ],
+                        [
+                            "lenguage_id" =>  2,
+                            "name" =>  "Activity characteristic",
+                            "description" =>  NULL
+                        ],
+                        [
+                            "lenguage_id" =>  3,
+                            "name" =>  "Característica da atividade",
+                            "description" =>  NULL
+                        ]
+                    ],
+                #
+
+                # Las 6 características o ḿas
+                #Translables
+                "characteristics" =>
+                [
+                    #$clock
+                        [
+                            "icon" =>  '$clock',
+                            "order" =>  "1",
+                            "translables" =>  [
+                                [
+                                    #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  '<p>9:30 horas (Todo el día)</p>',
+                                    "description" =>  '<p>La duración de la actividad es de aproximadamente 9.30hs. Se recomienda no organizar otros planes para ese día.</p>'
+                                ],
+                                [
+                                    # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>9:30 hours (Full day)</p>",
+                                    "description" =>  "<p>The duration of the activity is approximately 9:30 a.m. It is recommended not to organize other plans for that day.</p>"
+                                ],
+                                [
+                                    # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>9:30 horas (Todo o dia)</p>",
+                                    "description" =>  "<p>A duração da atividade é de aproximadamente 9h30. Recomenda-se não organizar outros planos para esse dia.</p>"
+                                ]
+                            ]
+                        ],
+                    #$calendar
+                        [
+                            "icon" =>  '$calendar',
+                            "order" =>  "2",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>15 Julio al 31 Mayo</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>July 15th to May 31th</p>",
+                                    "description" =>  "<p>The availability of this excursion is from July 15 to May 31</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>15 Julho até 31 maio</p>",
+                                    "description" =>  "<p>A disponibilidade desta excursão é de 15 de Julho a 31 de Mayo</p>"
+                                ]
+                            ]
+                        ],
+                    #$bus
+                        [
+                            "icon" =>  '$bus',
+                            "order" =>  "3",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  '<p>Traslado opcional</p>',
+                                    "description" =>  '<p>Opcional traslado con guía y visita de una hora aproximadamente a pasarelas.</p>'
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  '<p>Optional transfer</p>',
+                                    "description" =>  "<p>Optional transfer with guide, including a visit of about one hour to the walkways.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  '<p>Transferência opcional</p>',
+                                    "description" =>  "<p>Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas.</p>"
+                                ]
+                            ]
+                        ],
+                    #$guide
+                        [
+                            "icon" =>  '$guide',
+                            "order" =>  "4",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Guías español e inglés.</p>",
+                                    "description" =>  "<p>Nuestros guías hablan español e inglés.</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Spanish and English guides.</p>",
+                                    "description" =>  "<p>Our guides speak Spanish and English.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Guias em espanhol e inglês</p>",
+                                    "description" =>  "<p>Nossos guias falam espanhol e inglês.</p>"
+                                ]
+                            ]
+                        ],
+                    #$age
+                        [
+                            "icon" =>  '$age',
+                            "order" =>  "5",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Apto para 8 a 65 años</p>",
+                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 8 a 65 años.</span> Sin excepción.</p>'
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Adequado para 8 a 65 anos</p>",
+                                    "description" =>  '<p>Suitable for <span style="color: #366895;">people between 8 and 65 years ONLY.</span> No exceptions.</p>'
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Suitable for 8 to 65 years old</p>",
+                                    "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 8 e 65 anos.</span> Sem exceções.</p>'
+                                ]
+                            ]
+                        ],
+                    #$complexity
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "6",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Complejidad moderada</p>",
+                                    "description" =>  "<p>Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar 3 horas, siendo parte del trayecto sobre el hielo y con crampones.</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Moderate complexity</p>",
+                                    "description" =>  "<p>In order to have a great experience on the Glacier, you must have the mental and physical capacity required to walk for 3 hours, partly on ice and with crampons.</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Moderada complexidade</p>",
+                                    "description" =>  "<p>Para que você desfrute de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar 3 horas, uma parte do percorrido sobre gelo e com grampos.</p>"
+                                ]
+                            ]
+                        ]
+                ]
+            ];
+
+        //2 about
+            $characteristics['characteristics'][] = [
+                    "icon_id" => null,
+                    "icon" => null,
+                    "characteristic_type" =>  "about",
+                    "order" => null,
+
+                    "characteristics" => [],
+                    "translables" => [
+                        [
+                            "lenguage_id" => 1,
+                            "name" => "Sobre esta experiencia",
+                            "description" => '<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
+                            <p>&nbsp;</p>
+                            <p>Una vez en el puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 20 minutos de navegaci&oacute;n frente a la imponente cara sur del Glaciar Perito Moreno.</p>
+                            <p>&nbsp;</p>
+                            <p>Al desembarcar ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a, quienes los conducir&aacute;n a un acogedor refugio con una vista privilegiada del glaciar. A partir de aqu&iacute;, &iexcl;comienza el trekking! Iniciaremos el recorrido con una caminata por la costa del lago y con la vista posada en el glaciar para no perdernos la oportunidad de ver desprendimientos. Luego, los gu&iacute;as brindar&aacute;n una charla sobre glaciolog&iacute;a.</p>
+                            <p>&nbsp;</p>
+                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo enmarcando el paisaje, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y caminar&aacute;n para disfrutar de este para&iacute;so helado declarado Patrimonio de la Humanidad (1981).</p>
+                            <p>&nbsp;</p>
+                            <p><strong><span style="color: #2471B9;">El circuito sobre el glaciar es de dificultad media, la superficie del hielo es irregular pero firme y segura.</span>&nbsp;</strong>Durante la caminata se podr&aacute; apreciar una variedad de formaciones t&iacute;picas de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas.</p>
+                            <p>&nbsp;</p>
+                            <p>Al finalizar la caminata sobre el hielo, se recorrer&aacute; la zona periglaciar y la morena lateral desde donde obtendr&aacute;n una vista panor&aacute;mica del Glaciar Perito Moreno, las monta&ntilde;as y del lago. Luego, se emprender&aacute; el regreso por un sendero que atraviesa el exuberante bosque andino patag&oacute;nico, completando as&iacute; las&nbsp;<strong><span style="color: #2471B9;">TRES HORAS DE CAMINATA POR LA COSTA DEL LAGO, MORRENA, HIELO Y BOSQUE (de las cuales, una hora aproximadamente es sobre el hielo glaciar)</span>.</strong>&nbsp;Al llegar al refugio los invitaremos con una bebida caliente y les haremos entrega de un souvenir. Poco tiempo despu&eacute;s embarcar&aacute;n para regresar al Puerto Bajo de las Sombras, pero antes contemplar&aacute;n desde el barco las enormes paredes del glaciar.</p>
+                            <p>&nbsp;</p>
+                            <p><strong><span style="color: #2471B9;">La duraci&oacute;n de la excursi&oacute;n con el traslado es de alrededor de diez horas en total</span>&nbsp;</strong>e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el Minitrekking dura cuatro horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida.</p>
+                            <p>&nbsp;</p>
+                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursi&oacute;n no se suspende, mientras que las condiciones de seguridad lo permitan &iexcl;Los esperamos!</strong></span></p>'
+                        ],
+                        [
+                            "lenguage_id" => 2,
+                            "name" => "About",
+                            "description" => '<p>The tour starts when passengers are picked up in El Calafate. You will board our comfortable buses, where our tour guides will give you information on the place, the glacier and the tour on our way to Parque Nacional Los Glaciares.</p>
+                            <p>&nbsp;</p>
+                            <p>Once you arrive at &ldquo;Bajo de las Sombras&rdquo; port (located on Route 11, 70 Km from El Calafate), you&rsquo;ll board a ship to cross Lago Rico and descend on the opposite coast, after a 20-minute navigation in front of the stunning south face of Glaciar Perito Moreno.</p>
+                            <p>&nbsp;</p>
+                            <p>When you disembark, you will be welcomed by our expert mountain guides, who will lead you to a cozy shelter with a privileged view of the glacier. Here starts the trekking! We will start by walking along the coast of the lake, keeping our eyes on the glacier so that we do not miss any ice calvings. Then, the guides will give a talk about glaciology.</p>
+                            <p>&nbsp;</p>
+                            <p>When we reach the glacier side, with its amazing shades of blue ice framing the landscape, you will be divided into subgroups of up to 20 people each and you will have the crampons and helmets fitted, which are provided by the company. This tour is highly personalized (one guide every up to 10 passengers). Once on the glacier, you will hear the safety instructions and you will walk to enjoy this frozen paradise, which has been declared a Word Heritage Site in 1981.</p>
+                            <p>&nbsp;</p>
+                            <p><strong><span style="color: #2471B9;">The level of difficulty of this walk is moderate. The surface of the ice is irregular, but firm and safe</span>.&nbsp;</strong>During the trekking, you will be able to see a variety of typical glacier features, such as deep cracks, blue moulins, huge seracs and turquoise ponds.</p>
+                            <p>&nbsp;</p>
+                            <p>At the end of the ice trekking, you will walk on the area around the glacier and the side moraine, from where you will be able to enjoy a panoramic view of Glaciar Perito Moreno, the mountains and the lake. Later, you will return along a path crossing the exuberant Bosque Andino Patag&oacute;nico, completing the&nbsp;<span style="color: #2471B9;"><strong>THREE-HOUR&nbsp;WALK ON THE LAKE COAST, MORAINE, ICE AND WOODS (about one hour is on the glacier&rsquo;s ice).</strong></span>&nbsp;When we arrive to the shelter, we will give visitors hot drinks and a souvenir. Shortly after, you will embark to return to &ldquo;Bajo de las Sombras&rdquo; port, but before departing you will be able to watch the huge walls of the glacier from the ship.</p>
+                            <p>&nbsp;</p>
+                            <p><strong><span style="color: #2471B9;">The duration of this tour is about 10 hours, including the transfe</span>r&nbsp;</strong>and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from the port. There, you&rsquo;ll enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t use our transfer and go by your own means, the Minitrekking takes about four hours and a half, leaving from the port and returning to the same point.</p>
+                            <p>&nbsp;</p>
+                            <p><span style="color: #2471B9;"><strong>The Minitrekking is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, the excursion is not suspended, as long as security conditions allow it. We are waiting for you!</strong></span></p>'
+                        ],
+                        [
+                            "lenguage_id" => 3,
+                            "name" => "Sobre esta experiência",
+                            "description" => '<p>A excurs&atilde;o come&ccedil;a com a retirada dos passageiros na cidade de El Calafate. Em nossos confort&aacute;veis &ocirc;nibus, caminho ao Parque Nacional Los Glaciares, os guias de turismo oferecer&atilde;o informa&ccedil;&otilde;es sobre o local, a geleira e a excurs&atilde;o.</p>
+                            <p>&nbsp;</p>
+                            <p>Ao chegar ao porto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate), come&ccedil;a a navega&ccedil;&atilde;o em barco, atravessando o Lago Rico at&eacute; atingir a costa oposta, logo ap&oacute;s 20 minutos de navega&ccedil;&atilde;o com vista para a parede sul do Glaciar Perito Moreno.</p>
+                            <p>&nbsp;</p>
+                            <p>Ao desembarcar, os passageiros s&atilde;o recebidos por nossos expertos guias de montanha e conduzidos at&eacute; um abrigo aconchegante, com vista privilegiada &agrave; geleira. A partir desse ponto come&ccedil;a o trekking! O percorrido come&ccedil;a com uma caminhada pela costa do lago e sempre com vista &agrave; geleira, para n&atilde;o perdermos a oportunidade de contemplar os desprendimentos. Logo, os guias oferecer&atilde;o informa&ccedil;&otilde;es sobre glaciologia.</p>
+                            <p>&nbsp;</p>
+                            <p>Ao chegar at&eacute; a borda do glaciar, no meio de uma paisagem de incr&iacute;veis tonalidades azuis, ser&atilde;o organizados subgrupos com at&eacute; 20 pessoas cada um, e ser&atilde;o colocados os grampos e capacetes fornecidos pela empresa. Esta excurs&atilde;o &eacute; muito personalizada, com um guia cada, no m&aacute;ximo, 10 passageiros. J&aacute; na geleira, os passageiros receber&atilde;o instru&ccedil;&otilde;es sobre seguran&ccedil;a e caminhar&atilde;o para desfrutar desse para&iacute;so gelado, que foi declarado Patrim&ocirc;nio da Humanidade em 1981.</p>
+                            <p>&nbsp;</p>
+                            <p><span style="color: #2471B9;"><strong>O circuito sobre a geleira tem uma dificuldade m&eacute;dia, a superf&iacute;cie do gelo &eacute; irregular, mas firme e segura.</strong></span>&nbsp;No percorrido, os passageiros poder&atilde;o apreciar uma grande variedade de forma&ccedil;&otilde;es caracter&iacute;sticas de uma geleira, como profundas fendas, sumidouros azuis, enormes seracs e lagoas de cor azul turquesa.</p>
+                            <p>&nbsp;</p>
+                            <p>Ao concluir a caminhada sobre o gelo, os passageiros percorrer&atilde;o a &aacute;rea periglacial e a morena lateral para desfrutar da vista panor&acirc;mica do Glaciar Perito Moreno, das montanhas e do lago. O retorno ser&aacute; por uma trilha que atravessa o exuberante bosque andino patag&ocirc;nico, completando assim as&nbsp;<span style="color: #2471B9;"><strong>TR&Ecirc;S HORAS DE CAMINHADA PELA COSTA DO LAGO, MORENA, GELO E BOSQUE (dessas tr&ecirc;s horas, uma hora aproximadamente ser&aacute; sobre o gelo da geleira).</strong></span>&nbsp;Ao chegar ao abrigo, os passageiros s&atilde;o convidados com bebida quente e receber&atilde;o um souvenir. Pouco tempo depois, embarcar&atilde;o para retornar ao porto Bajo las Sombras, mas antes de partir, contemplar&atilde;o as enormes paredes da geleira.</p>
+                            <p>&nbsp;</p>
+                            <p><span style="color: #2471B9;"><strong>A dura&ccedil;&atilde;o total da excurs&atilde;o mais o traslado &eacute; de aproximadamente dez horas</strong></span>&nbsp;e inclui uma visita guiada de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km do porto. L&aacute; desfrutar&atilde;o da espetacular vista panor&acirc;mica do glaciar e percorrer&atilde;o algumas das trilhas autoguiadas. Se voc&ecirc; n&atilde;o escolher nosso transporte e utilizar seus pr&oacute;prios meios, lembre-se que a dura&ccedil;&atilde;o do Minitrekking &eacute; quatro horas e meia aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.</p>
+                            <p>&nbsp;</p>
+                            <p><span style="color: #2471B9;"><strong>O Minitrekking &eacute; realizado em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o est&aacute; suspensa, desde que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitan. Esperamos voc&ecirc;s!</strong></span></p>'
+                        ]
+                    ]
+            ];
+
+        //3 before_buying
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "before_buying",
+                "order" => null,
+
+                "characteristics" => [
+                    [
+                        "icon" => null,
+                        "order" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "icon" => '$obesity',
+                                "order" => null,
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li>Personas con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => '<li>Obese persons.&nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => '<li>Pessoas obesas <a href="https://hieloyaventura.com/faq-es/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$pregnant',
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li>Mujeres embarazadas.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>Pregnant women.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Mulheres grávidas.</li>",
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$brain',
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li>Personas con cualquier grado o tipo de discapacidad física o mental que afecte su atención, marcha y/o coordinación.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People with any degree of physical or mental disability that affects their attention, ability to walk and/or coordination.</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com qualquer grau ou tipo de deficiência física ou mental que possa afetar sua atenção, marcha e/ou coordenação.</li>",
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$heart_rate',
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li>Personas que sufran enfermedades cardiovasculares centrales o periféricas, que sus capacidades cardíacas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras prótesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y múltiples).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People who suffer from central or peripheral heart or vascular diseases, whose heart or vascular capabilities are limited, or people with stents, bypass, pacemaker or other prosthesis. Example: anticoagulant medication, stage 3 varicose veins (multiple thick varicose veins that can be noticed).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).</li>",
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$lung',
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas de discapacidades respiratorias (EPOC, asma, enfisema, etc.)</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => "<li>People who suffer from diseases causing respiratory impairment (COPD, asthma, emphysema, etc.).</li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => "<li>Pessoas com doenças que provoquem deficiências respiratórias (EPOC, asma, enfisema, etc.).</li>",
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ],
+                    // [ //esta característica no está en BIG ICE, pero si tiene otras. Tengo que preguntar por eso
+                    //     "icon_id" => null,
+                    //     "order" => null,
+                    //     "icon" => null,
+
+                    //     "characteristics" => [],
+                    //     "translables" => [
+                    //         [
+                    //             "lenguage_id" => 1,
+                    //             "name" => null,
+                    //             "description" => "<p>Los niños deben tener la capacidad psicofísica suficiente de para caminar 3 horas, de las cuales 1 hora y media es sobre el hielo con crampones.</p>"
+                    //         ]
+                    //     ]
+                    // ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "A TENER EN CUENTA ANTES DE COMPRAR",
+                        "description" => "<p><strong>Debido al grado de esfuerzo y dificultad (ALTA, con pronunciadas subidas y bajadas en un terreno irregular) que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar:</strong></p>"
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
+                        "description" => "<p><strong>Due to the effort and difficulty levels (HIGH, with steep and uneven ascents and descents) of this activity, and in order to preserve their health, the following persons cannot take the tour:</strong></p>"
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "LEVAR EM CONTA ANTES DE COMPRAR",
+                        "description" => "<p><strong>Devido ao nível de esforço e dificuldade da atividade (ALTA, com subidas e descidas pronunciadas e irregulares), e visando a proteger sua saúde, as pessoas a seguir não podem participar da excursão:</strong></p>"
+                    ]
+                ]
+            ];
+
+        //5 itinerary
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'itinerary',
+                "order" => null,
+
+                "characteristics" => [
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_point',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Salida de El Calafate",
+                                        "description" => "70km al glaciar."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Departure from El Calafate",
+                                        "description" => "70km to the glacier"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Partida de El Calafate",
+                                        "description" => "70 km até a geleira."
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_ship',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Embarque en Puerto",
+                                        "description" => "20min de navegación."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Boarding in port",
+                                        "description" => "20min of navigation."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Embarque no porto",
+                                        "description" => "20min de navegação."
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_shoe',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Trekking por la costa, el glaciar y el bosque",
+                                        "description" => "3 horas."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "trekking along the coast, the glacier and the forest",
+                                        "description" => "3 hours."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Trekking ao longo da costa, a geleira e a floresta",
+                                        "description" => "3 horas."
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_ship',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Regreso al Puerto",
+                                        "description" => "30 minurtos de navegación."
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Return to port",
+                                        "description" => "30min of navigation."
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Retornar ao porto",
+                                        "description" => "30min de navegação."
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$stairs',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Visita a Pasarelas",
+                                        "description" => "1hs aproximadamente"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Visit to catwalks",
+                                        "description" => "1 hour approximately"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Visita a passarelas",
+                                        "description" => "1 hora aproximadamente"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_point',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Regreso a El Calafate",
+                                        "description" => "70km"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Return to el calafate",
+                                        "description" => "70km"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Voltar para el calafate",
+                                        "description" => "70km"
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ],
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => null,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "OPCIONAL CON TRASLADO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "OPTIONAL WITH TRANSFER",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "OPCIONAL COM TRANSFER",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => null,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "TOUR INCLUIDO",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "TOUR INCLUDED",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "PASSEIO INCLUÍDO",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Itinerario Minitrekking",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Minitrekking itinerary",
+                        "description" => null
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Itinerário Minitrekking",
+                        "description" => null
+                    ]
+                ]
+            ];
+
+        //7 carry
+            $characteristics['characteristics'][] =
+                [
+                    "icon_id" => null,
+                    "characteristic_type" => "carry",
+                    "order" => null,
+                    "icon" => null,
+                    "characteristics" => [
+                        [
+                            "icon_id" => null,
+                            "order" => null,
+                            "icon" => '$cloth',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => "<p>Vestir ropa c&oacute;moda y abrigada. Campera&nbsp;y&nbsp;pantal&oacute;n impermeable,&nbsp;calzado deportivo o&nbsp;botas de&nbsp;trekking&nbsp;impermeables.&nbsp;El clima es cambiante y hay que estar preparado para no mojarse ni pasar fr&iacute;o.&nbsp;Lentes de sol, protector solar, guantes, gorro.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => "<p>Wear comfortable and warm clothes. A jacket, sports shoes or trekking boots, sunglasses, sunscreen, gloves, a wool hat.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => "<p>Roupa confort&aacute;vel e quente. Casaco, cal&ccedil;ado esportivo ou botas de trekking, &oacute;culos de sol, protetor solar, luvas e gorro.</p>"
+                                ]
+                            ]
+                        ],
+                        [
+                            "icon_id" => null,
+                            "order" => null,
+                            "icon" => '$food',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => "<p>Llevar comida y bebida para el d&iacute;a. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => "<p>Bring food and drink for the day. The company does not sell food and drinks</p>"
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => "<p>Levar comida e bebida para todo o dia. A empresa n&atilde;o oferece servi&ccedil;o de venda de comidas nem bebidas.</p>"
+                                ]
+                            ]
+                        ],
+                        [
+                            "icon_id" => null,
+                            "characteristic_type" => null,
+                            "order" => null,
+                            "icon" => '$ticket',
+                            "characteristics" => [],
+                            "translables" => [
+                                [
+                                    "lenguage_id" => 1,
+                                    "name" => null,
+                                    "description" => '<p>Deber&aacute;s presentar tu entrada al Parque Nacional. Pod&eacute;s comprarla&nbsp;<a href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>a<span style="color: #2471B9;">c&aacute;</span><span style="color: #2471B9;"> (Seleccionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</span></strong></a>&nbsp;o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 2,
+                                    "name" => null,
+                                    "description" => '<p>Tickets must be exhibited at the entrance of the Parque Nacional. You can buy your ticket here&nbsp;<a href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(<span style="color: #2471B9;">Select: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</span></strong></a>&nbsp;or pay it in cash (in Argentine pesos) when you arrive at the Parque Nacional.</p>'
+                                ],
+                                [
+                                    "lenguage_id" => 3,
+                                    "name" => null,
+                                    "description" => '<p>Voc&ecirc; dever&aacute; apresentar seu ingresso ao Parque Nacional. Pode comprar o ingresso aqui&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Selecionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;ou pagar com dinheiro (pesos argentinos) ao chegar ao Parque Nacional.</p>'
+                                ]
+                            ]
+                        ]
+                    ],
+                    "translables" => [
+                        [
+                            "lenguage_id" => 1,
+                            "name" => "Qué llevar en la excursión?",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 2,
+                            "name" => "What SHOULD I bring?",
+                            "description" => null
+                        ],
+                        [
+                            "lenguage_id" => 3,
+                            "name" => "O que É PRECISO levar?",
+                            "description" => null
+                        ]
+                    ]
+                ];
+        //9 restrictions
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "restrictions",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Restricciones importantes antes de comprar",
+                        "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Important restrictions before buying",
+                        "description" => "<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, people with:</p>"
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Restrições importantes antes de comprar",
+                        "description" => "<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, as pessoas com:</p>"
+                    ]
+                ]
+            ];
+
+        //10 comparison_sail_perito
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sail_perito",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Navega frente al Glaciar Perito Moreno",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Sail in front of the Perito Moreno Glacier",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Navegue em frente ao Glaciar Perito Moreno",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //11 comparison_trekking_ice
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_trekking_ice",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking sobre hielo",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Ice trekking",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking no gelo",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //12 comparison_dificult
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_dificult",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Dificultad",
+                        "description" => "Moderada"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Difficulty",
+                        "description" => "Moderate"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Dificuldade",
+                        "description" => "Moderada"
+                    ]
+                ]
+            ];
+        //14 comparison_fissures
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_fissures",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de grietas",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of cracks",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão de rachaduras",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //15 comparison_seracs
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_seracs",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of Seracs",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão de Seracs",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //16 comparison_sinks
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_sinks",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de sumideros",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of sinkholes",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visão dos sumidouros",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //17 comparison_caves
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_caves",
+                "order" => null,
+                "icon" => null,
+
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de cuevas",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of caves",
+                        "description" => "eventually"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista das cavernas",
+                        "description" => "eventualmente"
+                    ]
+                ]
+            ];
+        //18 comparison_laggons
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_laggons",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Vista de lagunas",
+                        "description" => "eventualmente"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "View of lagoons",
+                        "description" => "eventually"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Vista das lagoas",
+                        "description" => "eventualmente"
+                    ]
+                ]
+            ];
+        //19 comparison_group_size
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_group_size",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Tamaño de grupo",
+                        "description" => "20"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Group size",
+                        "description" => "20"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Tamanho do grupo",
+                        "description" => "20"
+                    ]
+                ]
+            ];
+        //20 comparison_lagoon_coast_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_lagoon_coast_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por costa del lago",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking along the lake coast",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking ao longo da costa do lago",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //21 comparison_forest_trekking
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_forest_trekking",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Trekking por bosque",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Trekking through forest",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Trekking pela floresta",
+                        "description" => "1"
+                    ]
+                ]
+            ];
+        //22 comparison_food_included
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_food_included",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Comida incluida",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Lunch included",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Almoço incluso",
+                        "description" => "0"
+                    ]
+                ]
+            ];
+        //23 comparison_hotel_transfer
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_hotel_transfer",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Traslado desde el hotel",
+                        "description" => "optativo"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Transfer from the hotel",
+                        "description" => "optional"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Traslado do hotel",
+                        "description" => "opcional"
+                    ]
+                ]
+            ];
+        //25 comparison_current_price
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_current_price",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Precio actual",
+                        "description" => 42000
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Actual Price",
+                        "description" => 42000
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Preço real",
+                        "description" => 42000
+                    ]
+                ]
+            ];
+
+
+
+
+        //
+
+        return $characteristics;
+    }
+
     public function bigIce()
     {
         $characteristics = [];
@@ -424,7 +1569,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 2,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "About",
                             "description" => '<p style="text-align: justify;">Big Ice is a full day tour, starting with passenger pick-up in El Calafate. On our way to Parque Nacional Los Glaciares, aboard our comfortable buses, our tour guides will give you information on the tour, the place and the glacier.</p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p style="text-align: justify;"><span style="color: #2471b9;"><strong>Once you arrive at “Bajo de las Sombras” port (located on Route 11, 70 Km from El Calafate)</strong>&nbsp;</span><strong><span style="color: #2471b9;">you will board a ship to cross Lago Rico</span>,</strong>&nbsp;and descend on the opposite coast after a 20-minute navigation in front of the stunning south face of Glaciar Perito Moreno.</p>
@@ -448,7 +1593,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 3,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "Sobre esta experiência",
                             "description" => '<p>O passeio começa no momento do <b style="color: #2471b9;">pick up</b>, cedo de manhã, no ponto de encontro acordado na cidade de El Calafate. Em nossos <b style="color: #2471b9;">confortáveis buses</b>, <b style="color: #2471b9;">um guia de turismo bilíngue</b> lhe oferecerá informações sobre a paisagem por descobrir.</p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p>Inclui visita guiada às <b style="color: #2471b9;">passarelas do Parque Nacional Los Glaciares</b>. Lá, você poderá desfrutar da espetacular paisagem panorâmica da geleira e percorrer algumas das trilhas autoguiadas.</p>
@@ -675,17 +1820,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Salida de El Calafate",
-                                        "description" => "80km de lagos, estepa y bosques."
+                                        "description" => "80km de lagos, estepa y bosques"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Salida de El Calafate",
-                                        "description" => "80km de lagos, estepa y bosques."
+                                        "name" => "Departure from El Calafate",
+                                        "description" => "80km of lakes, steppes and forests"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Salida de El Calafate",
-                                        "description" => "80km de lagos, estepa y bosques."
+                                        "name" => "Partida de El Calafate",
+                                        "description" => "80km de lagos, estepes e florestas"
                                     ]
                                 ]
                             ],
@@ -698,63 +1843,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Embarque en Puerto",
-                                        "description" => "20 minutos de navegación frente al Glaciar."
+                                        "description" => "20min de navegación"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Embarque en Puerto",
-                                        "description" => "20 minutos de navegación frente al Glaciar."
+                                        "name" => "Boarding in port",
+                                        "description" => "20min of navigation"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Embarque en Puerto",
-                                        "description" => "20 minutos de navegación frente al Glaciar."
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$itinerary_shoe',
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Trekking sobre el glaciar",
-                                        "description" => "Caminata con crampones de aproximadamente 3 horas."
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Trekking sobre el glaciar",
-                                        "description" => "Caminata con crampones de aproximadamente 3 horas."
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Trekking sobre el glaciar",
-                                        "description" => "Caminata con crampones de aproximadamente 3 horas."
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$itinerary_ship',
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Regreso al Puerto",
-                                        "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Regreso al Puerto",
-                                        "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Regreso al Puerto",
-                                        "description" => "2 horas de caminata bordeando el Glaciar y 20 minurtos de navegación."
+                                        "name" => "Embarque no porto",
+                                        "description" => "20min de navegação"
                                     ]
                                 ]
                             ],
@@ -767,17 +1866,86 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Visita a Pasarelas",
-                                        "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
+                                        "description" => "1 hora"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visita a Pasarelas",
-                                        "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
+                                        "name" => "Visit to catwalks",
+                                        "description" => "1 hour"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Visita a Pasarelas",
-                                        "description" => "1 hora de vista panorámica del Glaciar Perito Moreno."
+                                        "name" => "Visita a passarelas",
+                                        "description" => "1 hora"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_shoe',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Trekking hacia el glaciar",
+                                        "description" => "2 horas"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Trekking towards the glacier",
+                                        "description" => "2 hours"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Trekking em direção à geleira",
+                                        "description" => "2 horas"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_shoe',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Trekking sobre el glaciar",
+                                        "description" => "3 horas"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Trekking on the glacier",
+                                        "description" => "3 hours"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Trekking na geleira",
+                                        "description" => "3 horas"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_ship',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Regreso al Puerto",
+                                        "description" => "Caminata y navegación"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Return to port",
+                                        "description" => "Walk and navigation"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Retornar ao porto",
+                                        "description" => "Caminhada e navegação"
                                     ]
                                 ]
                             ],
@@ -790,17 +1958,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Regreso a El Calafate",
-                                        "description" => ""
+                                        "description" => "80km"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Regreso a El Calafate",
-                                        "description" => ""
+                                        "name" => "Return to el calafate",
+                                        "description" => "80km"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Regreso a El Calafate",
-                                        "description" => ""
+                                        "name" => "Voltar para el calafate",
+                                        "description" => "80km"
                                     ]
                                 ]
                             ]
@@ -1597,7 +2765,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" => 1,
-                            "name" => "About",
+                            "name" => "Sobre esta experiencia",
                             "description" => '<p><span style="color: #3686c3;"><strong>El Safari Azul</strong></span> está pensado para aquellos que, además de navegar frente al Glaciar Perito Moreno, <span style="color: #3686c3;"><strong>sueñan con acercarse al hielo glaciar!</strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p>La excursión comienza en El Calafate cuando el bus parte con destino al <span style="color: #3686c3;"><strong>Parque Nacional Los Glaciares.</strong></span> Una vez en el Puerto Bajo de las Sombras, a solo 7 km de las pasarelas, tomaremos un barco para cruzar el Lago Rico y, luego de navegar 20 minutos, desembarcaremos en la costa opuesta.</p>
@@ -1617,7 +2785,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 2,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "About",
                             "description" => '<p style="text-align: justify;">The <span style="color: #3686c3;"><strong>Safari Azul Tour</strong></span> has been thought for people willing to navigate in front of the Perito Moreno Glacier and <span style="color: #3686c3;"><strong>enjoy being very close to the ice.</strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p style="text-align: justify;">The tour will start in the city of El Calafate when the bus departs towards <span style="color: #2471b9;"><strong>Parque Nacional Los Glaciares.</strong></span> Once you arrive at the “Bajo de las Sombras” port (at only 7 Km from the walkways), you’ll board a ship to cross Lago Rico and descend on the opposite coast after a 20-minute navigation.</p>
@@ -1637,7 +2805,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 3,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "Sobre esta experiência",
                             "description" => '<p><b style="color: #2471b9;">O Safári Azul</b> foi organizado para quem quer navegar diante do Glaciar Perito Moreno e <b style="color: #2471b9;">sonha com estar bem perto da geleira.</b></p>
                             <p style="text-align: justify;">&nbsp;</p>
                             <p>A excursão começa na cidade de El Calafate com a saída do ônibus para o <b style="color: #2471b9;">Parque Nacional Los Glaciares.</b>Ao chegar ao Porto Bajo las Sombras, localizado a apenas 7 km das passarelas, cruzaremos o Lago Rico em uma embarcação, para descer, logo de 20 minutos de navegação, no lado oposto.</p>
@@ -1742,17 +2910,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Embarque en Puerto",
-                                        "description" => "20 minutos de navegación"
+                                        "description" => "20min de navegación"
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => "Embarking at the Port",
-                                        "description" => "20-minute navigation"
+                                        "description" => "20min navigation"
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => "Embarque no Porto",
-                                        "description" => "20 minutos de navegação"
+                                        "description" => "20min de navegação"
                                     ]
                                 ]
                             ],
@@ -2657,7 +3825,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" => 1,
-                            "name" => "About",
+                            "name" => "Sobre esta experiencia",
                             "description" => '<p>La excursi&oacute;n comienza en el&nbsp;<span style="color: #2471B9;"><strong>puerto &ldquo;Bajo de las Sombras&rdquo;</strong></span>, ubicado en la Ruta 11, Km 70.9, a una hora y media de El Calafate y a solo 7km del Glaciar. El pasajero deber&aacute;&nbsp;<span style="color: #2471B9;"><strong>llegar por sus medios</strong></span>&nbsp;hasta el puerto y una vez all&iacute;, se embarcar&aacute; para&nbsp;<span style="color: #2471B9;"><strong>navegar</strong></span>&nbsp;por el Lago Rico, donde se podr&aacute; apreciar la impresionante&nbsp;<strong><span style="color: #2471B9;">pared de hielo del Glaciar Perito Moreno</span>&nbsp;</strong>y los t&eacute;mpanos que provienen de &eacute;l.</p>
                             <p>&nbsp;</p>
                             <p>Esta navegaci&oacute;n tiene una duraci&oacute;n de&nbsp;<span style="color: #2471B9;"><strong>una hora</strong></span>&nbsp;y brinda la posibilidad de&nbsp;<strong>observar</strong>&nbsp;desde nuestras&nbsp;<span style="color: #2471B9;"><strong>confortables embarcaciones</strong></span>, y con una perspectiva totalmente diferente, las impresionantes paredes del Glaciar Perito Moreno y sus&nbsp;<span style="color: #2471B9;"><strong>continuos y estruendosos derrumbes</strong></span>&nbsp;sobre las aguas del Lago Rico.</p>
@@ -2673,7 +3841,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 2,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "About",
                             "description" => '<p>The tour begins at the&nbsp;<span style="color: #2471B9;"><strong>&ldquo;Bajo de las Sombras&rdquo; port</strong></span>&nbsp;located in Ruta 11, Km 70.9, one hour and a half from El Calafate and just 7km from the glacier. You must get to the port by&nbsp;<span style="color: #2471B9;"><strong>your own means</strong></span>&nbsp;and, once there, you will board the catamaran boat to navigate the Lago Rico where your will be able to appreciate the amazing&nbsp;<span style="color: #2471B9;"><strong>ice wall of the Perito Moreno Glacier</strong></span>&nbsp;and its icebergs.</p>
                             <p>&nbsp;</p>
                             <p>In our&nbsp;<strong><span style="color: #2471B9;">comfortable</span>&nbsp;</strong>catamaran boat and with a completely different perspective, this&nbsp;<span style="color: #2471B9;"><strong>one-hour trip</strong></span>&nbsp;offers the possibility to&nbsp;<span style="color: #2471B9;"><strong>observe</strong></span>&nbsp;the spectacular ice walls of the Perito Moreno Glacier and its&nbsp;<span style="color: #2471B9;"><strong>continuous and thunderous collapses</strong></span>&nbsp;over the Lago Rico.</p>
@@ -2687,7 +3855,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                         [
                             "lenguage_id" => 3,
-                            "name" => "Sobre esta experiencia",
+                            "name" => "Sobre esta experiência",
                             "description" => '<p>A excurs&atilde;o come&ccedil;a no&nbsp;<span style="color: #2471B9;"><strong>porto &ldquo;Bajo de las Sombras&rdquo;</strong></span>&nbsp;localizado no quil&ocirc;metro 70,9 da Ruta 11, a uma hora e meia da cidade de El Calafate, e a apenas 7 km da geleira. O passageiro dever&aacute; chegar ao porto por&nbsp;<span style="color: #2471B9;"><strong>seus pr&oacute;prios meios</strong></span>. Ali, se embarcar&aacute; para navegar pelo Lago Rico e poder&aacute; apreciar a impressionante parede de gelo da Geleira Perito Moreno e os blocos de gelo que se desprendem.&nbsp;</p>
                             <p>&nbsp;</p>
                             <p>A navega&ccedil;&atilde;o dura&nbsp;<span style="color: #2471B9;"><strong>uma hora</strong></span>&nbsp;e oferece a oportunidade de&nbsp;<span style="color: #2471B9;"><strong>contemplar</strong></span>, em nossas&nbsp;<span style="color: #2471B9;"><strong>confort&aacute;veis embarca&ccedil;&otilde;es</strong></span>, e de uma perspectiva inteiramente diferente, as impressionantes paredes da Geleira Perito Moreno e seus&nbsp;<span style="color: #2471B9;"><strong>cont&iacute;nuos e estrondosos desabamentos</strong></span>&nbsp;sobre as &aacute;guas do Lago Rico.</p>
@@ -2743,13 +3911,13 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
-        //5 itinerary ////traducir todas estás características
+        //5 itinerary 
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => 'itinerary',
                 "order" => null,
 
-                "characteristics" => [ //traducir todas estás características
+                "characteristics" => [
                     [
                         "icon_id" => null,
                         "order" => null,
@@ -2764,17 +3932,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Embarque en Puerto las Sombras",
-                                        "description" => "Salidas disponibles: 10:30 / 11:30 y 14:30 (consultar por otras salidas)"
+                                        "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => "Boarding in Puerto las Sombras",
-                                        "description" => "Departures available: 10:30 / 11:30 and 14:30 (ask for other departures)"
+                                        "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => "Embarque no Porto las Sombras",
-                                        "description" => "Saídas disponíveis: 10h30 / 11h30 e 14h30 (consultar outras saídas)"
+                                        "description" => null
                                     ]
                                 ]
                             ],
@@ -2787,17 +3955,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Navegación",
-                                        "description" => "1hs de navegacion frente a la pared sur del glaciar"
+                                        "description" => "1 hora"
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => "Navegating",
-                                        "description" => "1-hour navigation in front of the southern wall of the Glacier"
+                                        "description" => "1 hour"
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => "Navegação",
-                                        "description" => "1 hora de navegação em frente à parede sul da geleira"
+                                        "description" => "1 hora"
                                     ]
                                 ]
                             ],
