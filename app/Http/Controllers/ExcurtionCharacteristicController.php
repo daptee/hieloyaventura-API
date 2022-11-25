@@ -244,19 +244,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  '<p>Aproximadamente 12 horas (Día completo)</p>',
+                                    "name"        =>  '<p>12 horas (Día completo)</p>',
                                     "description" =>  '<p>La actividad es de todo el día, y cuenta con 7 horas y media de caminata.</p>'
                                 ],
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Approximately 12 hours (Full day)</p>",
+                                    "name"        =>  "<p>12 hours (Full day)</p>",
                                     "description" =>  "<p>The activity is all day, and has 7 hours and a half of walking.</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>",
+                                    "name"        =>  "<p>12 horas (Dia inteiro)</p>",
                                     "description" =>  "<p>A atividade é o dia todo, e tem 7 horas e meia de caminhada.</p>"
                                 ]
                             ]
@@ -269,19 +269,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Desde el 15 de septiembre hasta el 30 de abril</p>",
+                                    "name"        =>  "<p>15 septiembre al 30 abril</p>",
                                     "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Septiembre al 30 de Abril</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>From September 15th to April 30th.</p>",
+                                    "name"        =>  "<p>September 15th to April 30th</p>",
                                     "description" =>  "<p>The availability of this excursion is from September 15 to April 30</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>A partir de 15 de Setembro até 30 de abril</p>",
+                                    "name"        =>  "<p>15 Setembro até 30 abril</p>",
                                     "description" =>  "<p>A disponibilidade desta excursão é de 15 de setembro a 30 de abril</p>"
                                 ]
                             ]
@@ -345,7 +345,7 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Apto para 18 a 50 años</p>",
-                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 18 a 50 años.</span> Sin exepción.</p>'
+                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 18 a 50 años.</span> Sin excepción.</p>'
                                 ],
                                 [
                                 # INGLES
@@ -1409,55 +1409,55 @@ class ExcurtionCharacteristicController extends Controller
                 "characteristics" =>
                 [
                     #$clockConTraslado
-                    [
-                        "icon" =>  '$clock',
-                        "order" =>  "1",
-                        "translables" =>  [
-                            [
-                                #ESPAÑOL
-                                "lenguage_id" =>  "1",
-                                "name"        =>  "Duración CON traslado y pasarelas",
-                                "description" =>  '<p>Aproximadamente 8 horas (Día completo)</p>'
-                            ],
-                            [
-                                # INGLES
-                                "lenguage_id" =>  "2",
-                                "name"        =>  "Duration WITH transfer and walkways",  
-                                "description" =>  "<p>Approximately 8 hours (Full day)</p>"
-                            ],
-                            [
-                                # PORTUGUÉS
-                                "lenguage_id" =>  "3",
-                                "name"        =>  "Duração COM traslado e passarelas",  
-                                "description" =>  "<p>Aproximadamente 8 horas (Dia completo)</p>"
+                        [
+                            "icon" =>  '$clock',
+                            "order" =>  "1",
+                            "translables" =>  [
+                                [
+                                    #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>8 horas (todo el dia)</p>",
+                                    "description" =>  '<p>La duracion CON translado y pasarelas es de aproximadamente 8 horas (Día completo). SIN translado y pasarelas es de aproximadamente 2.45 horas</p>'
+                                ],
+                                [
+                                    # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>8 hours (Full day)</p>",  
+                                    "description" =>  "<p>The duration WITH transfer and footbridges is approximately 8 hours (Full day). WITHOUT transfer and walkways is approximately 2.45 hours</p>"
+                                ],
+                                [
+                                    # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>8 horas (Dia completo)</p>",  
+                                    "description" =>  "<p>A duração COM translado e passarelas é de aproximadamente 8 horas (dia inteiro). SEM transfer e passarelas é de aproximadamente 2,45 horas</p>"
+                                ]
                             ]
-                        ]
-                    ],
+                        ],
                     #$clockSinTraslado
-                    [
-                        "icon" =>  '$clock',
-                        "order" =>  "1",
-                        "translables" =>  [
-                            [
-                                #ESPAÑOL
-                                "lenguage_id" =>  "1",
-                                "name"        =>  "Duración SIN traslado y pasarelas",
-                                "description" =>  '<p>Aproximadamente 2.45 horas</p>'
-                            ],
-                            [
-                                # INGLES
-                                "lenguage_id" =>  "2",
-                                "name"        =>  "Duration WITHOUT transfer and walkways",
-                                "description" =>  "<p>Approximately 12 hours (Full day)</p>"
-                            ],
-                            [
-                                # PORTUGUÉS
-                                "lenguage_id" =>  "3",
-                                "name"        =>  "Duração SEM traslado e passarelas",
-                                "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
-                            ]
-                        ]
-                    ],
+                        // [
+                        //     "icon" =>  '$clock',
+                        //     "order" =>  "1",
+                        //     "translables" =>  [
+                        //         [
+                        //             #ESPAÑOL
+                        //             "lenguage_id" =>  "1",
+                        //             "name"        =>  "Duración SIN traslado y pasarelas",
+                        //             "description" =>  '<p>Aproximadamente 2.45 horas</p>'
+                        //         ],
+                        //         [
+                        //             # INGLES
+                        //             "lenguage_id" =>  "2",
+                        //             "name"        =>  "Duration WITHOUT transfer and walkways",
+                        //             "description" =>  "<p>Approximately 12 hours (Full day)</p>"
+                        //         ],
+                        //         [
+                        //             # PORTUGUÉS
+                        //             "lenguage_id" =>  "3",
+                        //             "name"        =>  "Duração SEM traslado e passarelas",
+                        //             "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
+                        //         ]
+                        //     ]
+                        // ],
                     #$calendar
                         [
                             "icon" =>  '$calendar',
@@ -1466,18 +1466,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  "<p>Desde el 15 de Julio al 31 de Mayo</p>"
-
+                                    "name"        =>  "<p>15 julio a 31 mayo</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>From September 15th to April 31th.</p>"
+                                    "name"        =>  "<p>15 july to 31 may</p>",
+                                    "description" =>  "<p>The availability of this excursion is from July 15 to May 31</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  "<p>A partir de 15 de Setembro até 31 de abril</p>"
+                                    "name"        =>  "<p>15 de julho a 31 de maio</p>",
+                                    "description" =>  "<p>A disponibilidade desta excursão é de 15 de julho a 31 de maio</p>"
                                 ]
                             ]
                         ],
@@ -1487,20 +1489,22 @@ class ExcurtionCharacteristicController extends Controller
                             "order" =>  "3",
                             "translables" =>  [
                                 [
-                                #ESPAÑOL
-                                    "lenguage_id" =>  "1",
-                                    "description" =>  '<p>Opcional traslado con guía y visita de aproximadamente dos horas a pasarelas.</p>'
-
+                                    #ESPAÑOL
+                                        "lenguage_id" =>  "1",
+                                        "name"        =>  '<p>Traslado opcional</p>',
+                                        "description" =>  '<p>Opcional traslado con guía y visita de aproximadamente dos horas a pasarelas.</p>'
                                 ],
                                 [
-                                # INGLES
-                                    "lenguage_id" =>  "2",
-                                    "description" =>  "<p>Optional transfer with a guide and an approx. 2-hour visit to the walkways.</p>"
+                                    # INGLES
+                                        "lenguage_id" =>  "2",
+                                        "name"        =>  '<p>Optional transfer</p>',
+                                        "description" =>  "<p>Optional transfer with guide and visit of approximately two hours to catwalks.</p>"
                                 ],
                                 [
-                                # PORTUGUÉS
-                                    "lenguage_id" =>  "3",
-                                    "description" =>  "<p>Traslado opcional, com guia e visita de aproximadamente duas horas às passarelas.</p>"
+                                    # PORTUGUÉS
+                                        "lenguage_id" =>  "3",
+                                        "name"        =>  '<p>Transferência opcional</p>',
+                                        "description" =>  "<p>Traslado opcional com guia e visita de aproximadamente duas horas às passarelas.</p>"
                                 ]
                             ]
                         ],
@@ -1512,17 +1516,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Guías español e inglés.</p>",
                                     "description" =>  "<p>Nuestros guías hablan español e inglés.</p>"
-
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  "<p>Our guides can speak Spanish and English.</p>"
+                                    "name"        =>  "<p>Spanish and English guides.</p>",
+                                    "description" =>  "<p>Our guides speak Spanish and English.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Guias em espanhol e inglês</p>",
                                     "description" =>  "<p>Nossos guias falam espanhol e inglês.</p>"
                                 ]
                             ]
@@ -1535,18 +1541,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 6 a 70 años.</span></p>'
-
+                                    "name"        =>  "<p>Apto para 6 a 70 años</p>",
+                                    "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 6 a 70 años.</span> Sin excepción.</p>'
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "description" =>  '<p>Only suitable for <span style="color: #366895;">people between 6 and 70 years</span></p>'
+                                    "name"        =>  "<p>Adequado para 6 a 70 anos</p>",
+                                    "description" =>  '<p>Suitable for <span style="color: #366895;">people between 6 and 70 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "description" =>  '<p>Apto somente para <span style="color: #366895;">pessoas entre 6 e 70 anos.</span></p>'
+                                    "name"        =>  "<p>Suitable for 6 to 70 years old</p>",
+                                    "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 6 e 70 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
                         ],
@@ -1558,16 +1566,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Complejidad baja</p>",
                                     "description" =>  "<p>Si bien la intensidad es baja el terreno presenta piedras, pendientes suaves y escaleras.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Low complexity</p>",
                                     "description" =>  "<p>Even though the difficulty of the tour is low, the surface has stones, gentle slopes and stairs.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Baixa complexidade</p>",
                                     "description" =>  "<p>Embora a dificuldade seja baixa, o terreno tem pedras, declives e escadas.</p>"
                                 ]
                             ]
@@ -2458,55 +2469,55 @@ class ExcurtionCharacteristicController extends Controller
                 "characteristics" =>
                 [
                     #$clockConTraslado
-                    [
-                        "icon" =>  '$clock',
-                        "order" =>  "1",
-                        "translables" =>  [
-                            [
-                                #ESPAÑOL
-                                "lenguage_id" =>  "1",
-                                "name"        =>  "<p>Aproximadamente 1 hora</p>",
-                                "description" =>  '<p>La duracion de la actividad es aproximadamente 1 hora.</p>'
-                            ],
-                            [
-                                # INGLES
-                                "lenguage_id" =>  "2",
-                                "name"        =>  "<p>Approximately 1 hour</p>",  
-                                "description" =>  "<p>The duration of the activity is approximately 1 hour.</p>"
-                            ],
-                            [
-                                # PORTUGUÉS
-                                "lenguage_id" =>  "3",
-                                "name"        =>  "<p>Aproximadamente 1 hora</p>",  
-                                "description" =>  "<p>A duração da atividade é de aproximadamente 1 hora.</p>"
+                        [
+                            "icon" =>  '$clock',
+                            "order" =>  "1",
+                            "translables" =>  [
+                                [
+                                    #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>1 hora</p>",
+                                    "description" =>  '<p>La duracion de la actividad es aproximadamente 1 hora.</p>'
+                                ],
+                                [
+                                    # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>1 hour</p>",  
+                                    "description" =>  "<p>The duration of the activity is approximately 1 hour.</p>"
+                                ],
+                                [
+                                    # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>1 hora</p>",  
+                                    "description" =>  "<p>A duração da atividade é de aproximadamente 1 hora.</p>"
+                                ]
                             ]
-                        ]
-                    ],
+                        ],
                     #$clockSinTraslado
-                    // [
-                    //     "icon" =>  '$clock',
-                    //     "order" =>  "1",
-                    //     "translables" =>  [
-                    //         [
-                    //             #ESPAÑOL
-                    //             "lenguage_id" =>  "1",
-                    //             "name"        =>  "Duración SIN traslado y pasarelas",
-                    //             "description" =>  '<p>Aproximadamente 2.45 horas</p>'
-                    //         ],
-                    //         [
-                    //             # INGLES
-                    //             "lenguage_id" =>  "2",
-                    //             "name"        =>  "Duration WITHOUT transfer and walkways",
-                    //             "description" =>  "<p>Approximately 12 hours (Full day)</p>"
-                    //         ],
-                    //         [
-                    //             # PORTUGUÉS
-                    //             "lenguage_id" =>  "3",
-                    //             "name"        =>  "Duração SEM traslado e passarelas",
-                    //             "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
-                    //         ]
-                    //     ]
-                    // ],
+                        // [
+                        //     "icon" =>  '$clock',
+                        //     "order" =>  "1",
+                        //     "translables" =>  [
+                        //         [
+                        //             #ESPAÑOL
+                        //             "lenguage_id" =>  "1",
+                        //             "name"        =>  "Duración SIN traslado y pasarelas",
+                        //             "description" =>  '<p>Aproximadamente 2.45 horas</p>'
+                        //         ],
+                        //         [
+                        //             # INGLES
+                        //             "lenguage_id" =>  "2",
+                        //             "name"        =>  "Duration WITHOUT transfer and walkways",
+                        //             "description" =>  "<p>Approximately 12 hours (Full day)</p>"
+                        //         ],
+                        //         [
+                        //             # PORTUGUÉS
+                        //             "lenguage_id" =>  "3",
+                        //             "name"        =>  "Duração SEM traslado e passarelas",
+                        //             "description" =>  "<p>Aproximadamente 12 horas (Dia inteiro)</p>"
+                        //         ]
+                        //     ]
+                        // ],
                     #$calendar
                         [
                             "icon" =>  '$calendar',
@@ -2565,19 +2576,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Nuestros guías hablan español.</p>",
+                                    "name"        =>  "<p>Guías en español</p>",
                                     "description" =>  "<p>Nuestros guías hablan principalmente español, aunque algunos también hablan ingles.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Our guides can speak Spanish.</p>",
+                                    "name"        =>  "<p>Guides in Spanish</p>",
                                     "description" =>  "<p>Our guides speak mainly Spanish, although some also speak English</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Nossos guias falam espanhol.</p>",
+                                    "name"        =>  "<p>Guias em espanhol</p>",
                                     "description" =>  "<p>Nossos guias falam principalmente espanhol, embora alguns também falem inglês.</p>"
                                 ]
                             ]
