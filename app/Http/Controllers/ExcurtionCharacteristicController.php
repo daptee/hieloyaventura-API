@@ -521,7 +521,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$brain',
+                                "icon" => '$wheel_chair',
 
                                 "characteristics" => [],
                                 "translables" => [
@@ -734,7 +734,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -1693,7 +1693,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$brain',
+                                "icon" => '$wheel_chair',
 
                                 "characteristics" => [],
                                 "translables" => [
@@ -1860,7 +1860,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -2881,7 +2881,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$itinerary_point',
+                                "icon" => '$boarding',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -2973,7 +2973,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -2996,7 +2996,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$itinerary_point',
+                                "icon" => '$landing',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3926,7 +3926,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3972,7 +3972,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
