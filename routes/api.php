@@ -124,7 +124,7 @@ Route::get('/clear-cache', function() {
 Route::get('test-mail', function() {
     try {
         $text = "Test de envio de mail Hielo y Aventura";
-        Mail::to("slarramendy@daptee.com.ar")->send(new TestMail("slarramendy@daptee.com.ar", $text));
+        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
         return 'Mail enviado';
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));

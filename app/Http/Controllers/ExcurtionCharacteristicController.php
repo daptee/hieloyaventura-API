@@ -351,13 +351,13 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Adequado para 8 a 65 anos</p>",
+                                    "name"        =>  "<p>Suitable for 8 to 65 years old</p>",
                                     "description" =>  '<p>Suitable for <span style="color: #366895;">people between 8 and 65 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Suitable for 8 to 65 years old</p>",
+                                    "name"        =>  "<p>Adequado para 8 a 65 anos</p>",
                                     "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 8 e 65 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
@@ -416,7 +416,7 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><strong><span style="color: #2471B9;">La duraci&oacute;n de la excursi&oacute;n con el traslado es de alrededor de diez horas en total</span>&nbsp;</strong>e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el Minitrekking dura cuatro horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida.</p>
                             <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursi&oacute;n no se suspende, mientras que las condiciones de seguridad lo permitan &iexcl;Los esperamos!</strong></span></p>'
+                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>'
                         ],
                         [
                             "lenguage_id" => 2,
@@ -480,7 +480,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li>Personas sedentarias con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -504,17 +504,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Mujeres embarazadas.</li>",
+                                        "description" => "<li>Embarazadas</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>Pregnant women.</li>",
+                                        "description" => "<li>Pregnant</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Mulheres grávidas.</li>",
+                                        "description" => "<li>Grávida</li>",
                                     ]
                                 ]
                             ],
@@ -576,17 +576,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas de discapacidades respiratorias (EPOC, asma, enfisema, etc.)</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>People who suffer from diseases causing respiratory impairment (COPD, asthma, emphysema, etc.).</li>",
+                                        "description" => "<li>People who suffer from diseases caused by respiratory disabilities such as COPD, asthma, emphysema, among others.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Pessoas com doenças que provoquem deficiências respiratórias (EPOC, asma, enfisema, etc.).</li>",
+                                        "description" => "<li>Pessoas que sofrem de doenças causadas por deficiências respiratórias como DPOC, asma, enfisema, entre outras.</li>",
                                     ]
                                 ]
                             ]
@@ -1495,13 +1495,13 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Adequado para 18 a 50 anos</p>",
+                                    "name"        =>  "<p>Suitable for 18 to 50 years old</p>",
                                     "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 50 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Suitable for 18 to 50 years old</p>",
+                                    "name"        =>  "<p>Adequado para 18 a 50 anos</p>",
                                     "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 18 e 50 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
@@ -1564,7 +1564,7 @@ class ExcurtionCharacteristicController extends Controller
                             <p style="text-align: justify;">&nbsp;</p>
                             <p><strong>&nbsp;</strong><strong><span style="color: #3686c3;">La duración de la excursión con el traslado es de alrededor de doce horas en total</span>&nbsp;</strong>e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. Allí podrán disfrutar de la espectacular vista panorámica del glaciar y recorrer alguno de los senderos auto-guiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el <span style="color: #3686c3;"><strong>Big Ice</strong></span> dura siete horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida.</p>
                             <p style="text-align: justify;">&nbsp;</p>
-                            <p><span style="color: #3686c3;"><strong>El Big Ice se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. ¡Esto nos permite disfrutar de experiencias irrepetibles en el glaciar más lindo del mundo! ¡Los esperamos!</strong></span></p>
+                            <p><span style="color: #3686c3;"><strong>El Big Ice se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>'
                         ],
                         [
@@ -1652,7 +1652,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li>Personas sedentarias con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -1676,17 +1676,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Mujeres embarazadas.</li>",
+                                        "description" => "<li>Embarazadas</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>Pregnant women.</li>",
+                                        "description" => "<li>Pregnant</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Mulheres grávidas.</li>",
+                                        "description" => "<li>Grávidas</li>",
                                     ]
                                 ]
                             ],
@@ -1748,17 +1748,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas de discapacidades respiratorias (EPOC, asma, enfisema, etc.)</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>People who suffer from diseases causing respiratory impairment (COPD, asthma, emphysema, etc.).</li>",
+                                        "description" => "<li>People who suffer from diseases caused by respiratory disabilities such as COPD, asthma, emphysema, among others.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Pessoas com doenças que provoquem deficiências respiratórias (EPOC, asma, enfisema, etc.).</li>",
+                                        "description" => "<li>Pessoas que sofrem de doenças causadas por deficiências respiratórias como DPOC, asma, enfisema, entre outras.</li>",
                                     ]
                                 ]
                             ]
@@ -2715,13 +2715,13 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Adequado para 6 a 70 anos</p>",
+                                    "name"        =>  "<p>Suitable for 6 to 70 years old</p>",
                                     "description" =>  '<p>Suitable for <span style="color: #366895;">people between 6 and 70 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Suitable for 6 to 70 years old</p>",
+                                    "name"        =>  "<p>Adequado para 6 a 70 anos</p>",
                                     "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 6 e 70 anos.</span> Sem exceções.</p>'
                                 ]
                             ]
@@ -2780,7 +2780,7 @@ class ExcurtionCharacteristicController extends Controller
                             <p style="text-align: justify;">&nbsp;</p>
                             <p>Llegaremos a El Calafate luego de recorrer la estepa patagónica, con el alma cargada de la energía natural de este glaciar único. <span style="color: #3686c3;"><strong>¡Estamos ansiosos por ser sus anfitriones!</strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>
-                            <p><span style="color: #3686c3;"><strong>El Safari Azul se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente.</strong></span> <span style="color: #3686c3;">Sin embargo, <strong>la excursión no se suspende</strong>, mientras que las condiciones de seguridad lo permitan.</span></p>
+                            <p><span style="color: #3686c3;"><strong>El Safari Azul se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!<strong></span></p>
                             <p style="text-align: justify;">&nbsp;</p>'
                         ],
                         [
