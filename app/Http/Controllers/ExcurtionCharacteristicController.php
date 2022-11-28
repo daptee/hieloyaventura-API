@@ -1860,7 +1860,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$blue_stairs',
+                                "icon" => '$stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3926,7 +3926,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$blue_stairs',
+                                "icon" => '$boarding',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3972,7 +3972,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$blue_stairs',
+                                "icon" => '$landing',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
