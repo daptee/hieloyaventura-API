@@ -2881,7 +2881,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$boarding',
+                                "icon" => '$itinerary_point',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -2996,7 +2996,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$landing',
+                                "icon" => '$itinerary_point',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
