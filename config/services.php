@@ -31,4 +31,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'mercadopago' => [
+        'dev' => [
+            'token' => env('MP_ACCESS_TOKEN_DEV')
+        ],
+        // 'prod' => [
+        //     'token' => env('MP_ACCESS_TOKEN_PROD')
+        // ]
+    ],
 ];
