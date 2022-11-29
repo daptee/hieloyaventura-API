@@ -16,34 +16,34 @@ class MercadoPagoController extends Controller
 
         // Crea un objeto de preferencia
         $preference = new MercadoPago\Preference();
-        // $preference->back_urls = array(
-        //     "success" => "https://prode.soyfutbolero.com/payment/success",
-        //     "failure" => "https://prode.soyfutbolero.com/payment/failure",
-        //     "pending" => "https://prode.soyfutbolero.com/payment/pending"
-        // );
-        // $preference->auto_return = "approved";
+        $preference->back_urls = array(
+            "success" => $request->url_back,
+            "failure" => $request->url_back,
+            "pending" => $request->url_back
+        );
+        $preference->auto_return = "approved";
 
         // Crea un ítem en la preferencia
         $item = new MercadoPago\Item();
-//        $item->id = $request->id;
-//        $item->currency_id = $request->currency_id;
-//        $item->description = $request->description;
-        
         $item->title = $request->title;
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
         $preference->items = array($item);
-        $preference->payment_methods = array(
-            // "excluded_payment_methods" => array(
-            //   array("id" => "master")
-            // ),
-            "excluded_payment_types" => array(
-              array("id" => "ticket", "id" => "bank_transfer")
-            ),
-        );
+        $preference->payment_methods = [
+            "excluded_payment_methods" => [
+                [
+                    "id" => "pagofacil",
+                    "id" => "rapipago",
+                ]
+            ],
+            "excluded_payment_types" => [
+                [
+                    "id" => "ticket"
+                ]
+            ]
+        ];
         $preference->save();
 
-        // dd($preference);
         return response()->json(['preference' => $preference->id], 200);
     }
 }
