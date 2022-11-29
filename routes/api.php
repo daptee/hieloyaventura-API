@@ -11,6 +11,7 @@ use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
+use App\Mail\ProcessCv;
 use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -119,6 +124,13 @@ Route::get('/clear-cache', function() {
     ]);
 });
 
+Route::get('/storage-link', function(){
+    Artisan::call('storage:link');
+
+    return response()->json([
+        "message" => "The links have been created."
+    ]);
+});
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
 
 Route::get('test-mail', function() {
@@ -133,3 +145,27 @@ Route::get('test-mail', function() {
 });
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
+
+Route::post('process-cv', function(Request $request) {
+    try {
+        $request->validate([
+            'nombre_y_apellido' => 'required',
+            'email' => 'required',
+        ]);
+
+        $cv = $request->file('file');
+        $fileName   = time() . '.' . $cv->getClientOriginalExtension();
+        
+        Storage::putFileAs('public/process-cv', $cv, $fileName);
+
+        $path = "storage/process-cv/$fileName";
+
+        Mail::to("enzo100amarilla@gmail.com")->send(new ProcessCv($request, $path));
+
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
