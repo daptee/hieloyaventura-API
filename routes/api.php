@@ -8,6 +8,7 @@ use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
+use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
@@ -172,3 +173,7 @@ Route::post('process-cv', function(Request $request) {
 });
 
 Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'createPay']);
+
+Route::get('diseases', [MedicalRecordController::class, 'diseases']);
+
+Route::post('passenger/diseases', [MedicalRecordController::class, 'passenger_diseases']);
