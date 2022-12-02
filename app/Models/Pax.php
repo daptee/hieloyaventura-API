@@ -15,6 +15,9 @@ class Pax extends Model
         'lastname',
         'dni',
         'birthdate',
+        'age',
+        'blood_type',
+        'description'
     ];
     use HasFactory;
 

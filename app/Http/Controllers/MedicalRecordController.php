@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Disease;
 use App\Models\PassengerDisease;
+use App\Models\Pax;
 use Illuminate\Http\Request;
 
 class MedicalRecordController extends Controller
@@ -22,6 +23,16 @@ class MedicalRecordController extends Controller
         foreach($datos as $passenger){
 
             $this->delete_diseases($passenger['passenger_id']);
+
+            $pax = Pax::find($passenger['passenger_id']); 
+            
+            if(isset($pax)){
+                $pax->age         = $passenger['age'];
+                $pax->blood_type  = $passenger['blood_type'];
+                $pax->description = $passenger['description'];
+                $pax->save();
+            }
+
             foreach($passenger['diseases'] as $disease){
                 $passenger_disease = new PassengerDisease();
                 $passenger_disease->passenger_id = $passenger['passenger_id'];
