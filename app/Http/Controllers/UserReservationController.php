@@ -165,6 +165,12 @@ class UserReservationController extends Controller
         return $userReservation;
     }
 
+    public function getByReservationNumber($reservation_number)
+    {
+        $userReservation = UserReservation::where('reservation_number', $reservation_number)->first();
+        return $userReservation;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

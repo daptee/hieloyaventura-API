@@ -93,6 +93,7 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::get('/', 'index')->middleware(['jwt.verify']);
     Route::post('/', 'store');
     Route::get('/{userReservation}', 'show');
+    Route::get('/number/{reservationNumber}', 'getByReservationNumber');
     Route::put('/{id}', 'update');
 });
 
