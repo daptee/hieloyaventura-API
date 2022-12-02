@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class MedicalRecordController extends Controller
 {
-    public function diseases()
+    public function diseases(Request $request)
     {
-        $diseases = Disease::all();
+        $diseases = Disease::where('language_id', $request->language_id ?? 1)->get();
     
         return response()->json(['diseases' => $diseases]);
     }
