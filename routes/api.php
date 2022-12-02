@@ -175,6 +175,6 @@ Route::post('process-cv', function(Request $request) {
 
 Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'createPay']);
 
-Route::get('diseases', [MedicalRecordController::class, 'diseases']);
+Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
 
 Route::post('passenger/diseases', [MedicalRecordController::class, 'passenger_diseases']);
