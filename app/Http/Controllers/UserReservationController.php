@@ -160,14 +160,23 @@ class UserReservationController extends Controller
      * @param  \App\Models\UserReservation  $userReservation
      * @return \Illuminate\Http\Response
      */
-    public function show(UserReservation $userReservation)
+    public function show($id)
     {
+        $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($id);
+        
+        if(is_null($userReservation))
+            return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
+
         return $userReservation;
     }
 
     public function getByReservationNumber($reservation_number)
     {
-        $userReservation = UserReservation::where('reservation_number', $reservation_number)->first();
+        $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number)->first();
+      
+        if(is_null($userReservation))
+            return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
+
         return $userReservation;
     }
 
