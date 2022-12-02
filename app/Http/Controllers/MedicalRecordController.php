@@ -10,7 +10,10 @@ class MedicalRecordController extends Controller
 {
     public function diseases(Request $request)
     {
-        $diseases = Disease::where('language_id', $request->language_id ?? 1)->get();
+        $datos = $request->all();
+
+        $language_id = $datos['language_id'] ?? 1;
+        $diseases = Disease::where('language_id', $language_id)->get();
     
         return response()->json(['diseases' => $diseases]);
     }
