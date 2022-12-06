@@ -1336,9 +1336,184 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
+        //26 purchase_detail
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'purchase_detail',
+                "order" => null,
 
-
-
+                "characteristics" => [
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Guía español e inglés durante el recorrido al glaciar y las pasarelas",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Spanish and English guide during the tour to the glacier and the walkways",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Guia espanhol e inglês durante o passeio à geleira e às passarelas",
+                                        "description" => ""
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Visita de 1 hora a las pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "1 hour visit to the catwalks",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "1 hora de visita às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Navegación frente a la pared del glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Navigation in front of the glacier wall",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Navegação em frente à parede da geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Trekking sobre el hielo de 1 hora",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "1 hour ice trekking",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "1 hora de caminhada no gelo",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Acceso a nuestro refugio de montaña",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Access to our mountain refuge",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Acesso ao nosso refúgio de montanha",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Detalle de compra",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Purchase detail",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Detalhe da compra",
+                        "description" => ""
+                    ]
+                ]
+            ];
         //
 
         return $characteristics;
@@ -2530,10 +2705,232 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
+        //26 purchase_detail
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'purchase_detail',
+                "order" => null,
 
-
-
-
+                "characteristics" => [
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Guía de Turismo bilingüe (español e inglés) durante el recorrido al Glaciar y visita a las pasarelas",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Bilingual Tour Guide (Spanish and English) during the tour to the Glacier and visit the catwalks",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Guia de turismo bilíngüe (espanhol e inglês) durante o passeio ao Glaciar e visita às passarelas",
+                                        "description" => ""
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Visita de 1 hora aproximadamente a las pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Visit of approximately 1 hour to the catwalks",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Visita de aproximadamente 1 hora às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Navegación frente a la pared sur del glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Navigation in front of the southern wall of the glacier",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Navegação em frente à parede sul da geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Caminata por costa del lago hasta llegar al glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Walk along the coast of the lake until you reach the glacier",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Caminhe ao longo da costa do lago até chegar à geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Caminata por bosque con Vía Ferrata (4hs total)",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Forest walk with Via Ferrata (4 hours total)",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Caminhada na floresta com a Via Ferrata (4 horas no total)",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Trekking sobre hielo de aproximadamente 3 horas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Trekking on ice of approximately 3 hours",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Trekking no gelo de aproximadamente 3 horas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Acceso a nuestro refugio de montaña",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Access to our mountain refuge",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Acesso ao nosso refúgio de montanha",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Detalle de compra",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Purchase detail",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Detalhe da compra",
+                        "description" => ""
+                    ]
+                ]
+            ];
         //
 
         return $characteristics;
@@ -3590,9 +3987,208 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
+        //26 purchase_detail
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'purchase_detail',
+                "order" => null,
 
-
-
+                "characteristics" => [
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Guía de Turismo bilingüe (español e inglés) en el bus",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Bilingual Tour Guide (Spanish and English) on the bus",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Guia turístico bilíngüe (espanhol e inglês) no ônibus",
+                                        "description" => ""
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Visita de 2 horas aproximadamente a las pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Visit of approximately 2 hours to the catwalks",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Visita de aproximadamente 2 horas às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Navegación frente a la pared sur del glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Navigation in front of the southern wall of the glacier",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Navegação em frente à parede sul da geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Caminata por costa del lago hasta llegar al glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Walk along the coast of the lake until you reach the glacier",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Caminhe ao longo da costa do lago até chegar à geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Mirador Panorámico",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Panoramic viewpoint",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Ponto de vista panorâmico",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Brindis",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Toast",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Brinde",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Detalle de compra",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Purchase detail",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Detalhe da compra",
+                        "description" => ""
+                    ]
+                ]
+            ];
 
         //
 
@@ -4566,9 +5162,112 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
+        //26 purchase_detail
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => 'purchase_detail',
+                "order" => null,
 
-
-
+                "characteristics" => [
+                    [
+                        "icon_id" => null,
+                        "order" => null,
+                        "icon" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Embarque: Puerto Bajo de las Sombras",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Embarkation: Lower Port of Shadows",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Embarque: Porto Inferior das Sombras",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Navegación de 1 hora frente a la cara sur del Glaciar Perito Moreno",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "1-hour navigation in front of the south face of the Perito Moreno Glacier",
+                                        "description" => ""
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Navegação de 1 hora em frente à face sul do Glaciar Perito Moreno",
+                                        "description" => ""
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 0,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Esta excursión no incluye traslado desde y hacia El Calafate. Tené en cuenta que la distancia entre El Calafate y el Parque Nacional Los Glaciares es de 80km",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "This excursion does not include transportation to and from El Calafate. Keep in mind that the distance between El Calafate and Los Glaciares National Park is 80km",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Esta excursão não inclui transporte de e para El Calafate. Tenha em mente que a distância entre El Calafate e o Parque Nacional Los Glaciares é de 80 km",
+                                        "description" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ]
+                ],
+                "translables" => [
+                    [
+                        "lenguage_id" => 1,
+                        "name" => "Detalle de compra",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 2,
+                        "name" => "Purchase detail",
+                        "description" => ""
+                    ],
+                    [
+                        "lenguage_id" => 3,
+                        "name" => "Detalhe da compra",
+                        "description" => ""
+                    ]
+                ]
+            ];
         //
 
         return $characteristics;

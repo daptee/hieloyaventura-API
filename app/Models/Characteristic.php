@@ -25,9 +25,10 @@ class Characteristic extends Model
     protected $fillable = [
         'link',
         'characteristic_id',
-        'characteristic_type_id',
+        'characteristic_type_id',        
         'icon_id',
         'icon',
+        'con_trf',
     ];
 
     public function characteristics(): HasMany
