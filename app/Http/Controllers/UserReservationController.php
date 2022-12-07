@@ -110,6 +110,7 @@ class UserReservationController extends Controller
                 //Creo el registro en user_reservations
                     $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
                     $newUserReservation->user_id = $datos['user_id'] ?? (isset($user) ? $user->id : null);
+                    $newUserReservation->language_id = $datos['language_id'] ?? 1; // Agregar en tabla de DB y avisar a Diego
                     $newUserReservation->save();
                 //
 
@@ -327,8 +328,19 @@ class UserReservationController extends Controller
     
     private function createPdf($newUserReservation, $details)
     {
-        Carbon::setLocale('es');
-        $languageToPdf = "ES";
+        // if(is_null($lenguageToPdf)){
+        //     Carbon::setLocale('es');
+        //     $languageToPdf = "ES";
+        // }
+
+        // Language
+        $array_languages = [ 
+            1 => 'ES',
+            2 => 'EN',
+            3 => 'PT'
+        ];
+
+        $languageToPdf = $array_languages[$newUserReservation->language_id];
 
         $date = $newUserReservation->date;
         $dayText = ucfirst($date->translatedFormat('l'));
@@ -363,12 +375,36 @@ class UserReservationController extends Controller
         $pdf->useTemplate($tplId, 0, 0, 210);
 
 
+        $traduccionesPDF = [
+            'ES' => [
+                'de_dateFormated' => 'de',
+                'thanks' => '¡Gracias por tu compra',
+                'withTranslation' => 'con traslado',
+                'withTranslationHotel' => 'El dia de la excursión, el pick up pasará a buscarte',
+                'por_el_hotel' => 'por el hotel'
+            ],
+            'EN' => [
+                'de_dateFormated' => 'of',
+                'thanks' => 'Thanks for your purchase',
+                'withTranslation' => 'with transfer',
+                'withTranslationHotel' => 'On the day of the excursion, the pick up will pick you up',
+                'por_el_hotel' => 'by the hotel'
+            ],
+            'PT' => [
+                'de_dateFormated' => 'do',
+                'thanks' => 'Obrigado pela sua compra',
+                'withTranslation' => 'com transferência',
+                'withTranslationHotel' => 'No dia da excursão, o pick up irá buscá-lo',
+                'por_el_hotel' => 'pelo hotel'
+            ]
+        ];
+        
         //Textos
-        $thanks                  = iconv('UTF-8', 'ISO-8859-1','¡Gracias por tu compra');
+        $thanks                  = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
         $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
         $contactFullName         = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
         $contactName             = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name);
-        $withTranslation         = $newUserReservation->is_transfer ? ' con traslado' : '';
+        $withTranslation         = $newUserReservation->is_transfer ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '';
         $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $newUserReservation->reservation_paxes->sum('quantity') . "x $excurtionName");
         $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
         $reservationTurn         = iconv('UTF-8', 'cp1250', $newUserReservation->turn->format('H:i\h\s'));
@@ -433,11 +469,11 @@ class UserReservationController extends Controller
             $pdf->SetFont('Nunito-Light','', 12);
             $pdf->SetTextColor(42, 42, 42);
             $pdf->SetXY(28, 108);
-            $str = iconv('UTF-8', 'cp1250', 'El dia de la excursión, el pick up pasará a buscarte ');
+            $str = iconv('UTF-8', 'cp1250', $traduccionesPDF[$languageToPdf]['withTranslationHotel'] . ' ');
             $pdf->Write(0, $str);
             
             $pdf->SetXY(28, 113);
-            $str = iconv('UTF-8', 'cp1250', 'por el hotel: ');
+            $str = iconv('UTF-8', 'cp1250', $traduccionesPDF[$languageToPdf]['por_el_hotel'] . ': ');
             $pdf->Write(0, $str);
             //si hay translado poner lo del hotel
             $pdf->SetFont('Nunito-SemiBold','', 12);
