@@ -218,7 +218,7 @@ class UserReservationController extends Controller
                                 $pathReservationPdf = $this->createPdf(
                                     $userReservation,
                                     'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
-                                );
+                                );                                
                                 $userReservation->pdf = $pathReservationPdf['urlToSave'];
                                 $userReservation->save();
 
@@ -340,7 +340,11 @@ class UserReservationController extends Controller
             3 => 'PT'
         ];
 
-        $languageToPdf = $array_languages[$newUserReservation->language_id];
+        $language_id = $newUserReservation->language_id ?? 1;
+        $languageToPdf = $array_languages[$language_id];
+
+        if(!is_dir('reservations'))
+            mkdir(public_path("reservations"));
 
         $date = $newUserReservation->date;
         $dayText = ucfirst($date->translatedFormat('l'));
