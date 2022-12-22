@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 class UserReservation extends Mailable
 {
     // use Queueable, SerializesModels;
-    public $subjet = "Reserva creada exitosamente";
+    public $subject = "";
 
     public $email;
     public $pathPdf;
@@ -20,11 +20,13 @@ class UserReservation extends Mailable
      *
      * @return void
      */
-    public function __construct($email, $pathPdf)
+    public function __construct($email, $pathPdf, $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name)
     {
         $this->email   = $email;
         $this->pathPdf = $pathPdf;
-
+        $this->minitrekking_or_bigice = $minitrekking_or_bigice;
+        $this->hash_reservation_number = $hash_reservation_number;
+        $this->subject = "Reserva nro: $reservation_number - Excursion $excurtion_name";
     }
 
     /**
@@ -39,7 +41,8 @@ class UserReservation extends Mailable
                     ->replyTo('No-responder@hieloyaventura.com')
                     ->subject($this->subject)
                     ->view('emails.user-reservation')
-                    ->with(["msg" => "El pago fue exitoso."])
-                    ;
+                    ->with(["minitrekking_o_bigice" => $this->minitrekking_or_bigice,
+                        "hash_reservation_number" => $this->hash_reservation_number
+                    ]);
     }
 }

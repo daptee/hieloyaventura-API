@@ -94,6 +94,7 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::post('/', 'store');
     Route::get('/{userReservation}', 'show');
     Route::get('/number/{reservationNumber}', 'getByReservationNumber');
+    Route::get('/number/encrypted/{reservationNumber}', 'getByReservationNumberEncrypted');
     Route::put('/{id}', 'update');
 });
 
