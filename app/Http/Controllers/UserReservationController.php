@@ -18,6 +18,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -181,6 +183,18 @@ class UserReservationController extends Controller
         return $userReservation;
     }
 
+    public function getByReservationNumberEncrypted($reservation_number_encrypted)
+    {
+        $reservation_number_decrypted = Crypt::decryptString($reservation_number_encrypted);
+        $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number_decrypted)->first();
+      
+        if(is_null($userReservation))
+            return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
+
+        return $userReservation;
+    }
+    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -218,7 +232,7 @@ class UserReservationController extends Controller
                                 $pathReservationPdf = $this->createPdf(
                                     $userReservation,
                                     'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
-                                );
+                                );                                
                                 $userReservation->pdf = $pathReservationPdf['urlToSave'];
                                 $userReservation->save();
 
@@ -229,8 +243,15 @@ class UserReservationController extends Controller
                         }
                         
                         try{
-                            $mailTo = $datos['email'] ?? $userReservation->contact_data->email;
-                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf']));
+                            $mailTo = $userReservation->contact_data->email;
+                            $minitrekking_or_bigice = $userReservation->excurtion_id == 1 || $userReservation->excurtion_id == 2 ? true : false;
+                            $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+                            $reservation_number = $userReservation->reservation_number;
+                            $excurtion_name = $userReservation->excurtion->name;
+
+                            // return new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number);
+                            Mail::to('enzo100amarilla@gmail.com')->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
+                            // Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf']));
                         } catch (\Throwable $th) {
                             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                         }
@@ -340,7 +361,11 @@ class UserReservationController extends Controller
             3 => 'PT'
         ];
 
-        $languageToPdf = $array_languages[$newUserReservation->language_id];
+        $language_id = $newUserReservation->language_id ?? 1;
+        $languageToPdf = $array_languages[$language_id];
+
+        if(!is_dir('reservations'))
+            mkdir(public_path("reservations"));
 
         $date = $newUserReservation->date;
         $dayText = ucfirst($date->translatedFormat('l'));
