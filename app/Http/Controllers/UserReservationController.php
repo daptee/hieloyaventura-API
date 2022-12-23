@@ -249,9 +249,7 @@ class UserReservationController extends Controller
                             $reservation_number = $userReservation->reservation_number;
                             $excurtion_name = $userReservation->excurtion->name;
 
-                            // return new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number);
-                            Mail::to('enzo100amarilla@gmail.com')->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
-                            // Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf']));
+                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
                         } catch (\Throwable $th) {
                             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                         }
