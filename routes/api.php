@@ -192,7 +192,7 @@ Route::post('contact-form', function(Request $request) {
             'email'             => 'required',
             'mensaje'           => 'required'
         ]);
-        Mail::to("enzo100amarilla@gmail.com")->send(new ContactForm($request));
+        Mail::to("info@hieloyaventura.com")->send(new ContactForm($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
@@ -211,7 +211,7 @@ Route::post('online-return', function(Request $request) {
             'mensaje'           => 'required'
         ]);
 
-        Mail::to("enzo100amarilla@gmail.com")->send(new OnlineReturn($request));
+        Mail::to("online@hieloyaventura.com")->send(new OnlineReturn($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));

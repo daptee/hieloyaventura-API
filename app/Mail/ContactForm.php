@@ -12,7 +12,7 @@ class ContactForm extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $data, $email;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,7 @@ class ContactForm extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->email = $data['email'];
     }
 
     /**
@@ -31,6 +32,8 @@ class ContactForm extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.contact-form');
+        return $this->replyTo($this->email)
+                    ->subject('Consulta web - Hielo & Aventura')
+                    ->view('emails.contact-form');
     }
 }

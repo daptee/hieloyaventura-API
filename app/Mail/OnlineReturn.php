@@ -12,7 +12,7 @@ class OnlineReturn extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    public $data, $email;
 
     /**
      * Create a new message instance.
@@ -22,6 +22,7 @@ class OnlineReturn extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
+        $this->email = $data['email'];
     }
 
     /**
@@ -31,6 +32,8 @@ class OnlineReturn extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.online-return');
+        return $this->replyTo($this->email)
+                    ->subject('Devolucion online - Hielo & Aventura')
+                    ->view('emails.online-return');
     }
 }
