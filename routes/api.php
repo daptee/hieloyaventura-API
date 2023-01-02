@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
@@ -13,7 +14,10 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
+use App\Mail\ContactForm;
+use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
+use App\Mail\ReturnContact;
 use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
@@ -179,3 +183,39 @@ Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'cr
 Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
 
 Route::post('passenger/diseases', [MedicalRecordController::class, 'passenger_diseases']);
+
+// Route::post('contact', [ContactController::class, 'form_contact']);
+Route::post('contact-form', function(Request $request) {
+    try {
+        $request->validate([
+            'nombre_y_apellido' => 'required',
+            'email'             => 'required',
+            'mensaje'           => 'required'
+        ]);
+        Mail::to("enzo100amarilla@gmail.com")->send(new ContactForm($request));
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
+
+Route::post('online-return', function(Request $request) {
+    try {
+        $request->validate([
+            'nro_reserva'       => 'required',
+            'nombre_y_apellido' => 'required',
+            'email'             => 'required',
+            'telefono'          => 'required',
+            'mensaje'           => 'required'
+        ]);
+
+        Mail::to("enzo100amarilla@gmail.com")->send(new OnlineReturn($request));
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
