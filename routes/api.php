@@ -168,7 +168,7 @@ Route::post('process-cv', function(Request $request) {
 
         $path = "storage/process-cv/$fileName";
 
-        Mail::to("enzo100amarilla@gmail.com")->send(new ProcessCv($request, $path));
+        Mail::to("info@hieloyaventura.com")->send(new ProcessCv($request, $path));
 
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {

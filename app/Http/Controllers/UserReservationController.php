@@ -244,12 +244,12 @@ class UserReservationController extends Controller
                         
                         try{
                             $mailTo = $userReservation->contact_data->email;
-                            $minitrekking_or_bigice = $userReservation->excurtion_id == 1 || $userReservation->excurtion_id == 2 ? true : false;
+                            $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
                             $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
                             $reservation_number = $userReservation->reservation_number;
                             $excurtion_name = $userReservation->excurtion->name;
 
-                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
+                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
                         } catch (\Throwable $th) {
                             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                         }
