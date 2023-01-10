@@ -229,10 +229,7 @@ class UserReservationController extends Controller
                     //Mandar email con el PDF adjunto
                         try {
                             DB::beginTransaction();
-                                $pathReservationPdf = $this->createPdf(
-                                    $userReservation,
-                                    'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.'
-                                );                                
+                                $pathReservationPdf = $this->createPdf($userReservation);                                
                                 $userReservation->pdf = $pathReservationPdf['urlToSave'];
                                 $userReservation->save();
 
@@ -249,7 +246,9 @@ class UserReservationController extends Controller
                             $reservation_number = $userReservation->reservation_number;
                             $excurtion_name = $userReservation->excurtion->name;
 
-                            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));
+                            // Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));                        
+                            Mail::to('enzo100amarilla@gmail.com')->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));                        
+                        
                         } catch (\Throwable $th) {
                             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                         }
@@ -345,21 +344,19 @@ class UserReservationController extends Controller
     //     return response()->json($userReservation);
     // }
     
-    private function createPdf($newUserReservation, $details)
-    {
-        // if(is_null($lenguageToPdf)){
-        //     Carbon::setLocale('es');
-        //     $languageToPdf = "ES";
-        // }
-
+    private function createPdf($newUserReservation)
+    {            
         // Language
         $array_languages = [ 
             1 => 'ES',
             2 => 'EN',
             3 => 'PT'
         ];
-
+            
         $language_id = $newUserReservation->language_id ?? 1;
+
+        Carbon::setLocale(strtolower($array_languages[$language_id]));
+        
         $languageToPdf = $array_languages[$language_id];
 
         if(!is_dir('reservations'))
@@ -369,7 +366,25 @@ class UserReservationController extends Controller
         $dayText = ucfirst($date->translatedFormat('l'));
         $dayNumber = $date->format('j');
         $month = ucfirst($date->translatedFormat('F'));
-        $dateFormated = "$dayText $dayNumber de $month";
+        
+        switch ($language_id) {
+            case 1: // Español
+                $dateFormated = "$dayText $dayNumber de $month";
+                $details = 'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.';
+                break;
+            case 2: // Ingles
+                $dateFormated = "$month $dayText $dayNumber";
+                $details = 'Please remember that the pick up waiting time can be up to 40 minutes.';
+                break;
+            case 3: // Portugues
+                $dateFormated = "$dayText, $dayNumber de $month";
+                $details = 'Lembre-se de que o tempo de espera para retirada pode ser de até 40 minutos.';
+                break;
+            default: // Default
+                $dateFormated = "$dayText $dayNumber de $month";
+                $details = 'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.';
+                break;
+            }
 
         $excurtionName = $newUserReservation->excurtion->name;
         $pathExcurtionLogo = public_path($newUserReservation->excurtion->icon);
@@ -427,7 +442,7 @@ class UserReservationController extends Controller
         $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
         $contactFullName         = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
         $contactName             = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name);
-        $withTranslation         = $newUserReservation->is_transfer ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '';
+        $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
         $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $newUserReservation->reservation_paxes->sum('quantity') . "x $excurtionName");
         $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
         $reservationTurn         = iconv('UTF-8', 'cp1250', $newUserReservation->turn->format('H:i\h\s'));
@@ -492,7 +507,7 @@ class UserReservationController extends Controller
             $pdf->SetFont('Nunito-Light','', 12);
             $pdf->SetTextColor(42, 42, 42);
             $pdf->SetXY(28, 108);
-            $str = iconv('UTF-8', 'cp1250', $traduccionesPDF[$languageToPdf]['withTranslationHotel'] . ' ');
+            $str = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['withTranslationHotel'] . ' ');
             $pdf->Write(0, $str);
             
             $pdf->SetXY(28, 113);

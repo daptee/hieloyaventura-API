@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 
 class PassengerDisease extends Model
@@ -12,8 +13,8 @@ class PassengerDisease extends Model
     protected $table = "passenger_diseases";
     protected $hidden = ['created_at', 'updated_at'];
 
-    // public function diseases()
-    // {
-    //     return $this->hasMany(Disease::class, 'disease_id', 'id');
-    // }
+    public function disease(): HasOne
+    {
+        return $this->hasOne(Disease::class, 'id', 'disease_id');
+    }
 }

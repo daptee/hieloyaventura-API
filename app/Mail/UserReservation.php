@@ -27,7 +27,7 @@ class UserReservation extends Mailable
         $this->pathPdf = $pathPdf;
         $this->bigice = $is_bigice;
         $this->hash_reservation_number = $hash_number;
-        $this->subject = "Ficha Medica - Nro reserva: $reservation_number - Hielo & Aventura";
+        $this->subject = "Hielo & Aventura - Reserva nro: $reservation_number";
     }
 
     /**
@@ -39,6 +39,7 @@ class UserReservation extends Mailable
     {
         return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
                     ->attach($this->pathPdf)
+                    ->replyTo($this->email)
                     ->subject($this->subject)
                     ->view('emails.user-reservation')
                     ->with(["bigice" => $this->bigice,

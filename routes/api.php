@@ -15,6 +15,7 @@ use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
+use App\Mail\GroupExcurtion;
 use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
 use App\Mail\ReturnContact;
@@ -182,7 +183,7 @@ Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'cr
 
 Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
 
-Route::post('passenger/diseases', [MedicalRecordController::class, 'passenger_diseases']);
+Route::post('passenger/diseases/{hash_reservation_number}/{mail_to}', [MedicalRecordController::class, 'passenger_diseases']);
 
 // Route::post('contact', [ContactController::class, 'form_contact']);
 Route::post('contact-form', function(Request $request) {
@@ -212,6 +213,28 @@ Route::post('online-return', function(Request $request) {
         ]);
 
         Mail::to("online@hieloyaventura.com")->send(new OnlineReturn($request));
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
+
+Route::post('group-excurtion', function(Request $request) {
+    try {
+        $request->validate([
+            'nombre_excursion'        => 'required',
+            'fecha'                   => 'required',
+            'turno'                   => 'required',
+            'con_o_sin_traslado'      => 'required',
+            'cantidad_pasajeros'      => 'required',
+            'nombre_completo_persona' => 'required',
+            'email_de_personal'       => 'required',
+            'tel_persona'             => 'required'
+        ]);
+
+        Mail::to("enzo100amarilla@gmail.com")->send(new GroupExcurtion($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
