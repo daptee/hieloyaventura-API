@@ -31,6 +31,12 @@ class CancelarReservas extends Command
     {
         $reservations = UserReservation::where('reservation_status_id', ReservationStatus::STARTED)
                                     ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
-                                    ->update(['reservation_status_id' => ReservationStatus::AUTOMATIC_CANCELED]);
+                                    ->get();
+
+        foreach($reservations as $reservation){
+            $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+            $reservation->save();
+            echo $reservation->id . ' - ';
+        }
     }
 }
