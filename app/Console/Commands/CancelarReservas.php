@@ -40,9 +40,12 @@ class CancelarReservas extends Command
             foreach($reservations as $reservation){
                 $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                 $reservation->save();
+                $fields = array('rsv' => $reservation->reservation_number);
+                $fields_string = http_build_query($fields);
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "http://apihya.hieloyaventura.com/apihya/CancelaReserva?RSV=$reservation->reservation_number");
+                curl_setopt($ch, CURLOPT_URL, "http://apihya.hieloyaventura.com/apihya/CancelaReserva");
                 curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
                 $data = curl_exec($ch);
                 curl_close($ch);
             }
