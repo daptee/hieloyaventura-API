@@ -33,16 +33,16 @@ class CancelarReservas extends Command
     public function handle()
     {
         $reservations = UserReservation::where('reservation_status_id', ReservationStatus::STARTED)
-                                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))->get();
-
-        if(count($reservations)){
+        ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))->get();
+        if(count($reservations) > 0){
             foreach($reservations as $reservation){
                 $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                 $reservation->save();
                 $fields = array('rsv' => $reservation->reservation_number);
+                $fields = array('rsv' => 349321);
                 $fields_string = http_build_query($fields);
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "http://apihya.hieloyaventura.com/apihya/CancelaReserva");
+                curl_setopt($ch, CURLOPT_URL, "https://apihya.hieloyaventura.com/apihya/CancelaReserva");
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
                 $data = curl_exec($ch);
