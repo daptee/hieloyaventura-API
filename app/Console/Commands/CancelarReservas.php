@@ -33,8 +33,7 @@ class CancelarReservas extends Command
     public function handle()
     {
         $reservations = UserReservation::where('reservation_status_id', ReservationStatus::STARTED)
-                                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
-                                    ->get();
+                                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))->get();
 
         if(count($reservations)){
             foreach($reservations as $reservation){
