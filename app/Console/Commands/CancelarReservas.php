@@ -39,7 +39,6 @@ class CancelarReservas extends Command
                 $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                 $reservation->save();
                 $fields = array('rsv' => $reservation->reservation_number);
-                $fields = array('rsv' => 349321);
                 $fields_string = http_build_query($fields);
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, "https://apihya.hieloyaventura.com/apihya/CancelaReserva");
