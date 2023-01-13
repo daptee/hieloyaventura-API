@@ -13,7 +13,7 @@ class StorePaxRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StorePaxRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user_reservation_id' => 'required',
+            'paxs' => 'required'
         ];
     }
 }

@@ -39,7 +39,6 @@ class StoreUserReservationRequest extends FormRequest
             'is_transfer' => 'nullable',
             'reservation' => 'accepted',
             'notifications' => 'accepted',
-            'paxs' => 'nullable|array',
             
             'billing_data' => 'required',
             'billing_data.name' => 'required',

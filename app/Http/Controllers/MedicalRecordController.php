@@ -73,8 +73,7 @@ class MedicalRecordController extends Controller
 
         // return $passengers_diseases;
 
-        // Mail::to('info@hieloyaventura.com')->send(new MedicalRecordMailable($mailto, $passengers_diseases, $reservation_number));
-        Mail::to('enzo100amarilla@gmail.com')->send(new MedicalRecordMailable($mailto, $passengers_diseases, $reservation_number));
+        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordMailable($mailto, $passengers_diseases, $reservation_number));
 
         return response()->json(['message' => "Guardado con exito!"]);
     }

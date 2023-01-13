@@ -11,6 +11,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\PaxController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
@@ -91,7 +92,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
     });
-    Route::get('send-email-pdf', [PDFController::class, 'index']);
+    // Route::get('send-email-pdf', [PDFController::class, 'index']);
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
@@ -143,6 +144,17 @@ Route::get('/storage-link', function(){
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
 
 Route::get('test-mail', function() {
+    try {
+        $text = "Test de envio de mail Hielo y Aventura";
+        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
+        return 'Mail enviado';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        return 'Mail no enviado';
+    }
+});
+
+Route::post('testeando-curl-post', function() {
     try {
         $text = "Test de envio de mail Hielo y Aventura";
         Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
@@ -242,3 +254,7 @@ Route::post('group-excurtion', function(Request $request) {
         return 'Mail no enviado';
     }
 });
+
+Route::post('paxs', [PaxController::class, 'store']);
+
+Route::post('recover-password', [UserController::class, 'recover_password_user']);
