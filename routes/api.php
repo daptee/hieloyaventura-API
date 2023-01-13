@@ -246,7 +246,7 @@ Route::post('group-excurtion', function(Request $request) {
             'tel_persona'             => 'required'
         ]);
 
-        Mail::to("enzo100amarilla@gmail.com")->send(new GroupExcurtion($request));
+        Mail::to("grupos@hieloyaventura.com")->send(new GroupExcurtion($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
