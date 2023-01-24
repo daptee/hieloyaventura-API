@@ -235,7 +235,7 @@ class UserReservationController extends Controller
                     ]);
                     break;
                 default:
-                    return response(["message" => "El update solo recibe estatus de REJECTED o COMPLETED Error: URU0001", "error" => "EL reservation_status_id no es valido"], 422);
+                    return response(["message" => "El update solo recibe estatus de REJECTED o PAX_PENDING Error: URU0001", "error" => "EL reservation_status_id no es valido"], 422);
                     break;
             }
        

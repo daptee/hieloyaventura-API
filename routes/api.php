@@ -62,9 +62,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::prefix('lenguages')->controller(LenguageController::class)->group(function () {
         Route::get('/', 'index');
     });
-    Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
-        Route::get('/', 'index');
-    });
     Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
@@ -93,6 +90,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/{id}', 'update');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
+});
+
+Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
+    Route::get('/', 'index');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
