@@ -165,7 +165,7 @@ class UserReservationController extends Controller
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
-        $userReservation->encrypted_id = Crypt::encryptString($userReservation->id);
+        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
     }
 
@@ -176,7 +176,7 @@ class UserReservationController extends Controller
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
-        $userReservation->encrypted_id = Crypt::encryptString($userReservation->id);
+        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
     }
 
@@ -188,7 +188,7 @@ class UserReservationController extends Controller
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
-        $userReservation->encrypted_id = Crypt::encryptString($userReservation->id);
+        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
     }
     
@@ -241,7 +241,7 @@ class UserReservationController extends Controller
        
             $userReservation->save();
 
-            $userReservation->encrypted_id = Crypt::encryptString($userReservation->id);
+            $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         DB::commit();
         } catch (Exception $error) {
             DB::rollBack();
