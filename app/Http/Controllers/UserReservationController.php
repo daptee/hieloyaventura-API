@@ -55,7 +55,8 @@ class UserReservationController extends Controller
             $data = $data->where('user_id', auth()->user()->id);
             $data = $data->get();
             foreach($data as $item){
-                $item->encrypted_id = Crypt::encryptString($item->id);
+//                $item->encrypted_id = Crypt::encryptString($item->id);
+                $item->encrypted_reservation_number = Crypt::encryptString($item->reservation_number);
             }
         } catch (ModelNotFoundException $error) {
             return response(["message" => "No se encontraron " . $this->sp . "."], 404);
@@ -104,13 +105,13 @@ class UserReservationController extends Controller
                                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                             }
                         //
-                        //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email'] 
+                        //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email']
                         //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
                             // ...
                         //
                     }
                 //
-                
+
                 //Creo el registro en user_reservations
                     $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
                     $newUserReservation->user_id = $datos['user_id'] ?? (isset($user) ? $user->id : null);
@@ -135,7 +136,7 @@ class UserReservationController extends Controller
                         ContactDataReservation::create($datos['contact_data'] + ['user_reservation_id' => $newUserReservation->id]);
                     }
                 //
-                
+
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
@@ -148,7 +149,7 @@ class UserReservationController extends Controller
 
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
-        
+
         return response(compact("message", "newUserReservation"));
     }
 
@@ -161,7 +162,7 @@ class UserReservationController extends Controller
     public function show($id)
     {
         $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($id);
-        
+
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
@@ -172,7 +173,7 @@ class UserReservationController extends Controller
     public function getByReservationNumber($reservation_number)
     {
         $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number)->first();
-      
+
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
@@ -184,14 +185,14 @@ class UserReservationController extends Controller
     {
         $reservation_number_decrypted = Crypt::decryptString($reservation_number_encrypted);
         $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number_decrypted)->first();
-      
+
         if(is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
         $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -223,7 +224,7 @@ class UserReservationController extends Controller
                 case ReservationStatus::PAX_PENDING:
                     $userReservation->is_paid = 1;
                     $userReservation->reservation_status_id =  ReservationStatus::PAX_PENDING;
- 
+
                     break;
                 case ReservationStatus::REJECTED:
                     $userReservation->is_paid = 0;
@@ -238,7 +239,7 @@ class UserReservationController extends Controller
                     return response(["message" => "El update solo recibe estatus de REJECTED o PAX_PENDING Error: URU0001", "error" => "EL reservation_status_id no es valido"], 422);
                     break;
             }
-       
+
             $userReservation->save();
 
             $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
@@ -246,7 +247,7 @@ class UserReservationController extends Controller
         } catch (Exception $error) {
             DB::rollBack();
             return response(["message" => "Tuvimos un problema en el servidor Error: URU0002", "error" => $error->getMessage()], 500);
-        } 
+        }
 
         return response()->json(["La reserva fue actualizada con éxito", $userReservation]);
 
@@ -310,11 +311,11 @@ class UserReservationController extends Controller
     //     $userReservation->excurtion_id = $excursion;
 
     //     $pathReservationPdf = $this->createPdf($userReservation,'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.');
-        
+
     //     $userReservation->pdf = $pathReservationPdf['urlToSave'];
     //     $userReservation->save();
 
     //     return response()->json($userReservation);
     // }
-    
+
 }
