@@ -2012,29 +2012,6 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$itinerary_ship',
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Embarque en Puerto",
-                                        "description" => "20min de navegación"
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Boarding in port",
-                                        "description" => "20min of navigation"
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Embarque no porto",
-                                        "description" => "20min de navegação"
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
                                 "icon" => '$stairs',
                                 "characteristics" => [],
                                 "translables" => [
@@ -2058,22 +2035,45 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
+                                "icon" => '$itinerary_ship',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Embarque en Puerto",
+                                        "description" => "20min de navegación"
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Boarding in port",
+                                        "description" => "20min of navigation"
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Embarque no porto",
+                                        "description" => "20min de navegação"
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
                                 "icon" => '$itinerary_shoe',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Trekking hacia el glaciar",
+                                        "name" => "Trekking en bosque",
                                         "description" => "2 horas"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Trekking towards the glacier",
+                                        "name" => "Trekking in forest",
                                         "description" => "2 hours"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Trekking em direção à geleira",
+                                        "name" => "Trekking na floresta",
                                         "description" => "2 horas"
                                     ]
                                 ]
@@ -2086,17 +2086,17 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Trekking sobre el glaciar",
+                                        "name" => "Trekking sobre Hielo",
                                         "description" => "3 horas"
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Trekking on the glacier",
+                                        "name" => "Ice Trekking",
                                         "description" => "3 hours"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Trekking na geleira",
+                                        "name" => "Trekking no gelo",
                                         "description" => "3 horas"
                                     ]
                                 ]
@@ -3347,6 +3347,52 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
+                                "icon" => '$itinerary_shoe',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Tocamos el Glaciar",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "We touch the Glacier",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Nós tocamos a geleira",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$itinerary_shoe',
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "Vistas Panorámicas y Breve Caminata por el bosque",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Panoramic Views and Brief Hike through the Forest",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Vistas Panorâmicas e Breve Caminhada pela Floresta",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
                                 "icon" => '$itinerary_ship',
                                 "characteristics" => [],
                                 "translables" => [
@@ -4341,19 +4387,19 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Guías en español</p>",
-                                    "description" =>  "<p>Nuestros guías hablan principalmente español, aunque algunos también hablan ingles.</p>"
+                                    "description" =>  "<p>Nuestros guías de turismo hablan español e inglés</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>Guides in Spanish</p>",
-                                    "description" =>  "<p>Our guides speak mainly Spanish, although some also speak English</p>"
+                                    "description" =>  "<p>Our tour guides speak Spanish and English</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Guias em espanhol</p>",
-                                    "description" =>  "<p>Nossos guias falam principalmente espanhol, embora alguns também falem inglês.</p>"
+                                    "description" =>  "<p>Nossos guias turísticos falam espanhol e inglês</p>"
                                 ]
                             ]
                         ],
