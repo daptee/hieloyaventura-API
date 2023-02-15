@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\GroupExcurtionController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoPagoController;
@@ -234,27 +235,7 @@ Route::post('online-return', function(Request $request) {
     }
 });
 
-Route::post('group-excurtion', function(Request $request) {
-    try {
-        $request->validate([
-            'nombre_excursion'        => 'required',
-            'fecha'                   => 'required',
-            'turno'                   => 'required',
-            'con_o_sin_traslado'      => 'required',
-            'cantidad_pasajeros'      => 'required',
-            'nombre_completo_persona' => 'required',
-            'email_de_personal'       => 'required',
-            'tel_persona'             => 'required'
-        ]);
-
-        Mail::to("grupos@hieloyaventura.com")->send(new GroupExcurtion($request));
-        return 'Mail enviado con exito!';
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-        // return $th->getMessage();
-        return 'Mail no enviado';
-    }
-});
+Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtion']);
 
 Route::post('paxs', [PaxController::class, 'store']);
 

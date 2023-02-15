@@ -386,6 +386,46 @@ class ExcurtionCharacteristicController extends Controller
                                     "description" =>  "<p>Para que você desfrute de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar 3 horas, uma parte do percorrido sobre gelo e com grampos.</p>"
                                 ]
                             ]
+                        ],
+                    #$restrictions_before_buying
+                        [
+                            "icon" =>  '$complexity', // Consultar Seba
+                            "order" =>  "7",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Personas sedentarias con obesidad</p>",
+                                    "description" =>  "<p>No podrán participar personas con obesidad. En el caso de los adultos, la
+                                                        Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando
+                                                        una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30.
+                                                        El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado
+                                                        de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una
+                                                        mail a clientes@hieloyaventura.com</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Sedentary people with obesity</p>",
+                                    "description" =>  "<p>People with obesity may not participate. In the case of adults, the
+                                                        The World Health Organization (WHO) defines obesity as such when
+                                                        a person has a Body Mass Index (BMI) equal to or greater than 30.
+                                                        The BMI is calculated by dividing a person's weight in kilograms by the square
+                                                        of your height in meters: (kg/m2). If you have any questions or queries, send us an
+                                                        email to clientes@hieloyaventura.com</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
+                                    "description" =>  "<p>Pessoas com obesidade não podem participar. No caso dos adultos, o
+                                                        A Organização Mundial da Saúde (OMS) define a obesidade como tal quando
+                                                        uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30.
+                                                        O IMC é calculado dividindo o peso de uma pessoa em quilogramas pelo quadrado
+                                                        da sua altura em metros: (kg/m2). Se você tiver alguma dúvida ou pergunta, envie-nos um
+                                                        e-mail para clientes@hieloyaventura.com</p>"
+                                ]
+                            ]
                         ]
                 ]
             ];
@@ -1196,17 +1236,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Tamaño de grupo",
-                        "description" => "20"
+                        "description" => "20 sobre el hielo"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Group size",
-                        "description" => "20"
+                        "description" => "20 on ice"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Tamanho do grupo",
-                        "description" => "20"
+                        "description" => "20 no gelo"
                     ]
                 ]
             ];
@@ -1703,6 +1743,46 @@ class ExcurtionCharacteristicController extends Controller
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Alta complexidade</p>",
                                     "description" =>  "<p>ALTA. Para que você tenha uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar, pelos menos, 7 horas e meia, uma parte do percorrido sobre gelo e com grampos.</p>"
+                                ]
+                            ]
+                        ],
+                    #$restrictions_before_buying
+                        [
+                            "icon" =>  '$complexity', // Consultar Seba
+                            "order" =>  "7",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Personas sedentarias con obesidad</p>",
+                                    "description" =>  "<p>No podrán participar personas con obesidad. En el caso de los adultos, la
+                                                        Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando
+                                                        una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30.
+                                                        El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado
+                                                        de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una
+                                                        mail a clientes@hieloyaventura.com</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Sedentary people with obesity</p>",
+                                    "description" =>  "<p>People with obesity may not participate. In the case of adults, the
+                                                        The World Health Organization (WHO) defines obesity as such when
+                                                        a person has a Body Mass Index (BMI) equal to or greater than 30.
+                                                        The BMI is calculated by dividing a person's weight in kilograms by the square
+                                                        of your height in meters: (kg/m2). If you have any questions or queries, send us an
+                                                        email to clientes@hieloyaventura.com</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
+                                    "description" =>  "<p>Pessoas com obesidade não podem participar. No caso dos adultos, o
+                                                        A Organização Mundial da Saúde (OMS) define a obesidade como tal quando
+                                                        uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30.
+                                                        O IMC é calculado dividindo o peso de uma pessoa em quilogramas pelo quadrado
+                                                        da sua altura em metros: (kg/m2). Se você tiver alguma dúvida ou pergunta, envie-nos um
+                                                        e-mail para clientes@hieloyaventura.com</p>"
                                 ]
                             ]
                         ]
@@ -2566,17 +2646,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Tamaño de grupo",
-                        "description" => "10"
+                        "description" => "10 sobre el hielo"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Group size",
-                        "description" => "10"
+                        "description" => "10 on ice"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Tamanho do grupo",
-                        "description" => "10"
+                        "description" => "10 no gelo"
                     ]
                 ]
             ];

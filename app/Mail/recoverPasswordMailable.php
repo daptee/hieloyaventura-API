@@ -28,6 +28,7 @@ class recoverPasswordMailable extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.recoverPassword');
+        return $this->subject('Hielo & Aventura - Recuperacion de contraseña')
+                    ->view('emails.recoverPassword');
     }
 }

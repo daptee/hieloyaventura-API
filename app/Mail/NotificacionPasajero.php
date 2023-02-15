@@ -8,11 +8,11 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 
-class GroupExcurtion extends Mailable
+class NotificacionPasajero extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data, $email, $attach_file;
+    public $data, $email, $subject;
 
     /**
      * Create a new message instance.
@@ -23,7 +23,7 @@ class GroupExcurtion extends Mailable
     {
         $this->data = $data;
         $this->email = $data['email'];
-        $this->attach_file = $data['file'];
+        $this->subject = $data['subject'];
     }
 
     /**
@@ -33,15 +33,8 @@ class GroupExcurtion extends Mailable
      */
     public function build()
     {
-        if(is_null($this->attach_file)){
-            return $this->replyTo($this->email)
-                        ->subject('Hielo & Aventura - nueva solicitud de reserva grupal')
-                        ->view('emails.group-excurtion');
-        }
-
         return $this->replyTo($this->email)
-                    ->subject('Hielo & Aventura - nueva solicitud de reserva grupal')
-                    ->view('emails.group-excurtion')
-                    ->attach($this->attach_file);
+                    ->subject($this->subject)
+                    ->view('emails.passenger-notification');
     }
 }
