@@ -58,7 +58,7 @@ class NotificacionPasajeros extends Command
                             <br><br>    
                             Muchas gracias. El equipo de Hielo & Aventura."
                 ];
-                Mail::to("grupos@hieloyaventura.com")->send(new NotificacionPasajero($r_10_min_data));
+                Mail::to($r_10_min_email)->send(new NotificacionPasajero($r_10_min_data));
             }
         }
 
@@ -76,7 +76,7 @@ class NotificacionPasajeros extends Command
                             <br><br>
                             Muchas gracias. El equipo de Hielo & Aventura."
                 ];
-                Mail::to("grupos@hieloyaventura.com")->send(new NotificacionPasajero($r_30_min_data));
+                Mail::to($r_30_min_email)->send(new NotificacionPasajero($r_30_min_data));
             }
         }
         

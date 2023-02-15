@@ -33,8 +33,7 @@ class NotificacionPasajero extends Mailable
      */
     public function build()
     {
-        return $this->replyTo($this->email)
-                    ->subject($this->subject)
+        return $this->subject($this->subject)
                     ->view('emails.passenger-notification');
     }
 }
