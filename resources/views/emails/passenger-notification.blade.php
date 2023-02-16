@@ -7,6 +7,6 @@
     <title>Notificacion Pasajero</title>
 </head>
 <body>
-    <p> {{ $data['msg'] }}</p>
+    <p style="white-space:pre-line"> {{ $data['msg'] }} </p>
 </body>
 </html>

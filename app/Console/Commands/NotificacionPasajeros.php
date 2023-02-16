@@ -46,16 +46,16 @@ class NotificacionPasajeros extends Command
                 $r_10_min_nombre = $r_10_min->user->name;
                 $r_10_min_nroReserva = $r_10_min->reservation_number;
                 $r_10_min_nombreExcursion = $r_10_min->excurtion->name;
-                $r_10_min_fechaExcursion = $r_10_min->date;
+                $r_10_min_fechaExcursion = $r_10_min->date->format('d/m/Y');
                 $r_10_min_link = "https://dev.hieloyaventura.com/mis-excursiones/". Crypt::encryptString($r_10_min_nroReserva);
                 $r_10_min_email = $r_10_min->user->email;
                 $r_10_min_data = [
                     'email' => $r_10_min_email,
                     'subject' => "Hielo & Aventura - aviso carga de pasajeros - nro de reserva $r_10_min_nroReserva",
                     'msg' => "Hola $r_10_min_nombre. Enviamos este correo para notificarle que su compra de la excursion nro $r_10_min_nroReserva, $r_10_min_nombreExcursion, para el dia $r_10_min_fechaExcursion, aun no esta confirmada. Para ello, debe terminar de completar los datos de los pasajeros de la misma. Puede realizarlo desde el siguiente link: $r_10_min_link
-                            <br><br>
+                            
                             IMPORTANTE: Recuerde que si no completa estos datos, su reserva puede ser cancelada.
-                            <br><br>    
+                              
                             Muchas gracias. El equipo de Hielo & Aventura."
                 ];
                 Mail::to($r_10_min_email)->send(new NotificacionPasajero($r_10_min_data));
@@ -68,12 +68,13 @@ class NotificacionPasajeros extends Command
                 $r_30_min_nroReserva = $r_30_min->reservation_number;
                 $r_30_min_nombreExcursion = $r_30_min->excurtion->name;
                 $r_30_min_fechaExcursion = $r_30_min->date;
+                $r_10_min_link = "https://dev.hieloyaventura.com/mis-excursiones/". Crypt::encryptString($r_30_min_nroReserva);
                 $r_30_min_email = $r_30_min->user->email;
                 $r_30_min_data = [
                     'email' => $r_30_min_email,
                     'subject' => "Hielo & Aventura - aviso carga de pasajeros - nro de reserva $r_30_min_nroReserva",
-                    'msg' => "Hola $r_30_min_nombre, este mail es el ultimo aviso para que complete los datos de los pasajeros correspondiente a su reserva $r_30_min_nroReserva de la excursion $r_30_min_nombreExcursion, para el dia $r_30_min_fechaExcursion. Su compra será cancelada a la brevedad en caso de no competarse los datos solicitados
-                            <br><br>
+                    'msg' => "Hola $r_30_min_nombre, este mail es el ultimo aviso para que complete los datos de los pasajeros correspondiente a su reserva $r_30_min_nroReserva de la excursion $r_30_min_nombreExcursion, para el dia $r_30_min_fechaExcursion. Su compra será cancelada a la brevedad en caso de no competarse los datos solicitados. Puede realizarlo desde el siguiente link: $r_10_min_link
+                            
                             Muchas gracias. El equipo de Hielo & Aventura."
                 ];
                 Mail::to($r_30_min_email)->send(new NotificacionPasajero($r_30_min_data));
@@ -90,13 +91,13 @@ class NotificacionPasajeros extends Command
                     'email' => $r_35_min_email,
                     'subject' => "Aviso de cancelación de reserva nro $r_35_min_nroReserva - falta de pasajeros",
                     'msg' => "Este es un aviso automatico proveniente de la web, para tomar decisiones sobre la compra con nro reserva $r_35_min_nroReserva, ya que se ha enviado los 2 avisos pero no se han completado los datos de los pasajeros.
-                            <br><br>
+                            
                             Los datos de contacto de esta reserva son:
-                            <br><br>
+                            
                             Nombre completo: $r_35_min_nombre
-                            <br><br>
+                            
                             Mail: $r_35_min_email
-                            <br><br>
+                            
                             Telefono: $r_35_min_telefono"
                 ];
                 Mail::to("online@hieloyaventura.com")->send(new NotificacionPasajero($r_35_min_data));

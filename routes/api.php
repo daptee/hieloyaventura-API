@@ -18,6 +18,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
 use App\Mail\GroupExcurtion;
+use App\Mail\NotificacionPasajero;
 use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
 use App\Mail\ReturnContact;
@@ -240,3 +241,16 @@ Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtio
 Route::post('paxs', [PaxController::class, 'store']);
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
+
+// Route::get('test-notification-user', function(){
+//     $r_10_min_data = [
+//         'email' => 'enzoamarilla@gmail.com',
+//         'subject' => "Hielo & Aventura - aviso carga de pasajeros - nro de reserva 12345",
+//         'msg' => "Hola. Enviamos este correo para notificarle que su compra de la excursion nro 12345, no esta confirmada. Para ello, debe terminar de completar los datos de los pasajeros de la misma. Puede realizarlo desde el siguiente link:
+
+//                 IMPORTANTEe: Recuerde que si no completa estos datos, su reserva puede ser cancelada.
+                  
+//                 Muchas gracias. El equipo de Hielo & Aventura."
+//     ];
+//     return new NotificacionPasajero($r_10_min_data);
+// });
