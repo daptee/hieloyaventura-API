@@ -3343,13 +3343,13 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
-        //5 itinerary ////traducir todas estás características
+        //5 itinerary
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => 'itinerary',
                 "order" => null,
 
-                "characteristics" => [ //traducir todas estás características
+                "characteristics" => [ 
                     [
                         "icon_id" => null,
                         "order" => null,
@@ -3427,7 +3427,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$itinerary_shoe',
+                                "icon" => '$touch',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3450,7 +3450,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$itinerary_shoe',
+                                "icon" => '$walk',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
