@@ -520,17 +520,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas sedentarias con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li>Obese persons.&nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li>Pessoas obesas <a href="https://hieloyaventura.com/faq-es/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
                                     ]
                                 ]
                             ],
@@ -1907,17 +1907,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas sedentarias con obesidad. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li>Obese persons.&nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li>Pessoas obesas <a href="https://hieloyaventura.com/faq-es/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
                                     ]
                                 ]
                             ],
@@ -3308,6 +3308,63 @@ class ExcurtionCharacteristicController extends Controller
                 "icon_id" => null,
                 "characteristic_type" => "before_buying",
                 "order" => null,
+                "characteristics" => [
+                    [
+                        "icon" => null,
+                        "order" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$pregnant',
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => 'No apto para personas embarazadas, con dificultad de movilidad, con problemas cardiacos u otros que puedan perjudicar su salud durante la caminata',
+                                        "description" => null,
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "Not suitable for pregnant people, with mobility difficulties, with heart problems or others that may harm their health during the walk",
+                                        "description" => null,
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "Não indicado para grávidas, com dificuldades de locomoção, com problemas cardíacos ou outros que possam prejudicar a saúde durante a caminhada",
+                                        "description" => null,
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "icon" => '$obesity',
+                                "order" => null,
+
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "translables" => []
+                    ],
+                ],
                 "translables" => [
                     [
                         "lenguage_id" => 1,
@@ -4466,19 +4523,19 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Guías en español</p>",
+                                    "name"        =>  "<p>Guías en español e inglés</p>",
                                     "description" =>  "<p>Nuestros guías de turismo hablan español e inglés</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Guides in Spanish</p>",
+                                    "name"        =>  "<p>Guides in Spanish and English</p>",
                                     "description" =>  "<p>Our tour guides speak Spanish and English</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Guias em espanhol</p>",
+                                    "name"        =>  "<p>Guias em espanhol e inglês</p>",
                                     "description" =>  "<p>Nossos guias turísticos falam espanhol e inglês</p>"
                                 ]
                             ]
@@ -4899,7 +4956,7 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Restricciones importantes antes de comprar",
+                        "name" => "A tener en cuenta antes de comprar",
                         "description" => '<p><span style="color: #2471B9;"><strong>Para realizar esta excursi&oacute;n deber&aacute;s acercarte por tus propios medios al Puerto Bajo las Sombras</strong></span>, ubicado en la Ruta 11 km 70.9. Te sugerimos salir con 1 hora y media de anticipaci&oacute;n de El Calafate para llegar a horario. El camino dentro del Parque Nacional es sinuoso y por seguridad, te recomendamos respetar los l&iacute;mites de velocidad se&ntilde;alados.</p>
                         <p>&nbsp;</p>
                         <p><span style="color: #2471B9;"><strong>Los tickets pueden ser comprados online o en el puerto antes de embarcar. En los meses de verano, recomendamos realizar la compra anticipadamente.</strong></span></p>
@@ -4909,7 +4966,7 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Restricciones importantes antes de comprar",
+                        "name" => "To keep in mind before buying",
                         "description" => '<p><strong><span style="color: #2471B9;">To do the tour you should get to the Bajo las Sombras Port</span>,&nbsp;</strong>located on Ruta 11 km 70.9, by your own means. We suggest setting off from El Calafate one hour in advance to be able to get on time. The road within the National Park is winding so, for your safety, we recommend that you comply with the speed limits.</p>
                         <p>&nbsp;</p>
                         <p><span style="color: #2471B9;"><strong>The tickets can be bought online or in the port before boarding. In the summer months, we recommend buying the tickets in advance.</strong></span></p>
@@ -4919,7 +4976,7 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Restricciones importantes antes de comprar",
+                        "name" => "Para ter em mente antes de comprar",
                         "description" => '<p><strong><span style="color: #2471B9;">Para participar desta excurs&atilde;o voc&ecirc; dever&aacute; ir, por seus pr&oacute;prios meios, para o Porto Bajos las Sombras</span>,&nbsp;</strong>localizado no quil&ocirc;metro 70,9 da Ruta 11. &Eacute; recomend&aacute;vel sair da cidade de El Calafate com una antecipa&ccedil;&atilde;o de uma hora e meia, para chegar a tempo. O caminho no Parque Nacional &eacute; sinuoso e, para sua seguran&ccedil;a, recomendamos respeitar os limites de velocidade indicados.</p>
                         <p>&nbsp;</p>
                         <p><span style="color: #2471B9;"><strong>Os t&iacute;quetes podem ser adquiridos online ou no porto, antes de se embarcar. Recomendamos adquirir os t&iacute;quetes antecipadamente, nos meses de ver&atilde;o.</strong></span></p>
