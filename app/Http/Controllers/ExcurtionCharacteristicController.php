@@ -520,17 +520,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com</li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com</li>'
                                     ]
                                 ]
                             ],
@@ -1907,17 +1907,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com</li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com</li>'
                                     ]
                                 ]
                             ],
@@ -3322,18 +3322,18 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => 'No apto para personas embarazadas, con dificultad de movilidad, con problemas cardiacos u otros que puedan perjudicar su salud durante la caminata',
-                                        "description" => null,
+                                        "name" => null,
+                                        "description" => "No apto para personas embarazadas, con dificultad de movilidad, con problemas cardiacos u otros que puedan perjudicar su salud durante la caminata",
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Not suitable for pregnant people, with mobility difficulties, with heart problems or others that may harm their health during the walk",
-                                        "description" => null,
+                                        "name" => null,
+                                        "description" => "Not suitable for pregnant people, with mobility difficulties, with heart problems or others that may harm their health during the walk",
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Não indicado para grávidas, com dificuldades de locomoção, com problemas cardíacos ou outros que possam prejudicar a saúde durante a caminhada",
-                                        "description" => null,
+                                        "name" => null,
+                                        "description" => "Não indicado para grávidas, com dificuldades de locomoção, com problemas cardíacos ou outros que possam prejudicar a saúde durante a caminhada",
                                     ]
                                 ]
                             ],
@@ -3347,17 +3347,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong> Personas sedentarias con obesidad.<strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com. <span style='font-size: 12px; color: #2471b9;'><a href='https://hieloyaventura.com/faq-es/' target='_blank' rel='noopener'><strong class='pum-trigger' style='cursor: pointer;'>Mas info.</strong></a></span></li>",
+                                        "description" => "<li><strong> Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com. &nbsp;<span style="font-size: 12px; color: #2471b9;"><a href="https://hieloyaventura.com/en/faq-en/" target="_blank" rel="noopener"><strong class="pum-trigger" style="cursor: pointer;">More info.</strong></a></span></li>',
+                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com</li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com. <a href="https://hieloyaventura.com/pt/faq-pt/"><strong class="pum-trigger" style="cursor: pointer;">Veja mais</strong></a></li>'
+                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com</li>'
                                     ]
                                 ]
                             ]
