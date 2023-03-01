@@ -389,7 +389,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$restrictions_before_buying
                         [
-                            "icon" =>  '$itinerary_shoe',
+                            "icon" =>  '$complexity',
                             "order" =>  "7",
                             "translables" =>  [
                                 [
@@ -468,7 +468,7 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>
                             <p>&nbsp;</p>
-                            <p><strong>Salidas grupales:</strong> Contamos con varias salidas diarias en diferentes horarios. Si viajas en grupo o con un compañero por favor indícanos el detalle con anticipación, para poder ubicarlos en el mismo horario y garantizar la salida grupal en un mismo horario.</p>'
+                            <p><span style="color: #2471B9;"><strong>Salidas grupales:</strong></span> Contamos con varias salidas diarias en diferentes horarios. Si viajas en grupo o con un compañero por favor indícanos el detalle con anticipación, para poder ubicarlos en el mismo horario y garantizar la salida grupal en un mismo horario.</p>'
                         ],
                         [
                             "lenguage_id" => 2,
@@ -3483,7 +3483,9 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "A TENER EN CUENTA ANTES DE COMPRAR",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
+                        "description" => '<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">No incluye:</span></strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
@@ -3493,7 +3495,9 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 2,
                         "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
+                        "description" => '<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, certain people will not be able to participate in the excursion</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">Not included:</span></strong>&nbsp;Ticket to the National Park | Food and drink. | Personal clothes suitable for the weather conditions of the place. (cold, rain, wind, snow) </p>
                         <p style="text-align: justify;">&nbsp;</p>
@@ -3503,7 +3507,9 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 3,
                         "name" => "LEVAR EM CONTA ANTES DE COMPRAR",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
+                        "description" => '<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, certas pessoas ñao poderao participar da excursao</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><span style="color: rgb(36, 113, 185);"><strong>N&atilde;o&nbsp;inclui:</strong></span>&nbsp; Ingresso ao Parque Nacional | Comida e bebida | Vestimenta pessoal adequada para as condi&ccedil;&otilde;es clim&aacute;ticas pr&oacute;prias da regi&atilde;o (frio, chuva, vento, neve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
