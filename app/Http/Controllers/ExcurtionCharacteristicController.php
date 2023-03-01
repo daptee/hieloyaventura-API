@@ -1786,46 +1786,6 @@ class ExcurtionCharacteristicController extends Controller
                                 ]
                             ]
                         ],
-                    #$restrictions_before_buying
-                        [
-                            "icon" =>  '$complexity', // Consultar Seba
-                            "order" =>  "7",
-                            "translables" =>  [
-                                [
-                                #ESPAÑOL
-                                    "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Personas sedentarias con obesidad</p>",
-                                    "description" =>  "<p>No podrán participar personas con obesidad. En el caso de los adultos, la
-                                                        Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando
-                                                        una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30.
-                                                        El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado
-                                                        de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una
-                                                        mail a clientes@hieloyaventura.com</p>"
-                                ],
-                                [
-                                # INGLES
-                                    "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Sedentary people with obesity</p>",
-                                    "description" =>  "<p>People with obesity may not participate. In the case of adults, the
-                                                        The World Health Organization (WHO) defines obesity as such when
-                                                        a person has a Body Mass Index (BMI) equal to or greater than 30.
-                                                        The BMI is calculated by dividing a person's weight in kilograms by the square
-                                                        of your height in meters: (kg/m2). If you have any questions or queries, send us an
-                                                        email to clientes@hieloyaventura.com</p>"
-                                ],
-                                [
-                                # PORTUGUÉS
-                                    "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
-                                    "description" =>  "<p>Pessoas com obesidade não podem participar. No caso dos adultos, o
-                                                        A Organização Mundial da Saúde (OMS) define a obesidade como tal quando
-                                                        uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30.
-                                                        O IMC é calculado dividindo o peso de uma pessoa em quilogramas pelo quadrado
-                                                        da sua altura em metros: (kg/m2). Se você tiver alguma dúvida ou pergunta, envie-nos um
-                                                        e-mail para clientes@hieloyaventura.com</p>"
-                                ]
-                            ]
-                        ],
                     #$does_not_include
                         [
                             "icon" =>  '$complexity',
@@ -3076,7 +3036,7 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-        // 27 comparison_ratio
+        //27 comparison_ratio
             $characteristics['characteristics'][] = [
                 "icon_id" => null,
                 "characteristic_type" => "comparison_ratio",
@@ -3086,7 +3046,7 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => "1",
-                        "name" => "RELACIÓN",
+                        "name" => "RATIO",
                         "description" => "Altamente personalizado! 1 guía cada 5 personas"
                     ],
                     [
@@ -3096,7 +3056,7 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "RELACION",
+                        "name" => "RATIO",
                         "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
                     ]
                 ]
@@ -4509,18 +4469,18 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => "1",
-                        "name" => "RELACIÓN",
-                        "description" => "Altamente personalizado! 1 guía cada 5 personas"
+                        "name" => "RATIO",
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "RATIO",
-                        "description" => "Highly personalized! 1 guide every 5 people"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "RELACION",
-                        "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
+                        "name" => "RATIO",
+                        "description" => "0"
                     ]
                 ]
             ];
@@ -5636,18 +5596,18 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => "1",
-                        "name" => "RELACIÓN",
-                        "description" => "Altamente personalizado! 1 guía cada 5 personas"
+                        "name" => "RATIO",
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "RATIO",
-                        "description" => "Highly personalized! 1 guide every 5 people"
+                        "description" => "0"
                     ],
                     [
                         "lenguage_id" => "3",
-                        "name" => "RELACION",
-                        "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
+                        "name" => "RATIO",
+                        "description" => "0"
                     ]
                 ]
             ];
