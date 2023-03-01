@@ -364,7 +364,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$complexity
                         [
-                            "icon" =>  '$complexity',
+                            "icon" =>  '$experience',
                             "order" =>  "6",
                             "translables" =>  [
                                 [
@@ -389,41 +389,51 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$restrictions_before_buying
                         [
-                            "icon" =>  '$complexity', // Consultar Seba
+                            "icon" =>  '$itinerary_shoe',
                             "order" =>  "7",
                             "translables" =>  [
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Personas sedentarias con obesidad</p>",
-                                    "description" =>  "<p>No podrán participar personas con obesidad. En el caso de los adultos, la
-                                                        Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando
-                                                        una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30.
-                                                        El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado
-                                                        de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una
-                                                        mail a clientes@hieloyaventura.com</p>"
+                                    "description" =>  "<p>Tanto niños como adultos deben tener la capacidad psicofísica suficiente de para caminar 3 horas, de las cuales 1h15´ es sobre el hielo con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>Sedentary people with obesity</p>",
-                                    "description" =>  "<p>People with obesity may not participate. In the case of adults, the
-                                                        The World Health Organization (WHO) defines obesity as such when
-                                                        a person has a Body Mass Index (BMI) equal to or greater than 30.
-                                                        The BMI is calculated by dividing a person's weight in kilograms by the square
-                                                        of your height in meters: (kg/m2). If you have any questions or queries, send us an
-                                                        email to clientes@hieloyaventura.com</p>"
+                                    "description" =>  "<p>Both children and adults must have sufficient psychophysical capacity to walk 3 hours, of which 1h15' is on the ice with crampons</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
-                                    "description" =>  "<p>Pessoas com obesidade não podem participar. No caso dos adultos, o
-                                                        A Organização Mundial da Saúde (OMS) define a obesidade como tal quando
-                                                        uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30.
-                                                        O IMC é calculado dividindo o peso de uma pessoa em quilogramas pelo quadrado
-                                                        da sua altura em metros: (kg/m2). Se você tiver alguma dúvida ou pergunta, envie-nos um
-                                                        e-mail para clientes@hieloyaventura.com</p>"
+                                    "description" =>  "<p>Tanto as crianças como os adultos devem ter capacidade psicofísica suficiente para caminhar 3 horas, das quais 1h15' é no gelo com crampons</p>"
+                                ]
+                            ]
+                        ],
+                    #$does_not_include
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "8",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Items no incluidos</p>",
+                                    "description" =>  "<p><strong>No incluye:</strong> Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones climáticas de la región. (frío, lluvia, viento, nieve)</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Items not included</p>",
+                                    "description" =>  "<p><strong>Not included:</strong> Entrance to the National Park | Food and drink | Personal clothing appropriate to the climatic conditions of the region. (cold, rain, wind, snow)</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Itens não inclusos</p>",
+                                    "description" =>  "<p><strong>Não inclui:</strong> Entrada no Parque Nacional | Comida e bebida | Roupa pessoal adequada às condições climáticas da região. (frio, chuva, vento, neve)</p>"
                                 ]
                             ]
                         ]
@@ -456,7 +466,9 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><strong><span style="color: #2471B9;">La duraci&oacute;n de la excursi&oacute;n con el traslado es de alrededor de diez horas en total</span>&nbsp;</strong>e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el Minitrekking dura cuatro horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida.</p>
                             <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>'
+                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>
+                            <p>&nbsp;</p>
+                            <p><strong>Salidas grupales:</strong> Contamos con varias salidas diarias en diferentes horarios. Si viajas en grupo o con un compañero por favor indícanos el detalle con anticipación, para poder ubicarlos en el mismo horario y garantizar la salida grupal en un mismo horario.</p>'
                         ],
                         [
                             "lenguage_id" => 2,
@@ -475,7 +487,9 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><strong><span style="color: #2471B9;">The duration of this tour is about 10 hours, including the transfe</span>r&nbsp;</strong>and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from the port. There, you&rsquo;ll enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t use our transfer and go by your own means, the Minitrekking takes about four hours and a half, leaving from the port and returning to the same point.</p>
                             <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>The Minitrekking is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, the excursion is not suspended, as long as security conditions allow it. We are waiting for you!</strong></span></p>'
+                            <p><span style="color: #2471B9;"><strong>The Minitrekking is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, the excursion is not suspended, as long as security conditions allow it. We are waiting for you!</strong></span></p>
+                            <p>&nbsp;</p>
+                            <p><strong>Group departures: </strong> we have several departures at different times. If you are traveling in a group or with a partner, please tell us the details in advance, in order to place them at the same time and guarantee the group departure at the same time</p>'
                         ],
                         [
                             "lenguage_id" => 3,
@@ -494,7 +508,9 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><span style="color: #2471B9;"><strong>A dura&ccedil;&atilde;o total da excurs&atilde;o mais o traslado &eacute; de aproximadamente dez horas</strong></span>&nbsp;e inclui uma visita guiada de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km do porto. L&aacute; desfrutar&atilde;o da espetacular vista panor&acirc;mica do glaciar e percorrer&atilde;o algumas das trilhas autoguiadas. Se voc&ecirc; n&atilde;o escolher nosso transporte e utilizar seus pr&oacute;prios meios, lembre-se que a dura&ccedil;&atilde;o do Minitrekking &eacute; quatro horas e meia aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.</p>
                             <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>O Minitrekking &eacute; realizado em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o est&aacute; suspensa, desde que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitan. Esperamos voc&ecirc;s!</strong></span></p>'
+                            <p><span style="color: #2471B9;"><strong>O Minitrekking &eacute; realizado em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o est&aacute; suspensa, desde que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitan. Esperamos voc&ecirc;s!</strong></span></p>
+                            <p>&nbsp;</p>
+                            <p><strong>Saídas em grupo: </strong> temos várias saídas em horários diferentes. Se viaja em group ou a dois, por favor indique-nos os detalhes com antecedencia, de forma a colocá-los a mesma hora a garantir a saída di grupo a mesma hora</p>'
                         ]
                     ]
             ];
@@ -1056,17 +1072,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Trekking sobre hielo",
-                        "description" => "1"
+                        "description" => "1hr 15'"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Ice trekking",
-                        "description" => "1"
+                        "description" => "1hr 15'"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Trekking no gelo",
-                        "description" => "1"
+                        "description" => "1hr 15'"
                     ]
                 ]
             ];
@@ -1554,7 +1570,31 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-        //
+        // 27 comparison_ratio
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_ratio",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "RATIO",
+                        "description" => "Personalizado! 1 guía cada 10 personas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "RATIO",
+                        "description" => "Personalized! 1 guide every 10 people"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "RATIO",
+                        "description" => "Personalizado! 1 guia a cada 10 pessoas"
+                    ]
+                ]
+            ];
 
         return $characteristics;
     }
@@ -1783,6 +1823,31 @@ class ExcurtionCharacteristicController extends Controller
                                                         O IMC é calculado dividindo o peso de uma pessoa em quilogramas pelo quadrado
                                                         da sua altura em metros: (kg/m2). Se você tiver alguma dúvida ou pergunta, envie-nos um
                                                         e-mail para clientes@hieloyaventura.com</p>"
+                                ]
+                            ]
+                        ],
+                    #$does_not_include
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "8",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Items no incluidos</p>",
+                                    "description" =>  "<p><strong>No incluye:</strong> Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones climáticas de la región. (frío, lluvia, viento, nieve)</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Items not included</p>",
+                                    "description" =>  "<p><strong>Not included:</strong> Entrance to the National Park | Food and drink | Personal clothing appropriate to the climatic conditions of the region. (cold, rain, wind, snow)</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Itens não inclusos</p>",
+                                    "description" =>  "<p><strong>Não inclui:</strong> Entrada no Parque Nacional | Comida e bebida | Roupa pessoal adequada às condições climáticas da região. (frio, chuva, vento, neve)</p>"
                                 ]
                             ]
                         ]
@@ -3011,7 +3076,31 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-        //
+        // 27 comparison_ratio
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_ratio",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "RELACIÓN",
+                        "description" => "Altamente personalizado! 1 guía cada 5 personas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "RATIO",
+                        "description" => "Highly personalized! 1 guide every 5 people"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "RELACION",
+                        "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
+                    ]
+                ]
+            ];
 
         return $characteristics;
     }
@@ -3062,7 +3151,7 @@ class ExcurtionCharacteristicController extends Controller
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>8 horas (todo el dia)</p>",
-                                    "description" =>  '<p>La duracion CON translado y pasarelas es de aproximadamente 8 horas (Día completo). SIN translado y pasarelas es de aproximadamente 2.45 horas</p>'
+                                    "description" =>  '<p>La duración CON translado y pasarelas es de aproximadamente 8 horas (Día completo). SIN translado y pasarelas es de aproximadamente 2.45 horas</p>'
                                 ],
                                 [
                                     # INGLES
@@ -3225,6 +3314,31 @@ class ExcurtionCharacteristicController extends Controller
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Baixa complexidade</p>",
                                     "description" =>  "<p>Embora a dificuldade seja baixa, o terreno tem pedras, declives e escadas.</p>"
+                                ]
+                            ]
+                        ],
+                    #$does_not_include
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "7",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Items no incluidos</p>",
+                                    "description" =>  "<p><strong>No incluye:</strong> Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones climáticas de la región. (frío, lluvia, viento, nieve)</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Items not included</p>",
+                                    "description" =>  "<p><strong>Not included:</strong> Entrance to the National Park | Food and drink | Personal clothing appropriate to the climatic conditions of the region. (cold, rain, wind, snow)</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Itens não inclusos</p>",
+                                    "description" =>  "<p><strong>Não inclui:</strong> Entrada no Parque Nacional | Comida e bebida | Roupa pessoal adequada às condições climáticas da região. (frio, chuva, vento, neve)</p>"
                                 ]
                             ]
                         ]
@@ -3782,7 +3896,9 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "Restricciones importantes antes de comprar",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
+                        "description" => '<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">No incluye:</span></strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
@@ -3791,8 +3907,10 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Restricciones importantes antes de comprar",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
+                        "name" => "Important restrictions before buying",
+                        "description" => '<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, certain people will not be able to participate in the excursion</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">Not included:</span></strong>&nbsp;Ticket to the National Park | Food and drink. | Personal clothes suitable for the weather conditions of the place. (cold, rain, wind, snow) </p>
                         <p style="text-align: justify;">&nbsp;</p>
@@ -3801,8 +3919,10 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Restricciones importantes antes de comprar",
-                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
+                        "name" => "Restricoes importantes antes de comprar",
+                        "description" => '<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, certas pessoas ñao poderao participar da excursao</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><span style="color: rgb(36, 113, 185);"><strong>N&atilde;o&nbsp;inclui:</strong></span>&nbsp; Ingresso ao Parque Nacional | Comida e bebida | Vestimenta pessoal adequada para as condi&ccedil;&otilde;es clim&aacute;ticas pr&oacute;prias da regi&atilde;o (frio, chuva, vento, neve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
@@ -4373,7 +4493,31 @@ class ExcurtionCharacteristicController extends Controller
                 ]
             ];
 
-        //
+        //27 comparison_ratio
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_ratio",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "RELACIÓN",
+                        "description" => "Altamente personalizado! 1 guía cada 5 personas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "RATIO",
+                        "description" => "Highly personalized! 1 guide every 5 people"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "RELACION",
+                        "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
+                    ]
+                ]
+            ];
 
         return $characteristics;
     }
@@ -4424,7 +4568,7 @@ class ExcurtionCharacteristicController extends Controller
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>1 hora</p>",
-                                    "description" =>  '<p>La duracion de la actividad es aproximadamente 1 hora.</p>'
+                                    "description" =>  '<p>La duración de la actividad es aproximadamente 1 hora.</p>'
                                 ],
                                 [
                                     # INGLES
@@ -4549,7 +4693,7 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  '<p>Sin limites de edad</p>',
-                                    "description" =>  '<p>Esta excursion no presenta una limitacion de edad. Cualquier persona puede realizarla.</p>'
+                                    "description" =>  '<p>Esta excursión no presenta una limitación de edad. Cualquier persona puede realizarla.</p>'
                                 ],
                                 [
                                 # INGLES
@@ -4574,7 +4718,7 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Complejidad nula</p>",
-                                    "description" =>  "<p>Esta excursion no requiere esfuerzo físico.</p>"
+                                    "description" =>  "<p>Esta excursión no requiere esfuerzo físico.</p>"
                                 ],
                                 [
                                 # INGLES
@@ -4587,6 +4731,31 @@ class ExcurtionCharacteristicController extends Controller
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>complexidade zero</p>",
                                     "description" =>  "<p>Esta excursão não exige esforço físico.</p>"
+                                ]
+                            ]
+                        ],
+                    #$does_not_include
+                        [
+                            "icon" =>  '$complexity',
+                            "order" =>  "7",
+                            "translables" =>  [
+                                [
+                                #ESPAÑOL
+                                    "lenguage_id" =>  "1",
+                                    "name"        =>  "<p>Items no incluidos</p>",
+                                    "description" =>  "<p><strong>No incluye:</strong> Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones climáticas de la región. (frío, lluvia, viento, nieve)</p>"
+                                ],
+                                [
+                                # INGLES
+                                    "lenguage_id" =>  "2",
+                                    "name"        =>  "<p>Items not included</p>",
+                                    "description" =>  "<p><strong>Not included:</strong> Entrance to the National Park | Food and drink | Personal clothing appropriate to the climatic conditions of the region. (cold, rain, wind, snow)</p>"
+                                ],
+                                [
+                                # PORTUGUÉS
+                                    "lenguage_id" =>  "3",
+                                    "name"        =>  "<p>Itens não inclusos</p>",
+                                    "description" =>  "<p><strong>Não inclui:</strong> Entrada no Parque Nacional | Comida e bebida | Roupa pessoal adequada às condições climáticas da região. (frio, chuva, vento, neve)</p>"
                                 ]
                             ]
                         ]
@@ -4779,29 +4948,29 @@ class ExcurtionCharacteristicController extends Controller
                         "order" => null,
                         "icon" => null,
                         "characteristics" => [
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => null,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "OPCIONAL CON TRASLADO",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "OPTIONAL WITH TRANSFER",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "OPCIONAL COM TRANSFER",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => null,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "OPCIONAL CON TRASLADO",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "OPTIONAL WITH TRANSFER",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "OPCIONAL COM TRANSFER",
+                            //             "description" => null
+                            //         ]
+                            //     ]
+                            // ],
                             [
                                 "icon_id" => null,
                                 "order" => null,
@@ -5451,7 +5620,31 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-        //
+        //27 comparison_ratio
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_ratio",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "RELACIÓN",
+                        "description" => "Altamente personalizado! 1 guía cada 5 personas"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "RATIO",
+                        "description" => "Highly personalized! 1 guide every 5 people"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "RELACION",
+                        "description" => "Altamente personalizado! 1 guia a cada 5 pessoas"
+                    ]
+                ]
+            ];
 
         return $characteristics;
     }
