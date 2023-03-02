@@ -389,7 +389,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$restrictions_before_buying
                         [
-                            "icon" =>  '$walk',
+                            "icon" =>  '$walking',
                             "order" =>  "7",
                             "translables" =>  [
                                 [
@@ -1769,7 +1769,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$complexity
                         [
-                            "icon" =>  '$complexity',
+                            "icon" =>  '$complex',
                             "order" =>  "6",
                             "translables" =>  [
                                 [
