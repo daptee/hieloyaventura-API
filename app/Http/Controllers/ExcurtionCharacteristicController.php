@@ -4914,29 +4914,29 @@ class ExcurtionCharacteristicController extends Controller
                         "order" => null,
                         "icon" => null,
                         "characteristics" => [
-                            // [
-                            //     "icon_id" => null,
-                            //     "order" => null,
-                            //     "icon" => null,
-                            //     "characteristics" => [],
-                            //     "translables" => [
-                            //         [
-                            //             "lenguage_id" => 1,
-                            //             "name" => "OPCIONAL CON TRASLADO",
-                            //             "description" => null
-                            //         ],
-                            //         [
-                            //             "lenguage_id" => 2,
-                            //             "name" => "OPTIONAL WITH TRANSFER",
-                            //             "description" => null
-                            //         ],
-                            //         [
-                            //             "lenguage_id" => 3,
-                            //             "name" => "OPCIONAL COM TRANSFER",
-                            //             "description" => null
-                            //         ]
-                            //     ]
-                            // ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => null,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => null,
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => null,
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => null,
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
                             [
                                 "icon_id" => null,
                                 "order" => null,
