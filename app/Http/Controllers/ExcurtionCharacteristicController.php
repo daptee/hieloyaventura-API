@@ -389,7 +389,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$restrictions_before_buying
                         [
-                            "icon" =>  '$complexity',
+                            "icon" =>  '$walk',
                             "order" =>  "7",
                             "translables" =>  [
                                 [
@@ -668,17 +668,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "A TENER EN CUENTA ANTES DE COMPRAR",
-                        "description" => "<p><strong>Debido al grado de esfuerzo y dificultad (ALTA, con pronunciadas subidas y bajadas en un terreno irregular) que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar:</strong></p>"
+                        "description" => "<p><strong>Debido al grado de esfuerzo y dificultad (MODERADA, con pronunciadas subidas y bajadas en un terreno irregular) que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar:</strong></p>"
                     ],
                     [
                         "lenguage_id" => 2,
                         "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
-                        "description" => "<p><strong>Due to the effort and difficulty levels (HIGH, with steep and uneven ascents and descents) of this activity, and in order to preserve their health, the following persons cannot take the tour:</strong></p>"
+                        "description" => "<p><strong>Due to the effort and difficulty levels (MODERATE, with steep and uneven ascents and descents) of this activity, and in order to preserve their health, the following persons cannot take the tour:</strong></p>"
                     ],
                     [
                         "lenguage_id" => 3,
                         "name" => "LEVAR EM CONTA ANTES DE COMPRAR",
-                        "description" => "<p><strong>Devido ao nível de esforço e dificuldade da atividade (ALTA, com subidas e descidas pronunciadas e irregulares), e visando a proteger sua saúde, as pessoas a seguir não podem participar da excursão:</strong></p>"
+                        "description" => "<p><strong>Devido ao nível de esforço e dificuldade da atividade (MODERADA, com subidas e descidas pronunciadas e irregulares), e visando a proteger sua saúde, as pessoas a seguir não podem participar da excursão:</strong></p>"
                     ]
                 ]
             ];
@@ -1019,17 +1019,23 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "Restricciones importantes antes de comprar",
-                        "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
+                        "description" => '<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>'
                     ],
                     [
                         "lenguage_id" => 2,
                         "name" => "Important restrictions before buying",
-                        "description" => "<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, people with:</p>"
+                        "description" => '<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, people with:</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/en/terms-and-conditions/" target="_blank" rel="noopener"><strong>Terms and conditions.</strong></a>&nbsp;|&nbsp;</span><a href="'.env("APP_URL").'/en/Cancellation-policy/" target="_blank" rel="noopener"><strong><span style="color: rgb(70, 127, 231);">Cancellation policy.</span></strong></a></p>'
                     ],
                     [
                         "lenguage_id" => 3,
                         "name" => "Restrições importantes antes de comprar",
-                        "description" => "<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, as pessoas com:</p>"
+                        "description" => '<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, as pessoas com:</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>'
                     ]
                 ]
             ];
@@ -1770,19 +1776,19 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Complejidad alta</p>",
-                                    "description" =>  "<p>ALTA. Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar al menos 7 horas y media, siendo parte del trayecto sobre el hielo con crampones.</p>"
+                                    "description" =>  "<p>Complejidad ALTA. Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar al menos 7 horas y media, siendo parte del trayecto sobre el hielo con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>High complexity</p>",
-                                    "description" =>  "<p>HIGH. In order to have a great experience on the Glacier, you should have the psychophysical capacity required to walk for at least 7 hours and a half, partly on ice and with crampons.</p>"
+                                    "description" =>  "<p>Complexity HIGH. In order to have a great experience on the Glacier, you should have the psychophysical capacity required to walk for at least 7 hours and a half, partly on ice and with crampons.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Alta complexidade</p>",
-                                    "description" =>  "<p>ALTA. Para que você tenha uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar, pelos menos, 7 horas e meia, uma parte do percorrido sobre gelo e com grampos.</p>"
+                                    "description" =>  "<p>Complexidade ALTA. Para que você tenha uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar, pelos menos, 7 horas e meia, uma parte do percorrido sobre gelo e com grampos.</p>"
                                 ]
                             ]
                         ],
@@ -2438,17 +2444,23 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "Restricciones importantes antes de comprar",
-                        "description" => "<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>"
+                        "description" => '<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>'
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Restricciones importantes antes de comprar",
-                        "description" => "<p></p>"//traducirlo
+                        "name" => "Important restrictions before buying",
+                        "description" => '<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, people with:</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/en/terms-and-conditions/" target="_blank" rel="noopener"><strong>Terms and conditions.</strong></a>&nbsp;|&nbsp;</span><a href="'.env("APP_URL").'/en/Cancellation-policy/" target="_blank" rel="noopener"><strong><span style="color: rgb(70, 127, 231);">Cancellation policy.</span></strong></a></p>'
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Restricciones importantes antes de comprar",
-                        "description" => "<p></p>" // traducirlo
+                        "name" => "Restrições importantes antes de comprar",
+                        "description" => '<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, as pessoas com:</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>'
                     ]
                 ]
             ];
@@ -3449,7 +3461,7 @@ class ExcurtionCharacteristicController extends Controller
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">No incluye:</span></strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>
+                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ],
                     [
@@ -3473,7 +3485,7 @@ class ExcurtionCharacteristicController extends Controller
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><span style="color: rgb(36, 113, 185);"><strong>N&atilde;o&nbsp;inclui:</strong></span>&nbsp; Ingresso ao Parque Nacional | Comida e bebida | Vestimenta pessoal adequada para as condi&ccedil;&otilde;es clim&aacute;ticas pr&oacute;prias da regi&atilde;o (frio, chuva, vento, neve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>
                         <p>&nbsp;</p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ]
@@ -3862,38 +3874,31 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => 1,
                         "name" => "Restricciones importantes antes de comprar",
-                        "description" => '<p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
-                        <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
+                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Aclaraci&oacute;n:</strong></span> Esta excursi&oacute;n NO incluye caminata sobre el Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">No incluye:</span></strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>
+                        <p>Debido al grado de esfuerzo y dificultad que esta actividad presenta y con el solo objetivo de preservar la salud, no podrán participar de la excursión ciertas personas.</p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ],
                     [
                         "lenguage_id" => 2,
                         "name" => "Important restrictions before buying",
-                        "description" => '<p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, certain people will not be able to participate in the excursion</p>
-                        <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
+                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Important:</strong></span>&nbsp;This tour doesn&rsquo;t include walking on the Perito Moreno Glacier.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><strong><span style="color: rgb(36, 113, 185);">Not included:</span></strong>&nbsp;Ticket to the National Park | Food and drink. | Personal clothes suitable for the weather conditions of the place. (cold, rain, wind, snow) </p>
                         <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="https://hieloyaventura/en/terms-and-conditions/" target="_blank" rel="noopener"><strong>Terms and conditions.</strong></a>&nbsp;|&nbsp;</span><a href="https://hieloyaventura/en/Cancellation-policy/" target="_blank" rel="noopener"><strong><span style="color: rgb(70, 127, 231);">Cancellation policy.</span></strong></a></p>
+                        <p>Due to the degree of effort and difficulty that this activity presents and with the sole objective of preserving health, certain people will not be able to participate in the excursion</p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ],
                     [
                         "lenguage_id" => 3,
                         "name" => "Restricoes importantes antes de comprar",
-                        "description" => '<p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, certas pessoas ñao poderao participar da excursao</p>
-                        <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
+                        "description" => '<p><span style="color: rgb(36, 113, 185);"><strong>Esclarecimento:</strong></span>&nbsp; A excurs&atilde;o N&Atilde;O INCLUI caminhada sobre o Glaciar Perito Moreno.</p>
                         <p style="text-align: justify;">&nbsp;</p>
                         <p><span style="color: rgb(36, 113, 185);"><strong>N&atilde;o&nbsp;inclui:</strong></span>&nbsp; Ingresso ao Parque Nacional | Comida e bebida | Vestimenta pessoal adequada para as condi&ccedil;&otilde;es clim&aacute;ticas pr&oacute;prias da regi&atilde;o (frio, chuva, vento, neve).</p>
                         <p style="text-align: justify;">&nbsp;</p>
-                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="https://hieloyaventura.com/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>
-                        <p>&nbsp;</p>
+                        <p>Devido ao grau de esforço e dificuldade que esta atividade apresenta e com o único objetivo de preservar a saúde, certas pessoas ñao poderao participar da excursao</p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ]
                 ]
@@ -5097,6 +5102,8 @@ class ExcurtionCharacteristicController extends Controller
                         <p><span style="color: #2471B9;"><strong>Los tickets pueden ser comprados online o en el puerto antes de embarcar. En los meses de verano, recomendamos realizar la compra anticipadamente.</strong></span></p>
                         <p>&nbsp;</p>
                         <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><strong><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/terminos-y-condiciones/" target="_blank" rel="noopener">T&eacute;rminos y Condiciones.</a>&nbsp;|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/politicas-de-cancelacion/" target="_blank" rel="noopener">Pol&iacute;ticas de cancelaci&oacute;n.</a></strong></span></p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ],
                     [
@@ -5107,6 +5114,8 @@ class ExcurtionCharacteristicController extends Controller
                         <p><span style="color: #2471B9;"><strong>The tickets can be bought online or in the port before boarding. In the summer months, we recommend buying the tickets in advance.</strong></span></p>
                         <p>&nbsp;</p>
                         <p><strong>Not included:&nbsp;</strong>National Park&rsquo;s entrance fee.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/en/terms-and-conditions/" target="_blank" rel="noopener"><strong>Terms and conditions.</strong></a>&nbsp;|&nbsp;</span><a href="'.env("APP_URL").'/en/Cancellation-policy/" target="_blank" rel="noopener"><strong><span style="color: rgb(70, 127, 231);">Cancellation policy.</span></strong></a></p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ],
                     [
@@ -5117,6 +5126,8 @@ class ExcurtionCharacteristicController extends Controller
                         <p><span style="color: #2471B9;"><strong>Os t&iacute;quetes podem ser adquiridos online ou no porto, antes de se embarcar. Recomendamos adquirir os t&iacute;quetes antecipadamente, nos meses de ver&atilde;o.</strong></span></p>
                         <p>&nbsp;</p>
                         <p><strong>N&atilde;o inclu&iacute;do:&nbsp;</strong>Ingresso ao Parque Nacional.</p>
+                        <p style="text-align: justify;">&nbsp;</p>
+                        <p><span style="color: rgb(70, 127, 231);"><a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/termos-e-condicoes/" target="_blank" rel="noopener"><strong>Termos e Condi&ccedil;&otilde;es.&nbsp;</strong></a>|&nbsp;<a style="color: rgb(70, 127, 231);" href="'.env("APP_URL").'/pt/politicas-de-cancelamento/" target="_blank" rel="noopener"><strong>Pol&iacute;ticas de cancelamento.</strong></a></span></p>
                         <p style="text-align: justify;">&nbsp;</p>'
                     ]
                 ]
