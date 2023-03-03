@@ -3260,7 +3260,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$complexity
                         [
-                            "icon" =>  '$complexity',
+                            "icon" =>  '$complex',
                             "order" =>  "6",
                             "translables" =>  [
                                 [
@@ -4669,7 +4669,7 @@ class ExcurtionCharacteristicController extends Controller
                         ],
                     #$complexity
                         [
-                            "icon" =>  '$complexity',
+                            "icon" =>  '$complex',
                             "order" =>  "6",
                             "translables" =>  [
                                 [
