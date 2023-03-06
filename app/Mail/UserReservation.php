@@ -14,19 +14,20 @@ class UserReservation extends Mailable
 
     public $email;
     public $pathPdf;
-
+    public $bigice;
+    public $hash_reservation_number;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $pathPdf, $minitrekking_or_bigice, $hash_reservation_number, $reservation_number, $excurtion_name)
+    public function __construct($email, $pathPdf, $is_bigice, $hash_number, $reservation_number, $excurtion_name)
     {
         $this->email   = $email;
         $this->pathPdf = $pathPdf;
-        $this->minitrekking_or_bigice = $minitrekking_or_bigice;
-        $this->hash_reservation_number = $hash_reservation_number;
-        $this->subject = "Reserva nro: $reservation_number - Excursion $excurtion_name";
+        $this->bigice = $is_bigice;
+        $this->hash_reservation_number = $hash_number;
+        $this->subject = "Hielo & Aventura - Reserva nro: $reservation_number";
     }
 
     /**
@@ -36,12 +37,12 @@ class UserReservation extends Mailable
      */
     public function build()
     {
-        return $this->from('No-responder@hieloyaventura.com', 'Hielo y Aventura')
+        return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
                     ->attach($this->pathPdf)
-                    ->replyTo('No-responder@hieloyaventura.com')
+                    ->replyTo($this->email)
                     ->subject($this->subject)
                     ->view('emails.user-reservation')
-                    ->with(["minitrekking_o_bigice" => $this->minitrekking_or_bigice,
+                    ->with(["bigice" => $this->bigice,
                         "hash_reservation_number" => $this->hash_reservation_number
                     ]);
     }

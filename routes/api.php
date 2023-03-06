@@ -4,16 +4,24 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\GroupExcurtionController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\PaxController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
+use App\Mail\ContactForm;
+use App\Mail\GroupExcurtion;
+use App\Mail\NotificacionPasajero;
+use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
+use App\Mail\ReturnContact;
 use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
@@ -56,9 +64,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::prefix('lenguages')->controller(LenguageController::class)->group(function () {
         Route::get('/', 'index');
     });
-    Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
-        Route::get('/', 'index');
-    });
     Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
@@ -86,7 +91,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/', 'store');
         Route::post('/{id}', 'update');
     });
-    Route::get('send-email-pdf', [PDFController::class, 'index']);
+    // Route::get('send-email-pdf', [PDFController::class, 'index']);
+});
+
+Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
+    Route::get('/', 'index');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
@@ -148,6 +157,17 @@ Route::get('test-mail', function() {
     }
 });
 
+Route::post('testeando-curl-post', function() {
+    try {
+        $text = "Test de envio de mail Hielo y Aventura";
+        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
+        return 'Mail enviado';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        return 'Mail no enviado';
+    }
+});
+
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
 
 Route::post('process-cv', function(Request $request) {
@@ -164,7 +184,7 @@ Route::post('process-cv', function(Request $request) {
 
         $path = "storage/process-cv/$fileName";
 
-        Mail::to("enzo100amarilla@gmail.com")->send(new ProcessCv($request, $path));
+        Mail::to("info@hieloyaventura.com")->send(new ProcessCv($request, $path));
 
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
@@ -178,4 +198,59 @@ Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'cr
 
 Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
 
-Route::post('passenger/diseases', [MedicalRecordController::class, 'passenger_diseases']);
+Route::post('passenger/diseases/{hash_reservation_number}/{mail_to}', [MedicalRecordController::class, 'passenger_diseases']);
+
+// Route::post('contact', [ContactController::class, 'form_contact']);
+Route::post('contact-form', function(Request $request) {
+    try {
+        $request->validate([
+            'nombre_y_apellido' => 'required',
+            'email'             => 'required',
+            'mensaje'           => 'required'
+        ]);
+        Mail::to("info@hieloyaventura.com")->send(new ContactForm($request));
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
+
+Route::post('online-return', function(Request $request) {
+    try {
+        $request->validate([
+            'nro_reserva'       => 'required',
+            'nombre_y_apellido' => 'required',
+            'email'             => 'required',
+            'telefono'          => 'required',
+            'mensaje'           => 'required'
+        ]);
+
+        Mail::to("online@hieloyaventura.com")->send(new OnlineReturn($request));
+        return 'Mail enviado con exito!';
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return 'Mail no enviado';
+    }
+});
+
+Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtion']);
+
+Route::post('paxs', [PaxController::class, 'store']);
+
+Route::post('recover-password', [UserController::class, 'recover_password_user']);
+
+// Route::get('test-notification-user', function(){
+//     $r_10_min_data = [
+//         'email' => 'enzoamarilla@gmail.com',
+//         'subject' => "Hielo & Aventura - aviso carga de pasajeros - nro de reserva 12345",
+//         'msg' => "Hola. Enviamos este correo para notificarle que su compra de la excursion nro 12345, no esta confirmada. Para ello, debe terminar de completar los datos de los pasajeros de la misma. Puede realizarlo desde el siguiente link:
+
+//                 IMPORTANTEe: Recuerde que si no completa estos datos, su reserva puede ser cancelada.
+                  
+//                 Muchas gracias. El equipo de Hielo & Aventura."
+//     ];
+//     return new NotificacionPasajero($r_10_min_data);
+// });
