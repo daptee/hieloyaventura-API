@@ -2502,7 +2502,7 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "2",
                         "name" => "Ice trekking",
-                        "description" => "3 horas"
+                        "description" => "3 hours"
                     ],
                     [
                         "lenguage_id" => "3",
