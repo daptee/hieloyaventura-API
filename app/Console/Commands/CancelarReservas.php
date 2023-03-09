@@ -41,10 +41,11 @@ class CancelarReservas extends Command
                 $fields = array('rsv' => $reservation->reservation_number);
                 $fields_string = http_build_query($fields);
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, "https://apihya.hieloyaventura.com/apihya/CancelaReserva");
+                curl_setopt($ch, CURLOPT_URL, env("API_HYA")."/CancelaReserva");
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
                 $data = curl_exec($ch);
+                Log::debug("Cronjob cancelar reserva: " . $data);
                 curl_close($ch);
             }
         }
