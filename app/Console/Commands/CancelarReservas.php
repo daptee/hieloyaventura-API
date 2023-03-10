@@ -34,6 +34,7 @@ class CancelarReservas extends Command
     {
         $reservations = UserReservation::where('reservation_status_id', ReservationStatus::STARTED)
         ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))->get();
+        Log::debug("Cantidad de reservas: " . count($reservations));
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
                 $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
@@ -45,7 +46,7 @@ class CancelarReservas extends Command
                 curl_setopt($ch, CURLOPT_POST, 1);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
                 $data = curl_exec($ch);
-                Log::debug("Cronjob cancelar reserva: " . $data);
+                Log::debug("Cronjob cancelar reserva: " . $data . " URL: " . env("API_HYA")."/CancelaReserva");
                 curl_close($ch);
             }
         }
