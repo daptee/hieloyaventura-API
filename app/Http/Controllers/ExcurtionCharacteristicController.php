@@ -363,30 +363,30 @@ class ExcurtionCharacteristicController extends Controller
                             ]
                         ],
                     #$complexity
-                        [
-                            "icon" =>  '$experience',
-                            "order" =>  "6",
-                            "translables" =>  [
-                                [
-                                #ESPAÑOL
-                                    "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Complejidad moderada</p>",
-                                    "description" =>  "<p>Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar 3 horas, siendo parte del trayecto sobre el hielo y con crampones.</p>"
-                                ],
-                                [
-                                # INGLES
-                                    "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Moderate complexity</p>",
-                                    "description" =>  "<p>In order to have a great experience on the Glacier, you must have the mental and physical capacity required to walk for 3 hours, partly on ice and with crampons.</p>"
-                                ],
-                                [
-                                # PORTUGUÉS
-                                    "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Moderada complexidade</p>",
-                                    "description" =>  "<p>Para que você desfrute de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar 3 horas, uma parte do percorrido sobre gelo e com grampos.</p>"
-                                ]
-                            ]
-                        ],
+                        // [
+                        //     "icon" =>  '$experience',
+                        //     "order" =>  "6",
+                        //     "translables" =>  [
+                        //         [
+                        //         #ESPAÑOL
+                        //             "lenguage_id" =>  "1",
+                        //             "name"        =>  "<p>Complejidad moderada</p>",
+                        //             "description" =>  "<p>Para que tengas una excelente experiencia en el Glaciar debés tener la capacidad psicofísica suficiente para caminar 3 horas, siendo parte del trayecto sobre el hielo y con crampones.</p>"
+                        //         ],
+                        //         [
+                        //         # INGLES
+                        //             "lenguage_id" =>  "2",
+                        //             "name"        =>  "<p>Moderate complexity</p>",
+                        //             "description" =>  "<p>In order to have a great experience on the Glacier, you must have the mental and physical capacity required to walk for 3 hours, partly on ice and with crampons.</p>"
+                        //         ],
+                        //         [
+                        //         # PORTUGUÉS
+                        //             "lenguage_id" =>  "3",
+                        //             "name"        =>  "<p>Moderada complexidade</p>",
+                        //             "description" =>  "<p>Para que você desfrute de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar 3 horas, uma parte do percorrido sobre gelo e com grampos.</p>"
+                        //         ]
+                        //     ]
+                        // ],
                     #$restrictions_before_buying
                         [
                             "icon" =>  '$walking',
@@ -396,19 +396,19 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>Personas sedentarias con obesidad</p>",
-                                    "description" =>  "<p>Tanto niños como adultos deben tener la capacidad psicofísica suficiente de para caminar 3 horas, de las cuales 1h15´ es sobre el hielo con crampones.</p>"
+                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>Sedentary people with obesity</p>",
-                                    "description" =>  "<p>Both children and adults must have sufficient psychophysical capacity to walk 3 hours, of which 1h15' is on the ice with crampons</p>"
+                                    "description" =>  "<p>To have an excellent experience in the Glacier, both children and adults must have sufficient psychophysical capacity to walk 3 hours, of which 1h15' is on the ice and with crampons</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
-                                    "description" =>  "<p>Tanto as crianças como os adultos devem ter capacidade psicofísica suficiente para caminhar 3 horas, das quais 1h15' é no gelo com crampons</p>"
+                                    "description" =>  "<p>Para ter uma excelente experiência no Glaciar, crianças e adultos devem ter capacidade psicofísica suficiente para caminhar 3 horas, das quais 1h15' é no gelo e com crampons</p>"
                                 ]
                             ]
                         ],
@@ -800,7 +800,7 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visit to catwalks",
+                                        "name" => "Visit to walkways",
                                         "description" => "1 hour approximately"
                                     ],
                                     [
@@ -823,12 +823,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Return to el calafate",
+                                        "name" => "Return to El Calafate",
                                         "description" => "70km"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Voltar para el calafate",
+                                        "name" => "Voltar para El Calafate",
                                         "description" => "70km"
                                     ]
                                 ]
@@ -2130,7 +2130,7 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visit to catwalks",
+                                        "name" => "Visit to walkways",
                                         "description" => "1 hour"
                                     ],
                                     [
@@ -2245,12 +2245,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Return to el calafate",
+                                        "name" => "Return to El Calafate",
                                         "description" => "80km"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Voltar para el calafate",
+                                        "name" => "Voltar para El Calafate",
                                         "description" => "80km"
                                     ]
                                 ]
@@ -3642,7 +3642,7 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visiting the Walkways",
+                                        "name" => "Visiting the walkways",
                                         "description" => null
                                     ],
                                     [
@@ -4260,78 +4260,78 @@ class ExcurtionCharacteristicController extends Controller
                         "order" => null,
                         "icon" => null,
                         "characteristics" => [
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => 1,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Inicio en su hotel de El Calafate",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Start at your hotel in El Calafate",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Comece no seu hotel em El Calafate",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => 1,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Guía de Turismo bilingüe (español e inglés) en el bus",
-                                        "description" => ""
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Bilingual Tour Guide (Spanish and English) on the bus",
-                                        "description" => ""
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Guia turístico bilíngüe (espanhol e inglês) no ônibus",
-                                        "description" => ""
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => 0,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Visita de 2 horas aproximadamente a las pasarelas",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Visit of approximately 2 hours to the catwalks",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Visita de aproximadamente 2 horas às passarelas",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => 1,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Inicio en su hotel de El Calafate",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "Start at your hotel in El Calafate",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "Comece no seu hotel em El Calafate",
+                            //             "description" => null
+                            //         ]
+                            //     ]
+                            // ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => 1,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Guía de Turismo bilingüe (español e inglés) en el bus",
+                            //             "description" => ""
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "Bilingual Tour Guide (Spanish and English) on the bus",
+                            //             "description" => ""
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "Guia turístico bilíngüe (espanhol e inglês) no ônibus",
+                            //             "description" => ""
+                            //         ]
+                            //     ]
+                            // ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => 0,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Visita de 2 horas aproximadamente a las pasarelas",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "Visit of approximately 2 hours to the catwalks",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "Visita de aproximadamente 2 horas às passarelas",
+                            //             "description" => null
+                            //         ]
+                            //     ]
+                            // ],
                             [
                                 "icon_id" => null,
                                 "order" => null,
@@ -4837,17 +4837,17 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Embarque en Puerto las Sombras",
+                                        "name" => "Embarque en Puerto bajo de las Sombras",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Boarding in Puerto las Sombras",
+                                        "name" => "Boarding in Puerto bajo de las Sombras",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Embarque no Porto las Sombras",
+                                        "name" => "Embarque no Porto bajo de las Sombras",
                                         "description" => null
                                     ]
                                 ]
@@ -4865,7 +4865,7 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Navegating",
+                                        "name" => "Navegation",
                                         "description" => "1 hour"
                                     ],
                                     [
