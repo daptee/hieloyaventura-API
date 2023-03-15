@@ -3117,7 +3117,7 @@ class ExcurtionCharacteristicController extends Controller
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>8 horas (todo el dia)</p>",
-                                    "description" =>  '<p>La duración CON translado y pasarelas es de aproximadamente 8 horas (Día completo). SIN translado y pasarelas es de aproximadamente 2.45 horas</p>'
+                                    "description" =>  '<p>La duración CON traslado y pasarelas es de aproximadamente 8 horas (Día completo). SIN traslado y pasarelas es de aproximadamente 2.45 horas</p>'
                                 ],
                                 [
                                     # INGLES
@@ -3129,7 +3129,7 @@ class ExcurtionCharacteristicController extends Controller
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>8 horas (Dia completo)</p>",  
-                                    "description" =>  "<p>A duração COM translado e passarelas é de aproximadamente 8 horas (dia inteiro). SEM transfer e passarelas é de aproximadamente 2,45 horas</p>"
+                                    "description" =>  "<p>A duração COM traslado e passarelas é de aproximadamente 8 horas (dia inteiro). SEM transfer e passarelas é de aproximadamente 2,45 horas</p>"
                                 ]
                             ]
                         ],
