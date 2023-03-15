@@ -36,14 +36,12 @@ class CancelarReservas extends Command
                     ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
                     ->get();
         
-        Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
+        // Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
 
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
                 
-                // $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
-                
-                Log::debug("Numero de reserva: $reservation->reservation_number");
+                // Log::debug("Numero de reserva: $reservation->reservation_number");
                 
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
@@ -56,23 +54,12 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                Log::debug("Response: $resp");
+                // Log::debug("Response: $resp");
 
-                // echo json_decode($resp)->RESULT;
-
-                // $fields = array('rsv' => $reservation->reservation_number);
-                // $fields_string = http_build_query($fields);
-                // $ch = curl_init();
-                // curl_setopt($ch, CURLOPT_URL, env("API_HYA")."/CancelaReserva");
-                // curl_setopt($ch, CURLOPT_POST, 1);
-                // curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
-                // $data = curl_exec($ch);
-                // Log::debug($data['res']['data']['RESULT']);
-                // Log::debug("Cronjob cancelar reserva: " . $data . " URL: " . env("API_HYA")."/CancelaReserva");
-                // curl_close($ch);
-
-                // $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                // $reservation->save();
+                if(json_decode($resp)->RESULT == "OK"){
+                    $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                    $reservation->save();
+                }
             }
         }
     }
