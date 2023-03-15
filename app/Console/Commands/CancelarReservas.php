@@ -36,14 +36,18 @@ class CancelarReservas extends Command
                     ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
                     ->get();
         
+        Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
+
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
                 
                 // $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
-
+                
+                Log::debug("Numero de reserva: $reservation->reservation_number");
+                
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
-                curl_setopt($curl, CURLOPT_URL, env("API_HYA")."/CancelaReserva");
+                curl_setopt($curl, CURLOPT_URL, env("API_HYA")."/CancelaReservaM2");
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
@@ -52,7 +56,7 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                Log::debug($resp);
+                Log::debug("Response: $resp");
 
                 // echo json_decode($resp)->RESULT;
 
@@ -67,8 +71,8 @@ class CancelarReservas extends Command
                 // Log::debug("Cronjob cancelar reserva: " . $data . " URL: " . env("API_HYA")."/CancelaReserva");
                 // curl_close($ch);
 
-                $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                $reservation->save();
+                // $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                // $reservation->save();
             }
         }
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\GeneralConfigurationsController;
 use App\Http\Controllers\GroupExcurtionController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\MedicalRecordController;
@@ -25,7 +26,6 @@ use App\Mail\ReturnContact;
 use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
-use App\Models\Web;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -243,9 +243,8 @@ Route::post('paxs', [PaxController::class, 'store']);
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
 
-Route::get('web/in_maintenance', function() {
-    return response()->json([ 'in_maintenance' => Web::first()->in_maintenance ]);
-});
+Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']); 
+Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store']); 
 
 Route::post('test-cancelar-reserva', function() {
     $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
