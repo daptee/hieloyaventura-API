@@ -25,6 +25,7 @@ use App\Mail\ReturnContact;
 use App\Mail\TestMail;
 use App\Models\Lenguage;
 use App\Models\User;
+use App\Models\Web;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -241,6 +242,27 @@ Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtio
 Route::post('paxs', [PaxController::class, 'store']);
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
+
+Route::get('web/in_maintenance', function() {
+    return response()->json([ 'in_maintenance' => Web::first()->in_maintenance ]);
+});
+
+Route::post('test-cancelar-reserva', function() {
+    $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
+
+    $curl = curl_init();
+    $fields = json_encode( array("RSV" => "123456") );
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    echo json_decode($resp)->RESULT;
+});
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
