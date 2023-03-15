@@ -8,6 +8,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\GeneralConfigurationsController;
 use App\Http\Controllers\GroupExcurtionController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\MedicalRecordController;
@@ -241,6 +242,26 @@ Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtio
 Route::post('paxs', [PaxController::class, 'store']);
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
+
+Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']); 
+Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store']); 
+
+Route::post('test-cancelar-reserva', function() {
+    $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
+
+    $curl = curl_init();
+    $fields = json_encode( array("RSV" => "123456") );
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    echo json_decode($resp)->RESULT;
+});
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
