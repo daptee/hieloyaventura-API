@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\ReservationStatus;
 use App\Models\UserReservation;
+use App\Models\UserReservationStatusHistory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -32,9 +33,9 @@ class CancelarReservas extends Command
      */
     public function handle()
     {
-        $reservations = UserReservation::where('reservation_status_id', ReservationStatus::STARTED)
-                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
-                    ->get();
+        $reservations = UserReservation::where('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
+                                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
+                                    ->get();
         
         // Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
 
@@ -56,10 +57,18 @@ class CancelarReservas extends Command
 
                 // Log::debug("Response: $resp");
 
-                if(json_decode($resp)->RESULT == "OK"){
-                    $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                    $reservation->save();
+                if(!is_null($resp)){
+                    if(json_decode($resp)->RESULT == "OK"){
+                        $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                        $reservation->save();
+
+                        $user_reservation_status = new UserReservationStatusHistory();
+                        $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                        $user_reservation_status->user_reservation_id = $reservation->id;
+                        $user_reservation_status->save();
+                    }
                 }
+
             }
         }
     }
