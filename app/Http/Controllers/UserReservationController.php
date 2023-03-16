@@ -13,6 +13,7 @@ use App\Models\ReservationPax;
 use App\Models\ReservationStatus;
 use App\Models\User;
 use App\Models\UserReservation;
+use App\Models\UserReservationStatusHistory;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -223,12 +224,14 @@ class UserReservationController extends Controller
             switch ($datos['reservation_status_id']) {
                 case ReservationStatus::PAX_PENDING:
                     $userReservation->is_paid = 1;
-                    $userReservation->reservation_status_id =  ReservationStatus::PAX_PENDING;
-
+                    $status_id = ReservationStatus::PAX_PENDING;
+                    $userReservation->reservation_status_id = $status_id;
+                    
                     break;
                 case ReservationStatus::REJECTED:
                     $userReservation->is_paid = 0;
-                    $userReservation->reservation_status_id =  ReservationStatus::REJECTED;
+                    $status_id = ReservationStatus::REJECTED;
+                    $userReservation->reservation_status_id = $status_id;
 
                     RejectedReservation::create([
                         'user_reservation_id'   => $userReservation->id,
@@ -241,6 +244,11 @@ class UserReservationController extends Controller
             }
 
             $userReservation->save();
+
+            $user_reservation_status = new UserReservationStatusHistory();
+            $user_reservation_status->status_id = $status_id;
+            $user_reservation_status->user_reservation_id = $userReservation->id;
+            $user_reservation_status->save();
 
             $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         DB::commit();

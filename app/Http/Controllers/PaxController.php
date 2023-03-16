@@ -8,6 +8,7 @@ use App\Models\Pax;
 use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
 use App\Models\UserReservation;
+use App\Models\UserReservationStatusHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
@@ -58,6 +59,11 @@ class PaxController extends Controller
 
         $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
         $userReservation->save();
+
+        $user_reservation_status = new UserReservationStatusHistory();
+        $user_reservation_status->status_id = ReservationStatus::COMPLETED;
+        $user_reservation_status->user_reservation_id = $userReservation->id;
+        $user_reservation_status->save();
 
         //Mandar email con el PDF adjunto
         $pathReservationPdf = $this->createPdf($userReservation);                                
