@@ -11,6 +11,8 @@ class UserReservationStatusHistory extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_reservations_status_history';
+
     public function status(): HasOne
     {
         return $this->hasOne(BillingDataReservation::class, 'status_id', 'id');
