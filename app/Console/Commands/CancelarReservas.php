@@ -37,6 +37,7 @@ class CancelarReservas extends Command
                                     ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
                                     ->get();
         
+        Log::debug($reservations);
         // Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
 
         if(count($reservations) > 0){
@@ -55,7 +56,7 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                Log::debug("Response: $resp");
+                // Log::debug("Response: $resp");
 
                 // !is_null($resp)
 
