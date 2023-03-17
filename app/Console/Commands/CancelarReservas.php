@@ -57,7 +57,9 @@ class CancelarReservas extends Command
 
                 // Log::debug("Response: $resp");
 
-                if(!is_null($resp)){
+                // !is_null($resp)
+
+                if(isset(json_decode($resp)->RESULT)){
                     if(json_decode($resp)->RESULT == "OK"){
                         $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                         $reservation->save();
