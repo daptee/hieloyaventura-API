@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('cancelar:reservas')->everyTwoMinutes();
+        $schedule->command('cancelar:reservas')->everyMinute();
         $schedule->command('notificar:pasajeros')->everyMinute();
     }
 

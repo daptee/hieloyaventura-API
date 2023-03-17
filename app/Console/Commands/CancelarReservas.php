@@ -35,6 +35,7 @@ class CancelarReservas extends Command
     {
         $reservations = UserReservation::where('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
                                     ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
+                                    ->where('reservation_number', 422284)
                                     ->get();
         
         Log::debug($reservations);
