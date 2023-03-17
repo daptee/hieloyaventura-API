@@ -55,7 +55,7 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                // Log::debug("Response: $resp");
+                Log::debug("Response: $resp");
 
                 // !is_null($resp)
 
