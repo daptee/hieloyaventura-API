@@ -43,7 +43,7 @@ class CancelarReservas extends Command
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
                 
-                // Log::debug("Numero de reserva: $reservation->reservation_number");
+                Log::debug("Numero de reserva: $reservation->reservation_number");
                 
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
@@ -56,7 +56,7 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                Log::debug("Response: $resp");
+                // Log::debug("Response: $resp");
 
                 // !is_null($resp)
 
