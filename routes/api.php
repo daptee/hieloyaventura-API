@@ -24,7 +24,9 @@ use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
 use App\Mail\ReturnContact;
 use App\Mail\TestMail;
+use App\Models\UserReservation;
 use App\Models\Lenguage;
+use App\Models\ReservationStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -201,6 +203,8 @@ Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases'
 
 Route::post('passenger/diseases/{hash_reservation_number}/{mail_to}', [MedicalRecordController::class, 'passenger_diseases']);
 
+Route::post('medical/record', [MedicalRecordController::class, 'medical_record']);
+
 // Route::post('contact', [ContactController::class, 'form_contact']);
 Route::post('contact-form', function(Request $request) {
     try {
@@ -246,21 +250,31 @@ Route::post('recover-password', [UserController::class, 'recover_password_user']
 Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']); 
 Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store']); 
 
+Route::post('paxs', [PaxController::class, 'store']);
+
 Route::post('test-cancelar-reserva', function() {
-    $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
+    
+    // $reservations = UserReservation::whereIn('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
+    //                                 ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
+    //                                 ->where('reservation_number', '!=', 0)
+    //                                 ->get();
+    
+    // return $reservations; 
 
-    $curl = curl_init();
-    $fields = json_encode( array("RSV" => "123456") );
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
 
-    $resp = curl_exec($curl);
-    curl_close($curl);
+    // $curl = curl_init();
+    // $fields = json_encode( array("RSV" => "123456") );
+    // curl_setopt($curl, CURLOPT_URL, $url);
+    // curl_setopt($curl, CURLOPT_POST, true);
+    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-    echo json_decode($resp)->RESULT;
+    // $resp = curl_exec($curl);
+    // curl_close($curl);
+
+    // echo json_decode($resp)->RESULT;
 });
 
 // Route::get('test-notification-user', function(){
