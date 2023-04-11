@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Mail\MedicalRecordMailable;
 use App\Models\Disease;
+use App\Models\MedicalRecord;
+use App\Models\Nationality;
 use Illuminate\Support\Facades\Mail;
 use App\Models\PassengerDisease;
 use App\Models\Pax;
+use App\Models\User;
 use App\Models\UserReservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 
 class MedicalRecordController extends Controller
 {
@@ -85,5 +89,22 @@ class MedicalRecordController extends Controller
         foreach($diseases as $disease){
             $disease->delete();
         }
+    }
+
+    public function medical_record(Request $request)
+    {
+        $request->validate([
+            'order_number' => 'required',
+            'excurtion_date' => 'required',
+            'passengers' => 'required'
+        ]);
+        
+        $medical_record = new MedicalRecord();
+        $medical_record->order_number = $request->order_number;
+        $medical_record->excurtion_date = $request->excurtion_date;
+        $medical_record->passengers = json_encode($request->passengers);
+        $medical_record->save();
+        
+        return response()->json(['medical_record' => $medical_record]);
     }
 }

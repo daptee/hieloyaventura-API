@@ -11,7 +11,7 @@
         Han enviado una nueva solicitud para compra de excursion grupal. La informacion es la siguiente: <br>
         Excursion: {{ $data->nombre_excursion }} <br>
         Fecha y hora: {{ $data->fecha . ' ' . $data->turno }} <br>
-        Con translado / Sin translado: {{ $data->con_o_sin_traslado == 1 ? 'Con traslado' : 'Sin traslado'}} <br>
+        Con traslado / Sin traslado: {{ $data->con_o_sin_traslado == 1 ? 'Con traslado' : 'Sin traslado'}} <br>
         Cantidad de pasajeros: {{ $data->cantidad_pasajeros }} <br>
         Nombre: {{ $data->nombre_completo_persona }}<br>
         Mail de personal: {{ $data->email_de_personal }} <br>
