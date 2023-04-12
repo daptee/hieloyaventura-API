@@ -30,7 +30,7 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-    'api_hya' => env('API_HYA'),
+    'api_hya' => env('API_HYA', 'https://apihya.hieloyaventura.com/apihya'),
 
     /*
     |--------------------------------------------------------------------------
