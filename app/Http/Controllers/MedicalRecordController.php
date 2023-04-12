@@ -106,7 +106,6 @@ class MedicalRecordController extends Controller
         $medical_record->passengers = json_encode($request->passengers);
         $medical_record->save();
         
-        
         $passengers_diseases = [];
         foreach ($request->passengers as $passenger) {
             $diseases_passenger = [];
@@ -114,7 +113,7 @@ class MedicalRecordController extends Controller
                 $diseases_passenger[] = Disease::find($disease)->nombre;
             }
             $passengers_diseases[] = [
-                'passenger_name' => $passenger['name'] . ' ' . $passenger['lastname'],
+                'passenger_name' => $passenger['name_lastname'],
                 'diseases' => $diseases_passenger
             ];
         }
