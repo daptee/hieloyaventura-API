@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -257,27 +258,20 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
 
 Route::post('test-api-cr', function() {
     
-    $response = Http::timeout(120)->post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', ['RSV' => '349268']);
+    $client = new Client();
 
-    return $response;
-    // ini_set('display_errors', 1);
-    // ini_set('display_startup_errors', 1);
-    // error_reporting(E_ALL);
+    $fields = json_encode(array("RSV" => "349268"));
 
-    // $url = config('app.api_hya')."/CancelaReservaM2";
-    
-    // $curl = curl_init();
-    // $fields = json_encode( array("RSV" => "349268") );
-    // curl_setopt($curl, CURLOPT_URL, "https://apihya.hieloyaventura.com/apihya/CancelaReservaM2");
-    // curl_setopt($curl, CURLOPT_POST, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response = $client->post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', [
+        'body' => $fields,
+        'headers' => [
+            'Content-Type' => 'application/json'
+        ]
+    ]);
 
-    // $resp = curl_exec($curl);
-    // curl_close($curl);
+    $body = $response->getBody();
 
-    // return $resp;
+    return $body;
 });
 
 // Route::get('test-notification-user', function(){
