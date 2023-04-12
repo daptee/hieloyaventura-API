@@ -333,10 +333,11 @@ class UserReservationController extends Controller
                                     ->where('reservation_number', '!=', 0)
                                     ->get();
     
-        $url = config('app.api_hya')."/CancelaReservaM2";
-        Log::debug(count($reservations));
+        Log::debug("count: " . count($reservations));
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
+
+                $url = config('app.api_hya')."/CancelaReservaM2";
 
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
@@ -349,6 +350,7 @@ class UserReservationController extends Controller
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
+                return $resp;
 
                 $resultado = json_decode($resp)->RESULT ?? "Sin resultado";
                 $mensaje = json_decode($resp)->ERROR_MSG ?? "Sin mensaje";
@@ -366,12 +368,10 @@ class UserReservationController extends Controller
                         $user_reservation_status->save();
                     }
                 }
-
             }
         }
 
         return response()->json(["message" => "Test cancelar reservas completado"]);
 
     }
-
 }
