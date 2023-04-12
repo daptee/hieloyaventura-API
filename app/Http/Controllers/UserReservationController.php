@@ -333,6 +333,9 @@ class UserReservationController extends Controller
                                     ->where('reservation_number', '!=', 0)
                                     ->get();
     
+        $url = config('app.api_hya')."/CancelaReservaM2";
+        return $url;
+        
         Log::debug("count: " . count($reservations));
         if(count($reservations) > 0){
             foreach($reservations as $reservation){

@@ -254,7 +254,7 @@ Route::post('paxs', [PaxController::class, 'store']);
 
 Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
-// Route::post('test-cancelar-reserva', function() {
+Route::post('test-api-cr', function() {
     
     // $reservations = UserReservation::whereIn('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
     //                                 ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
@@ -268,10 +268,10 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
     
     // return $reservations; 
 
-    // $url = "https://apihya.hieloyaventura.com/apihya_dev/CancelaReservaM2";
+    // $url = "https://apihya.hieloyaventura.com/apihya/CancelaReservaM2";
 
     // $curl = curl_init();
-    // $fields = json_encode( array("RSV" => "428923") );
+    // $fields = json_encode( array("RSV" => "349268") );
     // curl_setopt($curl, CURLOPT_URL, $url);
     // curl_setopt($curl, CURLOPT_POST, true);
     // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
@@ -281,8 +281,22 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
     // $resp = curl_exec($curl);
     // curl_close($curl);
 
-    // return json_decode($resp);
-// });
+    $url = config('app.api_hya')."/CancelaReservaM2";
+
+    $curl = curl_init();
+    $fields = json_encode( array("RSV" => 349268) );
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    // return $resp;
+    return json_decode($resp);
+});
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
