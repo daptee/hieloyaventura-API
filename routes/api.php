@@ -256,33 +256,10 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
 
 Route::post('test-api-cr', function() {
     
-    // $reservations = UserReservation::whereIn('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
-    //                                 ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
-    //                                 ->where('reservation_number', '!=', 0)
-    //                                 ->get();
-    // return now()->modify('+ minute')->format('Y-m-d H:i:s');
-    // $reservations = UserReservation::whereIn('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
-    // ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
-    // ->where('reservation_number', '!=', 0)
-    // ->get();
-    
-    // return $reservations; 
-
-    // $url = "https://apihya.hieloyaventura.com/apihya/CancelaReservaM2";
-
-    // $curl = curl_init();
-    // $fields = json_encode( array("RSV" => "349268") );
-    // curl_setopt($curl, CURLOPT_URL, $url);
-    // curl_setopt($curl, CURLOPT_POST, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    // $resp = curl_exec($curl);
-    // curl_close($curl);
-
     $url = config('app.api_hya')."/CancelaReservaM2";
-
+    
+    return $url;
+    
     $curl = curl_init();
     $fields = json_encode( array("RSV" => 349268) );
     curl_setopt($curl, CURLOPT_URL, $url);
