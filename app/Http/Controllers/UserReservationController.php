@@ -335,12 +335,14 @@ class UserReservationController extends Controller
     
         // return $reservations; 
 
+        $url = config('app.api_hya')."/CancelaReservaM2";
+        
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
-                                
+
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
-                curl_setopt($curl, CURLOPT_URL, env("API_HYA")."/CancelaReservaM2");
+                curl_setopt($curl, CURLOPT_URL, $url);
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
@@ -349,16 +351,12 @@ class UserReservationController extends Controller
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                // Log::debug("Response: $resp");
-
-                // !is_null($resp)
-
 
                 $resultado = json_decode($resp)->RESULT ?? "Sin resultado";
                 $mensaje = json_decode($resp)->ERROR_MSG ?? "Sin mensaje";
 
                 Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: $resultado , MSG: $mensaje");
-                Log::debug("Respuesta completa $resp");
+                // Log::debug("Respuesta completa: $resp");
 
                 if(isset(json_decode($resp)->RESULT)){
                     if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
@@ -372,7 +370,7 @@ class UserReservationController extends Controller
                     }
                 }
 
-                return $resp;
+                // return $resp;
             }
         }
 
