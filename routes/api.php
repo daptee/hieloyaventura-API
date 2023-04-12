@@ -254,9 +254,9 @@ Route::post('web/general_configuration', [GeneralConfigurationsController::class
 
 Route::post('paxs', [PaxController::class, 'store']);
 
-Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
+Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
-Route::post('test-api-cr', function() {
+Route::get('test-api-cr', function() {
     
     $client = new Client();
 
