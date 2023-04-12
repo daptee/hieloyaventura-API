@@ -252,7 +252,7 @@ Route::post('web/general_configuration', [GeneralConfigurationsController::class
 
 Route::post('paxs', [PaxController::class, 'store']);
 
-Route::post('test-cancelar-reserva', [UserReservationController::class, 'test-cancelar-reserva']);
+Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
 // Route::post('test-cancelar-reserva', function() {
     
