@@ -333,15 +333,13 @@ class UserReservationController extends Controller
                                     ->where('reservation_number', '!=', 0)
                                     ->get();
     
+        Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
         $url = config('app.api_hya')."/CancelaReservaM2";
-        return $url;
-        
-        Log::debug("count: " . count($reservations));
+        Log::debug("Url api: " . $url);
+    
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
-
-                $url = config('app.api_hya')."/CancelaReservaM2";
-
+                
                 $curl = curl_init();
                 $fields = json_encode( array("RSV" => $reservation->reservation_number) );
                 curl_setopt($curl, CURLOPT_URL, $url);
@@ -353,10 +351,10 @@ class UserReservationController extends Controller
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                return $resp;
+                Log::debug("Respuesta API: $resp");
 
-                $resultado = json_decode($resp)->RESULT ?? "Sin resultado";
-                $mensaje = json_decode($resp)->ERROR_MSG ?? "Sin mensaje";
+                $resultado = isset(json_decode($resp)->RESULT) ? json_decode($resp)->RESULT : "Sin resultado";
+                $mensaje = isset(json_decode($resp)->ERROR_MSG) ? json_decode($resp)->ERROR_MSG : "Sin mensaje";
 
                 Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: $resultado , MSG: $mensaje");
 
@@ -371,10 +369,11 @@ class UserReservationController extends Controller
                         $user_reservation_status->save();
                     }
                 }
+
             }
         }
 
-        return response()->json(["message" => "Test cancelar reservas completado"]);
+        return response()->json(["message" => "Test cancelar reservas completo"]);
 
     }
 }
