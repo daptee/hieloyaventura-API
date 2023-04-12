@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MedicalRecordExternalMailable;
 use App\Mail\MedicalRecordMailable;
 use App\Models\Disease;
 use App\Models\MedicalRecord;
@@ -98,13 +99,28 @@ class MedicalRecordController extends Controller
             'excurtion_date' => 'required',
             'passengers' => 'required'
         ]);
-        
+
         $medical_record = new MedicalRecord();
         $medical_record->order_number = $request->order_number;
         $medical_record->excurtion_date = $request->excurtion_date;
         $medical_record->passengers = json_encode($request->passengers);
         $medical_record->save();
         
+        
+        $passengers_diseases = [];
+        foreach ($request->passengers as $passenger) {
+            $diseases_passenger = [];
+            foreach ($passenger['diseases'] as $disease) {
+                $diseases_passenger[] = Disease::find($disease)->nombre;
+            }
+            $passengers_diseases[] = [
+                'passenger_name' => $passenger['name'] . ' ' . $passenger['lastname'],
+                'diseases' => $diseases_passenger
+            ];
+        }
+
+        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $passengers_diseases, $request->order_number));
+
         return response()->json(['medical_record' => $medical_record]);
     }
 }
