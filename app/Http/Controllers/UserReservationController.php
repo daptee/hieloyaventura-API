@@ -353,10 +353,12 @@ class UserReservationController extends Controller
 
                 // !is_null($resp)
 
+
                 $resultado = json_decode($resp)->RESULT ?? "Sin resultado";
                 $mensaje = json_decode($resp)->ERROR_MSG ?? "Sin mensaje";
 
                 Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: $resultado , MSG: $mensaje");
+                Log::debug("Respuesta completa $resp");
 
                 if(isset(json_decode($resp)->RESULT)){
                     if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
@@ -370,6 +372,7 @@ class UserReservationController extends Controller
                     }
                 }
 
+                return $resp;
             }
         }
 
