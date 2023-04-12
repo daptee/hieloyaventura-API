@@ -258,8 +258,6 @@ Route::post('test-api-cr', function() {
     
     $url = config('app.api_hya')."/CancelaReservaM2";
     
-    return $url;
-    
     $curl = curl_init();
     $fields = json_encode( array("RSV" => 349268) );
     curl_setopt($curl, CURLOPT_URL, $url);
