@@ -257,7 +257,7 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
 
 Route::post('test-api-cr', function() {
     
-    $response = Http::post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', ['RSV' => '349268']);
+    $response = Http::timeout(120)->post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', ['RSV' => '349268']);
 
     return $response;
     // ini_set('display_errors', 1);
