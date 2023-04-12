@@ -326,4 +326,49 @@ class UserReservationController extends Controller
     //     return response()->json($userReservation);
     // }
 
+    public function test_cancelar_reserva()
+    {
+        $reservations = UserReservation::whereIn('reservation_status_id', [ReservationStatus::REJECTED, ReservationStatus::STARTED])
+                                    ->where('created_at', '<', now()->modify('-30 minute')->format('Y-m-d H:i:s'))
+                                    ->where('reservation_number', '!=', 0)
+                                    ->get();
+    
+        // return $reservations; 
+
+        if(count($reservations) > 0){
+            foreach($reservations as $reservation){
+                                
+                $curl = curl_init();
+                $fields = json_encode( array("RSV" => $reservation->reservation_number) );
+                curl_setopt($curl, CURLOPT_URL, env("API_HYA")."/CancelaReservaM2");
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+                $resp = curl_exec($curl);
+                curl_close($curl);
+
+                // Log::debug("Response: $resp");
+
+                // !is_null($resp)
+
+                Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: " . json_decode($resp));
+
+                if(isset(json_decode($resp)->RESULT)){
+                    if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
+                        $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                        $reservation->save();
+
+                        $user_reservation_status = new UserReservationStatusHistory();
+                        $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                        $user_reservation_status->user_reservation_id = $reservation->id;
+                        $user_reservation_status->save();
+                    }
+                }
+
+            }
+        }
+    }
+
 }
