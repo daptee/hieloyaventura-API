@@ -256,6 +256,10 @@ Route::post('test-cancelar-reserva', [UserReservationController::class, 'test_ca
 
 Route::post('test-api-cr', function() {
     
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
     $url = config('app.api_hya')."/CancelaReservaM2";
     
     $curl = curl_init();
@@ -269,8 +273,7 @@ Route::post('test-api-cr', function() {
     $resp = curl_exec($curl);
     curl_close($curl);
 
-    // return $resp;
-    return json_decode($resp);
+    return $resp;
 });
 
 // Route::get('test-notification-user', function(){
