@@ -120,6 +120,12 @@ class MedicalRecordController extends Controller
 
         Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $passengers_diseases, $request->order_number));
 
-        return response()->json(['medical_record' => $medical_record]);
+        return response()->json(['medical_record' => $this->getAllMedicalRecord($medical_record)]);
+    }
+
+    public function getAllMedicalRecord($medical_record)
+    {
+        $medical_record->passengers = json_decode($medical_record->passenger);
+        return $medical_record;
     }
 }

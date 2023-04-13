@@ -14,7 +14,7 @@
         
         @if($bigice)
             <br> <br>
-            Debido a que tu excursion presenta dificultades fisicas, te solicitamos por favor que completes una ficha medica de todos los pasajeros, dentro del siguiente link: <a href="https://hieloyaventura.com/ficha-medica/{{ $hash_reservation_number }}">https://hieloyaventura.com/ficha-medica/{{ $hash_reservation_number }}</a>
+            Debido a que tu excursion presenta dificultades fisicas, te solicitamos por favor que completes una ficha medica de todos los pasajeros, dentro del siguiente link: <a href="{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}">{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}</a>
         @endif
     </p>
 </body>
