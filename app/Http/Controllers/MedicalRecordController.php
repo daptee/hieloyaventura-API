@@ -105,27 +105,15 @@ class MedicalRecordController extends Controller
         $medical_record->excurtion_date = $request->excurtion_date;
         $medical_record->passengers = json_encode($request->passengers);
         $medical_record->save();
-        
-        $passengers_diseases = [];
-        foreach ($request->passengers as $passenger) {
-            $diseases_passenger = [];
-            foreach ($passenger['diseases'] as $disease) {
-                $diseases_passenger[] = Disease::find($disease)->nombre;
-            }
-            $passengers_diseases[] = [
-                'passenger_name' => $passenger['name_lastname'],
-                'diseases' => $diseases_passenger
-            ];
-        }
 
-        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $passengers_diseases, $request->order_number));
+        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $medical_record, $request->order_number));
 
         return response()->json(['medical_record' => $this->getAllMedicalRecord($medical_record)]);
     }
 
     public function getAllMedicalRecord($medical_record)
     {
-        $medical_record->passengers = json_decode($medical_record->passenger);
+        $medical_record->passengers = json_decode($medical_record->passengers);
         return $medical_record;
     }
 }

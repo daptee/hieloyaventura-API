@@ -9,16 +9,16 @@ class MedicalRecordExternalMailable extends Mailable
     // use Queueable, SerializesModels;
     public $subject = "";
 
-    public $email, $passengers, $reservation_numb;
+    public $email, $medical_record, $reservation_numb;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $passengers_diseases, $reservation_number)
+    public function __construct($email, $medical_record, $reservation_number)
     {
         $this->email = $email;
-        $this->passengers = $passengers_diseases;
+        $this->medical_record = $medical_record;
         $this->reservation_numb = $reservation_number;
         $this->subject = "Ficha Medica Externa - Nro reserva: $reservation_number - Hielo & Aventura";
     }
@@ -33,7 +33,7 @@ class MedicalRecordExternalMailable extends Mailable
         return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
                     ->replyTo($this->email)
                     ->subject($this->subject)
-                    ->view('emails.medical-record')
-                    ->with([ "passengers" => $this->passengers, 'reservation_numb' => $this->reservation_numb ]);
+                    ->view('emails.external-medical-record')
+                    ->with([ "medical_record" => $this->medical_record, 'reservation_numb' => $this->reservation_numb ]);
     }
 }
