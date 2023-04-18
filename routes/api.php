@@ -43,6 +43,7 @@ use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
+    Route::post('login/admin', 'login_admin');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
@@ -93,8 +94,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('/', 'index');
     });
     Route::prefix('users')->controller(UserController::class)->group(function () {
+        Route::get('/', 'index');
         Route::post('/', 'store');
+        // Route::post('/create/admin', 'store_admin');
         Route::post('/{id}', 'update');
+        Route::put('/{id}/admin', 'update_admin');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 });
@@ -273,6 +277,8 @@ Route::get('test-api-cr', function() {
 
     return $body;
 });
+
+Route::get('modules/user', [UserController::class, 'get_modules']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

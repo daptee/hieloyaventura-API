@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, Notifiable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -64,5 +64,35 @@ class User extends Authenticatable implements JWTSubject
     public function reservations()
     {
         return $this->hasMany(UserReservation::class, 'user_id', 'id');
+    }
+
+    public function user_type()
+    {
+        return $this->hasOne(UserType::class, 'id', 'user_type_id');
+    }
+
+    public function language()
+    {
+        return $this->hasOne(Lenguage::class, 'id', 'lenguage_id');
+    }
+
+    public function nationality()
+    {
+        return $this->hasOne(Nationality::class, 'id', 'nationality_id');
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(UserModule::class, 'user_id', 'id');
+    }
+
+    public static function getAllDataUser($user_type_id, $id)
+    {
+        $array_data = ['user_type', 'language', 'nationality'];
+        
+        if($user_type_id == UserType::ADMIN)
+            array_push($array_data, 'modules.module');
+        
+        return User::with($array_data)->find($id);
     }
 }
