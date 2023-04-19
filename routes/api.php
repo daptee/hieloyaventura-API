@@ -280,6 +280,27 @@ Route::get('test-api-cr', function() {
 
 Route::get('curl/test-api-cancelar/reserva', function() {
     
+    try {
+        $url = config('app.api_hya')."/CancelaReservaM2";
+
+        $curl = curl_init();
+        $fields = json_encode( array("RSV" => "432837") );
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        return "entre en try, resp: $resp";
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return "entre en catch";
+    }
+
     $url = config('app.api_hya')."/CancelaReservaM2";
 
     $curl = curl_init();
