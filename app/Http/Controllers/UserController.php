@@ -169,12 +169,10 @@ class UserController extends Controller
         if($request->password)
             $user->password = Hash::make($request->password); // consultar seba antes de subir
 
-        if($user->user_type_id == UserType::CLIENTE){
-                $user->dni = $request->dni;
-                $user->birth_date = $request->birthdate;
-                $user->phone = $request->phone;
-                $user->nationality_id = $request->nationality_id;
-        }
+        $user->dni = $request->dni;
+        $user->birth_date = $request->birthdate;
+        $user->phone = $request->phone;
+        $user->nationality_id = $request->nationality_id;
 
         if($user->user_type_id == UserType::ADMIN){
             
