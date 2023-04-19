@@ -265,8 +265,8 @@ Route::get('test-api-cr', function() {
     $client = new Client();
 
     $fields = json_encode(array("RSV" => "349268"));
-
-    $response = $client->post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', [
+    $url = config('app.api_hya')."/CancelaReservaM2";
+    $response = $client->post($url, [
         'body' => $fields,
         'headers' => [
             'Content-Type' => 'application/json'
@@ -276,6 +276,24 @@ Route::get('test-api-cr', function() {
     $body = $response->getBody();
 
     return $body;
+});
+
+Route::get('curl/test-api-cancelar/reserva', function() {
+    
+    $url = config('app.api_hya')."/CancelaReservaM2";
+
+    $curl = curl_init();
+    $fields = json_encode( array("RSV" => "349268") );
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    return $resp;
 });
 
 Route::get('modules/user', [UserController::class, 'get_modules']);
