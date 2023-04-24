@@ -6,7 +6,10 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\recoverPasswordMailable;
+use App\Models\Module;
 use App\Models\User;
+use App\Models\UserModule;
+use App\Models\UserType;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -25,6 +28,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $users = User::with(['user_type', 'language', 'modules.module'])->get();
         // try {
         //     $data = $this->model::with($this->model::INDEX);
         //     foreach ($request->all() as $key => $value) {
@@ -39,11 +43,11 @@ class UserController extends Controller
         //     return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
         // }
         // $message = $this->message_show_500;
-        // return response(compact("message", "data"));
+        return response(compact("users", $users));
     }
 
-    public function store(StoreUserRequest $request)
-    {
+    // public function store(StoreUserRequest $request)
+    // {
         // $message = "Error al crear en la {$this->s}.";
         // $data = $request->all();
 
@@ -58,7 +62,43 @@ class UserController extends Controller
         // }
         // $message = $this->message_show_200;
         // return response(compact("message", "data"));
+    // }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            "name" => 'required',
+            "email" => 'required|unique:users',
+            "password" => 'required',
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->user_type_id = $request->user_type_id;
+        $user->dni = $request->dni;
+        $user->birth_date = $request->birthdate;
+        $user->phone = $request->phone;
+        $user->nationality_id = $request->nationality_id;
+        $user->save();
+
+        if($request->user_type_id == UserType::ADMIN){
+            foreach ($request->modules as $module) {
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = $module;
+                $user_module->save();
+            }
+        }
+        
+        $user = User::getAllDataUser($user->user_type_id, $user->id);
+
+        return response(compact(
+            "user", $user
+        ));
     }
+
     public function authenticate(Request $request)
     {
         // $credentials = $request->only('email', 'password');
@@ -71,6 +111,7 @@ class UserController extends Controller
         // }
         // return response()->json(compact('token'));
     }
+
     public function getAuthenticatedUser()
     {
         // try {
@@ -115,6 +156,49 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function update_admin(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if(!isset($user))
+            return response()->json(['message' => 'Usuario no valido.'], 400);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        if($request->password)
+            $user->password = Hash::make($request->password); // consultar seba antes de subir
+
+        $user->dni = $request->dni;
+        $user->birth_date = $request->birthdate;
+        $user->phone = $request->phone;
+        $user->nationality_id = $request->nationality_id;
+
+        if($user->user_type_id == UserType::ADMIN){
+            
+            if($request->modules){
+                UserModule::where('user_id', $id)->delete();
+                
+                foreach ($request->modules as $module) {
+                    $user_module = new UserModule();
+                    $user_module->user_id = $user->id;
+                    $user_module->module_id = $module;
+                    $user_module->save();
+                }
+            }
+
+        }
+        
+        $user->save();
+
+        $user = User::getAllDataUser($user->user_type_id, $user->id);
+
+        return response(compact(
+            "user", $user
+        ));
+
+    }
+
     public function updatePassword(UpdateUserPasswordRequest $request)
     {
         $user = auth()->user();
@@ -155,7 +239,6 @@ class UserController extends Controller
         if(!$user)
             return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
         
-        
         try {
             $new_password = Str::random(16);
             $user->password = Hash::make($new_password);
@@ -173,5 +256,10 @@ class UserController extends Controller
        
         return response()->json(['message' => 'Correo enviado con exito.'], 200);
         
+    }
+
+    public function get_modules()
+    {
+        return response()->json(['modules' => Module::all()]);
     }
 }

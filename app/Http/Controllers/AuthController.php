@@ -11,6 +11,7 @@ use JWT;
 use App\Services\JwtService;
 use App\Models\User;
 use App\Models\Module;
+use App\Models\UserType;
 use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller{
@@ -32,7 +33,7 @@ class AuthController extends Controller{
         }
 
 // Session::put('applocale', $request);
-        return $this->respondWithToken($token,$credentials['email']);
+        return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
     }
 
     public function logout(){
@@ -51,9 +52,10 @@ class AuthController extends Controller{
     }
 
 
-    protected function respondWithToken($token,$email){
+    protected function respondWithToken($token,$type_user_id,$id){
         $expire_in = config('jwt.ttl');
-        $user  = User::where('email' , $email )->first();
+        // $user  = User::where('email' , $email )->first();
+        $user = User::getAllDataUser($type_user_id, $id);
         // $modules = Module::all();
 
         // $modules_user = [];
@@ -85,4 +87,31 @@ class AuthController extends Controller{
             'data' => $data
         ]);
     }
+
+    public function login_admin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // User admin 
+        $user_to_validate = User::where('email', $request->email)->first();
+        
+        if(!isset($user_to_validate) || $user_to_validate->user_type_id == UserType::CLIENTE)
+            return response()->json(['message' => 'Email no existente o usuario no admin.'], 400);
+        
+        $credentials = $request->only('email', 'password');
+
+        if (! $token = JWTAuth::attempt($credentials))
+            return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
+
+        // if (!Auth::attempt($credentials)) 
+            // return response()->json(['message' => 'El usuario o la contraseña son invalidos.'], 400);
+        
+        // $token = Auth::user()->createToken('auth_token')->plainTextToken;
+
+        return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
+    }
+
 }

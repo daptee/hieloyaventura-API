@@ -43,6 +43,7 @@ use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
+    Route::post('login/admin', 'login_admin');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
@@ -93,8 +94,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::get('/', 'index');
     });
     Route::prefix('users')->controller(UserController::class)->group(function () {
+        Route::get('/', 'index');
         Route::post('/', 'store');
+        // Route::post('/create/admin', 'store_admin');
         Route::post('/{id}', 'update');
+        Route::put('/{id}/admin', 'update_admin');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 });
@@ -261,8 +265,8 @@ Route::get('test-api-cr', function() {
     $client = new Client();
 
     $fields = json_encode(array("RSV" => "349268"));
-
-    $response = $client->post('https://apihya.hieloyaventura.com/apihya/CancelaReservaM2', [
+    $url = config('app.api_hya')."/CancelaReservaM2";
+    $response = $client->post($url, [
         'body' => $fields,
         'headers' => [
             'Content-Type' => 'application/json'
@@ -273,6 +277,47 @@ Route::get('test-api-cr', function() {
 
     return $body;
 });
+
+Route::get('curl/test-api-cancelar/reserva', function() {
+    
+    try {
+        $url = config('app.api_hya')."/CancelaReservaM2";
+
+        $curl = curl_init();
+        $fields = json_encode( array("RSV" => "432837") );
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        return "entre en try, resp: $resp";
+    } catch (\Throwable $th) {
+        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        // return $th->getMessage();
+        return "entre en catch";
+    }
+
+    $url = config('app.api_hya')."/CancelaReservaM2";
+
+    $curl = curl_init();
+    $fields = json_encode( array("RSV" => "432837") );
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $resp = curl_exec($curl);
+    curl_close($curl);
+
+    return $resp;
+});
+
+Route::get('modules/user', [UserController::class, 'get_modules']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
