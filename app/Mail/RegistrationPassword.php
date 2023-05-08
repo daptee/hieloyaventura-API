@@ -24,7 +24,7 @@ class RegistrationPassword extends Mailable
         Le damos la bienvenida a Hielo y Aventura. <br><br>
         Se le ha generado una nueva cuenta, cuyos datos de acceso son: <br>
         usuario: $email <br>
-        password: $password. <br><br> 
+        password: $password <br><br> 
         
         Muchas gracias, el equipo de H&A.";
 
