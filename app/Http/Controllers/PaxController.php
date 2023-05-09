@@ -95,7 +95,7 @@ class PaxController extends Controller
         $reservation_number = $userReservation->reservation_number;
         $excurtion_name = $userReservation->excurtion->name;
 
-        Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name));                        
+        Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
 
         return response(["message" => "Pasajeros guardados con exito"], 200);
     }

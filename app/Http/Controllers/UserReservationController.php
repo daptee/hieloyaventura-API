@@ -101,7 +101,7 @@ class UserReservationController extends Controller
                         ]);
                         //Email de Bienvenida
                             try {
-                                Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass));
+                                Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass, $datos['language_id']));
                             } catch (\Throwable $th) {
                                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                             }
