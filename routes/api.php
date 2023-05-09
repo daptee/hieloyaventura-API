@@ -249,8 +249,6 @@ Route::post('online-return', function(Request $request) {
 
 Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtion']);
 
-Route::post('paxs', [PaxController::class, 'store']);
-
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
 
 Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']); 
@@ -301,20 +299,20 @@ Route::get('curl/test-api-cancelar/reserva', function() {
         return "entre en catch";
     }
 
-    $url = config('app.api_hya')."/CancelaReservaM2";
+    // $url = config('app.api_hya')."/CancelaReservaM2";
 
-    $curl = curl_init();
-    $fields = json_encode( array("RSV" => "432837") );
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    // $curl = curl_init();
+    // $fields = json_encode( array("RSV" => "432837") );
+    // curl_setopt($curl, CURLOPT_URL, $url);
+    // curl_setopt($curl, CURLOPT_POST, true);
+    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
+    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-    $resp = curl_exec($curl);
-    curl_close($curl);
+    // $resp = curl_exec($curl);
+    // curl_close($curl);
 
-    return $resp;
+    // return $resp;
 });
 
 Route::get('modules/user', [UserController::class, 'get_modules']);

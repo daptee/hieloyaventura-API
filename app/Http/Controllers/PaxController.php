@@ -7,11 +7,13 @@ use App\Http\Requests\UpdatePaxRequest;
 use App\Models\Pax;
 use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
+use App\Models\PaxFile;
 use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
 
 class PaxController extends Controller
@@ -53,7 +55,24 @@ class PaxController extends Controller
         
         if (isset($paxs)) {
             foreach ($paxs as $pax) {
-                Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                $pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                $files = $request->file('files');
+                
+                if($files){
+                    foreach ($files as $file) {
+                        $fileName   = time() . '.' . $file->getClientOriginalExtension();
+                        
+                        Storage::putFileAs('public/paxs/files', $file, $fileName);
+                        
+                        $path = "storage/paxs/files/$fileName";
+                        
+                        $pax_file = [
+                            'pax_id' => $pax->id,
+                            'url' => $path,
+                        ];
+                        PaxFile::create($pax_file);
+                    }
+                }
             }
         }
 
