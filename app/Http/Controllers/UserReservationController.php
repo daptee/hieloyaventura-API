@@ -245,10 +245,8 @@ class UserReservationController extends Controller
 
             $userReservation->save();
 
-            $user_reservation_status = new UserReservationStatusHistory();
-            $user_reservation_status->status_id = $status_id;
-            $user_reservation_status->user_reservation_id = $userReservation->id;
-            $user_reservation_status->save();
+            if($status_id)
+                UserReservation::store_user_reservation_status_history($status_id, $userReservation->id);
 
             $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         DB::commit();
@@ -363,10 +361,7 @@ class UserReservationController extends Controller
                         $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                         $reservation->save();
 
-                        $user_reservation_status = new UserReservationStatusHistory();
-                        $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                        $user_reservation_status->user_reservation_id = $reservation->id;
-                        $user_reservation_status->save();
+                        UserReservation::store_user_reservation_status_history(ReservationStatus::AUTOMATIC_CANCELED, $reservation->id);
                     }
                 }
 

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserReservation as MailUserReservation;
+use Illuminate\Support\Facades\Log;
 
 class UserReservation extends Model
 {
@@ -20,7 +24,10 @@ class UserReservation extends Model
         'status',
         'excurtion',
         'billing_data',
-        'contact_data'
+        'contact_data',
+        'paxes', 
+        'reservation_paxes',
+        'status_history',
     ];
     const INDEX = [
         'status',
@@ -80,5 +87,37 @@ class UserReservation extends Model
     public function reservation_paxes()
     {
         return $this->hasMany(ReservationPax::class, 'user_reservation_id', 'id');
+    }
+
+    public function status_history()
+    {
+        return $this->hasMany(UserReservationStatusHistory::class, 'user_reservation_id', 'id');
+    }
+
+    public static function store_user_reservation_status_history($status_id, $user_reservation_id)
+    {
+        $user_reservation_status = new UserReservationStatusHistory();
+        $user_reservation_status->status_id = $status_id;
+        $user_reservation_status->user_reservation_id = $user_reservation_id;
+        $user_reservation_status->save();
+    }
+
+    public static function send_mail_user_reservation_voucher($userReservation)
+    {
+        $mailTo = $userReservation->contact_data->email;
+        $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
+        $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+        $reservation_number = $userReservation->reservation_number;
+        $excurtion_name = $userReservation->excurtion->name;
+    
+        // Mail voucher
+            try {
+                Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                return ["status" => 200];
+            } catch (\Throwable $th) {
+                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                return ["message" => "Error al enviar el mail.", "status" => 500];
+            }
+        //
     }
 }
