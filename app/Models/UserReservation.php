@@ -112,7 +112,7 @@ class UserReservation extends Model
     
         // Mail voucher
             try {
-                Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 return ["status" => 200];
             } catch (\Throwable $th) {
                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
