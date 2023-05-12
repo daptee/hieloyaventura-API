@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
 
 class ReservationController extends Controller
 {
@@ -45,12 +46,13 @@ class ReservationController extends Controller
                 return $query->where('reservation_status_id', $request->reservation_status_id);
             })
             ->orderBy('id', 'desc')
-            ->paginate(30);
-        
-            // foreach($data as $item){
-            //    $item->encrypted_id = Crypt::encryptString($item->id);
-                // $item->encrypted_reservation_number = Crypt::encryptString($item->reservation_number);
-            // }
+            ->paginate(30)
+            ->map(function ($item) {
+                $item->encrypted_id = Crypt::encryptString($item->id);
+                $item->encrypted_reservation_number = Crypt::encryptString($item->reservation_number);
+                return $item;
+            });
+
         } catch (ModelNotFoundException $error) {
             return response(["message" => "No se encontraron " . $this->sp . "."], 404);
         } catch (Exception $error) {
@@ -93,6 +95,8 @@ class ReservationController extends Controller
 
         if(!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
+
+        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
 
         return response(compact("userReservation"));
     }
