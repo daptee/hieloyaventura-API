@@ -27,7 +27,8 @@ class UserReservation extends Model
         'contact_data',
         'paxes', 
         'reservation_paxes',
-        'status_history',
+        'status_history.status',
+        'rejected_history'
     ];
     const INDEX = [
         'status',
@@ -92,6 +93,11 @@ class UserReservation extends Model
     public function status_history()
     {
         return $this->hasMany(UserReservationStatusHistory::class, 'user_reservation_id', 'id');
+    }
+
+    public function rejected_history()
+    {
+        return $this->hasMany(RejectedReservation::class, 'user_reservation_id', 'id');
     }
 
     public static function store_user_reservation_status_history($status_id, $user_reservation_id)
