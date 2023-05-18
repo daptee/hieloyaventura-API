@@ -26,23 +26,26 @@ use Illuminate\Support\Facades\Mail;
 class UserController extends Controller
 {
 
+    public $model = User::class;
+    public $s = "usuario"; //sustantivo singular
+    public $sp = "usuarios"; //sustantivo plural
+    public $ss = "usuario/s"; //sustantivo sigular/plural
+    public $v = "o"; //verbo ej:encontrado/a
+    public $pr = "el"; //preposicion singular
+    public $prp = "los"; //preposicion plural
+
     public function index(Request $request)
     {
-        $users = User::with(['user_type', 'language', 'modules.module'])->get();
-        // try {
-        //     $data = $this->model::with($this->model::INDEX);
-        //     foreach ($request->all() as $key => $value) {
-        //         if (method_exists($this->model, 'scope' . $key)) {
-        //             $data->$key($value);
-        //         }
-        //     }
-        //     $data = $this->model::with($this->model::INDEX)->get();
-        // } catch (ModelNotFoundException $error) {
-        //     return response(["message" => $this->message_404], 404);
-        // } catch (Exception $error) {
-        //     return response(["message" => $this->message_show_500, "error" => $error->getMessage()], 500);
-        // }
-        // $message = $this->message_show_500;
+        $query = User::with($this->model::INDEX)->when($request->user_type_id, function ($query) use ($request) {
+                    return $query->where('user_type_id', $request->user_type_id);
+                })
+                ->when($request->q, function ($query) use ($request) {
+                    return $query->where('name', 'LIKE', '%'.$request->q.'%')
+                                 ->orWhere('email', 'LIKE', '%'.$request->q.'%');
+                });
+
+        $users = $query->get();
+
         return response(compact("users", $users));
     }
 

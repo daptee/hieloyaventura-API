@@ -52,14 +52,12 @@ class PaxController extends Controller
             return response(["message" => "User Reservation ID Invalido."], 422);
 
         $paxs = $request->paxs;
-        
         if (isset($paxs)) {
             foreach ($paxs as $pax) {
-                $pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                $files = $request->file('files');
-                
-                if($files){
-                    foreach ($files as $file) {
+                $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+
+                if($pax['files']){
+                    foreach ($pax['files'] as $file) {
                         $fileName   = time() . '.' . $file->getClientOriginalExtension();
                         
                         Storage::putFileAs('public/paxs/files', $file, $fileName);
@@ -67,7 +65,7 @@ class PaxController extends Controller
                         $path = "storage/paxs/files/$fileName";
                         
                         $pax_file = [
-                            'pax_id' => $pax->id,
+                            'pax_id' => $new_pax->id,
                             'url' => $path,
                         ];
                         PaxFile::create($pax_file);
@@ -167,42 +165,48 @@ class PaxController extends Controller
         $dayText = ucfirst($date->translatedFormat('l'));
         $dayNumber = $date->format('j');
         $month = ucfirst($date->translatedFormat('F'));
+        $excurtionName = $newUserReservation->excurtion->name;
         
         switch ($language_id) {
             case 1: // Español
                 $dateFormated = "$dayText $dayNumber de $month";
-                $details = 'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.';
+                $details = "Nos complace informarte que tu reserva del ";
+                $booking_report = "$excurtionName ha sido confirmada";
                 break;
             case 2: // Ingles
                 $dateFormated = "$month $dayText $dayNumber";
-                $details = 'Please remember that the pick up waiting time can be up to 40 minutes.';
+                $details = "We are pleased to inform you that your reservation of the ";
+                $booking_report = "$excurtionName has been confirmed";
                 break;
             case 3: // Portugues
                 $dateFormated = "$dayText, $dayNumber de $month";
-                $details = 'Lembre-se de que o tempo de espera para retirada pode ser de até 40 minutos.';
+                $details = "Temos o prazer de informar que a sua reserva do ";
+                $booking_report = "$excurtionName foi confirmado";
                 break;
             default: // Default
                 $dateFormated = "$dayText $dayNumber de $month";
-                $details = 'Por favor, recordá, que el tiempo de espera del pick up puede ser de hasta 40 minutos.';
+                $details = "Nos complace informarte que tu reserva del ";
+                $booking_report = "$excurtionName ha sido confirmada";
                 break;
             }
 
-        $excurtionName = $newUserReservation->excurtion->name;
-        $pathExcurtionLogo = public_path($newUserReservation->excurtion->icon);
+        // $pathExcurtionLogo = public_path($newUserReservation->excurtion->icon);
         
 
-        $firstPage = $this->withOrWithoutTrf($excurtionName, $newUserReservation->is_transfer, $languageToPdf);
-        $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
+        // $firstPage = $this->withOrWithoutTrf($excurtionName, $newUserReservation->is_transfer, $languageToPdf);
+        // $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
+        $base_pdf = $languageToPdf . '_' . str_replace(' ', '_', $excurtionName);
+        $secondPage = public_path("excursions/bases/$base_pdf.pdf");
 
         // initiate FPDI
         $pdf = new Fpdi();
 
-        $pdf->AddPage();
+        // $pdf->AddPage();
         // set the source file
-        $pdf->setSourceFile($firstPage);
-        $tplId1 = $pdf->importPage(1);
+        // $pdf->setSourceFile($firstPage);
+        // $tplId1 = $pdf->importPage(1);
 
-        $pdf->useTemplate($tplId1, -8, -8, 227);
+        // $pdf->useTemplate($tplId1, -8, -8, 227);
 
         // add a page
         $pdf->AddPage();
@@ -266,24 +270,24 @@ class PaxController extends Controller
         //Agradecimiento por la compra
             $pdf->SetFont('GothamRounded-Bold', '', 14);
             $pdf->SetTextColor(12, 180, 181);
-            $pdf->SetXY(10, 35);
+            $pdf->SetXY(8, 75);
             $pdf->Write(0, "$thanks $contactName!");
         
         //Nro de reserva
             $pdf->SetFont('Nunito-Bold', '', 12);
             $pdf->SetTextColor(54, 134, 195);
-            $pdf->SetXY(40, 61.4);
+            $pdf->SetXY(40, 102.4);
             $pdf->Write(0, $reservationNumber);
 
         //nombre del contact data
             $pdf->SetFont('Nunito-SemiBold', '', 12);
             $pdf->SetTextColor(54, 134, 195);
-            $pdf->SetXY(55, 74);
+            $pdf->SetXY(54.4, 114.9);
             $pdf->Write(0, $contactFullName);
 
         //cantidad (pasajeros) y nombre de la excursion
             $pdf->SetFont('Nunito-Regular', '', 12);
-            $pdf->SetXY(19, 82);
+            $pdf->SetXY(19, 122);
             $pdf->Write(0, $amountPaxesWithDeatails);
 
             $pdf->SetFont('Nunito-Bold', '', 12);
@@ -294,40 +298,44 @@ class PaxController extends Controller
         //Fecha de la reserva
             $pdf->SetFont('Nunito-Bold', '', 12);
             $pdf->SetTextColor(255, 255, 255);
-            $pdf->SetXY(19, 88.2);
+            $pdf->SetXY(19, 129);
             $pdf->MultiCell(62, 8.6, $reservationDate, 0, 'C');
         //Hora de la reserva
             // $pdf->SetXY(84, 92.5);
-            $pdf->SetXY(83.5, 88.1);
+            $pdf->SetXY(83.5, 129);
             $pdf->MultiCell(20.5, 8.8, $reservationTurn, 0, 'C');
 
         //si hay translado poner lo del hotel
         if ($withTranslation) {
             
-            $pdf->Image(public_path('ubicacion.png'),20, 105, 5);
+            $pdf->Image(public_path('ubicacion.png'),20, 142, 5);
             $pdf->SetFont('Nunito-Light','', 12);
             $pdf->SetTextColor(42, 42, 42);
-            $pdf->SetXY(28, 108);
+            $pdf->SetXY(28, 145);
             $str = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['withTranslationHotel'] . ' ');
             $pdf->Write(0, $str);
             
-            $pdf->SetXY(28, 113);
+            $pdf->SetXY(28, 150);
             $str = iconv('UTF-8', 'cp1250', $traduccionesPDF[$languageToPdf]['por_el_hotel'] . ': ');
             $pdf->Write(0, $str);
             //si hay translado poner lo del hotel
             $pdf->SetFont('Nunito-SemiBold','', 12);
             $pdf->SetTextColor(54, 134, 195);
             $pdf->Write(0, $hotelName);
-            //Texto informativo 1
-            $pdf->SetFont('Nunito-Regular','', 12);
-            $pdf->SetTextColor(42, 42, 42);
-
-            $pdf->SetXY(10, 142);
-            $pdf->MultiCell(120, 5, $details, 0, 'L');
         }
+        
+        // Booking report
+        $pdf->SetFont('Nunito-Regular','', 11);
+        $pdf->SetTextColor(42, 42, 42);
+        $pdf->SetXY(8, 82);
+        
+        $pdf->Write(0, $details);
+        
+        $pdf->SetTextColor(54, 134, 195);
+        $pdf->Write(0, $booking_report);
 
         //Img
-        $pdf->Image($pathExcurtionLogo, 159, 67, 25);
+        // $pdf->Image($pathExcurtionLogo, 162, 67, 16);
 
         //Nombre de la excursion
         $pdf->SetFont('GothamRounded-Bold','', 18);
@@ -335,12 +343,12 @@ class PaxController extends Controller
         $pdf->SetXY(140, 98);
         $pdf->SetTextColor(54, 134, 195);
         // $pdf->Write(0, $excurtionName);
-        $pdf->MultiCell(62, 8, $excurtionName, 0, 'C');
+        // $pdf->MultiCell(62, 8, $excurtionName, 0, 'C');
 
 
-        // $pdf->Output();  
         $pdf->Output($pathToSavePdf, "F");  
 
+        // return $pdf->Output();
         return [
             'urlToSave' => $urlToSave, 
             'pathToSavePdf' => $pathToSavePdf

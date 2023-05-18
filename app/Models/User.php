@@ -12,6 +12,17 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, Notifiable, HasFactory;
 
+    const SHOW = [
+        'user_type',
+        'language',
+        'modules.module',
+    ];
+    const INDEX = [
+        'user_type',
+        'language',
+        'modules.module',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
