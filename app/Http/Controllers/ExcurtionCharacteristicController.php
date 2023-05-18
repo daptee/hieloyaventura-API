@@ -632,7 +632,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -2031,7 +2031,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
