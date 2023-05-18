@@ -33,7 +33,7 @@ class ReservationController extends Controller
     {
         $message = "Error al traer listado de {$this->sp}.";
         try {
-            $data = UserReservation::with($this->model::INDEX)->when($request->date_from, function ($query) use ($request) {
+            $query = UserReservation::with($this->model::INDEX)->when($request->date_from, function ($query) use ($request) {
                 return $query->where('date', '>=', $request->date_from);
             })
             ->when($request->date_to, function ($query) use ($request) {
@@ -45,21 +45,31 @@ class ReservationController extends Controller
             ->when($request->reservation_status_id, function ($query) use ($request) {
                 return $query->where('reservation_status_id', $request->reservation_status_id);
             })
-            ->orderBy('id', 'desc')
-            ->paginate(30)
-            ->map(function ($item) {
+            ->when($request->reservation_status_id, function ($query) use ($request) {
+                return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
+            })
+            ->orderBy('id', 'desc');
+            
+            $total = $query->count();
+            $total_per_page = 30;
+            $data  = $query->paginate($total_per_page);
+            $current_page = $request->page ?? $data->currentPage();
+            $last_page = $data->lastPage();
+
+            $data = $data->map(function ($item) {
                 $item->encrypted_id = Crypt::encryptString($item->id);
                 $item->encrypted_reservation_number = Crypt::encryptString($item->reservation_number);
                 return $item;
             });
-
         } catch (ModelNotFoundException $error) {
             return response(["message" => "No se encontraron " . $this->sp . "."], 404);
         } catch (Exception $error) {
             return response(["message" => $message, "error" => $error->getMessage()], 500);
         }
         $message = ucfirst($this->sp) . " encontrad{$this->v}s exitosamente.";
-        return response(compact("message", "data"));
+
+        //devolver cantidad resultados por pagina, cantidad paginas, cantidad resultados total
+        return response(compact("message", "data", "total", "total_per_page", "current_page", "last_page"));
     }
 
     /**

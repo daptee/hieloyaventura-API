@@ -25,15 +25,15 @@ class UserReservation extends Model
         'excurtion',
         'billing_data',
         'contact_data',
-        'paxes', 
-        'reservation_paxes',
+        'paxes.files', 
+        'reservation_paxes.pax_type',
         'status_history.status',
         'rejected_history'
     ];
     const INDEX = [
         'status',
         'excurtion',
-        'paxes',
+        'paxes.files',
         'reservation_paxes'
     ];
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ReservationPax extends Model
 {
@@ -14,4 +15,9 @@ class ReservationPax extends Model
         'price',
         'quantity',
     ];
+
+    public function pax_type(): HasOne
+    {
+        return $this->hasOne(PaxType::class, 'id', 'pax_type_id');
+    }
 }
