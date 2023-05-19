@@ -58,11 +58,11 @@ class PaxController extends Controller
 
                 if($pax['files']){
                     foreach ($pax['files'] as $file) {
-                        $fileName   = time() . '.' . $file->getClientOriginalExtension();
+                        $fileName   = time() . '.' . $file->extension();
                         
-                        Storage::putFileAs('public/paxs/files', $file, $fileName);
+                        $file->move(public_path('/paxs/files'),$fileName);
                         
-                        $path = "storage/paxs/files/$fileName";
+                        $path = "/paxs/files/$fileName";
                         
                         $pax_file = [
                             'pax_id' => $new_pax->id,
