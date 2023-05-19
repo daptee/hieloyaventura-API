@@ -118,6 +118,9 @@ class UserReservationController extends Controller
                     $newUserReservation->user_id = $datos['user_id'] ?? (isset($user) ? $user->id : null);
                     $newUserReservation->language_id = $datos['language_id'] ?? 1; // Agregar en tabla de DB y avisar a Diego
                     $newUserReservation->save();
+
+                    // Guardo status en historial
+                    UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
                 //
 
                 //Creo los registros de los pasajeros en reservation_paxes
