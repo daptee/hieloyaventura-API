@@ -45,7 +45,7 @@ class ReservationController extends Controller
             ->when($request->reservation_status_id, function ($query) use ($request) {
                 return $query->where('reservation_status_id', $request->reservation_status_id);
             })
-            ->when($request->reservation_status_id, function ($query) use ($request) {
+            ->when($request->q, function ($query) use ($request) {
                 return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
             })
             ->orderBy('id', 'desc');

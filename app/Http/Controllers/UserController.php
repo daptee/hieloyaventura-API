@@ -42,11 +42,18 @@ class UserController extends Controller
                 ->when($request->q, function ($query) use ($request) {
                     return $query->where('name', 'LIKE', '%'.$request->q.'%')
                                  ->orWhere('email', 'LIKE', '%'.$request->q.'%');
-                });
+                })
+                ->orderBy('id', 'desc');
+            
+                $total = $query->count();
+                $total_per_page = 30;
+                $data = $query->paginate($total_per_page);
+                $current_page = $request->page ?? $data->currentPage();
+                $last_page = $data->lastPage();
 
-        $users = $query->get();
+        $users = $data;
 
-        return response(compact("users", $users));
+        return response(compact("users", "total", "total_per_page", "current_page", "last_page"));
     }
 
     // public function store(StoreUserRequest $request)
