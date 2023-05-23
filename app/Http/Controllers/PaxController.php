@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
+use ZipArchive;
+use Illuminate\Support\Facades\File;
 
 class PaxController extends Controller
 {
@@ -60,9 +62,9 @@ class PaxController extends Controller
                     foreach ($pax['files'] as $file) {
                         $fileName   = time() . '.' . $file->extension();
                         
-                        $file->move(public_path('/paxs/files'),$fileName);
+                        $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
                         
-                        $path = "/paxs/files/$fileName";
+                        $path = "/paxs/files/$request->user_reservation_id/$fileName";
                         
                         $pax_file = [
                             'pax_id' => $new_pax->id,
@@ -93,11 +95,41 @@ class PaxController extends Controller
         $reservation_number = $userReservation->reservation_number;
         $excurtion_name = $userReservation->excurtion->name;
 
-        Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+        $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
+        
+        $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+        
+        try {
+            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $pathReservationZip, $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+        } catch (Exception $error) {
+            return response(["error" => $error->getMessage()], 500);
+        }
+
+        File::delete($pathReservationZip);
 
         return response(["message" => "Pasajeros guardados con exito"], 200);
     }
 
+    public function createZipFilesReservation($user_reservation_id)
+    {
+        $zip = new ZipArchive;
+   
+        $fileNameZipReservation = "zipFilesReservation$user_reservation_id.zip";
+       
+        if ($zip->open(public_path($fileNameZipReservation), ZipArchive::CREATE) === TRUE)
+        {
+            $files = File::files(public_path("paxs/files/$user_reservation_id"));
+            
+            foreach ($files as $key => $value) {
+                $relativeNameInZipFile = basename($value);
+                $zip->addFile($value, $relativeNameInZipFile);
+            }
+                
+            $zip->close();
+        }
+
+        return ['fileNameZipReservation'=> $fileNameZipReservation];
+    }
     /**
      * Display the specified resource.
      *
