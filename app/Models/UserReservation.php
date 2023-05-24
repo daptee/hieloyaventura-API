@@ -120,7 +120,11 @@ class UserReservation extends Model
         $pax_controller = new PaxController();
         $zipFilesReservation = $pax_controller->createZipFilesReservation($userReservation->id);
         
-        $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+        if($zipFilesReservation['fileNameZipReservation']){
+            $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+        }else{
+            $pathReservationZip = null;
+        }
 
         // Mail voucher
             try {

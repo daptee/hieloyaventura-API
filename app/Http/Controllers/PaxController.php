@@ -97,7 +97,11 @@ class PaxController extends Controller
 
         $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
         
-        $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+        if($zipFilesReservation['fileNameZipReservation']){
+            $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+        }else{
+            $pathReservationZip = null;
+        }
         
         try {
             Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $pathReservationZip, $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
@@ -115,17 +119,23 @@ class PaxController extends Controller
         $zip = new ZipArchive;
    
         $fileNameZipReservation = "zipFilesReservation$user_reservation_id.zip";
-       
-        if ($zip->open(public_path($fileNameZipReservation), ZipArchive::CREATE) === TRUE)
-        {
-            $files = File::files(public_path("paxs/files/$user_reservation_id"));
-            
-            foreach ($files as $key => $value) {
-                $relativeNameInZipFile = basename($value);
-                $zip->addFile($value, $relativeNameInZipFile);
-            }
+        $directoryPath = public_path("paxs/files/$user_reservation_id");
+      
+        if (file_exists($directoryPath)) {
+            if ($zip->open(public_path($fileNameZipReservation), ZipArchive::CREATE) === TRUE)
+            {
+
+                $files = File::files($directoryPath);
                 
-            $zip->close();
+                foreach ($files as $key => $value) {
+                    $relativeNameInZipFile = basename($value);
+                    $zip->addFile($value, $relativeNameInZipFile);
+                }
+                    
+                $zip->close();
+            }
+        }else{
+            $fileNameZipReservation = null;
         }
 
         return ['fileNameZipReservation'=> $fileNameZipReservation];

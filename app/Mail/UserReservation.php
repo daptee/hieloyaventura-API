@@ -46,7 +46,9 @@ class UserReservation extends Mailable
     {
         return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
                     ->attach($this->pathPdf)
-                    ->attach($this->pathReservationZip)
+                    ->when($this->pathReservationZip != null, function ($message) {
+                        return $message->attach($this->pathReservationZip);
+                    })
                     ->replyTo($this->email)
                     ->subject($this->subject)
                     ->view('emails.user-reservation')
