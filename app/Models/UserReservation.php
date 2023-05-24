@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\PaxController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -116,9 +117,14 @@ class UserReservation extends Model
         $reservation_number = $userReservation->reservation_number;
         $excurtion_name = $userReservation->excurtion->name;
     
+        $pax_controller = new PaxController();
+        $zipFilesReservation = $pax_controller->createZipFilesReservation($userReservation->id);
+        
+        $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+
         // Mail voucher
             try {
-                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $pathReservationZip, $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 return ["status" => 200];
             } catch (\Throwable $th) {
                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
