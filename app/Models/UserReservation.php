@@ -118,19 +118,6 @@ class UserReservation extends Model
         $reservation_number = $userReservation->reservation_number;
         $excurtion_name = $userReservation->excurtion->name;
     
-        $pax_controller = new PaxController();
-        $zipFilesReservation = $pax_controller->createZipFilesReservation($userReservation->id);
-        
-        if($zipFilesReservation['fileNameZipReservation']){
-            $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
-            $paxs = Pax::where('user_reservation_id', $userReservation->user_reservation_id);
-            try {
-                Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
-            } catch (Exception $error) {
-                return response(["error" => $error->getMessage()], 500);
-            }
-        }
-
         // Mail voucher
             try {
                 Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
