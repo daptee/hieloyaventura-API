@@ -18,20 +18,18 @@ class UserReservation extends Mailable
     public $hash_reservation_number;
     public $msg;
     public $msg_is_bigice;
-    public $pathReservationZip;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $pathPdf, $pathReservationZip, $is_bigice, $hash_number, $reservation_number, $excurtion_name, $language_id)
+    public function __construct($email, $pathPdf, $is_bigice, $hash_number, $reservation_number, $excurtion_name, $language_id)
     {
         $this->email   = $email;
         $data_in_language = $this->get_data_in_language($language_id);
         $this->msg = $data_in_language['message'];
         $this->msg_is_bigice = $data_in_language['msg_is_bigice'];
         $this->pathPdf = $pathPdf;
-        $this->pathReservationZip = $pathReservationZip;
         $this->bigice = $is_bigice;
         $this->hash_reservation_number = $hash_number;
         $this->subject = $data_in_language['subject'] . " " . $reservation_number;
@@ -46,9 +44,6 @@ class UserReservation extends Mailable
     {
         return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
                     ->attach($this->pathPdf)
-                    ->when($this->pathReservationZip != null, function ($message) {
-                        return $message->attach($this->pathReservationZip);
-                    })
                     ->replyTo($this->email)
                     ->subject($this->subject)
                     ->view('emails.user-reservation')

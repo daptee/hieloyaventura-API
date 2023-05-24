@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePaxRequest;
 use App\Models\Pax;
 use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
+use App\Mail\UserReservationAttachedPassengerFiles;
 use App\Models\PaxFile;
 use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Str;
 use ZipArchive;
 use Illuminate\Support\Facades\File;
 
@@ -60,7 +62,7 @@ class PaxController extends Controller
 
                 if($pax['files']){
                     foreach ($pax['files'] as $file) {
-                        $fileName   = time() . '.' . $file->extension();
+                        $fileName   = Str::random(5) . time() . '.' . $file->extension();
                         
                         $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
                         
@@ -99,12 +101,16 @@ class PaxController extends Controller
         
         if($zipFilesReservation['fileNameZipReservation']){
             $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
-        }else{
-            $pathReservationZip = null;
+            $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
+            try {
+                Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
+            } catch (Exception $error) {
+                return response(["error" => $error->getMessage()], 500);
+            }
         }
         
         try {
-            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $pathReservationZip, $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
         } catch (Exception $error) {
             return response(["error" => $error->getMessage()], 500);
         }

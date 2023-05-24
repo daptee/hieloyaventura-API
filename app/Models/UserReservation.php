@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserReservation as MailUserReservation;
+use App\Mail\UserReservationAttachedPassengerFiles;
 use Illuminate\Support\Facades\Log;
 
 class UserReservation extends Model
@@ -122,13 +123,17 @@ class UserReservation extends Model
         
         if($zipFilesReservation['fileNameZipReservation']){
             $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
-        }else{
-            $pathReservationZip = null;
+            $paxs = Pax::where('user_reservation_id', $userReservation->user_reservation_id);
+            try {
+                Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
+            } catch (Exception $error) {
+                return response(["error" => $error->getMessage()], 500);
+            }
         }
 
         // Mail voucher
             try {
-                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $pathReservationZip, $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 return ["status" => 200];
             } catch (\Throwable $th) {
                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
