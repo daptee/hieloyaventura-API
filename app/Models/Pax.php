@@ -29,4 +29,9 @@ class Pax extends Model
     {
         return $this->name . ' ' . $this->lastname;
     }
+
+    public function files()
+    {
+        return $this->hasMany(PaxFile::class, 'pax_id', 'id');
+    }
 }

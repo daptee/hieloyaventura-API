@@ -15,7 +15,7 @@ class UserReservationStatusHistory extends Model
 
     public function status(): HasOne
     {
-        return $this->hasOne(BillingDataReservation::class, 'status_id', 'id');
+        return $this->hasOne(ReservationStatus::class, 'id', 'status_id');
     }
 
     public function user_reservation(): HasOne

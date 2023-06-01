@@ -101,7 +101,7 @@ class UserReservationController extends Controller
                         ]);
                         //Email de Bienvenida
                             try {
-                                Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass));
+                                Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass, $datos['language_id']));
                             } catch (\Throwable $th) {
                                 Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
                             }
@@ -118,6 +118,9 @@ class UserReservationController extends Controller
                     $newUserReservation->user_id = $datos['user_id'] ?? (isset($user) ? $user->id : null);
                     $newUserReservation->language_id = $datos['language_id'] ?? 1; // Agregar en tabla de DB y avisar a Diego
                     $newUserReservation->save();
+
+                    // Guardo status en historial
+                    UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
                 //
 
                 //Creo los registros de los pasajeros en reservation_paxes
@@ -245,10 +248,8 @@ class UserReservationController extends Controller
 
             $userReservation->save();
 
-            $user_reservation_status = new UserReservationStatusHistory();
-            $user_reservation_status->status_id = $status_id;
-            $user_reservation_status->user_reservation_id = $userReservation->id;
-            $user_reservation_status->save();
+            if($status_id)
+                UserReservation::store_user_reservation_status_history($status_id, $userReservation->id);
 
             $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         DB::commit();
@@ -363,10 +364,7 @@ class UserReservationController extends Controller
                         $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
                         $reservation->save();
 
-                        $user_reservation_status = new UserReservationStatusHistory();
-                        $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                        $user_reservation_status->user_reservation_id = $reservation->id;
-                        $user_reservation_status->save();
+                        UserReservation::store_user_reservation_status_history(ReservationStatus::AUTOMATIC_CANCELED, $reservation->id);
                     }
                 }
 

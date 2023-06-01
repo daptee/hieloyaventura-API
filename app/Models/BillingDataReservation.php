@@ -18,6 +18,8 @@ class BillingDataReservation extends Model
         'phone',
         'lastname',
         'dni',
+        'invoice_A',
+        'cuit',
         'nationality_id'
     ];
     

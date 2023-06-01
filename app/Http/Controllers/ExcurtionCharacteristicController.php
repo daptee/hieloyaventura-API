@@ -601,6 +601,31 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
+                                "icon" =>  '$age_yellow',
+                                "translables" =>  [
+                                    [
+                                    #ESPAÑOL
+                                        "lenguage_id" =>  "1",
+                                        "name"        =>  "<p>Apto para 8 a 65 años</p>",
+                                        "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 8 a 65 años.</span> Sin excepción.</p>'
+                                    ],
+                                    [
+                                    # INGLES
+                                        "lenguage_id" =>  "2",
+                                        "name"        =>  "<p>Suitable for 8 to 65 years old</p>",
+                                        "description" =>  '<p>Suitable for <span style="color: #366895;">people between 8 and 65 years ONLY.</span> No exceptions.</p>'
+                                    ],
+                                    [
+                                    # PORTUGUÉS
+                                        "lenguage_id" =>  "3",
+                                        "name"        =>  "<p>Adequado para 8 a 65 anos</p>",
+                                        "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 8 e 65 anos.</span> Sem exceções.</p>'
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
                                 "icon" => '$heart_rate',
 
                                 "characteristics" => [],
@@ -632,7 +657,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -2000,6 +2025,31 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
+                                "icon" => '$age_yellow',
+                                "translables" =>  [
+                                    [
+                                    #ESPAÑOL
+                                        "lenguage_id" =>  "1",
+                                        "name"        =>  "<p>Apto para 18 a 50 años</p>",
+                                        "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 18 a 50 años.</span> Sin excepción.</p>'
+                                    ],
+                                    [
+                                    # INGLES
+                                        "lenguage_id" =>  "2",
+                                        "name"        =>  "<p>Suitable for 18 to 50 years old</p>",
+                                        "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 50 years ONLY.</span> No exceptions.</p>'
+                                    ],
+                                    [
+                                    # PORTUGUÉS
+                                        "lenguage_id" =>  "3",
+                                        "name"        =>  "<p>Adequado para 18 a 50 anos</p>",
+                                        "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 18 e 50 anos.</span> Sem exceções.</p>'
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
                                 "icon" => '$heart_rate',
 
                                 "characteristics" => [],
@@ -2031,7 +2081,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, efisema, entre otras.</li>",
+                                        "description" => "<li>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -3440,7 +3490,32 @@ class ExcurtionCharacteristicController extends Controller
                                         "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com</li>'
                                     ]
                                 ]
-                            ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "icon" => '$age_yellow',
+                                "order" => null,
+                                "translables" =>  [
+                                    [
+                                    #ESPAÑOL
+                                        "lenguage_id" =>  "1",
+                                        "name"        =>  "<p>Apto para 6 a 70 años</p>",
+                                        "description" =>  '<p>Solo apto para <span style="color: #366895;">personas de 6 a 70 años.</span> Sin excepción.</p>'
+                                    ],
+                                    [
+                                    # INGLES
+                                        "lenguage_id" =>  "2",
+                                        "name"        =>  "<p>Suitable for 6 to 70 years old</p>",
+                                        "description" =>  '<p>Suitable for <span style="color: #366895;">people between 6 and 70 years ONLY.</span> No exceptions.</p>'
+                                    ],
+                                    [
+                                    # PORTUGUÉS
+                                        "lenguage_id" =>  "3",
+                                        "name"        =>  "<p>Adequado para 6 a 70 anos</p>",
+                                        "description" =>  '<p>Somente apto para <span style="color: #366895;">pessoas entre 6 e 70 anos.</span> Sem exceções.</p>'
+                                    ]
+                                ]
+                            ],
                         ],
                         "translables" => []
                     ],
@@ -4783,6 +4858,40 @@ class ExcurtionCharacteristicController extends Controller
                 "icon_id" => null,
                 "characteristic_type" => "before_buying",
                 "order" => null,
+                "characteristics" => [
+                    [
+                        "icon" => null,
+                        "order" => null,
+                        "characteristics" => [
+                            [
+                                "icon_id" => null,
+                                "icon" => '$age_yellow',
+                                "order" => null,
+                                "translables" =>  [
+                                    [
+                                    #ESPAÑOL
+                                        "lenguage_id" =>  "1",
+                                        "name"        =>  '<p>Sin limites de edad</p>',
+                                        "description" =>  '<p>Esta excursión no presenta una limitación de edad. Cualquier persona puede realizarla.</p>'
+                                    ],
+                                    [
+                                    # INGLES
+                                        "lenguage_id" =>  "2",
+                                        "name"        =>  '<p>No age limit</p>',
+                                        "description" =>  '<p>This excursion does not present an age limitation. Anyone can do it.</p>'
+                                    ],
+                                    [
+                                    # PORTUGUÉS
+                                        "lenguage_id" =>  "3",
+                                        "name"        =>  '<p>Sem limite de idade</p>',
+                                        "description" =>  '<p>Esta excursão não apresenta limite de idade. Qualquer um pode fazer isso.</p>'
+                                    ]
+                                ]
+                            ],
+                        ],
+                        "translables" => []
+                    ],
+                ],
                 "translables" => [
                     [
                         "lenguage_id" => 1,

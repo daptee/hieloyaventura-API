@@ -8,13 +8,11 @@
 </head>
 <body>
     <p>
-        Gracias por realizar tu compra con nosotros. <br>
-        A continuacion te dejamos adjunto un PDF con todos los datos de tu reserva. Asimismo, podes ingresar en la web y con tu usuario y contraseña descargar tambien este PDF. <br> <br>
-        Si tenes algun inconveniente, podes escribirnos a info@hieloyaventura.com, o bien comunicarte con nosotros a +54 (2902) 492 205/094
+        {!! $msg !!}
         
         @if($bigice)
             <br> <br>
-            Debido a que tu excursion presenta dificultades fisicas, te solicitamos por favor que completes una ficha medica de todos los pasajeros, dentro del siguiente link: <a href="{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}">{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}</a>
+            {{ $msg_is_bigice }} <a href="{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}">{{ config('app.url_hya') }}/ficha-medica/{{ $hash_reservation_number }}</a>
         @endif
     </p>
 </body>
