@@ -9,6 +9,7 @@ use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
 use App\Mail\UserReservationAttachedPassengerFiles;
 use App\Models\PaxFile;
+use Illuminate\Support\Facades\Log;
 use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
 use Carbon\Carbon;
@@ -56,66 +57,74 @@ class PaxController extends Controller
             return response(["message" => "User Reservation ID Invalido."], 422);
 
         $paxs = $request->paxs;
-        if (isset($paxs)) {
-            foreach ($paxs as $pax) {
-                $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
 
-                if($pax['files']){
-                    foreach ($pax['files'] as $file) {
-                        $fileName   = Str::random(5) . time() . '.' . $file->extension();
-                        
-                        $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
-                        
-                        $path = "/paxs/files/$request->user_reservation_id/$fileName";
-                        
-                        $pax_file = [
-                            'pax_id' => $new_pax->id,
-                            'url' => $path,
-                        ];
-                        PaxFile::create($pax_file);
+        try {
+            if (isset($paxs)) {
+                foreach ($paxs as $pax) {
+                    $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+
+                    if($pax['files']){
+                        foreach ($pax['files'] as $file) {
+                            $fileName   = Str::random(5) . time() . '.' . $file->extension();
+                            
+                            $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
+                            
+                            $path = "/paxs/files/$request->user_reservation_id/$fileName";
+                            
+                            $pax_file = [
+                                'pax_id' => $new_pax->id,
+                                'url' => $path,
+                            ];
+                            PaxFile::create($pax_file);
+                        }
                     }
                 }
             }
-        }
 
-        $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
-        $userReservation->save();
+            $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
+            $userReservation->save();
 
-        $user_reservation_status = new UserReservationStatusHistory();
-        $user_reservation_status->status_id = ReservationStatus::COMPLETED;
-        $user_reservation_status->user_reservation_id = $userReservation->id;
-        $user_reservation_status->save();
+            $user_reservation_status = new UserReservationStatusHistory();
+            $user_reservation_status->status_id = ReservationStatus::COMPLETED;
+            $user_reservation_status->user_reservation_id = $userReservation->id;
+            $user_reservation_status->save();
 
-        //Mandar email con el PDF adjunto
-        $pathReservationPdf = $this->createPdf($userReservation);                                
-        $userReservation->pdf = $pathReservationPdf['urlToSave'];
-        $userReservation->save();
+            //Mandar email con el PDF adjunto
+            $pathReservationPdf = $this->createPdf($userReservation);                                
+            $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            $userReservation->save();
 
-        $mailTo = $userReservation->contact_data->email;
-        $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
-        $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
-        $reservation_number = $userReservation->reservation_number;
-        $excurtion_name = $userReservation->excurtion->name;
+            $mailTo = $userReservation->contact_data->email;
+            $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
+            $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+            $reservation_number = $userReservation->reservation_number;
+            $excurtion_name = $userReservation->excurtion->name;
 
-        $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
+            $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
         
-        if($zipFilesReservation['fileNameZipReservation']){
-            $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
-            $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
-            try {
-                Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
-            } catch (Exception $error) {
-                return response(["error" => $error->getMessage()], 500);
+            if($zipFilesReservation['fileNameZipReservation']){
+                $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+                $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
+                try {
+                    Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
+                } catch (Exception $error) {
+                    Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
+                }
             }
-        }
-        
-        try {
-            Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-        } catch (Exception $error) {
-            return response(["error" => $error->getMessage()], 500);
-        }
+            
+            try {
+                Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+            } catch (Exception $error) {
+                Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
+                return response(["error" => $error->getMessage()], 600);
+            }
 
-        File::delete($pathReservationZip);
+            File::delete($pathReservationZip);
+
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            return response(["error" => $th->getMessage()], 500);
+        }
 
         return response(["message" => "Pasajeros guardados con exito"], 200);
     }
