@@ -8,13 +8,13 @@
 </head>
 <body>
     <p>
-        @foreach ($passengers as $passenger)
+        @foreach ($paxs as $pax)
         <div>
             <ul>
-                    <li> {{ "Nombre y apellido: " . $passenger->name ?? '-' }} </li>
-                    <li> {{"DNI: " . $passenger->dni ?? '-' }} </li>
-                    <li> {{"Nacionalidad : " . $passenger->nacionality->name ?? '-' }} </li>
-                    <li> {{"Fecha de nacimiento : " . $passenger->birth_date ?? '-' }} </li>
+                    <li> {{ "Nombre y apellido: " . $pax->name ?? '-' }} </li>
+                    <li> {{"DNI: " . $pax->dni ?? '-' }} </li>
+                    <li> {{"Nacionalidad : " . $pax->nacionality->name ?? '-' }} </li>
+                    <li> {{"Fecha de nacimiento : " . $pax->birth_date ?? '-' }} </li>
             </ul>
         </div>
     @endforeach
