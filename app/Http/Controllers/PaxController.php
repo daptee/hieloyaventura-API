@@ -77,12 +77,6 @@ class PaxController extends Controller
                                     'pax_id' => $new_pax->id,
                                     'url' => $path,
                                 ];
-
-                                // $pax_file = [
-                                //     'pax_id' => $new_pax->id,
-                                //     'url' => $path,
-                                // ];
-                                // PaxFile::create($pax_file);
                             }
                         }
                     }
@@ -112,29 +106,27 @@ class PaxController extends Controller
             $reservation_number = $userReservation->reservation_number;
             $excurtion_name = $userReservation->excurtion->name;
 
-            // $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
+            $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
         
-            // if($zipFilesReservation['fileNameZipReservation']){
-            //     $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
-            //     $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
-            //     try {
-            //         // Mail::to("enzo100amarilla@gmail.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
-            //         Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
-            //     } catch (Exception $error) {
-            //         Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
-            //     }
-                // File::delete($pathReservationZip);
-            // }
+            if($zipFilesReservation['fileNameZipReservation']){
+                $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
+                $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
+                try {
+                    Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
+                } catch (Exception $error) {
+                    Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
+                }
+            }
             
             try {
                 Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-                // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
             } catch (Exception $error) {
                 Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
                 return response(["error" => $error->getMessage()], 600);
             }
 
-            // File::delete($pathReservationZip);
+            if(isset($pathReservationZip))
+                File::delete($pathReservationZip);
 
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
