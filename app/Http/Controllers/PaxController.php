@@ -102,9 +102,9 @@ class PaxController extends Controller
             $user_reservation_status->save();
 
             //Mandar email con el PDF adjunto
-            $pathReservationPdf = $this->createPdf($userReservation);                                
-            $userReservation->pdf = $pathReservationPdf['urlToSave'];
-            $userReservation->save();
+            // $pathReservationPdf = $this->createPdf($userReservation);                                
+            // $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            // $userReservation->save();
 
             // $mailTo = $userReservation->contact_data->email;
             // $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
