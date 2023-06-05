@@ -39,9 +39,9 @@ class CancelarReservas extends Command
                                     ->get();
         
         // Log::debug($reservations);
-        Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
+        // Log::debug("Cantidad de reservas que trae la query: " . count($reservations));
         $url = config('app.api_hya')."/CancelaReservaM2";
-        Log::debug("Url api: " . $url);
+        // Log::debug("Url api: " . $url);
 
         if(count($reservations) > 0){
             foreach($reservations as $reservation){
@@ -57,7 +57,7 @@ class CancelarReservas extends Command
                 $resp = curl_exec($curl);
                 curl_close($curl);
 
-                Log::debug("Respuesta API: $resp");
+                // Log::debug("Respuesta API: $resp");
 
                 $resultado = isset(json_decode($resp)->RESULT) ? json_decode($resp)->RESULT : "Sin resultado";
                 $mensaje = isset(json_decode($resp)->ERROR_MSG) ? json_decode($resp)->ERROR_MSG : "Sin mensaje";
