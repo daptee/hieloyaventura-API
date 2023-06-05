@@ -67,7 +67,7 @@ class PaxController extends Controller
                     ini_set('memory_limit', '128M');
                     foreach ($paxs as $pax) {
                         $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                        if($pax['files']){
+                        if($pax['files'] && count($pax['files']) != 0){
                             foreach ($pax['files'] as $file) {
                                 $fileName   = Str::random(5) . time() . '.' . $file->extension();
                                 $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
