@@ -102,15 +102,15 @@ class PaxController extends Controller
             $user_reservation_status->save();
 
             //Mandar email con el PDF adjunto
-            // $pathReservationPdf = $this->createPdf($userReservation);                                
-            // $userReservation->pdf = $pathReservationPdf['urlToSave'];
-            // $userReservation->save();
+            $pathReservationPdf = $this->createPdf($userReservation);                                
+            $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            $userReservation->save();
 
-            // $mailTo = $userReservation->contact_data->email;
-            // $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
-            // $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
-            // $reservation_number = $userReservation->reservation_number;
-            // $excurtion_name = $userReservation->excurtion->name;
+            $mailTo = $userReservation->contact_data->email;
+            $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
+            $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+            $reservation_number = $userReservation->reservation_number;
+            $excurtion_name = $userReservation->excurtion->name;
 
             // $zipFilesReservation = $this->createZipFilesReservation($request->user_reservation_id);
         
@@ -123,15 +123,16 @@ class PaxController extends Controller
             //     } catch (Exception $error) {
             //         Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
             //     }
+                // File::delete($pathReservationZip);
             // }
             
-            // try {
-            //     Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-            //     // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-            // } catch (Exception $error) {
-            //     Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
-            //     return response(["error" => $error->getMessage()], 600);
-            // }
+            try {
+                Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+            } catch (Exception $error) {
+                Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
+                return response(["error" => $error->getMessage()], 600);
+            }
 
             // File::delete($pathReservationZip);
 
