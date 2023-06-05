@@ -14,6 +14,7 @@ use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
@@ -60,25 +61,36 @@ class PaxController extends Controller
 
         try {
             if (isset($paxs)) {
-                foreach ($paxs as $pax) {
-                    $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                DB::transaction(function () use ($paxs, $request) {
+                    $paxFiles = [];
 
-                    if($pax['files']){
-                        foreach ($pax['files'] as $file) {
-                            $fileName   = Str::random(5) . time() . '.' . $file->extension();
-                            
-                            $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
-                            
-                            $path = "/paxs/files/$request->user_reservation_id/$fileName";
-                            
-                            $pax_file = [
-                                'pax_id' => $new_pax->id,
-                                'url' => $path,
-                            ];
-                            PaxFile::create($pax_file);
+                    ini_set('memory_limit', '128M');
+                    foreach ($paxs as $pax) {
+                        $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                        if($pax['files']){
+                            foreach ($pax['files'] as $file) {
+                                $fileName   = Str::random(5) . time() . '.' . $file->extension();
+                                $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
+                                $path = "/paxs/files/$request->user_reservation_id/$fileName";
+                                
+                                $paxFiles[] = [
+                                    'pax_id' => $new_pax->id,
+                                    'url' => $path,
+                                ];
+
+                                // $pax_file = [
+                                //     'pax_id' => $new_pax->id,
+                                //     'url' => $path,
+                                // ];
+                                // PaxFile::create($pax_file);
+                            }
                         }
                     }
-                }
+
+                    if (!empty($paxFiles)) {
+                        PaxFile::insert($paxFiles);
+                    }
+                });
             }
 
             $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
@@ -106,6 +118,7 @@ class PaxController extends Controller
                 $pathReservationZip = public_path($zipFilesReservation['fileNameZipReservation']);
                 $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
                 try {
+                    // Mail::to("enzo100amarilla@gmail.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
                     Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
                 } catch (Exception $error) {
                     Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
@@ -114,6 +127,7 @@ class PaxController extends Controller
             
             try {
                 Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
             } catch (Exception $error) {
                 Log::debug(print_r([$error->getMessage(), $error->getLine()],  true));
                 return response(["error" => $error->getMessage()], 600);
