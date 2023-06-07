@@ -30,9 +30,12 @@ class UserReservation extends Model
         'paxes.files', 
         'reservation_paxes.pax_type',
         'status_history.status',
-        'rejected_history'
+        'rejected_history',
+        'observation_history.user'
     ];
+
     const INDEX = [
+        'user',
         'status',
         'excurtion',
         'paxes.files',
@@ -55,6 +58,7 @@ class UserReservation extends Model
         'is_transfer',
         'notifications_accepted',
         'reservation_checked',
+        'internal_closed',
     ];
 
     public function user(): BelongsTo
@@ -95,6 +99,11 @@ class UserReservation extends Model
     public function status_history()
     {
         return $this->hasMany(UserReservationStatusHistory::class, 'user_reservation_id', 'id');
+    }
+
+    public function observation_history()
+    {
+        return $this->hasMany(UserReservationObservationsHistory::class, 'user_reservation_id', 'id');
     }
 
     public function rejected_history()
