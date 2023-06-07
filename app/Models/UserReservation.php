@@ -37,6 +37,7 @@ class UserReservation extends Model
     const INDEX = [
         'user',
         'status',
+        'status_history.status',
         'excurtion',
         'paxes.files',
         'reservation_paxes'

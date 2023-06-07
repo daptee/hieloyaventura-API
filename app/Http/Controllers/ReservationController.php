@@ -56,11 +56,15 @@ class ReservationController extends Controller
             $query = UserReservation::with($this->model::INDEX)
                     ->when($request->date_from, fn ($query) => $query
                         ->where('date', '>=', $request->date_from)
-                        ->orWhere('created_at', '>=', $request->date_from)
                     )
                     ->when($request->date_to, fn ($query) => $query
                         ->where('date', '<=', $request->date_to)
-                        ->orWhere('created_at', '<=', $request->date_from)
+                    )
+                    ->when($request->creation_date_from, fn ($query) => $query
+                        ->where('created_at', '>=', $request->creation_date_from)
+                    )
+                    ->when($request->creation_date_to, fn ($query) => $query
+                        ->where('created_at', '>=', $request->creation_date_to)
                     )
                     ->when($request->excursion_id, fn ($query) => $query
                         ->where('excursion_id', $request->excursion_id)
