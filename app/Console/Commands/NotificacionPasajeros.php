@@ -47,7 +47,7 @@ class NotificacionPasajeros extends Command
                 $r_10_min_nroReserva = $r_10_min->reservation_number;
                 $r_10_min_nombreExcursion = $r_10_min->excurtion->name;
                 $r_10_min_fechaExcursion = $r_10_min->date->format('d/m/Y');
-                $r_10_min_link = "https://dev.hieloyaventura.com/mis-excursiones/". Crypt::encryptString($r_10_min_nroReserva);
+                $r_10_min_link = config('app.api_hya').'/mis-excursiones/' . Crypt::encryptString($r_10_min_nroReserva);
                 $r_10_min_email = $r_10_min->user->email;
                 $r_10_min_data = [
                     'email' => $r_10_min_email,
@@ -68,7 +68,7 @@ class NotificacionPasajeros extends Command
                 $r_30_min_nroReserva = $r_30_min->reservation_number;
                 $r_30_min_nombreExcursion = $r_30_min->excurtion->name;
                 $r_30_min_fechaExcursion = $r_30_min->date;
-                $r_10_min_link = "https://dev.hieloyaventura.com/mis-excursiones/". Crypt::encryptString($r_30_min_nroReserva);
+                $r_10_min_link = config('app.api_hya').'/mis-excursiones/' . Crypt::encryptString($r_30_min_nroReserva);
                 $r_30_min_email = $r_30_min->user->email;
                 $r_30_min_data = [
                     'email' => $r_30_min_email,
