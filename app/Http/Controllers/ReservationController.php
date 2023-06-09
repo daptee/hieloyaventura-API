@@ -75,6 +75,9 @@ class ReservationController extends Controller
                     ->when($request->q, fn ($query) => $query
                         ->where('reservation_number', 'LIKE', '%'.$request->q.'%')
                     )
+                    ->when($request->internal_closed, fn ($query) => $query
+                        ->where('internal_closed', $request->internal_closed)
+                    )
                     ->when($request->t, fn ($query) => $query
                         ->whereHas('user', fn ($subQuery) => $subQuery
                             ->where('email',  'LIKE', '%'.$request->t.'%')
