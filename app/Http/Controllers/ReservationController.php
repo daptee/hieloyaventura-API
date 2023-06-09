@@ -35,55 +35,37 @@ class ReservationController extends Controller
     {
         $message = "Error al traer listado de {$this->sp}.";
         try {
-            // $query = UserReservation::with($this->model::INDEX)->when($request->date_from, function ($query) use ($request) {
-            //     return $query->where('date', '>=', $request->date_from)
-            //                 ->orWhere('created_at', '>=', $request->date_from);
-            // })
-            // ->when($request->date_to, function ($query) use ($request) {
-            //     return $query->where('date', '<=', $request->date_to);
-            // })
-            // ->when($request->excurtion_id, function ($query) use ($request) {
-            //     return $query->where('excurtion_id', $request->excurtion_id);
-            // })
-            // ->when($request->reservation_status_id, function ($query) use ($request) {
-            //     return $query->where('reservation_status_id', $request->reservation_status_id);
-            // })
-            // ->when($request->q, function ($query) use ($request) {
-            //     return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
-            // })
-            // ->orderBy('id', 'desc');
-
             $query = UserReservation::with($this->model::INDEX)
-                    ->when($request->date_from, fn ($query) => $query
-                        ->where('date', '>=', $request->date_from)
-                    )
-                    ->when($request->date_to, fn ($query) => $query
-                        ->where('date', '<=', $request->date_to)
-                    )
-                    ->when($request->creation_date_from, fn ($query) => $query
-                        ->where('created_at', '>=', $request->creation_date_from)
-                    )
-                    ->when($request->creation_date_to, fn ($query) => $query
-                        ->where('created_at', '>=', $request->creation_date_to)
-                    )
-                    ->when($request->excursion_id, fn ($query) => $query
-                        ->where('excursion_id', $request->excursion_id)
-                    )
-                    ->when($request->reservation_status_id, fn ($query) => $query
-                        ->where('reservation_status_id', $request->reservation_status_id)
-                    )
-                    ->when($request->q, fn ($query) => $query
-                        ->where('reservation_number', 'LIKE', '%'.$request->q.'%')
-                    )
-                    ->when($request->internal_closed, fn ($query) => $query
-                        ->where('internal_closed', $request->internal_closed)
-                    )
-                    ->when($request->t, fn ($query) => $query
-                        ->whereHas('user', fn ($subQuery) => $subQuery
-                            ->where('email',  'LIKE', '%'.$request->t.'%')
-                        )
-                    )
-                    ->orderBy('id', 'desc');
+            ->when($request->date_from !== null, function ($query) use ($request) {
+                return $query->where('date', '>=', $request->date_from);
+            })
+            ->when($request->date_to !== null, function ($query) use ($request) {
+                return $query->where('date', '<=', $request->date_to);
+            })
+            ->when($request->creation_date_from !== null, function ($query) use ($request) {
+                return $query->where('created_at', '>=', $request->creation_date_from);
+            }) 
+            ->when($request->creation_date_to !== null, function ($query) use ($request) {
+                return $query->where('created_at', '<=', $request->creation_date_to);
+            })
+            ->when($request->excurtion_id !== null, function ($query) use ($request) {
+                return $query->where('excurtion_id', $request->excurtion_id);
+            })
+            ->when($request->reservation_status_id !== null, function ($query) use ($request) {
+                return $query->where('reservation_status_id', $request->reservation_status_id);
+            })
+            ->when($request->q !== null, function ($query) use ($request) {
+                return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
+            })
+            ->when($request->internal_closed !== null, function ($query) use ($request) {
+                return $query->where('internal_closed', $request->internal_closed);
+            })
+            ->when($request->t !== null, function ($query) use ($request) {
+                return $query->whereHas('user', function ($q) use ($request) {
+                    $q->where('email', 'LIKE', '%'.$request->t.'%');
+                });
+            })
+            ->orderBy('id', 'desc');
 
             $total = $query->count();
             $total_per_page = 30;
