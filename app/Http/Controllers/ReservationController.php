@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Mail\RegistrationPassword;
 use App\Models\User;
 use App\Models\UserReservation;
+use App\Models\UserReservationObservationsHistory;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -33,23 +35,38 @@ class ReservationController extends Controller
     {
         $message = "Error al traer listado de {$this->sp}.";
         try {
-            $query = UserReservation::with($this->model::INDEX)->when($request->date_from, function ($query) use ($request) {
+            $query = UserReservation::with($this->model::INDEX)
+            ->when($request->date_from !== null, function ($query) use ($request) {
                 return $query->where('date', '>=', $request->date_from);
             })
-            ->when($request->date_to, function ($query) use ($request) {
+            ->when($request->date_to !== null, function ($query) use ($request) {
                 return $query->where('date', '<=', $request->date_to);
             })
-            ->when($request->excurtion_id, function ($query) use ($request) {
+            ->when($request->creation_date_from !== null, function ($query) use ($request) {
+                return $query->where('created_at', '>=', $request->creation_date_from);
+            }) 
+            ->when($request->creation_date_to !== null, function ($query) use ($request) {
+                return $query->where('created_at', '<=', $request->creation_date_to);
+            })
+            ->when($request->excurtion_id !== null, function ($query) use ($request) {
                 return $query->where('excurtion_id', $request->excurtion_id);
             })
-            ->when($request->reservation_status_id, function ($query) use ($request) {
+            ->when($request->reservation_status_id !== null, function ($query) use ($request) {
                 return $query->where('reservation_status_id', $request->reservation_status_id);
             })
-            ->when($request->q, function ($query) use ($request) {
+            ->when($request->q !== null, function ($query) use ($request) {
                 return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
             })
+            ->when($request->internal_closed !== null, function ($query) use ($request) {
+                return $query->where('internal_closed', $request->internal_closed);
+            })
+            ->when($request->t !== null, function ($query) use ($request) {
+                return $query->whereHas('user', function ($q) use ($request) {
+                    $q->where('email', 'LIKE', '%'.$request->t.'%');
+                });
+            })
             ->orderBy('id', 'desc');
-            
+
             $total = $query->count();
             $total_per_page = 30;
             $data  = $query->paginate($total_per_page);
@@ -101,16 +118,18 @@ class ReservationController extends Controller
      */
     public function show($id)
     {
-        $userReservation = UserReservation::with($this->model::SHOW)->find($id);
+        $userReservation = $this->getAllReservation($id);
 
         if(!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
-        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
-
         return response(compact("userReservation"));
     }
 
+    public function getAllReservation($id)
+    {
+        return $this->model::with($this->model::SHOW)->find($id);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -187,4 +206,41 @@ class ReservationController extends Controller
 
         return response(["message" => "Mail enviado con exito."]);
     }
+
+    public function update_internal_closed(Request $request, $id)
+    {
+        $userReservation = $this->getAllReservation($id);
+
+        if(!$userReservation)
+            return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
+
+        $userReservation->internal_closed = $request->internal_closed;
+        $userReservation->save();
+
+        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+
+        return response(compact("userReservation"));
+    }
+
+    public function new_observation(Request $request)
+    {
+        $request->validate([
+            'user_reservation_id' => 'required',
+            'observation' => 'required',
+        ]);
+
+        $userReservation = UserReservation::find($request->user_reservation_id);
+        if(!$userReservation)
+            return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
+
+        $observation = new UserReservationObservationsHistory();
+        $observation->user_reservation_id = $request->user_reservation_id;
+        $observation->user_id = Auth::user()->id;
+        $observation->observation = $request->observation;
+        $observation->save();
+
+        $observation = UserReservationObservationsHistory::with(UserReservationObservationsHistory::RELATIONS)->find($observation->id);
+        return response(compact("observation"));
+    }
+
 }
