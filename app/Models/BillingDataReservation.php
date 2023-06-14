@@ -11,7 +11,10 @@ class BillingDataReservation extends Model
 
     protected $table = "billing_data_reservations";
 
-    
+    protected $casts = [
+        "tax_condition" => 'json'
+    ];
+
     protected $fillable = [
         'user_reservation_id',
         'name',
@@ -20,7 +23,9 @@ class BillingDataReservation extends Model
         'dni',
         'invoice_A',
         'cuit',
-        'nationality_id'
+        'nationality_id',
+        'business_name',
+        'tax_condition',
     ];
     
     public function user_reservation()

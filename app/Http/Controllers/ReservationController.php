@@ -128,7 +128,10 @@ class ReservationController extends Controller
 
     public function getAllReservation($id)
     {
-        return $this->model::with($this->model::SHOW)->find($id);
+        $reservation = $this->model::with($this->model::SHOW)->find($id);
+        $reservation->encrypted_id = Crypt::encryptString($reservation->id);
+        $reservation->encrypted_reservation_number = Crypt::encryptString($reservation->reservation_number);
+        return $reservation;
     }
     /**
      * Show the form for editing the specified resource.
