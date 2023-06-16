@@ -252,8 +252,8 @@ Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtio
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
 
-Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']); 
-Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store']); 
+Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']);
+Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']); 
 
 Route::post('paxs', [PaxController::class, 'store']);
 
