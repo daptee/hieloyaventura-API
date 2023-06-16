@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
+use App\Http\Requests\UpdateUserReservationStatusRequest;
 use App\Mail\RegistrationPassword;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
@@ -133,7 +134,7 @@ class UserReservationController extends Controller
                     //Pasar el last name como nullable porque en el name le pasará el fullname y el lastname se completará en null o vacio
                 //biling data reservation
                     if(isset($datos['billing_data'])) {
-                        BillingDataReservation::create($datos['billing_data'] + ['user_reservation_id' => $newUserReservation->id]);
+                        BillingDataReservation::create($datos['billing_data'] + ['user_reservation_id' => $newUserReservation->id ]);
                     }
                 //contact data reservation
                     if(isset($datos['contact_data'])) {
@@ -220,7 +221,7 @@ class UserReservationController extends Controller
     {
         $userReservation = $id;
 
-        $datos = $request->only(['reservation_status_id', 'payment_id', 'payment_details', 'email']);
+        $datos = $request->only(['reservation_status_id', 'payment_details']);
 
         DB::beginTransaction();
         try {
@@ -241,8 +242,17 @@ class UserReservationController extends Controller
                         'data'                  => $datos['payment_details']
                     ]);
                     break;
+                case ReservationStatus::AUTOMATIC_CANCELED:
+                        $userReservation->is_paid = 0;
+                        $status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                        $userReservation->reservation_status_id = $status_id;
+                        
+                        break;
                 default:
-                    return response(["message" => "El update solo recibe estatus de REJECTED o PAX_PENDING Error: URU0001", "error" => "EL reservation_status_id no es valido"], 422);
+                    return response([
+                        "message" => "El update solo recibe estatus de REJECTED o PAX_PENDING o AUTOMATIC_CANCELED Error: URU0001",
+                        "error" => "EL reservation_status_id no es valido"
+                    ], 422);
                     break;
             }
 
@@ -259,47 +269,6 @@ class UserReservationController extends Controller
         }
 
         return response()->json(["La reserva fue actualizada con éxito", $userReservation]);
-
-        // $message = "Error al editar {$this->s}.";
-        // $datos = $request->all();
-
-        // DB::beginTransaction();
-        // try {
-        //     if (isset($datos['user'])) {
-        //         $user = User::createUser($datos['user']);
-        //     }
-        //     $id->update($datos + ['user_id' => $datos['user_id']]);
-
-        //     $data = UserReservation::with(['user'])->findOrFail($id->id);
-        //     if ($id->reservation_status_id == ReservationStatus::REJECTED) {
-        //         RejectedReservation::create([
-        //             'reservation_id' => $id->id,
-        //         ]);
-        //     }
-        //     if ($id->reservation_status_id == ReservationStatus::COMPLETED) {
-        //         $data->title = "Factura de compra";
-        //         try {
-        //             $pdf = PDF::loadView('emails.bill', compact('data'));
-
-        //             Mail::send('emails.bill', compact('data'), function ($message) use ($data, $pdf) {
-        //                 $message->to($data->user->email, $data->user->email)
-        //                     ->subject($data->title)
-        //                     ->attachData($pdf->output(), "Billing.pdf");
-        //             });
-        //         } catch (\Throwable$th) {
-        //         }
-        //     }
-        // } catch (ModelNotFoundException $error) {
-        //     DB::rollBack();
-        //     return response(["message" => "No se encontro {$this->pr} {$this->s}.", "error" => $error->getMessage()], 404);
-        // } catch (Exception $error) {
-        //     DB::rollBack();
-        //     return response(["message" => $message, "error" => $error->getMessage() . $error->getLine()], 500);
-        // }
-        // DB::commit();
-        // $data = $this->model::with($this->model::SHOW)->findOrFail($id->id);
-        // $message = "Se ha editado {$this->pr} {$this->s} correctamente.";
-        // return response(compact("message", "data"));
     }
 
     /**
