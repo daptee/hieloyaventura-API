@@ -212,7 +212,7 @@ class ReservationController extends Controller
 
     public function update_internal_closed(Request $request, $id)
     {
-        $userReservation = $this->getAllReservation($id);
+        $userReservation = UserReservation::find($request->user_reservation_id);
 
         if(!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
@@ -220,7 +220,7 @@ class ReservationController extends Controller
         $userReservation->internal_closed = $request->internal_closed;
         $userReservation->save();
 
-        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+        $userReservation = $this->getAllReservation($id);
 
         return response(compact("userReservation"));
     }
