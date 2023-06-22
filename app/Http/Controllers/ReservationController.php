@@ -212,7 +212,7 @@ class ReservationController extends Controller
 
     public function update_internal_closed(Request $request, $id)
     {
-        $userReservation = UserReservation::find($request->user_reservation_id);
+        $userReservation = UserReservation::find($id);
 
         if(!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
