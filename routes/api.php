@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
@@ -323,6 +324,11 @@ Route::post('reservations/resend/email_welcome', [ReservationController::class, 
 Route::post('reservations/resend/email_voucher', [ReservationController::class, 'resend_email_voucher'])->middleware(['jwt.verify']);
 Route::post('reservations/update/internal_closed/{id}', [ReservationController::class, 'update_internal_closed'])->middleware(['jwt.verify']);
 Route::post('reservations/new/observation', [ReservationController::class, 'new_observation'])->middleware(['jwt.verify']);
+
+// Agency users 
+Route::get('agency/users', [AgencyUserController::class, 'index']);
+Route::post('agency/users', [AgencyUserController::class, 'store']);
+Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
