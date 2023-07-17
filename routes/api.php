@@ -46,6 +46,7 @@ use GuzzleHttp\Client;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('login/admin', 'login_admin');
+    Route::post('login/agency/user', 'login_agency_user');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
