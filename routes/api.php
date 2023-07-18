@@ -330,6 +330,7 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 Route::get('agency/users', [AgencyUserController::class, 'index']);
 Route::post('agency/users', [AgencyUserController::class, 'store']);
 Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
+Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

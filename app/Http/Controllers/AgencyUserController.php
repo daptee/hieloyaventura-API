@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgencyUser;
+use App\Models\AgencyUserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -59,5 +60,11 @@ class AgencyUserController extends Controller
         $user = AgencyUser::getAllDataUser($user->id);
 
         return response(compact("user"));
+    }
+
+    public function types_user_agency(Request $request)
+    {
+        $types_user = AgencyUserType::all();
+        return response(compact("types_user"));
     }
 }
