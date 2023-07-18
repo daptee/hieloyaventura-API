@@ -104,6 +104,10 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::put('/{id}/admin', 'update_admin');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
+
+    Route::post('agency/users', [AgencyUserController::class, 'store']);
+    Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
+    Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 });
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
@@ -328,9 +332,8 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 
 // Agency users 
 Route::get('agency/users', [AgencyUserController::class, 'index']);
-Route::post('agency/users', [AgencyUserController::class, 'store']);
-Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
+Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
