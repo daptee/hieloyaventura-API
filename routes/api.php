@@ -101,6 +101,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
         Route::post('/', 'store');
         // Route::post('/create/admin', 'store_admin');
         Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
         Route::put('/{id}/admin', 'update_admin');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
@@ -325,6 +326,7 @@ Route::get('curl/test-api-cancelar/reserva', function() {
 Route::get('modules/user', [UserController::class, 'get_modules']);
 
 Route::resource('reservations', ReservationController::class)->middleware(['jwt.verify']);
+Route::post('reservations/change/assigned_user', [ReservationController::class, 'change_assigned_user'])->middleware(['jwt.verify']);
 Route::post('reservations/resend/email_welcome', [ReservationController::class, 'resend_email_welcome'])->middleware(['jwt.verify']);
 Route::post('reservations/resend/email_voucher', [ReservationController::class, 'resend_email_voucher'])->middleware(['jwt.verify']);
 Route::post('reservations/update/internal_closed/{id}', [ReservationController::class, 'update_internal_closed'])->middleware(['jwt.verify']);
