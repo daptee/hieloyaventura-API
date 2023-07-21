@@ -59,6 +59,13 @@ class UserController extends Controller
         return response(compact("users", "total", "total_per_page", "current_page", "last_page"));
     }
 
+    public function get_all_with_out_filters()
+    {
+        $users = User::with($this->model::INDEX)->get();
+        return response(compact("users"));
+    }
+
+
     // public function store(StoreUserRequest $request)
     // {
         // $message = "Error al crear en la {$this->s}.";

@@ -98,6 +98,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     Route::prefix('users')->controller(UserController::class)->group(function () {
         Route::get('/', 'index');
+        Route::get('/get_all/with_out_filters', 'get_all_with_out_filters');
         Route::post('/', 'store');
         // Route::post('/create/admin', 'store_admin');
         Route::post('/{id}', 'update');
