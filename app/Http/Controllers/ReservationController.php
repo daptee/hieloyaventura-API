@@ -6,8 +6,10 @@ use App\Mail\RegistrationPassword;
 use App\Models\User;
 use App\Models\UserReservation;
 use App\Models\UserReservationObservationsHistory;
+use App\Models\UserType;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -244,6 +246,23 @@ class ReservationController extends Controller
 
         $observation = UserReservationObservationsHistory::with(UserReservationObservationsHistory::RELATIONS)->find($observation->id);
         return response(compact("observation"));
+    }
+
+    public function change_assigned_user(Request $request)
+    {
+        $request->validate([
+            "reservation_id" => ['required', 'integer', Rule::exists('user_reservations', 'id')],
+            "new_user_id" => ['required', 'integer', Rule::exists('users', 'id')],
+        ]);
+
+        if(Auth::user()->type_user == UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
+
+        $userReservation = UserReservation::find($request->reservation_id);
+        $userReservation->user_id = $request->new_user_id;
+        $userReservation->save();
+
+        return response(["message" => "Usuario asignado a la reserva con exito.", "userReservation" => $userReservation]);
     }
 
 }

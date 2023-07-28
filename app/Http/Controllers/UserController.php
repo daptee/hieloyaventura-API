@@ -6,13 +6,16 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\recoverPasswordMailable;
+use App\Mail\UserReservation;
 use App\Models\Module;
 use App\Models\User;
 use App\Models\UserModule;
+use App\Models\UserReservation as ModelsUserReservation;
 use App\Models\UserType;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
@@ -55,6 +58,13 @@ class UserController extends Controller
 
         return response(compact("users", "total", "total_per_page", "current_page", "last_page"));
     }
+
+    public function get_all_with_out_filters()
+    {
+        $users = User::with($this->model::INDEX)->get();
+        return response(compact("users"));
+    }
+
 
     // public function store(StoreUserRequest $request)
     // {
@@ -271,5 +281,25 @@ class UserController extends Controller
     public function get_modules()
     {
         return response()->json(['modules' => Module::all()]);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        
+        if(!$user)
+            return response(["message" => "ID Usuario invalido."], 422);
+
+        if(Auth::user()->type_user == UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
+        
+        $count_user_reservations = ModelsUserReservation::where('user_id', $id)->count();
+
+        if($count_user_reservations > 0)
+            return response(["message" => "Este usuario posee reservas asociadas."], 422);
+
+        $user->delete();
+
+        return response()->json(['message' => 'Usuario eliminado con exito.'], 200);
     }
 }

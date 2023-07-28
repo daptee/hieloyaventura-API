@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'agency' => [
+            'driver' => 'jwt',
+            'provider' => 'agency_users',
+        ],
     ],
 
     /*
@@ -69,6 +74,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'agency_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AgencyUser::class,
+        ],
     ],
 
     /*
@@ -92,6 +102,12 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
+        ],
+
+        'agency_users' => [
+            'provider' => 'agency_users',
+            'table' => 'password_resets',
+            'expire' => 60,
         ],
     ],
 

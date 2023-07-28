@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
@@ -45,6 +46,7 @@ use GuzzleHttp\Client;
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('login/admin', 'login_admin');
+    Route::post('login/agency/user', 'login_agency_user');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
@@ -96,12 +98,18 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     Route::prefix('users')->controller(UserController::class)->group(function () {
         Route::get('/', 'index');
+        Route::get('/get_all/with_out_filters', 'get_all_with_out_filters');
         Route::post('/', 'store');
         // Route::post('/create/admin', 'store_admin');
         Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
         Route::put('/{id}/admin', 'update_admin');
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
+
+    Route::post('agency/users', [AgencyUserController::class, 'store']);
+    Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
+    Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 });
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
@@ -319,10 +327,16 @@ Route::get('curl/test-api-cancelar/reserva', function() {
 Route::get('modules/user', [UserController::class, 'get_modules']);
 
 Route::resource('reservations', ReservationController::class)->middleware(['jwt.verify']);
+Route::post('reservations/change/assigned_user', [ReservationController::class, 'change_assigned_user'])->middleware(['jwt.verify']);
 Route::post('reservations/resend/email_welcome', [ReservationController::class, 'resend_email_welcome'])->middleware(['jwt.verify']);
 Route::post('reservations/resend/email_voucher', [ReservationController::class, 'resend_email_voucher'])->middleware(['jwt.verify']);
 Route::post('reservations/update/internal_closed/{id}', [ReservationController::class, 'update_internal_closed'])->middleware(['jwt.verify']);
 Route::post('reservations/new/observation', [ReservationController::class, 'new_observation'])->middleware(['jwt.verify']);
+
+// Agency users 
+Route::get('agency/users', [AgencyUserController::class, 'index']);
+Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
+Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgencyUser;
+use App\Models\AgencyUserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use JWTAuth;
+// use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Log;
 use JWT;
@@ -12,7 +14,9 @@ use App\Services\JwtService;
 use App\Models\User;
 use App\Models\Module;
 use App\Models\UserType;
+use Faker\Provider\UserAgent;
 use Illuminate\Support\Facades\Session;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller{
 
@@ -88,6 +92,22 @@ class AuthController extends Controller{
         ]);
     }
 
+    protected function respondWithTokenAgency($token, $id){
+        $expire_in = config('jwt.ttl');
+        $user = AgencyUser::getAllDataUser($id);
+        $data = [
+            'user' => $user,
+        ];
+
+        return response()->json([
+            'message' => 'Login exitoso.',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => $expire_in * 60,
+            'data' => $data
+        ]);
+    }
+
     public function login_admin(Request $request)
     {
         $request->validate([
@@ -114,4 +134,24 @@ class AuthController extends Controller{
         return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
     }
 
+    public function login_agency_user(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // User agency 
+        $user_to_validate = AgencyUser::where('email', $request->email)->first();
+
+        if(!isset($user_to_validate) || !in_array($user_to_validate->agency_user_type_id, [AgencyUserType::ADMIN, AgencyUserType::VENDEDOR]))
+            return response()->json(['message' => 'Email no existente o el usuario no pertenece a una agencia.'], 400);
+        
+        $credentials = $request->only('email', 'password');
+
+        if (! $token = Auth::guard('agency')->attempt($credentials))
+            return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
+
+        return $this->respondWithTokenAgency($token, $user_to_validate->id);
+    }
 }
