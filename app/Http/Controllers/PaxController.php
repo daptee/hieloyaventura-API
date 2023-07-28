@@ -311,8 +311,8 @@ class PaxController extends Controller
         //Textos
         $thanks                  = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
         $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
-        $contactFullName         = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
-        $contactName             = iconv('UTF-8', 'cp1250', $newUserReservation->contact_data->name);
+        $contactFullName         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
+        $contactName             = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name);
         $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
         $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $newUserReservation->reservation_paxes->sum('quantity') . "x $excurtionName");
         $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
