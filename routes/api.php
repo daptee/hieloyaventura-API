@@ -187,6 +187,7 @@ Route::post('testeando-curl-post', function() {
 });
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
+Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics']);
 
 Route::post('process-cv', function(Request $request) {
     try {
@@ -264,6 +265,7 @@ Route::get('web/general_configuration', [GeneralConfigurationsController::class,
 Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']); 
 
 Route::post('paxs', [PaxController::class, 'store']);
+Route::post('agency_paxs', [PaxController::class, 'store_type_agency']);
 
 Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
@@ -337,6 +339,9 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 Route::get('agency/users', [AgencyUserController::class, 'index']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
 Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
+
+// Agency user reservations
+Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

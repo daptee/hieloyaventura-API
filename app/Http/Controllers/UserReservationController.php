@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserReservationAgencyRequest;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
@@ -19,6 +20,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -93,7 +95,7 @@ class UserReservationController extends Controller
         try {
             DB::beginTransaction();
                 // Crear un usuario si se manda "create_user" en true
-                $user = User::where('email', $datos['contact_data']['email'])->first();
+                $user = User::where('email', $datos['contact_data']['email'])->first(); // Busco el usuario en DB
                     if ($datos['create_user'] and isset($datos['contact_data']) and !$user) {
                         $pass = Str::random(8);
                         $passHashed = Hash::make($pass);
@@ -111,6 +113,13 @@ class UserReservationController extends Controller
                         //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
                             // ...
                         //
+                    }else{
+                        Log::debug(print_r([
+                            "create_user" => $datos['create_user'],
+                            "contact_data" => $datos['contact_data'],
+                            "user" => $user,
+                            "error" => "No se creo el usuario ni tampoco envio de mail."
+                        ],  true));
                     }
                 //
 
@@ -140,6 +149,44 @@ class UserReservationController extends Controller
                     if(isset($datos['contact_data'])) {
                         ContactDataReservation::create($datos['contact_data'] + ['user_reservation_id' => $newUserReservation->id]);
                     }
+                //
+
+            DB::commit();
+        } catch (ModelNotFoundException $error) {
+            DB::rollBack();
+            return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
+        } catch (Exception $error) {
+            DB::rollBack();
+            Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
+            return response(["message" => $message, "error" => "URC0001"], 500);
+        }
+
+        $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
+        $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
+
+        return response(compact("message", "newUserReservation"));
+    }
+
+    public function store_type_agency(StoreUserReservationAgencyRequest $request)
+    {
+        $message = "Error al crear en la {$this->s}.";
+        $datos = $request->all();
+    
+        // validar token -> agency
+        if(Auth::guard('agency')->user()->agency_code != $request->agency_code)
+            return response(["message" => "agency_id invalido"], 400);
+
+        try {
+            DB::beginTransaction();
+                //Creo el registro en user_reservations
+                    $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
+                    $newUserReservation->user_id = null;
+                    $newUserReservation->agency_id = $request->agency_code;
+                    $newUserReservation->language_id = 1;
+                    $newUserReservation->save();
+
+                    // Guardo status en historial
+                    UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
                 //
 
             DB::commit();

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -127,6 +128,63 @@ class PaxController extends Controller
 
                 if(isset($pathReservationZip))
                     File::delete($pathReservationZip);
+
+            });
+
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros", $th->getLine()],  true));
+            return response(["error" => $th->getMessage()], 500);
+        }
+
+        return response(["message" => "Pasajeros guardados con exito"], 200);
+    }
+
+    public function store_type_agency(StorePaxRequest $request)
+    {
+        $userReservation = UserReservation::find($request->user_reservation_id);
+
+        if(Auth::guard('agency')->user()->agency_code != $userReservation->agency_id)
+            return response(["message" => "No puede realizar esta accion"], 400);
+
+        if(!isset($userReservation))
+            return response(["message" => "User Reservation ID Invalido."], 422);
+
+        $paxs = $request->paxs;
+
+        try {
+            DB::transaction(function () use ($paxs, $request, $userReservation) {
+                if (isset($paxs)) {
+                        $paxFiles = [];
+
+                        ini_set('memory_limit', '128M');
+                        foreach ($paxs as $pax) {
+                            $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                            if($pax['files'] && count($pax['files']) != 0){
+                                foreach ($pax['files'] as $file) {
+                                    $fileName   = Str::random(5) . time() . '.' . $file->extension();
+                                    $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
+                                    $path = "/paxs/files/$request->user_reservation_id/$fileName";
+                                    
+                                    $paxFiles[] = [
+                                        'pax_id' => $new_pax->id,
+                                        'url' => $path,
+                                    ];
+                                }
+                            }
+                        }
+
+                        if (!empty($paxFiles)) {
+                            PaxFile::insert($paxFiles);
+                        }
+                }
+
+                $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
+                $userReservation->save();
+
+                $user_reservation_status = new UserReservationStatusHistory();
+                $user_reservation_status->status_id = ReservationStatus::COMPLETED;
+                $user_reservation_status->user_reservation_id = $userReservation->id;
+                $user_reservation_status->save();
 
             });
 
