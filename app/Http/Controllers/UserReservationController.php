@@ -154,10 +154,11 @@ class UserReservationController extends Controller
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
+            Log::debug( print_r(["Error al crear la reserva (1er catch, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage(), $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
@@ -195,7 +196,7 @@ class UserReservationController extends Controller
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r([$error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage(), $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
@@ -235,14 +236,18 @@ class UserReservationController extends Controller
 
     public function getByReservationNumberEncrypted($reservation_number_encrypted)
     {
-        $reservation_number_decrypted = Crypt::decryptString($reservation_number_encrypted);
-        $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number_decrypted)->first();
+        try {
+            $reservation_number_decrypted = Crypt::decryptString($reservation_number_encrypted);
+            $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number_decrypted)->first();
 
-        if(is_null($userReservation))
-            return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
+            if(is_null($userReservation))
+                return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
-        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
-        return $userReservation;
+            $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+            return $userReservation;
+        } catch (Exception $error) {
+            Log::debug( print_r(["Error al obtener reservation by number encrypted, detalle: " . $error->getMessage(), $error->getLine()], true));
+        }
     }
 
 
@@ -312,6 +317,7 @@ class UserReservationController extends Controller
         DB::commit();
         } catch (Exception $error) {
             DB::rollBack();
+            Log::debug( print_r(["Error al hacer update de la reserva, detalle: " . $error->getMessage(), $error->getLine()], true));
             return response(["message" => "Tuvimos un problema en el servidor Error: URU0002", "error" => $error->getMessage()], 500);
         }
 
