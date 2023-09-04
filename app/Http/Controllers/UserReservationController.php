@@ -158,7 +158,7 @@ class UserReservationController extends Controller
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
@@ -193,10 +193,11 @@ class UserReservationController extends Controller
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
+            Log::debug( print_r(["Error al crear la reserva (agencia) (1er catch, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
@@ -225,13 +226,17 @@ class UserReservationController extends Controller
 
     public function getByReservationNumber($reservation_number)
     {
-        $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number)->first();
+        try {
+            $userReservation = UserReservation::with(['user','status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->where('reservation_number', $reservation_number)->first();
 
-        if(is_null($userReservation))
-            return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
+            if(is_null($userReservation))
+                return response(["message" => "No se ha encontrado una reserva para este numero de reserva"], 422);
 
-        $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
-        return $userReservation;
+            $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
+            return $userReservation;
+        } catch (Exception $error) {
+            Log::debug( print_r(["Error al obtener reservation by number, detalle: " . $error->getMessage(), $error->getLine()], true));
+        }
     }
 
     public function getByReservationNumberEncrypted($reservation_number_encrypted)
