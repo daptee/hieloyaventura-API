@@ -113,13 +113,6 @@ class UserReservationController extends Controller
                         //Si se encuentra, ponerle a todos esos user_reservations, en el user_id, el id del nuevo usuario creado ($user->id)
                             // ...
                         //
-                    }else{
-                        Log::debug(print_r([
-                            "create_user" => $datos['create_user'],
-                            "contact_data" => $datos['contact_data'],
-                            "user" => $user,
-                            "error" => "No se creo el usuario ni tampoco envio de mail."
-                        ],  true));
                     }
                 //
 
