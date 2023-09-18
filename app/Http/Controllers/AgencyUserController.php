@@ -49,22 +49,25 @@ class AgencyUserController extends Controller
 
     public function update(Request $request, $id)
     {
+        if(!isset(Auth::guard('agency')->user()->agency_code))
+            return response()->json(['message' => 'Token is invalid.'], 400);
+
         $request->validate([
-            "agency_user_type_id" => 'required',
-            "user" => 'required',
+            // "agency_user_type_id" => 'required',
+            // "user" => 'required',
             "name" => 'required',
             "last_name" => 'required',
             "email" => 'required|unique:agency_users,email,' . $id,
-            "agency_code" => 'required',
+            // "agency_code" => 'required',
         ]);
 
         $user = AgencyUser::find($id);
-        $user->agency_user_type_id = $request->agency_user_type_id;
-        $user->user = $request->user;
+        // $user->agency_user_type_id = $request->agency_user_type_id;
+        // $user->user = $request->user;
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
-        $user->agency_code = $request->agency_code;
+        // $user->agency_code = $request->agency_code;
         
         if($request->password)
             $user->password = Hash::make($request->password);
