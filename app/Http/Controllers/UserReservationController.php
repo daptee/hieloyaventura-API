@@ -91,7 +91,7 @@ class UserReservationController extends Controller
     {
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
-
+        $reservation_number = $datos['reservation_number'];
         try {
             DB::beginTransaction();
                 // Crear un usuario si se manda "create_user" en true
@@ -151,7 +151,7 @@ class UserReservationController extends Controller
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
+            Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage() . " datos a cargar: $datos, nro reserva: $reservation_number", $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
