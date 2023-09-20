@@ -260,6 +260,8 @@ Route::post('online-return', function(Request $request) {
 Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtion']);
 
 Route::post('recover-password', [UserController::class, 'recover_password_user']);
+Route::post('agency-recover-password-user', [UserController::class, 'agency_recover_password_user']);
+
 
 Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']);
 Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']); 

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\recoverPasswordMailable;
 use App\Mail\UserReservation;
+use App\Models\AgencyUser;
 use App\Models\Module;
 use App\Models\User;
 use App\Models\UserModule;
@@ -275,7 +276,31 @@ class UserController extends Controller
         }
        
         return response()->json(['message' => 'Correo enviado con exito.'], 200);
+    }
+
+    public function agency_recover_password_user(Request $request)
+    {
+        $user = AgencyUser::where('email', $request->email)->first();
+
+        if(!$user)
+            return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
         
+        try {
+            $new_password = Str::random(16);
+            $user->password = Hash::make($new_password);
+            $user->save();
+            
+            $data = [
+                'name' => $user->nombre,
+                'email' => $user->email,
+                'password' => $new_password,
+            ];
+            Mail::to($user->email)->send(new recoverPasswordMailable($data));
+        } catch (Exception $error) {
+            return response(["error" => $error->getMessage()], 500);
+        }
+       
+        return response()->json(['message' => 'Correo enviado con exito.'], 200);
     }
 
     public function get_modules()
