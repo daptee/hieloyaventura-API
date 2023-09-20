@@ -280,6 +280,10 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 1;
                     $status_id = ReservationStatus::PAX_PENDING;
                     $userReservation->reservation_status_id = $status_id;
+                    Log::debug([
+                        "Response confirma pasajeros" => $request->response_cp,
+                        "Comportamiento funcion" => $request->funcion_part 
+                    ]);
                     
                     break;
                 case ReservationStatus::REJECTED:
