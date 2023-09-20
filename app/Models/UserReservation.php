@@ -19,7 +19,6 @@ class UserReservation extends Model
     protected $casts = [
         'turn' => 'datetime:H:i',
         'date' => 'datetime:Y-m-d',
-        'response_cp' => 'json'
     ];
 
     const SHOW = [
@@ -62,8 +61,6 @@ class UserReservation extends Model
         'notifications_accepted',
         'reservation_checked',
         'internal_closed',
-        'response_cp',
-        'function_part'
     ];
 
     public function user(): BelongsTo
