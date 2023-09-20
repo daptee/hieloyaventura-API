@@ -278,6 +278,8 @@ class UserReservationController extends Controller
             switch ($datos['reservation_status_id']) {
                 case ReservationStatus::PAX_PENDING:
                     $userReservation->is_paid = 1;
+                    $userReservation->response_cp = $request->response_cp;
+                    $userReservation->function_part = $request->function_part;
                     $status_id = ReservationStatus::PAX_PENDING;
                     $userReservation->reservation_status_id = $status_id;
                     
