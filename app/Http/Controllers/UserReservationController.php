@@ -186,11 +186,13 @@ class UserReservationController extends Controller
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al crear la reserva (agencia) (1er catch, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'];
+            Log::debug( print_r(["Error al crear la reserva (agencia) (1er catch, detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'];
+            Log::debug( print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
