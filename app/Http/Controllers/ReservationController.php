@@ -56,8 +56,16 @@ class ReservationController extends Controller
             ->when($request->reservation_status_id !== null, function ($query) use ($request) {
                 return $query->where('reservation_status_id', $request->reservation_status_id);
             })
+            // ->when($request->q !== null, function ($query) use ($request) {
+            //     return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
+            // })
             ->when($request->q !== null, function ($query) use ($request) {
-                return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
+                return  $query->where(function ($query) use ($request) {
+                        $query->where('reservation_number', 'LIKE', '%'.$request->q.'%')
+                              ->orWhereHas('user', function ($q) use ($request) {
+                                $q->where('email', 'LIKE', '%'.$request->q.'%');
+                              });
+                });
             })
             ->when($request->internal_closed !== null, function ($query) use ($request) {
                 return $query->where('internal_closed', $request->internal_closed);

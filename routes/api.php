@@ -155,6 +155,15 @@ Route::get('/clear-cache', function() {
     ]);
 });
 
+Route::get('/clear-tokens', function() {
+    Artisan::call('passport:purge');
+    Artisan::call('passport:install');
+
+    return response()->json([
+        "message" => "Tokens config successfully"
+    ]);
+});
+
 Route::get('/storage-link', function(){
     Artisan::call('storage:link');
 
