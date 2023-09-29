@@ -322,7 +322,7 @@ class UserReservationController extends Controller
         DB::commit();
         } catch (Exception $error) {
             DB::rollBack();
-            Log::debug( print_r(["Error al hacer update de la reserva, detalle: " . $error->getMessage(), $error->getLine()], true));
+            Log::debug( print_r(["Error al hacer update de la reserva, nro reserva $userReservation->reservation_number, detalle: " . $error->getMessage(), $error->getLine()], true));
             return response(["message" => "Tuvimos un problema en el servidor Error: URU0002", "error" => $error->getMessage()], 500);
         }
 
