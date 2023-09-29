@@ -39,11 +39,13 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            'expire' => 1440,
         ],
 
         'agency' => [
             'driver' => 'jwt',
             'provider' => 'agency_users',
+            'expire' => 1440,
         ],
     ],
 
