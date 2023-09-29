@@ -283,8 +283,9 @@ class UserReservationController extends Controller
                     $status_id = ReservationStatus::PAX_PENDING;
                     $userReservation->reservation_status_id = $status_id;
                     Log::debug([
-                        "Response confirma pasajeros" => $request->response_cp,
-                        "Comportamiento funcion" => $request->funcion_part 
+                        "Response confirma reserva" => $request->response_cp,
+                        "Comportamiento funcion" => $request->funcion_part,
+                        "Nro de reserva" => $userReservation->reservation_number 
                     ]);
                     
                     break;
