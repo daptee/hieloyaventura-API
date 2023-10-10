@@ -17,6 +17,7 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaxController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationStatusController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
@@ -110,7 +111,13 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
+
+    Route::post('tickets', [TicketController::class, 'store']);
+    Route::post('tickets/message', [TicketController::class, 'message']);
+    Route::post('tickets/change/status', [TicketController::class, 'change_status']);
 });
+
+Route::get('tickets', [TicketController::class, 'index']);
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
     Route::get('/', 'index');
