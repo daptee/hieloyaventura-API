@@ -305,6 +305,24 @@ class UserReservationController extends Controller
                         $userReservation->reservation_status_id = $status_id;
                         
                         break;
+                case ReservationStatus::PAYMENT_CONFIRMED:
+                        $userReservation->is_paid = 0;
+                        $status_id = ReservationStatus::PAYMENT_CONFIRMED;
+                        $userReservation->reservation_status_id = $status_id;
+                            
+                        break;
+                case ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR:
+                    $userReservation->is_paid = 0;
+                    $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
+                    $userReservation->reservation_status_id = $status_id;
+                        
+                    break;
+                case ReservationStatus::CANCELED_MANUAL:
+                    $userReservation->is_paid = 0;
+                    $status_id = ReservationStatus::CANCELED_MANUAL;
+                    $userReservation->reservation_status_id = $status_id;
+                        
+                    break;
                 default:
                     return response([
                         "message" => "El update solo recibe estatus de REJECTED o PAX_PENDING o AUTOMATIC_CANCELED Error: URU0001",
