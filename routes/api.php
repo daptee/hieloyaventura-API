@@ -5,13 +5,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ExcurtionCharacteristicController;
 use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\GeneralConfigurationsController;
 use App\Http\Controllers\GroupExcurtionController;
 use App\Http\Controllers\LenguageController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaxController;
@@ -21,15 +21,10 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
-use App\Mail\GroupExcurtion;
-use App\Mail\NotificacionPasajero;
 use App\Mail\OnlineReturn;
 use App\Mail\ProcessCv;
-use App\Mail\ReturnContact;
 use App\Mail\TestMail;
-use App\Models\UserReservation;
 use App\Models\Lenguage;
-use App\Models\ReservationStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -38,10 +33,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
@@ -118,6 +110,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 });
 
 Route::get('tickets', [TicketController::class, 'index']);
+
+Route::post('create/log', [LogController::class, 'store_log']);
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
     Route::get('/', 'index');
