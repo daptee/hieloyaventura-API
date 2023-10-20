@@ -283,11 +283,11 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 1;
                     $status_id = ReservationStatus::PAX_PENDING;
                     $userReservation->reservation_status_id = $status_id;
-                    Log::debug([
-                        "Response confirma reserva" => $request->response_cp,
-                        "Comportamiento funcion" => $request->funcion_part,
-                        "Nro de reserva" => $userReservation->reservation_number 
-                    ]);
+                    // Log::debug([
+                    //     "Response confirma reserva" => $request->response_cp,
+                    //     "Comportamiento funcion" => $request->funcion_part,
+                    //     "Nro de reserva" => $userReservation->reservation_number 
+                    // ]);
                     
                     break;
                 case ReservationStatus::REJECTED:
@@ -316,11 +316,19 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 0;
                     $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
                     $userReservation->reservation_status_id = $status_id;
-
+                    Log::debug([
+                        "Response confirma reserva" => $request->response_cp,
+                        "Comportamiento funcion" => $request->funcion_part,
+                        "Nro de reserva" => $userReservation->reservation_number 
+                    ]);
                     $last_status = UserReservationStatusHistory::where('user_reservation_id', $userReservation->id)->orderBy('created_at', 'DESC')->first();
                     // Email de notificacion error confirmacion inape
                     try {
-                        if($last_status->status_id != $status_id){
+                        if(isset($last_status)){
+                            if($last_status->status_id != $status_id){
+                                Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                            }
+                        }else{
                             Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
                         }
                     } catch (\Throwable $th) {
