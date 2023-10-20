@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserReservationAgencyRequest;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
+use App\Mail\NotificationErrorConfirmationInape;
 use App\Mail\RegistrationPassword;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
@@ -315,6 +316,17 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 0;
                     $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
                     $userReservation->reservation_status_id = $status_id;
+
+                    $last_status = UserReservationStatusHistory::where('user_reservation_id', $userReservation->id)->orderBy('created_at', 'DESC')->first();
+                    // Email de notificacion error confirmacion inape
+                    try {
+                        if($last_status->status_id != $status_id){
+                            Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                        }
+                    } catch (\Throwable $th) {
+                        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                    }
+                    //
                         
                     break;
                 case ReservationStatus::CANCELED_MANUAL:
