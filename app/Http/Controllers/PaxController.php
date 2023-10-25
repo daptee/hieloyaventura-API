@@ -62,31 +62,33 @@ class PaxController extends Controller
         $paxs = $request->paxs;
 
         try {
-            DB::transaction(function () use ($paxs, $request, $userReservation) {
+            DB::beginTransaction();
+            // DB::transaction(function () use ($paxs, $request, $userReservation) {
+            
                 if (isset($paxs)) {
-                        $paxFiles = [];
+                    $paxFiles = [];
 
-                        ini_set('memory_limit', '128M');
-                        foreach ($paxs as $pax) {
-                            $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                            if($pax['files'] && count($pax['files']) != 0){
-                                foreach ($pax['files'] as $file) {
-                                    $fileName   = Str::random(5) . time() . '.' . $file->extension();
-                                    $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
-                                    $path = "/paxs/files/$request->user_reservation_id/$fileName";
-                                    
-                                    $paxFiles[] = [
-                                        'pax_id' => $new_pax->id,
-                                        'url' => $path,
-                                    ];
-                                }
+                    ini_set('memory_limit', '128M');
+                    foreach ($paxs as $pax) {
+                        $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
+                        if($pax['files'] && count($pax['files']) != 0){
+                            foreach ($pax['files'] as $file) {
+                                $fileName   = Str::random(5) . time() . '.' . $file->extension();
+                                $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
+                                $path = "/paxs/files/$request->user_reservation_id/$fileName";
+                                
+                                $paxFiles[] = [
+                                    'pax_id' => $new_pax->id,
+                                    'url' => $path,
+                                ];
                             }
                         }
+                    }
 
-                        if (!empty($paxFiles)) {
-                            PaxFile::insert($paxFiles);
-                        }
-                }
+                    if (!empty($paxFiles)) {
+                        PaxFile::insert($paxFiles);
+                    }
+                }   
 
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
@@ -120,21 +122,23 @@ class PaxController extends Controller
                     }
                 }
                 
+                if(isset($pathReservationZip))
+                    File::delete($pathReservationZip);
+
+                DB::commit();
+                
                 try {
                     Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 } catch (Exception $error) {
                     Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()],  true));
-                    return response(["error" => $error->getMessage()], 600);
+                    return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
                 }
-
-                if(isset($pathReservationZip))
-                    File::delete($pathReservationZip);
-
-            });
+            // });
 
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", $th->getLine()],  true));
-            return response(["error" => $th->getMessage()], 500);
+            return response(["message" => "error en proceso general de carga de pasajeros", "error" => $th->getMessage(), "line" => $th->getLine()], 500);
         }
 
         return response(["message" => "Pasajeros guardados con exito"], 200);

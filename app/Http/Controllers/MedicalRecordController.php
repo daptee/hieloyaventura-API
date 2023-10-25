@@ -15,6 +15,9 @@ use App\Models\UserReservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Exception;
+use Illuminate\Support\Facades\DB;
 
 class MedicalRecordController extends Controller
 {
@@ -27,58 +30,63 @@ class MedicalRecordController extends Controller
 
     public function passenger_diseases(Request $request, $hash_reservation_number, $mail_to)
     {
-        $datos = $request->all();
-        $passengers_diseases = [];
-        $reservation_number = Crypt::decryptString($hash_reservation_number);
-        $mailto = $mail_to;
-       
-        foreach($datos as $passenger){
+        try {
+            DB::beginTransaction();
+               
+                $datos = $request->all();
+                $passengers_diseases = [];
+                $reservation_number = Crypt::decryptString($hash_reservation_number);
+                $mailto = $mail_to;
+            
+                foreach($datos as $passenger){
 
-            $this->delete_diseases($passenger['passenger_id']);
+                    $this->delete_diseases($passenger['passenger_id']);
 
-            $pax = Pax::find($passenger['passenger_id']); 
+                    $pax = Pax::find($passenger['passenger_id']); 
 
-            if(isset($pax)){
-                $pax->age         = $passenger['age'];
-                $pax->blood_type  = $passenger['blood_type'];
-                $pax->description = $passenger['description'];
-                $pax->save();
-            }
+                    if(isset($pax)){
+                        $pax->age         = $passenger['age'];
+                        $pax->blood_type  = $passenger['blood_type'];
+                        $pax->description = $passenger['description'];
+                        $pax->save();
+                    }
 
-            if(count($passenger['diseases'])){
-                foreach($passenger['diseases'] as $disease){
-                    $passenger_disease = new PassengerDisease();
-                    $passenger_disease->passenger_id = $passenger['passenger_id'];
-                    $passenger_disease->disease_id   = $disease;
-                    $passenger_disease->save();
+                    if(count($passenger['diseases'])){
+                        foreach($passenger['diseases'] as $disease){
+                            $passenger_disease = new PassengerDisease();
+                            $passenger_disease->passenger_id = $passenger['passenger_id'];
+                            $passenger_disease->disease_id   = $disease;
+                            $passenger_disease->save();
+                        }
+                    }
+                    
+                    $diseases = PassengerDisease::with(['disease'])->where('passenger_id', $passenger['passenger_id'])->get();
+                    $diseases_passenger = [];
+                    foreach ($diseases as $disease) {
+                        $diseases_passenger[] = $disease->disease->nombre;
+                    }
+
+                    $passengers_diseases[] = [
+                        'id' => $pax->id,
+                        'passenger_name' => $pax->name,
+                        'diseases' => $diseases_passenger
+                    ];
                 }
-            }
-            
-            $diseases = PassengerDisease::with(['disease'])->where('passenger_id', $passenger['passenger_id'])->get();
-            $diseases_passenger = [];
-            foreach ($diseases as $disease) {
-                $diseases_passenger[] = $disease->disease->nombre;
-            }
 
-            $passengers_diseases[] = [
-                'id' => $pax->id,
-                'passenger_name' => $pax->name,
-                'diseases' => $diseases_passenger
-            ];
+            DB::commit();
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::debug(print_r([$th->getMessage() . " - error en proceso de carga 'passenger_diseases'", $th->getLine()],  true));
+            return response(["message" => "error en proceso de carga 'passenger_diseases'", "error" => $th->getMessage(), "line" => $th->getLine()], 500);
         }
-    
-        // foreach($passengers_diseases as $passenger){
-        //     $diseases = PassengerDisease::with(['disease'])->where('passenger_id', $passenger['id'])->get();
-            
-        //     foreach ($diseases as $disease) {
-        //         $passenger['diseases'][] = [ 'nombre' => $disease->disease->nombre ];
-        //         // return $passenger;
-        //     }
-        // }
 
-        // return $passengers_diseases;
-
-        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordMailable($mailto, $passengers_diseases, $reservation_number));
+        try {
+            Mail::to('info@hieloyaventura.com')->send(new MedicalRecordMailable($mailto, $passengers_diseases, $reservation_number));
+        } catch (Exception $error) {
+            Log::debug(print_r([$error->getMessage() . " error en envio de mail a info@hieloyaventura.com en 'passenger diseases'", $error->getLine()],  true));
+            // return response(["message" => "error en envio de mail a info@hieloyaventura.com en 'passenger diseases'", "error" => $error->getMessage()], 600);
+        }
 
         return response()->json(['message' => "Guardado con exito!"]);
     }
@@ -106,7 +114,12 @@ class MedicalRecordController extends Controller
         $medical_record->passengers = json_encode($request->passengers);
         $medical_record->save();
 
-        Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $medical_record, $request->order_number));
+        try {
+            Mail::to('info@hieloyaventura.com')->send(new MedicalRecordExternalMailable("info@hieloyaventura.com", $medical_record, $request->order_number));
+        } catch (Exception $error) {
+            Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()],  true));
+            return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
+        }
 
         return response()->json(['medical_record' => $this->getAllMedicalRecord($medical_record)]);
     }
