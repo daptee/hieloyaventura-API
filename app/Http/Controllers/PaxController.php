@@ -8,6 +8,7 @@ use App\Models\Pax;
 use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
 use App\Mail\UserReservationAttachedPassengerFiles;
+use App\Models\AuditReservation;
 use App\Models\PaxFile;
 use Illuminate\Support\Facades\Log;
 use App\Models\UserReservation;
@@ -126,7 +127,7 @@ class PaxController extends Controller
                     File::delete($pathReservationZip);
 
                 DB::commit();
-                
+
                 try {
                     Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 } catch (Exception $error) {
@@ -138,9 +139,13 @@ class PaxController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", $th->getLine()],  true));
+            
+            AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Error en carga de pasajeros", "status" => "Error"]);
+           
             return response(["message" => "error en proceso general de carga de pasajeros", "error" => $th->getMessage(), "line" => $th->getLine()], 500);
         }
 
+        AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Carga de pasajeros", "status" => "Ok"]);
         return response(["message" => "Pasajeros guardados con exito"], 200);
     }
 

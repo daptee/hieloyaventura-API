@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\AuditReservation;
 use App\Models\ReservationStatus;
 use App\Models\UserReservation;
 use App\Models\UserReservationStatusHistory;
@@ -73,6 +74,8 @@ class CancelarReservas extends Command
                         $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
                         $user_reservation_status->user_reservation_id = $reservation->id;
                         $user_reservation_status->save();
+
+                        AuditReservation::store_audit_reservation($reservation->id, ["operation" => "Cancelado automatico", "status" => "Ok"]);
                     }
                 }
 
