@@ -138,11 +138,11 @@ class PaxController extends Controller
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", $th->getLine()],  true));
+            Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", "nro_reserva" => $userReservation->reservation_number, $th->getLine()],  true));
             
             AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Error en carga de pasajeros", "status" => "Error"]);
            
-            return response(["message" => "error en proceso general de carga de pasajeros", "error" => $th->getMessage(), "line" => $th->getLine()], 500);
+            return response(["message" => "error en proceso general de carga de pasajeros", "error" => $th->getMessage(), "line" => $th->getLine(), "nro_reserva" => $userReservation->reservation_number], 500);
         }
 
         AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Carga de pasajeros", "status" => "Ok"]);
@@ -199,7 +199,7 @@ class PaxController extends Controller
             });
 
         } catch (\Throwable $th) {
-            Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros (agencia)", $th->getLine()],  true));
+            Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine()],  true));
             return response(["error" => $th->getMessage()], 500);
         }
 
