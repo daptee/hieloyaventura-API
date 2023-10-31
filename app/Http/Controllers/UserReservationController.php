@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
 use App\Mail\NotificationErrorConfirmationInape;
 use App\Mail\RegistrationPassword;
+use App\Models\AuditReservation;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
 use App\Models\Pax;
@@ -149,12 +150,16 @@ class UserReservationController extends Controller
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
             Log::debug( print_r(["Error al crear la reserva (1er catch, detalle: " . $error->getMessage() . " datos a cargar: $datos", $error->getLine()], true));
+            AuditReservation::store_audit_reservation($newUserReservation->id, ["operation" => "Inicio de reserva", "status" => "Error"]);
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
             Log::debug( print_r(["Error al crear la reserva, detalle: " . $error->getMessage() . " datos a cargar: $datos, nro reserva: $reservation_number", $error->getLine()], true));
+            AuditReservation::store_audit_reservation($newUserReservation->id, ["operation" => "Inicio de reserva", "status" => "Error"]);
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
+
+        AuditReservation::store_audit_reservation($newUserReservation->id, ["operation" => "Inicio de reserva", "status" => "Ok"]);
 
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
@@ -326,10 +331,18 @@ class UserReservationController extends Controller
                     try {
                         if(isset($last_status)){
                             if($last_status->status_id != $status_id){
-                                Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                try {
+                                  Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                } catch (Exception $error) {
+                                  Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                                }
                             }
                         }else{
-                            Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                            try {
+                                Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                            } catch (Exception $error) {
+                                Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                            }
                         }
                     } catch (\Throwable $th) {
                         Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
@@ -356,11 +369,14 @@ class UserReservationController extends Controller
             if($status_id)
                 UserReservation::store_user_reservation_status_history($status_id, $userReservation->id);
 
+            AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Actualización de reserva", "status" => "Ok", "status_id" => $status_id]);
+
             $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         DB::commit();
         } catch (Exception $error) {
             DB::rollBack();
             Log::debug( print_r(["Error al hacer update de la reserva, nro reserva $userReservation->reservation_number, detalle: " . $error->getMessage(), $error->getLine()], true));
+            AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Actualización de reserva", "status" => "Error", "status_id" => $status_id]);
             return response(["message" => "Tuvimos un problema en el servidor Error: URU0002", "error" => $error->getMessage()], 500);
         }
 

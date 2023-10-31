@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\MedicalRecordExternalMailable;
 use App\Mail\MedicalRecordMailable;
+use App\Models\AuditReservation;
 use App\Models\Disease;
 use App\Models\MedicalRecord;
 use App\Models\Nationality;
@@ -36,6 +37,11 @@ class MedicalRecordController extends Controller
                 $datos = $request->all();
                 $passengers_diseases = [];
                 $reservation_number = Crypt::decryptString($hash_reservation_number);
+                $user_reservation = UserReservation::where('reservation_number', $reservation_number)->first();
+                
+                if($user_reservation)
+                    AuditReservation::store_audit_reservation($user_reservation->id, ["operation" => "Carga ficha medica", "status" => "Ok"]);
+
                 $mailto = $mail_to;
             
                 foreach($datos as $passenger){
@@ -78,6 +84,10 @@ class MedicalRecordController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::debug(print_r([$th->getMessage() . " - error en proceso de carga 'passenger_diseases'", $th->getLine()],  true));
+            
+            if($user_reservation)
+                AuditReservation::store_audit_reservation($user_reservation->id, ["operation" => "Carga ficha medica", "status" => "Error"]);
+            
             return response(["message" => "error en proceso de carga 'passenger_diseases'", "error" => $th->getMessage(), "line" => $th->getLine()], 500);
         }
 
