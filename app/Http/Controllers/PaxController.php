@@ -74,14 +74,18 @@ class PaxController extends Controller
                         $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
                         if($pax['files'] && count($pax['files']) != 0){
                             foreach ($pax['files'] as $file) {
-                                $fileName   = Str::random(5) . time() . '.' . $file->extension();
-                                $file->move(public_path("paxs/files/$request->user_reservation_id"),$fileName);
-                                $path = "/paxs/files/$request->user_reservation_id/$fileName";
-                                
-                                $paxFiles[] = [
-                                    'pax_id' => $new_pax->id,
-                                    'url' => $path,
-                                ];
+                                if (is_a($file, 'Illuminate\Http\UploadedFile') && $file->isValid()) {
+                                    $fileName = Str::random(5) . time() . '.' . $file->extension();
+                                    $file->move(public_path("paxs/files/$request->user_reservation_id"), $fileName);
+                                    $path = "/paxs/files/$request->user_reservation_id/$fileName";
+                            
+                                    $paxFiles[] = [
+                                        'pax_id' => $new_pax->id,
+                                        'url' => $path,
+                                    ];
+                                } else {
+                                    Log::debug(["error" => "archivo no valido o inexistente en carga de pasajeros", "nro_reserva" => $userReservation->reservation_number]);
+                                }
                             }
                         }
                     }
