@@ -29,7 +29,7 @@
         @endforeach
 
         <br><br>
-        Version ficha médica: Ficha médica revisión 2 - {{ now()->format('d/m/Y') }}
+        Version ficha médica: Ficha médica revisión 2 - 01/11/2023
     </p>
 </body>
 </html>
