@@ -27,6 +27,9 @@
                 @endif
             </div>
         @endforeach
+
+        <br><br>
+        Version ficha médica: Ficha médica revisión 2 - {{ now()->format('d/m/Y') }}
     </p>
 </body>
 </html>
