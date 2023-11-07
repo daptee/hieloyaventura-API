@@ -56,29 +56,36 @@ class CancelarReservas extends Command
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
                 $resp = curl_exec($curl);
-                curl_close($curl);
 
-                // Log::debug("Respuesta API: $resp");
+                if ($resp === false) {
+                    // Error en la solicitud cURL
+                    $error_curl = 'Error de cURL: ' . curl_error($curl);
+                    Log::debug($error_curl);
+                    AuditReservation::store_audit_reservation($reservation->id, ["operation" => "Cancelado automatico", "status" => "ERROR"]);
 
-                $resultado = isset(json_decode($resp)->RESULT) ? json_decode($resp)->RESULT : "Sin resultado";
-                $mensaje = isset(json_decode($resp)->ERROR_MSG) ? json_decode($resp)->ERROR_MSG : "Sin mensaje";
-
-                Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: $resultado , MSG: $mensaje");
-
-                if(isset(json_decode($resp)->RESULT)){
-                    if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
-                        $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                        $reservation->save();
-
-                        $user_reservation_status = new UserReservationStatusHistory();
-                        $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
-                        $user_reservation_status->user_reservation_id = $reservation->id;
-                        $user_reservation_status->save();
-
-                        AuditReservation::store_audit_reservation($reservation->id, ["operation" => "Cancelado automatico", "status" => "Ok"]);
+                } else {
+                    $resultado = isset(json_decode($resp)->RESULT) ? json_decode($resp)->RESULT : "Sin resultado";
+                    $mensaje = isset(json_decode($resp)->ERROR_MSG) ? json_decode($resp)->ERROR_MSG : "Sin mensaje";
+    
+                    Log::debug("Numero de reserva: $reservation->reservation_number , Resultado API: $resultado , MSG: $mensaje");
+    
+                    if(isset(json_decode($resp)->RESULT)){
+                        if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
+                            $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                            $reservation->save();
+    
+                            $user_reservation_status = new UserReservationStatusHistory();
+                            $user_reservation_status->status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                            $user_reservation_status->user_reservation_id = $reservation->id;
+                            $user_reservation_status->save();
+    
+                            $status = json_decode($resp)->RESULT == "OK" ? "OK" : "ERROR";
+                            AuditReservation::store_audit_reservation($reservation->id, ["operation" => "Cancelado automatico", "status" => $status]);
+                        }
                     }
                 }
-
+                
+                curl_close($curl);
             }
         }
     }
