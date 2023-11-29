@@ -10,6 +10,7 @@ use App\Http\Controllers\ExcurtionController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\GeneralConfigurationsController;
 use App\Http\Controllers\GroupExcurtionController;
+use App\Http\Controllers\HyAController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\MedicalRecordController;
@@ -115,6 +116,15 @@ Route::post('create/log', [LogController::class, 'store_log']);
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
     Route::get('/', 'index');
+});
+
+Route::prefix('hya')->controller(HyAController::class)->group(function () {
+    Route::get('/passengers_types', 'passengers_types');
+    Route::get('/nationalities', 'nationalities');
+    Route::get('/hotels', 'hotels');
+    Route::get('/rates', 'rates');
+    Route::get('/excursions', 'excursions');
+    Route::get('/shifts', 'shifts');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {

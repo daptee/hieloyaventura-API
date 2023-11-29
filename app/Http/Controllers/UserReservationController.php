@@ -333,6 +333,7 @@ class UserReservationController extends Controller
                             if($last_status->status_id != $status_id){
                                 try {
                                   Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                  Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
                                 } catch (Exception $error) {
                                   Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
                                 }
@@ -340,6 +341,7 @@ class UserReservationController extends Controller
                         }else{
                             try {
                                 Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
                             } catch (Exception $error) {
                                 Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
                             }
