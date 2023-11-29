@@ -108,7 +108,6 @@ class PaxController extends Controller
                 $userReservation->pdf = $pathReservationPdf['urlToSave'];
                 $userReservation->save();
 
-
                 $mailTo = $userReservation->contact_data->email;
                 $is_bigice = $userReservation->excurtion_id == 2 ? true : false;
                 $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
@@ -363,21 +362,33 @@ class PaxController extends Controller
                     'thanks' => '¡Gracias por tu compra',
                     'withTranslation' => 'con traslado',
                     'withTranslationHotel' => 'El dia de la excursión, el pick up pasará a buscarte',
-                    'por_el_hotel' => 'por el hotel'
+                    'por_el_hotel' => 'por el hotel',
+                    'meetingPoint' => [
+                        'title' => 'PUNTO DE ENCUENTRO: ',
+                        'text' => 'Puerto "Bajo de las Sombras"',
+                    ],
                 ],
                 'EN' => [
                     'de_dateFormated' => 'of',
                     'thanks' => 'Thanks for your purchase',
                     'withTranslation' => 'with transfer',
                     'withTranslationHotel' => 'On the day of the excursion, the pick up will pick you up',
-                    'por_el_hotel' => 'by the hotel'
+                    'por_el_hotel' => 'by the hotel',
+                    'meetingPoint' => [
+                        'title' => 'MEETING POINT: ',
+                        'text' => '"Bajo de las Sombras" Port',
+                    ],
                 ],
                 'PT' => [
                     'de_dateFormated' => 'do',
                     'thanks' => 'Obrigado pela sua compra',
                     'withTranslation' => 'com transferência',
                     'withTranslationHotel' => 'No dia da excursão, o pick up irá buscá-lo',
-                    'por_el_hotel' => 'pelo hotel'
+                    'por_el_hotel' => 'pelo hotel',
+                    'meetingPoint' => [
+                        'title' => 'PONTO DE ENCUENTRO: ',
+                        'text' => 'Porto "Bajo de las Sombras"',
+                    ],
                 ]
             ];
             
@@ -444,7 +455,7 @@ class PaxController extends Controller
                 // $pdf->SetXY(84, 92.5);
                 $pdf->SetXY(83.5, 129);
                 $pdf->MultiCell(20.5, 8.8, $reservationTurn, 0, 'C');
-
+                
             //si hay translado poner lo del hotel
             if ($withTranslation) {
                 
@@ -462,6 +473,22 @@ class PaxController extends Controller
                 $pdf->SetFont('Nunito-SemiBold','', 12);
                 $pdf->SetTextColor(54, 134, 195);
                 $pdf->Write(0, $hotelName);
+            }else{
+                // SIN TRASLADO: "Punto de encuentro"
+                $pdf->Image(public_path('ubicacion.png'),19, 140.5, 5);
+                $pdf->SetFont('Nunito-SemiBold', '', 11);
+                $pdf->SetTextColor(42, 42, 42);
+                $pdf->SetXY(25, 144);
+                $title = $traduccionesPDF[$languageToPdf]['meetingPoint']['title'];
+                $titleWidth = $pdf->GetStringWidth($title);
+                $pdf->SetXY(25, 144);
+                $pdf->Write(0, $title);
+
+                $pdf->SetFont('Nunito-SemiBold', 'U', 11); // 'U' activa el subrayado para simular un enlace
+                $pdf->SetTextColor(54, 134, 195); // Color azul para el enlace
+                $enlace = $traduccionesPDF[$languageToPdf]['meetingPoint']['text'];
+                $pdf->SetXY(25 + $titleWidth + 2, 144); // Ajusta la posición
+                $pdf->Write(0, $enlace, $enlace);
             }
             
             // Booking report
@@ -486,9 +513,10 @@ class PaxController extends Controller
             // $pdf->MultiCell(62, 8, $excurtionName, 0, 'C');
 
 
-            $pdf->Output($pathToSavePdf, "F");  
-
+            $pdf->Output($pathToSavePdf, "F");
+            
             // return $pdf->Output();
+
             return [
                 'urlToSave' => $urlToSave, 
                 'pathToSavePdf' => $pathToSavePdf
