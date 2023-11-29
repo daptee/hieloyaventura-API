@@ -487,8 +487,10 @@ class PaxController extends Controller
                 $pdf->SetFont('Nunito-SemiBold', 'U', 11); // 'U' activa el subrayado para simular un enlace
                 $pdf->SetTextColor(54, 134, 195); // Color azul para el enlace
                 $enlace = $traduccionesPDF[$languageToPdf]['meetingPoint']['text'];
+                $url = 'https://goo.gl/maps/ktAopyJib2xxoEoz6';
                 $pdf->SetXY(25 + $titleWidth + 2, 144); // Ajusta la posición
-                $pdf->Write(0, $enlace, $enlace);
+                $pdf->SetLink($url);
+                $pdf->Write(0, $enlace, $url);
             }
             
             // Booking report
