@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Http;
 
 class HyAController extends Controller
 {
-    public function passengers_types()
+    public function passengers_types(Request $request)
     {
-        $response = Http::get('https://apihya.hieloyaventura.com/apihya/TiposPasajeros?LENG=ES');   
+        $lang = $request->lang ?? 'ES';
+        $response = Http::get("https://apihya.hieloyaventura.com/apihya/TiposPasajeros?LENG=$lang");   
         return $response->json();
     }
 
