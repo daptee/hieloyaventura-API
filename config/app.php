@@ -32,6 +32,7 @@ return [
 
     'api_hya' => env('API_HYA'),
     'url_hya' => env('URL_HYA'),
+    'environment' => env('APP_ENVIRONMENT', 'DEV'),
 
     /*
     |--------------------------------------------------------------------------
