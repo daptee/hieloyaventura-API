@@ -9,8 +9,8 @@ class HyAController extends Controller
 {
     public function passengers_types(Request $request)
     {
-        $lang = $request->lang ?? 'ES';
-        $response = Http::get("https://apihya.hieloyaventura.com/apihya/TiposPasajeros?LENG=$lang");   
+        $leng = $request->leng ?? 'ES';
+        $response = Http::get("https://apihya.hieloyaventura.com/apihya/TiposPasajeros?LENG=$leng");   
         return $response->json();
     }
 
