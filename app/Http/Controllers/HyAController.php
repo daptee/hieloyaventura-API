@@ -43,7 +43,7 @@ class HyAController extends Controller
         $fecha_desde = $request->date_from;
         $fecha_hasta = $request->date_to;
         $excursion_id = $request->excursion_id;
-        $response = Http::get("https://apihya.hieloyaventura.com/apihya/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&excursion_id=$excursion_id");   
+        $response = Http::get("https://apihya.hieloyaventura.com/apihya/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
         return $response->json();
     }
 
