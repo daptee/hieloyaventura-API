@@ -83,4 +83,20 @@ class HyAController extends Controller
         $response = Http::post("$url/CancelaReserva?RSV=$request->RSV");   
         return $response->json();
     }
+
+    public function ConfirmaReserva(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmaReserva", $body_json);
+        return $response->json();
+    }
+
+    public function ConfirmaPasajeros(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmaPasajeros", $body_json);
+        return $response->json();
+    }
 }
