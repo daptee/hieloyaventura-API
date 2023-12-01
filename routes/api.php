@@ -125,6 +125,9 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/rates', 'rates');
     Route::get('/excursions', 'excursions');
     Route::get('/shifts', 'shifts');
+    Route::get('/ReservaxCodigo', 'ReservaxCodigo');
+    Route::post('/IniciaReserva', 'IniciaReserva');
+    Route::post('/CancelaReserva', 'CancelaReserva');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {

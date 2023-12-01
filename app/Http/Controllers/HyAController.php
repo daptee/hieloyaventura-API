@@ -43,7 +43,25 @@ class HyAController extends Controller
         $fecha_desde = $request->date_from;
         $fecha_hasta = $request->date_to;
         $excursion_id = $request->excursion_id;
-        $response = Http::get("https://apihya.hieloyaventura.com/apihya/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        $response = Http::get("https://apihya.hieloyaventura.com/apihya/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&excursion_id=$excursion_id");   
+        return $response->json();
+    }
+
+    public function ReservaxCodigo(Request $request)
+    {
+        $response = Http::get("https://apihya.hieloyaventura.com/apihya/ReservaxCodigo?RSV=$request->RSV");   
+        return $response->json();
+    }
+
+    public function IniciaReserva(Request $request)
+    {
+        $response = Http::post("https://apihya.hieloyaventura.com/apihya/TUR=$request->TUR&PSJ=$request->PSJ&PRD=$request->PRD&TRF=$request->TRF");   
+        return $response->json();
+    }
+
+    public function CancelaReserva(Request $request)
+    {
+        $response = Http::post("https://apihya.hieloyaventura.com/apihya/CancelaReserva?RSV=$request->RSV");   
         return $response->json();
     }
 }
