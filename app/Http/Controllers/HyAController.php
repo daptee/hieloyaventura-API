@@ -102,7 +102,8 @@ class HyAController extends Controller
     public function IniciaReserva(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::post("$url/TUR=$request->TUR&PSJ=$request->PSJ&PRD=$request->PRD&TRF=$request->TRF");   
+        $body_json = $request->all();
+        $response = Http::post("$url/IniciaReserva", $body_json);   
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -117,7 +118,8 @@ class HyAController extends Controller
         ]);
         
         $url = $this->get_url();
-        $response = Http::post("$url/CancelaReserva?RSV=" . urlencode($request->RSV));   
+        $body_json = $request->all();
+        $response = Http::post("$url/CancelaReserva", $body_json);   
         if ($response->successful()) {
             return $response->json();
         } else {
