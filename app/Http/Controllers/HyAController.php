@@ -118,8 +118,9 @@ class HyAController extends Controller
         ]);
         
         $url = $this->get_url();
-        $body_json = $request->all();
-        $response = Http::post("$url/CancelaReserva", $body_json);   
+        $response = Http::asForm()->post("$url/CancelaReserva", [
+            'RSV' => $request->RSV   
+        ]);
         if ($response->successful()) {
             return $response->json();
         } else {
