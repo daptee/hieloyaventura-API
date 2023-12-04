@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Spatie\FlareClient\Truncation\TruncationStrategy;
 
 class HyAController extends Controller
 {    
@@ -22,35 +23,55 @@ class HyAController extends Controller
         $leng = $request->leng ?? 'ES';
         $url = $this->get_url();
         $response = Http::get("$url/TiposPasajeros?LENG=$leng");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function nationalities()
     {
         $url = $this->get_url();
         $response = Http::get("$url/Naciones");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function hotels()
     {
         $url = $this->get_url();
         $response = Http::get("$url/Hoteles");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
  
     public function rates()
     {
         $url = $this->get_url();
         $response = Http::get("$url/Tarifas");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
     
     public function excursions(Request $request)
     {
         $url = $this->get_url();
         $response = Http::get("$url/Productos?FECHA=$request->date");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function shifts(Request $request)
@@ -60,28 +81,48 @@ class HyAController extends Controller
         $excursion_id = $request->excursion_id;
         $url = $this->get_url();
         $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function ReservaxCodigo(Request $request)
     {
         $url = $this->get_url();
         $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function IniciaReserva(Request $request)
     {
         $url = $this->get_url();
         $response = Http::post("$url/TUR=$request->TUR&PSJ=$request->PSJ&PRD=$request->PRD&TRF=$request->TRF");   
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function CancelaReserva(Request $request)
     {
+        $this->validate($request, [
+            'RSV' => 'required',
+        ]);
+        
         $url = $this->get_url();
-        $response = Http::post("$url/CancelaReserva?RSV=$request->RSV");   
-        return $response->json();
+        $response = Http::post("$url/CancelaReserva?RSV=" . urlencode($request->RSV));   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function ConfirmaReserva(Request $request)
@@ -89,7 +130,11 @@ class HyAController extends Controller
         $url = $this->get_url();
         $body_json = $request->all();
         $response = Http::post("$url/ConfirmaReserva", $body_json);
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function ConfirmaPasajeros(Request $request)
@@ -97,6 +142,10 @@ class HyAController extends Controller
         $url = $this->get_url();
         $body_json = $request->all();
         $response = Http::post("$url/ConfirmaPasajeros", $body_json);
-        return $response->json();
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 }
