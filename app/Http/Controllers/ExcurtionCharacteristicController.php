@@ -1611,7 +1611,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -1635,7 +1635,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -4607,7 +4607,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -4631,7 +4631,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -6064,7 +6064,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -6088,7 +6088,7 @@ class ExcurtionCharacteristicController extends Controller
                                 "icon_id" => null,
                                 "order" => null,
                                 "icon" => '$check',
-                                "con_trf" => null,
+                                "con_trf" => 1,
                                 "characteristics" => [],
                                 "translables" => [
                                     [
