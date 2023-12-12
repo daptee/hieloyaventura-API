@@ -311,9 +311,9 @@ class PaxController extends Controller
                 $paxes_name .= $pax['name'] . ', ';
                 $count++;
 
-                if ($count % 2 == 0) {
-                    $paxes_name .= "\n";
-                }
+                // if ($count % 2 == 0) {
+                //     $paxes_name .= "\n";
+                // }
             }
             $quantity_paxes = $count;
             // Elimina la coma y el espacio adicionales al final
