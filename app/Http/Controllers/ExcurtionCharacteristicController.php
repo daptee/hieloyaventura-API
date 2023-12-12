@@ -1496,69 +1496,45 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Inicio en su hotel de El Calafate",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Start at your hotel in El Calafate",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Comece no seu hotel em El Calafate",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => null,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Guía español e inglés durante el recorrido al glaciar y las pasarelas",
+                                        "name" => "Guía español e inglés durante el recorrido en el glaciar",
                                         "description" => ""
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Spanish and English guide during the tour to the glacier and the walkways",
+                                        "name" => "Spanish and English guide during the tour on the glacier",
                                         "description" => ""
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Guia espanhol e inglês durante o passeio à geleira e às passarelas",
+                                        "name" => "Guia espanhol e inglês durante o passeio pela geleira",
                                         "description" => ""
                                     ]
                                 ]
                             ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => 1,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Visita de 1 hora a las pasarelas",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "1 hour visit to the catwalks",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "1 hora de visita às passarelas",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => 1,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Visita de 1 hora a las pasarelas",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "1 hour visit to the catwalks",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "1 hora de visita às passarelas",
+                            //             "description" => null
+                            //         ]
+                            //     ]
+                            // ],
                             [
                                 "icon_id" => null,
                                 "order" => null,
@@ -1630,7 +1606,55 @@ class ExcurtionCharacteristicController extends Controller
                                         "description" => null
                                     ]
                                 ]
-                            ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Traslado con guía y visita de aproximadamente una hora a pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Optional transfer with guide, including a visit of about one hour to the walkways",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
                         ],
                         "translables" => []
                     ]
@@ -4396,69 +4420,69 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Inicio en su hotel de El Calafate",
+                                        "name" => "Guía de Turismo bilingüe (español e inglés) durante el recorrido en el glaciar",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Start at your hotel in El Calafate",
+                                        "name" => "Bilingual tourist guide (Spanish and English) during the glacier tour",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Comece no seu hotel em El Calafate",
+                                        "name" => "Guia turístico bilíngue (espanhol e inglês) durante o passeio pela geleira",
                                         "description" => null
                                     ]
                                 ]
                             ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => null,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Guía de Turismo bilingüe (español e inglés) durante el recorrido al Glaciar y visita a las pasarelas",
-                                        "description" => ""
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Bilingual Tour Guide (Spanish and English) during the tour to the Glacier and visit the catwalks",
-                                        "description" => ""
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Guia de turismo bilíngüe (espanhol e inglês) durante o passeio ao Glaciar e visita às passarelas",
-                                        "description" => ""
-                                    ]
-                                ]
-                            ],
-                            [
-                                "icon_id" => null,
-                                "order" => null,
-                                "icon" => '$check',
-                                "con_trf" => null,
-                                "characteristics" => [],
-                                "translables" => [
-                                    [
-                                        "lenguage_id" => 1,
-                                        "name" => "Visita de 1 hora aproximadamente a las pasarelas",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 2,
-                                        "name" => "Visit of approximately 1 hour to the catwalks",
-                                        "description" => null
-                                    ],
-                                    [
-                                        "lenguage_id" => 3,
-                                        "name" => "Visita de aproximadamente 1 hora às passarelas",
-                                        "description" => null
-                                    ]
-                                ]
-                            ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => null,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Guía español e inglés durante el recorrido en el glaciar",
+                            //             "description" => ""
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "Spanish and English guide during the tour on the glacier",
+                            //             "description" => ""
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "Guia espanhol e inglês durante o passeio pela geleira",
+                            //             "description" => ""
+                            //         ]
+                            //     ]
+                            // ],
+                            // [
+                            //     "icon_id" => null,
+                            //     "order" => null,
+                            //     "icon" => '$check',
+                            //     "con_trf" => null,
+                            //     "characteristics" => [],
+                            //     "translables" => [
+                            //         [
+                            //             "lenguage_id" => 1,
+                            //             "name" => "Visita de 1 hora aproximadamente a las pasarelas",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 2,
+                            //             "name" => "Visit of approximately 1 hour to the catwalks",
+                            //             "description" => null
+                            //         ],
+                            //         [
+                            //             "lenguage_id" => 3,
+                            //             "name" => "Visita de aproximadamente 1 hora às passarelas",
+                            //             "description" => null
+                            //         ]
+                            //     ]
+                            // ],
                             [
                                 "icon_id" => null,
                                 "order" => null,
@@ -4578,7 +4602,55 @@ class ExcurtionCharacteristicController extends Controller
                                         "description" => null
                                     ]
                                 ]
-                            ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Traslado con guía y visita de aproximadamente 1 hora a pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Optional transfer with guide, including a visit of about one hour to the walkways",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
                         ],
                         "translables" => []
                     ]
@@ -5853,30 +5925,6 @@ class ExcurtionCharacteristicController extends Controller
                             //     "translables" => [
                             //         [
                             //             "lenguage_id" => 1,
-                            //             "name" => "Inicio en su hotel de El Calafate",
-                            //             "description" => null
-                            //         ],
-                            //         [
-                            //             "lenguage_id" => 2,
-                            //             "name" => "Start at your hotel in El Calafate",
-                            //             "description" => null
-                            //         ],
-                            //         [
-                            //             "lenguage_id" => 3,
-                            //             "name" => "Comece no seu hotel em El Calafate",
-                            //             "description" => null
-                            //         ]
-                            //     ]
-                            // ],
-                            // [
-                            //     "icon_id" => null,
-                            //     "order" => null,
-                            //     "icon" => '$check',
-                            //     "con_trf" => 1,
-                            //     "characteristics" => [],
-                            //     "translables" => [
-                            //         [
-                            //             "lenguage_id" => 1,
                             //             "name" => "Guía de Turismo bilingüe (español e inglés) en el bus",
                             //             "description" => ""
                             //         ],
@@ -6011,7 +6059,55 @@ class ExcurtionCharacteristicController extends Controller
                                         "description" => null
                                     ]
                                 ]
-                            ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Inicio en su hotel de El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Start at your hotel in El Calafate",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Comece no seu hotel em El Calafate",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
+                            [
+                                "icon_id" => null,
+                                "order" => null,
+                                "icon" => '$check',
+                                "con_trf" => 1,
+                                "characteristics" => [],
+                                "translables" => [
+                                    [
+                                        "lenguage_id" => 1,
+                                        "name" => "CON TRASLADO: Traslado con guía y visita de aproximadamente 1 hora a pasarelas",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 2,
+                                        "name" => "WITH TRANSFER: Optional transfer with guide, including a visit of about one hour to the walkways",
+                                        "description" => null
+                                    ],
+                                    [
+                                        "lenguage_id" => 3,
+                                        "name" => "COM TRANSFER: Traslado opcional, com guia e visita de aproximadamente uma hora às passarelas",
+                                        "description" => null
+                                    ]
+                                ]
+                            ],
                         ],
                         "translables" => []
                     ]
