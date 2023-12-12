@@ -121,6 +121,7 @@ class PaxController extends Controller
                     $paxs = Pax::where('user_reservation_id', $request->user_reservation_id);
                     try {
                         Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
+                        // Mail::to("enzo100amarilla@gmail.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
                     } catch (Exception $error) {
                         Log::debug(print_r([$error->getMessage() . " error en envio de mail a ventas@hieloyaventura.com con adjunto ZIP", $error->getLine()],  true));
                     }
@@ -133,6 +134,7 @@ class PaxController extends Controller
 
                 try {
                     Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
+                    // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
                 } catch (Exception $error) {
                     Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()],  true));
                     return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
@@ -291,15 +293,32 @@ class PaxController extends Controller
             ];
                 
             $language_id = $newUserReservation->language_id ?? 1;
+            // $language_id = 3;
 
             Carbon::setLocale(strtolower($array_languages[$language_id]));
             
             $languageToPdf = $array_languages[$language_id];
+            // $languageToPdf = $array_languages[1];
 
             if(!is_dir('reservations'))
                 mkdir(public_path("reservations"));
 
             $date = $newUserReservation->date;
+            $paxes = $newUserReservation->paxes;
+            $paxes_name = "";
+            $count = 0;
+            foreach ($paxes as $pax) {
+                $paxes_name .= $pax['name'] . ', ';
+                $count++;
+
+                if ($count % 2 == 0) {
+                    $paxes_name .= "\n";
+                }
+            }
+            $quantity_paxes = $count;
+            // Elimina la coma y el espacio adicionales al final
+            $paxes_name = rtrim($paxes_name, ', ');
+            // Log::debug(["Paxes name" => $paxes_name]);
             $dayText = ucfirst($date->translatedFormat('l'));
             $dayNumber = $date->format('j');
             $month = ucfirst($date->translatedFormat('F'));
@@ -335,7 +354,8 @@ class PaxController extends Controller
             // $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
             $base_pdf = $languageToPdf . '_' . str_replace(' ', '_', $excurtionName);
             $secondPage = public_path("excursions/bases/$base_pdf.pdf");
-
+            // $secondPage = public_path("excursions/bases/PT_Big_Ice.pdf");
+            
             // initiate FPDI
             $pdf = new Fpdi();
 
@@ -397,8 +417,8 @@ class PaxController extends Controller
             $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
             $contactFullName         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
             $contactName             = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name);
-            $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
-            $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', $newUserReservation->reservation_paxes->sum('quantity') . "x $excurtionName");
+            $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer == 1 ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
+            $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', "|  " . $quantity_paxes . "x $excurtionName");
             $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
             $reservationTurn         = iconv('UTF-8', 'cp1250', $newUserReservation->turn->format('H:i\h\s'));
             $hotelName               = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->hotel_name);
@@ -427,21 +447,32 @@ class PaxController extends Controller
             //Nro de reserva
                 $pdf->SetFont('Nunito-Bold', '', 12);
                 $pdf->SetTextColor(54, 134, 195);
-                $pdf->SetXY(40, 102.4);
+                // $pdf->SetXY(40, 102.4);
+                $pdf->SetXY(36, 100);
                 $pdf->Write(0, $reservationNumber);
 
             //nombre del contact data
-                $pdf->SetFont('Nunito-SemiBold', '', 12);
+                $pdf->SetFont('Nunito-SemiBold', '', 11);
                 $pdf->SetTextColor(54, 134, 195);
-                $pdf->SetXY(54.4, 114.9);
-                $pdf->Write(0, $contactFullName);
+                $pdf->SetXY(14, 108.5);
+                // Definir el ancho y la altura máxima del área para el texto
+                $width = 120; // ajusta el ancho según tus necesidades
+                $maxHeight = 5; // ajusta la altura máxima según tus necesidades
+
+                $pdf->MultiCell($width, $maxHeight, $paxes_name, 0, 'L');
+
+                // Log::debug($pdf->GetY());
+                // Puedes ajustar la posición Y según sea necesario para continuar con otros elementos
+                // $pdf->SetXY(54.4, 115); // ajusta el valor de 5 según tus necesidades
+                // $pdf->Write(0, $paxes_name);
 
             //cantidad (pasajeros) y nombre de la excursion
-                $pdf->SetFont('Nunito-Regular', '', 12);
-                $pdf->SetXY(19, 122);
+                $pdf->SetFont('Nunito-Regular', '', 11);
+                // $pdf->SetXY(14.5, 133);
+                $pdf->SetXY(55, 100);
                 $pdf->Write(0, $amountPaxesWithDeatails);
 
-                $pdf->SetFont('Nunito-Bold', '', 12);
+                $pdf->SetFont('Nunito-Bold', '', 11);
                 // $pdf->SetXY(19, 82);
                 $pdf->Write(0, $withTranslation);
 
@@ -449,24 +480,24 @@ class PaxController extends Controller
             //Fecha de la reserva
                 $pdf->SetFont('Nunito-Bold', '', 12);
                 $pdf->SetTextColor(255, 255, 255);
-                $pdf->SetXY(19, 129);
+                $pdf->SetXY(15, 135.5);
                 $pdf->MultiCell(62, 8.6, $reservationDate, 0, 'C');
             //Hora de la reserva
                 // $pdf->SetXY(84, 92.5);
-                $pdf->SetXY(83.5, 129);
+                $pdf->SetXY(79.5, 135.5);
                 $pdf->MultiCell(20.5, 8.8, $reservationTurn, 0, 'C');
                 
             //si hay translado poner lo del hotel
             if ($withTranslation) {
                 
-                $pdf->Image(public_path('ubicacion.png'),20, 142, 5);
-                $pdf->SetFont('Nunito-Light','', 12);
+                $pdf->Image(public_path('ubicacion.png'),15, 147, 5);
+                $pdf->SetFont('Nunito-SemiBold','', 12);
                 $pdf->SetTextColor(42, 42, 42);
-                $pdf->SetXY(28, 145);
+                $pdf->SetXY(21, 148.5);
                 $str = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['withTranslationHotel'] . ' ');
                 $pdf->Write(0, $str);
                 
-                $pdf->SetXY(28, 150);
+                $pdf->SetXY(21, 153.2);
                 $str = iconv('UTF-8', 'cp1250', $traduccionesPDF[$languageToPdf]['por_el_hotel'] . ': ');
                 $pdf->Write(0, $str);
                 //si hay translado poner lo del hotel
@@ -475,20 +506,19 @@ class PaxController extends Controller
                 $pdf->Write(0, $hotelName);
             }else{
                 // SIN TRASLADO: "Punto de encuentro"
-                $pdf->Image(public_path('ubicacion.png'),19, 140.5, 5);
+                $pdf->Image(public_path('ubicacion.png'),15, 147, 5);
                 $pdf->SetFont('Nunito-SemiBold', '', 11);
                 $pdf->SetTextColor(42, 42, 42);
-                $pdf->SetXY(25, 144);
+                $pdf->SetXY(21, 151.2);
                 $title = $traduccionesPDF[$languageToPdf]['meetingPoint']['title'];
                 $titleWidth = $pdf->GetStringWidth($title);
-                $pdf->SetXY(25, 144);
                 $pdf->Write(0, $title);
 
                 $pdf->SetFont('Nunito-SemiBold', 'U', 11); // 'U' activa el subrayado para simular un enlace
                 $pdf->SetTextColor(54, 134, 195); // Color azul para el enlace
                 $enlace = $traduccionesPDF[$languageToPdf]['meetingPoint']['text'];
                 $url = 'https://goo.gl/maps/ktAopyJib2xxoEoz6';
-                $pdf->SetXY(25 + $titleWidth + 2, 144); // Ajusta la posición
+                $pdf->SetXY(21 + $titleWidth + 2, 151.2); // Ajusta la posición
                 $pdf->SetLink($url);
                 $pdf->Write(0, $enlace, $url);
             }
