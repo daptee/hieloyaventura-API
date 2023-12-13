@@ -96,6 +96,12 @@ class UserReservationController extends Controller
         $reservation_number = $datos['reservation_number'];
         try {
             DB::beginTransaction();
+
+                // Verificar si ya existe un registro con el mismo reservation_number
+                $existingReservation = $this->model::where('reservation_number', $reservation_number)->first();
+                if ($existingReservation)
+                    return response(["message" => "Ya existe un registro con el número de reserva proporcionado."], 400);
+
                 // Crear un usuario si se manda "create_user" en true
                 $user = User::where('email', $datos['contact_data']['email'])->first(); // Busco el usuario en DB
                     if ($datos['create_user'] and isset($datos['contact_data']) and !$user) {
