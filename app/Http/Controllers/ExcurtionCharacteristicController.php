@@ -4747,20 +4747,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>8 horas (todo el dia)</p>",
-                                    "description" =>  '<p>La duración CON traslado y pasarelas es de aproximadamente 8 horas (Día completo). SIN traslado y pasarelas es de aproximadamente 2.45 horas</p>'
+                                    "name"        =>  "<p>9 horas (todo el dia)</p>",
+                                    "description" =>  '<p>La duración CON traslado y pasarelas es de aproximadamente 9 horas (Día completo). SIN traslado y pasarelas es de aproximadamente 2.45 horas</p>'
                                 ],
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>8 hours (Full day)</p>",  
-                                    "description" =>  "<p>The duration WITH transfer and footbridges is approximately 8 hours (Full day). WITHOUT transfer and walkways is approximately 2.45 hours</p>"
+                                    "name"        =>  "<p>9 hours (Full day)</p>",  
+                                    "description" =>  "<p>The duration WITH transfer and footbridges is approximately 9 hours (Full day). WITHOUT transfer and walkways is approximately 2.45 hours</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>8 horas (Dia completo)</p>",  
-                                    "description" =>  "<p>A duração COM traslado e passarelas é de aproximadamente 8 horas (dia inteiro). SEM transfer e passarelas é de aproximadamente 2,45 horas</p>"
+                                    "name"        =>  "<p>9 horas (Dia completo)</p>",  
+                                    "description" =>  "<p>A duração COM traslado e passarelas é de aproximadamente 9 horas (dia inteiro). SEM transfer e passarelas é de aproximadamente 2,45 horas</p>"
                                 ]
                             ]
                         ],
