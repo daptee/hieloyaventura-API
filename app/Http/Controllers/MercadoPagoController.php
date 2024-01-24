@@ -28,7 +28,17 @@ class MercadoPagoController extends Controller
         $item->title = $request->title;
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
+        $item->category_descriptor = [
+            "route" => [
+                "departure_date_time" => $request->departure_date_time
+            ]
+        ];
+        $preference->external_reference = $request->external_reference;
         $preference->items = array($item);
+        $preference->payer = [
+            "name" => $request->payer_name,
+            "email" => $request->payer_email
+        ];
         $preference->payment_methods = [
             "excluded_payment_methods" => [
                 [
