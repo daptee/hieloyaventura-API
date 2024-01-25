@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use MercadoPago;
+use stdClass;
 
 class MercadoPagoController extends Controller
 {
@@ -28,22 +30,24 @@ class MercadoPagoController extends Controller
         $item->title = $request->title;
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
-        $item->category_descriptor = [
-            "route" => [
+        $item->category_descriptor = array(
+            "route" => array(
                 "departure_date_time" => $request->departure_date_time
-            ]
-        ];
-        $preference->external_reference = $request->external_reference;
+            )
+        );
         $preference->items = array($item);
-        $preference->payer = [
-            "name" => $request->payer_name,
-            "email" => $request->payer_email
-        ];
+        $object_payer = new stdClass;
+        $object_payer->name = $request->payer_name;
+        $object_payer->email = $request->payer_email;
+        $preference->payer = $object_payer;
+        $preference->external_reference = $request->external_reference;
         $preference->payment_methods = [
             "excluded_payment_methods" => [
                 [
-                    "id" => "pagofacil",
-                    "id" => "rapipago",
+                    "id" => "pagofacil"
+                ],
+                [
+                    "id" => "rapipago"
                 ]
             ],
             "excluded_payment_types" => [
