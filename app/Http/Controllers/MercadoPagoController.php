@@ -31,11 +31,13 @@ class MercadoPagoController extends Controller
         $item->title = $request->title;
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
-        // $item->category_descriptor = array(
-            // "route" => array(
-                // "departure_date_time" => $request->departure_date_time
-            // )
-        // );
+        $category_descriptor = new stdClass;
+        $category_descriptor_route = new stdClass;
+        $category_descriptor_route->departure_date_time = $request->departure_date_time;
+        $category_descriptor->route = $category_descriptor_route; 
+        $category_descriptor->name = $request->payer_name;
+        $category_descriptor->email = $request->payer_email;
+        $item->category_descriptor = $category_descriptor;
         $preference->items = array($item);
         // $object_payer = new stdClass;
         // $object_payer->name = $request->payer_name;
