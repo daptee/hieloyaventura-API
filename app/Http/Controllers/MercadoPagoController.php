@@ -41,9 +41,9 @@ class MercadoPagoController extends Controller
                 "departure_date_time" => $request->departure_date_time
             ]
         ];
-        $item->category_descriptor = json_encode($category_descriptor);
+        // $item->category_descriptor = json_encode($category_descriptor);
         $preference->items = array($item);
-        
+
         // $object_payer = new stdClass;
         // $object_payer->name = $request->payer_name;
         // $object_payer->email = $request->payer_email;
