@@ -14,6 +14,7 @@ class MercadoPagoController extends Controller
         // SDK de Mercado Pago
         require base_path('vendor/autoload.php');
         // Agrega credenciales
+        Log::debug(config('services.mercadopago.dev.token'));
         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
         // Crea un objeto de preferencia
@@ -30,17 +31,17 @@ class MercadoPagoController extends Controller
         $item->title = $request->title;
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
-        $item->category_descriptor = array(
-            "route" => array(
-                "departure_date_time" => $request->departure_date_time
-            )
-        );
+        // $item->category_descriptor = array(
+            // "route" => array(
+                // "departure_date_time" => $request->departure_date_time
+            // )
+        // );
         $preference->items = array($item);
-        $object_payer = new stdClass;
-        $object_payer->name = $request->payer_name;
-        $object_payer->email = $request->payer_email;
-        $preference->payer = $object_payer;
-        $preference->external_reference = $request->external_reference;
+        // $object_payer = new stdClass;
+        // $object_payer->name = $request->payer_name;
+        // $object_payer->email = $request->payer_email;
+        // $preference->payer = $object_payer;
+        // $preference->external_reference = $request->external_reference;
         $preference->payment_methods = [
             "excluded_payment_methods" => [
                 [
