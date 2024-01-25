@@ -44,10 +44,10 @@ class MercadoPagoController extends Controller
         // $item->category_descriptor = json_encode($category_descriptor);
         $preference->items = array($item);
 
-        // $object_payer = new stdClass;
-        // $object_payer->name = $request->payer_name;
-        // $object_payer->email = $request->payer_email;
-        // $preference->payer = $object_payer;
+        $object_payer = new stdClass;
+        $object_payer->name = $request->payer_name;
+        $object_payer->email = $request->payer_email;
+        $preference->payer = $object_payer;
         $preference->external_reference = $request->external_reference;
         $preference->payment_methods = [
             "excluded_payment_methods" => [
