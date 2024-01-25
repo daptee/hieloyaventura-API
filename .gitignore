@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/excursions
 /public/paxs/files
 /storage/*.key
 /vendor
