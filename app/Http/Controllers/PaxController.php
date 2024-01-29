@@ -294,11 +294,11 @@ class PaxController extends Controller
                 
             $language_id = $newUserReservation->language_id ?? 1;
             // $language_id = 3;
-
             Carbon::setLocale(strtolower($array_languages[$language_id]));
             
             $languageToPdf = $array_languages[$language_id];
             // $languageToPdf = $array_languages[1];
+            $is_transfer = $newUserReservation->is_transfer == 1 ? "con_trf" : "sin_trf";
 
             if(!is_dir('reservations'))
                 mkdir(public_path("reservations"));
@@ -353,7 +353,8 @@ class PaxController extends Controller
             // $firstPage = $this->withOrWithoutTrf($excurtionName, $newUserReservation->is_transfer, $languageToPdf);
             // $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
             $base_pdf = $languageToPdf . '_' . str_replace(' ', '_', $excurtionName);
-            $secondPage = public_path("excursions/bases/$base_pdf.pdf");
+            $secondPage = public_path("excursions/bases/$is_transfer/$base_pdf.pdf");
+            // $secondPage = public_path("excursions/bases/$base_pdf.pdf");
             // $secondPage = public_path("excursions/bases/PT_Big_Ice.pdf");
             
             // initiate FPDI
