@@ -14,6 +14,7 @@ use App\Http\Controllers\HyAController;
 use App\Http\Controllers\LenguageController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\MercadoLibreController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaxController;
 use App\Http\Controllers\ReservationController;
@@ -369,6 +370,13 @@ Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_cod
 
 // Agency user reservations
 Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.verify']);
+
+// Webhook Mercado Libre
+Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notificationWebHook']);
+// Route::post('/publication/update/price', [MercadoLibreController::class, 'update_publication_price']);
+// Route::post('/publication/update/status', [MercadoLibreController::class, 'update_publication_status']);
+// Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
+// Route::post('/publication/upload/invoice', [MercadoLibreController::class, 'upload_publication_invoice']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
