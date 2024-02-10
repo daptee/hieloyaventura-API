@@ -114,6 +114,13 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'notificationmp' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/notificationmp.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 
 ];

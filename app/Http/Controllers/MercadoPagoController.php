@@ -73,4 +73,36 @@ class MercadoPagoController extends Controller
 
         return response()->json(['preference' => $preference->id], 200);
     }
+
+    public function notificationWebHook()
+    {
+        $data = json_encode($_POST);
+        MercadoPago\SDK::setAccessToken(config('services.mercadopago.webhook.token'));
+        Log::channel("notificationmp")->info($data);
+        switch($_POST["type"]) {
+            case "payment":
+                $payment = MercadoPago\Payment::find_by_id($_POST["data"]["id"]);
+                Log::debug(["payment" => $payment]);
+                break;
+            case "plan":
+                $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
+                Log::debug(["plan" => $plan]);
+                break;
+            case "subscription":
+                $subcription = MercadoPago\Subscription::find_by_id($_POST["data"]["id"]);
+                Log::debug(["subcription" => $subcription]);
+                break;
+            case "invoice":
+                $invoice = MercadoPago\Invoice::find_by_id($_POST["data"]["id"]);
+                Log::debug(["invoice" => $invoice]);
+                break;
+            case "point_integration_wh":
+                // $_POST contiene la informaciòn relacionada a la notificaciòn.
+                Log::debug(["Info relacionad" => $_POST]);
+                break;
+        }
+
+        // return $payment;
+    }
+
 }
