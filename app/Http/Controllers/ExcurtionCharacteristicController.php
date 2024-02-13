@@ -1925,22 +1925,22 @@ class ExcurtionCharacteristicController extends Controller
                             "order" =>  "6",
                             "translables" =>  [
                                 [
-                                #ESPAÑOL
+                                    #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>No apto para personas sedentarias</p>",
+                                    "name"        =>  "<p>Personas sedentarias con obesidad</p>",
                                     "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
                                 ],
                                 [
-                                # INGLES
+                                    # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Not suitable for sedentary people</p>",
-                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
+                                    "name"        =>  "<p>Sedentary people with obesity</p>",
+                                    "description" =>  "<p>To have an excellent experience in the Glacier, both children and adults must have sufficient psychophysical capacity to walk 3 hours, of which 1h15' is on the ice and with crampons</p>"
                                 ],
                                 [
-                                # PORTUGUÉS
+                                    # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Não é adequado para pessoas sedentárias</p>",
-                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
+                                    "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
+                                    "description" =>  "<p>Para ter uma excelente experiência no Glaciar, crianças e adultos devem ter capacidade psicofísica suficiente para caminhar 3 horas, das quais 1h15' é no gelo e com crampons</p>"
                                 ]
                             ]
                         ],
