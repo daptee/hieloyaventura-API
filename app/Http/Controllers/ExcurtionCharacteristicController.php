@@ -275,7 +275,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" =>  1,
-                            "name" =>  "Característica de la actividad",
+                            "name" =>  "Características de la actividad",
                             "description" =>  NULL
                         ],
                         [
@@ -1705,7 +1705,56 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-
+        // 28 comparison_total_walk
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_total_walk",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Caminata total",
+                        "description" => "3 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Caminata total",
+                        "description" => "3 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Caminata total",
+                        "description" => "3 km aprox"
+                    ]
+                ]
+            ];
+        // 29 comparison_waterfall_view
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_waterfall_view",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ]
+                ]
+            ];
         return $characteristics;
     }
 
@@ -1726,7 +1775,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" =>  1,
-                            "name" =>  "Característica de la actividad",
+                            "name" =>  "Características de la actividad",
                             "description" =>  NULL
                         ],
                         [
@@ -1879,19 +1928,19 @@ class ExcurtionCharacteristicController extends Controller
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
                                     "name"        =>  "<p>No apto para personas sedentarias</p>",
-                                    "description" =>  null
+                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>Not suitable for sedentary people</p>",
-                                    "description" =>  null
+                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Não é adequado para pessoas sedentárias</p>",
-                                    "description" =>  null
+                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
                                 ]
                             ]
                         ],
@@ -1960,65 +2009,248 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             "lenguage_id" => 1,
                             "name" => "Sobre esta experiencia",
-                            "description" => '<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
+                            "description" => "<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
+                            <p>Una vez en el Puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 10 minutos de navegaci&oacute;n frente a la imponente pared sur del Glaciar Perito Moreno.</p>
+                            <p>Al desembarcar en la Bah&iacute;a Puma, a solo 500mts del Glaciar, ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a. A partir de aqu&iacute;, comenzaremos el recorrido con una caminata de una hora aproximadamente por la costa del lago y luego por la morena al lado del hielo (terreno de rocas y tierra inestable)&nbsp;</p>
+                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
+                            <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
+                            <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
+                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>
                             <p>&nbsp;</p>
-                            <p>Una vez en el puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 20 minutos de navegaci&oacute;n frente a la imponente cara sur del Glaciar Perito Moreno.</p>
+                            <p><span style='text-decoration: underline;'><strong>&iquest;Qu&eacute; llevar en la excursi&oacute;n?</strong></span></p>
+                            <p>Vestir ropa c&oacute;moda y abrigada. Campera y pantal&oacute;n impermeable, botas de trekking impermeables o calzado deportivo con cordones. Mochila, lentes de sol, protector solar, guantes y gorro. El clima es cambiante y hay que estar preparado para no mojarse ni pasar fr&iacute;o.</p>
+                            <p>Llevar comida y bebida para el d&iacute;a. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>
+                            <p>Deber&aacute;s presentar tu entrada al Parque Nacional. Pod&eacute;s comprarla&nbsp;ac&aacute; (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')&nbsp;o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>
                             <p>&nbsp;</p>
-                            <p>Al desembarcar ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a, quienes los conducir&aacute;n a un acogedor refugio con una vista privilegiada del glaciar. A partir de aqu&iacute;, &iexcl;comienza el trekking! Iniciaremos el recorrido con una caminata por la costa del lago y con la vista posada en el glaciar para no perdernos la oportunidad de ver desprendimientos. Luego, los gu&iacute;as brindar&aacute;n una charla sobre glaciolog&iacute;a.</p>
+                            <p><span style='text-decoration: underline;'><strong>ITINERARIO DE LA ACTIVIDAD:&nbsp;</strong></span></p>
+                            <ul>
+                            <li>
+                            <p>Opcional con traslado 🡪 azul</p>
+                            </li>
+                            <li>
+                            <p>Opcional sin traslado 🡪 verde</p>
+                            </li>
+                            </ul>
+                            <p>Salida de El Calafate ( 70 km al glaciar) 🡪 Azul<br>Embarque en Puerto &ndash; 10 minutos de navegaci&oacute;n 🡪 verde<br>Trekking por la costa, morena y glaciar 🡪 verde<br>Visita a cascada 🡪 verde<br>Regreso al Puerto 🡪 verde<br>Visita a pasarelas &ndash; 1 hs aproximadamente 🡪 Azul<br>Regreso a El Calafate &ndash; 70km 🡪Azul</p>
+                            <h4><strong>Caracter&iacute;stica de la actividad</strong></h4>
+                            <ul>
+                            <li>
+                            <p>9.30 horas ( todo el d&iacute;a)</p>
+                            </li>
+                            <li>
+                            <p>La actividad es de todo el d&iacute;a y cuenta con 3 horas de caminata.</p>
+                            </li>
+                            <li>
+                            <p>La disponibilidad de esta excursi&oacute;n es desde el 1 de febrero hasta fin de abril.</p>
+                            </li>
+                            <li>
+                            <p>Opcional traslado con gu&iacute;a biling&uuml;e y visita de una hora aproximadamente a pasarelas.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>No apto para personas sedentarias&nbsp;</p>
+                            </li>
+                            <li>
+                            <p>Complejidad media/alta. Para que tengas una excelente experiencia en el Glaciar deb&eacute;s tener la capacidad psicof&iacute;sica suficiente para caminar de manera constante al menos 3 horas, siendo parte del trayecto sobre el hielo con crampones.</p>
+                            </li>
+                            </ul>
+                            <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve)</p>
+                            <p><br><br></p>
+                            <h4><strong>A TENER EN CUENTA ANTES DE COMPRAR</strong></h4>
+                            <p><span style='color: rgb(232, 180, 85);'><strong>Debido al grado de esfuerzo y dificultad ( Media/Alta) de esta experiencia con terreno de rocas,&nbsp; tierra inestable y&nbsp; hielo irregular pero firme y seguro </strong><strong>y con el solo objetivo de preservar la salud, no podr&aacute;n participar:</strong></span></p>
+                            <ul>
+                            <li>
+                            <p><strong>Personas sedentarias con obesidad.</strong>&nbsp;No podr&aacute;n participar personas con obesidad. En el caso de los adultos, la Organizaci&oacute;n Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un &Iacute;ndice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, env&iacute;anos un mail a clientes@hieloyaventura.com</p>
+                            </li>
+                            <li>
+                            <p>Embarazadas</p>
+                            </li>
+                            <li>
+                            <p>Personas con cualquier grado o tipo de discapacidad f&iacute;sica o mental que afecte su atenci&oacute;n, marcha y/o coordinaci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Personas con antecedentes card&iacute;acos. Personas que sufran enfermedades cardiovasculares centrales o perif&eacute;ricas, que sus capacidades card&iacute;acas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras pr&oacute;tesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y m&uacute;ltiples).</p>
+                            </li>
+                            <li>
+                            <p>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</p>
+                            </li>
+                            </ul>
                             <p>&nbsp;</p>
-                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo enmarcando el paisaje, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y caminar&aacute;n para disfrutar de este para&iacute;so helado declarado Patrimonio de la Humanidad (1981).</p>
-                            <p>&nbsp;</p>
-                            <p><strong><span style="color: #2471B9;">El circuito sobre el glaciar es de dificultad media, la superficie del hielo es irregular pero firme y segura.</span>&nbsp;</strong>Durante la caminata se podr&aacute; apreciar una variedad de formaciones t&iacute;picas de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas.</p>
-                            <p>&nbsp;</p>
-                            <p>Al finalizar la caminata sobre el hielo, se recorrer&aacute; la zona periglaciar y la morena lateral desde donde obtendr&aacute;n una vista panor&aacute;mica del Glaciar Perito Moreno, las monta&ntilde;as y del lago. Luego, se emprender&aacute; el regreso por un sendero que atraviesa el exuberante bosque andino patag&oacute;nico, completando as&iacute; las&nbsp;<strong><span style="color: #2471B9;">TRES HORAS DE CAMINATA POR LA COSTA DEL LAGO, MORRENA, HIELO Y BOSQUE (de las cuales, una hora aproximadamente es sobre el hielo glaciar)</span>.</strong>&nbsp;Al llegar al refugio los invitaremos con una bebida caliente y les haremos entrega de un souvenir. Poco tiempo despu&eacute;s embarcar&aacute;n para regresar al Puerto Bajo de las Sombras, pero antes contemplar&aacute;n desde el barco las enormes paredes del glaciar.</p>
-                            <p>&nbsp;</p>
-                            <p><strong><span style="color: #2471B9;">La duraci&oacute;n de la excursi&oacute;n con el traslado es de alrededor de diez horas en total</span>&nbsp;</strong>e incluye la visita guiada de una hora aproximadamente a las pasarelas del Glaciar Perito Moreno, a 7 km del puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, el Minitrekking dura cuatro horas y media aproximadamente, saliendo desde el Puerto y regresando al mismo punto de partida.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>El Minitrekking se realiza en un ambiente natural por lo cual las condiciones climáticas y características del glaciar y sus alrededores cambian diariamente. Sin embargo, la excursión no se suspende, mientras que las condiciones de seguridad lo permitan. ¡Los esperamos!</strong></span></p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>Salidas grupales:</strong></span> Contamos con varias salidas diarias en diferentes horarios. Si viajas en grupo o con un compañero por favor indícanos el detalle con anticipación, para poder ubicarlos en el mismo horario y garantizar la salida grupal en un mismo horario.</p>'
+                            <p><strong>Pol&iacute;ticas de cancelaci&oacute;n ( las mismas q en todas las excursiones)</strong></p>
+                            <p>&nbsp;</p>"
                         ],
                         [
                             "lenguage_id" => 2,
                             "name" => "About",
-                            "description" => '<p>The tour starts when passengers are picked up in El Calafate. You will board our comfortable buses, where our tour guides will give you information on the place, the glacier and the tour on our way to Parque Nacional Los Glaciares.</p>
+                            "description" => "<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
+                            <p>Una vez en el Puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 10 minutos de navegaci&oacute;n frente a la imponente pared sur del Glaciar Perito Moreno.</p>
+                            <p>Al desembarcar en la Bah&iacute;a Puma, a solo 500mts del Glaciar, ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a. A partir de aqu&iacute;, comenzaremos el recorrido con una caminata de una hora aproximadamente por la costa del lago y luego por la morena al lado del hielo (terreno de rocas y tierra inestable)&nbsp;</p>
+                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
+                            <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
+                            <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
+                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>
                             <p>&nbsp;</p>
-                            <p>Once you arrive at &ldquo;Bajo de las Sombras&rdquo; port (located on Route 11, 70 Km from El Calafate), you&rsquo;ll board a ship to cross Lago Rico and descend on the opposite coast, after a 20-minute navigation in front of the stunning south face of Glaciar Perito Moreno.</p>
+                            <p><span style='text-decoration: underline;'><strong>&iquest;Qu&eacute; llevar en la excursi&oacute;n?</strong></span></p>
+                            <p>Vestir ropa c&oacute;moda y abrigada. Campera y pantal&oacute;n impermeable, botas de trekking impermeables o calzado deportivo con cordones. Mochila, lentes de sol, protector solar, guantes y gorro. El clima es cambiante y hay que estar preparado para no mojarse ni pasar fr&iacute;o.</p>
+                            <p>Llevar comida y bebida para el d&iacute;a. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>
+                            <p>Deber&aacute;s presentar tu entrada al Parque Nacional. Pod&eacute;s comprarla&nbsp;ac&aacute; (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')&nbsp;o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>
                             <p>&nbsp;</p>
-                            <p>When you disembark, you will be welcomed by our expert mountain guides, who will lead you to a cozy shelter with a privileged view of the glacier. Here starts the trekking! We will start by walking along the coast of the lake, keeping our eyes on the glacier so that we do not miss any ice calvings. Then, the guides will give a talk about glaciology.</p>
+                            <p><span style='text-decoration: underline;'><strong>ITINERARIO DE LA ACTIVIDAD:&nbsp;</strong></span></p>
+                            <ul>
+                            <li>
+                            <p>Opcional con traslado 🡪 azul</p>
+                            </li>
+                            <li>
+                            <p>Opcional sin traslado 🡪 verde</p>
+                            </li>
+                            </ul>
+                            <p>Salida de El Calafate ( 70 km al glaciar) 🡪 Azul<br>Embarque en Puerto &ndash; 10 minutos de navegaci&oacute;n 🡪 verde<br>Trekking por la costa, morena y glaciar 🡪 verde<br>Visita a cascada 🡪 verde<br>Regreso al Puerto 🡪 verde<br>Visita a pasarelas &ndash; 1 hs aproximadamente 🡪 Azul<br>Regreso a El Calafate &ndash; 70km 🡪Azul</p>
+                            <h4><strong>Caracter&iacute;stica de la actividad</strong></h4>
+                            <ul>
+                            <li>
+                            <p>9.30 horas ( todo el d&iacute;a)</p>
+                            </li>
+                            <li>
+                            <p>La actividad es de todo el d&iacute;a y cuenta con 3 horas de caminata.</p>
+                            </li>
+                            <li>
+                            <p>La disponibilidad de esta excursi&oacute;n es desde el 1 de febrero hasta fin de abril.</p>
+                            </li>
+                            <li>
+                            <p>Opcional traslado con gu&iacute;a biling&uuml;e y visita de una hora aproximadamente a pasarelas.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>No apto para personas sedentarias&nbsp;</p>
+                            </li>
+                            <li>
+                            <p>Complejidad media/alta. Para que tengas una excelente experiencia en el Glaciar deb&eacute;s tener la capacidad psicof&iacute;sica suficiente para caminar de manera constante al menos 3 horas, siendo parte del trayecto sobre el hielo con crampones.</p>
+                            </li>
+                            </ul>
+                            <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve)</p>
+                            <p><br><br></p>
+                            <h4><strong>A TENER EN CUENTA ANTES DE COMPRAR</strong></h4>
+                            <p><span style='color: rgb(232, 180, 85);'><strong>Debido al grado de esfuerzo y dificultad ( Media/Alta) de esta experiencia con terreno de rocas,&nbsp; tierra inestable y&nbsp; hielo irregular pero firme y seguro </strong><strong>y con el solo objetivo de preservar la salud, no podr&aacute;n participar:</strong></span></p>
+                            <ul>
+                            <li>
+                            <p><strong>Personas sedentarias con obesidad.</strong>&nbsp;No podr&aacute;n participar personas con obesidad. En el caso de los adultos, la Organizaci&oacute;n Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un &Iacute;ndice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, env&iacute;anos un mail a clientes@hieloyaventura.com</p>
+                            </li>
+                            <li>
+                            <p>Embarazadas</p>
+                            </li>
+                            <li>
+                            <p>Personas con cualquier grado o tipo de discapacidad f&iacute;sica o mental que afecte su atenci&oacute;n, marcha y/o coordinaci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Personas con antecedentes card&iacute;acos. Personas que sufran enfermedades cardiovasculares centrales o perif&eacute;ricas, que sus capacidades card&iacute;acas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras pr&oacute;tesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y m&uacute;ltiples).</p>
+                            </li>
+                            <li>
+                            <p>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</p>
+                            </li>
+                            </ul>
                             <p>&nbsp;</p>
-                            <p>When we reach the glacier side, with its amazing shades of blue ice framing the landscape, you will be divided into subgroups of up to 20 people each and you will have the crampons and helmets fitted, which are provided by the company. This tour is highly personalized (one guide every up to 10 passengers). Once on the glacier, you will hear the safety instructions and you will walk to enjoy this frozen paradise, which has been declared a Word Heritage Site in 1981.</p>
-                            <p>&nbsp;</p>
-                            <p><strong><span style="color: #2471B9;">The level of difficulty of this walk is moderate. The surface of the ice is irregular, but firm and safe</span>.&nbsp;</strong>During the trekking, you will be able to see a variety of typical glacier features, such as deep cracks, blue moulins, huge seracs and turquoise ponds.</p>
-                            <p>&nbsp;</p>
-                            <p>At the end of the ice trekking, you will walk on the area around the glacier and the side moraine, from where you will be able to enjoy a panoramic view of Glaciar Perito Moreno, the mountains and the lake. Later, you will return along a path crossing the exuberant Bosque Andino Patag&oacute;nico, completing the&nbsp;<span style="color: #2471B9;"><strong>THREE-HOUR&nbsp;WALK ON THE LAKE COAST, MORAINE, ICE AND WOODS (about one hour is on the glacier&rsquo;s ice).</strong></span>&nbsp;When we arrive to the shelter, we will give visitors hot drinks and a souvenir. Shortly after, you will embark to return to &ldquo;Bajo de las Sombras&rdquo; port, but before departing you will be able to watch the huge walls of the glacier from the ship.</p>
-                            <p>&nbsp;</p>
-                            <p><strong><span style="color: #2471B9;">The duration of this tour is about 10 hours, including the transfe</span>r&nbsp;</strong>and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from the port. There, you&rsquo;ll enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t use our transfer and go by your own means, the Minitrekking takes about four hours and a half, leaving from the port and returning to the same point.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>The Minitrekking is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, the excursion is not suspended, as long as security conditions allow it. We are waiting for you!</strong></span></p>
-                            <p>&nbsp;</p>
-                            <p><strong>Group departures: </strong> we have several departures at different times. If you are traveling in a group or with a partner, please tell us the details in advance, in order to place them at the same time and guarantee the group departure at the same time</p>'
+                            <p><strong>Pol&iacute;ticas de cancelaci&oacute;n ( las mismas q en todas las excursiones)</strong></p>
+                            <p>&nbsp;</p>"
                         ],
                         [
                             "lenguage_id" => 3,
                             "name" => "Sobre esta experiência",
-                            "description" => '<p>A excurs&atilde;o come&ccedil;a com a retirada dos passageiros na cidade de El Calafate. Em nossos confort&aacute;veis &ocirc;nibus, caminho ao Parque Nacional Los Glaciares, os guias de turismo oferecer&atilde;o informa&ccedil;&otilde;es sobre o local, a geleira e a excurs&atilde;o.</p>
+                            "description" => "<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
+                            <p>Una vez en el Puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 10 minutos de navegaci&oacute;n frente a la imponente pared sur del Glaciar Perito Moreno.</p>
+                            <p>Al desembarcar en la Bah&iacute;a Puma, a solo 500mts del Glaciar, ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a. A partir de aqu&iacute;, comenzaremos el recorrido con una caminata de una hora aproximadamente por la costa del lago y luego por la morena al lado del hielo (terreno de rocas y tierra inestable)&nbsp;</p>
+                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
+                            <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
+                            <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
+                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
+                            <p><span style='color: rgb(36, 113, 185);'><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>
                             <p>&nbsp;</p>
-                            <p>Ao chegar ao porto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate), come&ccedil;a a navega&ccedil;&atilde;o em barco, atravessando o Lago Rico at&eacute; atingir a costa oposta, logo ap&oacute;s 20 minutos de navega&ccedil;&atilde;o com vista para a parede sul do Glaciar Perito Moreno.</p>
+                            <p><span style='text-decoration: underline;'><strong>&iquest;Qu&eacute; llevar en la excursi&oacute;n?</strong></span></p>
+                            <p>Vestir ropa c&oacute;moda y abrigada. Campera y pantal&oacute;n impermeable, botas de trekking impermeables o calzado deportivo con cordones. Mochila, lentes de sol, protector solar, guantes y gorro. El clima es cambiante y hay que estar preparado para no mojarse ni pasar fr&iacute;o.</p>
+                            <p>Llevar comida y bebida para el d&iacute;a. La Empresa no cuenta con servicio de venta de comidas ni bebidas.</p>
+                            <p>Deber&aacute;s presentar tu entrada al Parque Nacional. Pod&eacute;s comprarla&nbsp;ac&aacute; (Seleccionar: 'Acceso Corredor Rio Mitre y Glaciar Perito Moreno')&nbsp;o abonarla en efectivo (en pesos argentinos) al llegar al Parque Nacional.</p>
                             <p>&nbsp;</p>
-                            <p>Ao desembarcar, os passageiros s&atilde;o recebidos por nossos expertos guias de montanha e conduzidos at&eacute; um abrigo aconchegante, com vista privilegiada &agrave; geleira. A partir desse ponto come&ccedil;a o trekking! O percorrido come&ccedil;a com uma caminhada pela costa do lago e sempre com vista &agrave; geleira, para n&atilde;o perdermos a oportunidade de contemplar os desprendimentos. Logo, os guias oferecer&atilde;o informa&ccedil;&otilde;es sobre glaciologia.</p>
+                            <p><span style='text-decoration: underline;'><strong>ITINERARIO DE LA ACTIVIDAD:&nbsp;</strong></span></p>
+                            <ul>
+                            <li>
+                            <p>Opcional con traslado 🡪 azul</p>
+                            </li>
+                            <li>
+                            <p>Opcional sin traslado 🡪 verde</p>
+                            </li>
+                            </ul>
+                            <p>Salida de El Calafate ( 70 km al glaciar) 🡪 Azul<br>Embarque en Puerto &ndash; 10 minutos de navegaci&oacute;n 🡪 verde<br>Trekking por la costa, morena y glaciar 🡪 verde<br>Visita a cascada 🡪 verde<br>Regreso al Puerto 🡪 verde<br>Visita a pasarelas &ndash; 1 hs aproximadamente 🡪 Azul<br>Regreso a El Calafate &ndash; 70km 🡪Azul</p>
+                            <h4><strong>Caracter&iacute;stica de la actividad</strong></h4>
+                            <ul>
+                            <li>
+                            <p>9.30 horas ( todo el d&iacute;a)</p>
+                            </li>
+                            <li>
+                            <p>La actividad es de todo el d&iacute;a y cuenta con 3 horas de caminata.</p>
+                            </li>
+                            <li>
+                            <p>La disponibilidad de esta excursi&oacute;n es desde el 1 de febrero hasta fin de abril.</p>
+                            </li>
+                            <li>
+                            <p>Opcional traslado con gu&iacute;a biling&uuml;e y visita de una hora aproximadamente a pasarelas.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>No apto para personas sedentarias&nbsp;</p>
+                            </li>
+                            <li>
+                            <p>Complejidad media/alta. Para que tengas una excelente experiencia en el Glaciar deb&eacute;s tener la capacidad psicof&iacute;sica suficiente para caminar de manera constante al menos 3 horas, siendo parte del trayecto sobre el hielo con crampones.</p>
+                            </li>
+                            </ul>
+                            <p><strong>No incluye:</strong>&nbsp;Entrada al Parque Nacional | Comida y bebida | Ropa personal adecuada a las condiciones clim&aacute;ticas de la regi&oacute;n. (fr&iacute;o, lluvia, viento, nieve)</p>
+                            <p><br><br></p>
+                            <h4><strong>A TENER EN CUENTA ANTES DE COMPRAR</strong></h4>
+                            <p><span style='color: rgb(232, 180, 85);'><strong>Debido al grado de esfuerzo y dificultad ( Media/Alta) de esta experiencia con terreno de rocas,&nbsp; tierra inestable y&nbsp; hielo irregular pero firme y seguro </strong><strong>y con el solo objetivo de preservar la salud, no podr&aacute;n participar:</strong></span></p>
+                            <ul>
+                            <li>
+                            <p><strong>Personas sedentarias con obesidad.</strong>&nbsp;No podr&aacute;n participar personas con obesidad. En el caso de los adultos, la Organizaci&oacute;n Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un &Iacute;ndice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, env&iacute;anos un mail a clientes@hieloyaventura.com</p>
+                            </li>
+                            <li>
+                            <p>Embarazadas</p>
+                            </li>
+                            <li>
+                            <p>Personas con cualquier grado o tipo de discapacidad f&iacute;sica o mental que afecte su atenci&oacute;n, marcha y/o coordinaci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Solo apto para&nbsp;personas de 18 a 55 a&ntilde;os.&nbsp;Sin excepci&oacute;n.</p>
+                            </li>
+                            <li>
+                            <p>Personas con antecedentes card&iacute;acos. Personas que sufran enfermedades cardiovasculares centrales o perif&eacute;ricas, que sus capacidades card&iacute;acas o vasculares se encuentren disminuidas, o utilicen stent, bypass, marcapasos u otras pr&oacute;tesis. Ejemplo: medicamentos anticoagulantes, varices grado III (las que se evidencian gruesas y m&uacute;ltiples).</p>
+                            </li>
+                            <li>
+                            <p>Personas que padezcan enfermedades provocadas POR discapacidades respiratorias como EPOC, asma, enfisema, entre otras.</p>
+                            </li>
+                            </ul>
                             <p>&nbsp;</p>
-                            <p>Ao chegar at&eacute; a borda do glaciar, no meio de uma paisagem de incr&iacute;veis tonalidades azuis, ser&atilde;o organizados subgrupos com at&eacute; 20 pessoas cada um, e ser&atilde;o colocados os grampos e capacetes fornecidos pela empresa. Esta excurs&atilde;o &eacute; muito personalizada, com um guia cada, no m&aacute;ximo, 10 passageiros. J&aacute; na geleira, os passageiros receber&atilde;o instru&ccedil;&otilde;es sobre seguran&ccedil;a e caminhar&atilde;o para desfrutar desse para&iacute;so gelado, que foi declarado Patrim&ocirc;nio da Humanidade em 1981.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>O circuito sobre a geleira tem uma dificuldade m&eacute;dia, a superf&iacute;cie do gelo &eacute; irregular, mas firme e segura.</strong></span>&nbsp;No percorrido, os passageiros poder&atilde;o apreciar uma grande variedade de forma&ccedil;&otilde;es caracter&iacute;sticas de uma geleira, como profundas fendas, sumidouros azuis, enormes seracs e lagoas de cor azul turquesa.</p>
-                            <p>&nbsp;</p>
-                            <p>Ao concluir a caminhada sobre o gelo, os passageiros percorrer&atilde;o a &aacute;rea periglacial e a morena lateral para desfrutar da vista panor&acirc;mica do Glaciar Perito Moreno, das montanhas e do lago. O retorno ser&aacute; por uma trilha que atravessa o exuberante bosque andino patag&ocirc;nico, completando assim as&nbsp;<span style="color: #2471B9;"><strong>TR&Ecirc;S HORAS DE CAMINHADA PELA COSTA DO LAGO, MORENA, GELO E BOSQUE (dessas tr&ecirc;s horas, uma hora aproximadamente ser&aacute; sobre o gelo da geleira).</strong></span>&nbsp;Ao chegar ao abrigo, os passageiros s&atilde;o convidados com bebida quente e receber&atilde;o um souvenir. Pouco tempo depois, embarcar&atilde;o para retornar ao porto Bajo las Sombras, mas antes de partir, contemplar&atilde;o as enormes paredes da geleira.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>A dura&ccedil;&atilde;o total da excurs&atilde;o mais o traslado &eacute; de aproximadamente dez horas</strong></span>&nbsp;e inclui uma visita guiada de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km do porto. L&aacute; desfrutar&atilde;o da espetacular vista panor&acirc;mica do glaciar e percorrer&atilde;o algumas das trilhas autoguiadas. Se voc&ecirc; n&atilde;o escolher nosso transporte e utilizar seus pr&oacute;prios meios, lembre-se que a dura&ccedil;&atilde;o do Minitrekking &eacute; quatro horas e meia aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: #2471B9;"><strong>O Minitrekking &eacute; realizado em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o est&aacute; suspensa, desde que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitan. Esperamos voc&ecirc;s!</strong></span></p>
-                            <p>&nbsp;</p>
-                            <p><strong>Saídas em grupo: </strong> temos várias saídas em horários diferentes. Se viaja em group ou a dois, por favor indique-nos os detalhes com antecedencia, de forma a colocá-los a mesma hora a garantir a saída di grupo a mesma hora</p>'
+                            <p><strong>Pol&iacute;ticas de cancelaci&oacute;n ( las mismas q en todas las excursiones)</strong></p>
+                            <p>&nbsp;</p>"
                         ]
                     ]
             ];
@@ -2300,7 +2532,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$blue_stairs',
+                                "icon" => '$waterfall',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
@@ -3178,7 +3410,56 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-
+        // 28 comparison_total_walk
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_total_walk",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Caminata total",
+                        "description" => "4,5 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Caminata total",
+                        "description" => "4,5 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Caminata total",
+                        "description" => "4,5 km aprox"
+                    ]
+                ]
+            ];
+        // 29 comparison_waterfall_view
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_waterfall_view",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ]
+                ]
+            ];
         return $characteristics;
     }
 
@@ -3199,7 +3480,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" =>  1,
-                            "name" =>  "Característica de la actividad",
+                            "name" =>  "Características de la actividad",
                             "description" =>  NULL
                         ],
                         [
@@ -4720,7 +5001,56 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-
+        // 28 comparison_total_walk
+        $characteristics['characteristics'][] = [
+            "icon_id" => null,
+            "characteristic_type" => "comparison_total_walk",
+            "order" => null,
+            "icon" => null,
+            "characteristics" => [],
+            "translables" => [
+                [
+                    "lenguage_id" => "1",
+                    "name" => "Caminata total",
+                    "description" => "12 km aprox"
+                ],
+                [
+                    "lenguage_id" => "2",
+                    "name" => "Caminata total",
+                    "description" => "12 km aprox"
+                ],
+                [
+                    "lenguage_id" => "3",
+                    "name" => "Caminata total",
+                    "description" => "12 km aprox"
+                ]
+            ]
+        ];
+        // 29 comparison_waterfall_view
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_waterfall_view",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visita a Cascada",
+                        "description" => "1"
+                    ]
+                ]
+            ];
         return $characteristics;
     }
 
@@ -4741,7 +5071,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" =>  1,
-                            "name" =>  "Característica de la actividad",
+                            "name" =>  "Características de la actividad",
                             "description" =>  NULL
                         ],
                         [
@@ -6178,7 +6508,56 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-
+        // 28 comparison_total_walk
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_total_walk",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Caminata total",
+                        "description" => "1 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Caminata total",
+                        "description" => "1 km aprox"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Caminata total",
+                        "description" => "1 km aprox"
+                    ]
+                ]
+            ];
+        // 29 comparison_waterfall_view
+            $characteristics['characteristics'][] = [
+                "icon_id" => null,
+                "characteristic_type" => "comparison_waterfall_view",
+                "order" => null,
+                "icon" => null,
+                "characteristics" => [],
+                "translables" => [
+                    [
+                        "lenguage_id" => "1",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "2",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ],
+                    [
+                        "lenguage_id" => "3",
+                        "name" => "Visita a Cascada",
+                        "description" => "0"
+                    ]
+                ]
+            ];
         return $characteristics;
     }
 
@@ -6199,7 +6578,7 @@ class ExcurtionCharacteristicController extends Controller
                     "translables" => [
                         [
                             "lenguage_id" =>  1,
-                            "name" =>  "Característica de la actividad",
+                            "name" =>  "Características de la actividad",
                             "description" =>  NULL
                         ],
                         [
@@ -7339,7 +7718,56 @@ class ExcurtionCharacteristicController extends Controller
                     ]
                 ]
             ];
-
+        // 28 comparison_total_walk
+        $characteristics['characteristics'][] = [
+            "icon_id" => null,
+            "characteristic_type" => "comparison_total_walk",
+            "order" => null,
+            "icon" => null,
+            "characteristics" => [],
+            "translables" => [
+                [
+                    "lenguage_id" => "1",
+                    "name" => "Caminata total",
+                    "description" => "0"
+                ],
+                [
+                    "lenguage_id" => "2",
+                    "name" => "Caminata total",
+                    "description" => "0"
+                ],
+                [
+                    "lenguage_id" => "3",
+                    "name" => "Caminata total",
+                    "description" => "0"
+                ]
+            ]
+        ];
+    // 29 comparison_waterfall_view
+        $characteristics['characteristics'][] = [
+            "icon_id" => null,
+            "characteristic_type" => "comparison_waterfall_view",
+            "order" => null,
+            "icon" => null,
+            "characteristics" => [],
+            "translables" => [
+                [
+                    "lenguage_id" => "1",
+                    "name" => "Visita a Cascada",
+                    "description" => "0"
+                ],
+                [
+                    "lenguage_id" => "2",
+                    "name" => "Visita a Cascada",
+                    "description" => "0"
+                ],
+                [
+                    "lenguage_id" => "3",
+                    "name" => "Visita a Cascada",
+                    "description" => "0"
+                ]
+            ]
+        ];
         return $characteristics;
     }
 }
