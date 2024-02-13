@@ -2505,17 +2505,17 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Itinerario Minitrekking",
+                        "name" => "Itinerario Minitrekking 2",
                         "description" => null
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Minitrekking itinerary",
+                        "name" => "Itinerario Minitrekking 2",
                         "description" => null
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Itinerário Minitrekking",
+                        "name" => "Itinerario Minitrekking 2",
                         "description" => null
                     ]
                 ]
