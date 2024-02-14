@@ -106,7 +106,7 @@ class MercadoPagoController extends Controller
                 break;
         }
 
-        // return $payment;
+        return response()->json(["payment" => $payment]);
     }
 
 }
