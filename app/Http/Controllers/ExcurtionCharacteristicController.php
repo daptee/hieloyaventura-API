@@ -1809,13 +1809,13 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>9:30 hours (Full day)</p>",
+                                    "name"        =>  "<p>9.5 hours (Full day)</p>",
                                     "description" =>  "<p>The duration of the activity is approximately 9:30 a.m. It is recommended not to organize other plans for that day.</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>9:30 horas (Todo o dia)</p>",
+                                    "name"        =>  "<p>9.30 horas (o dia inteiro)</p>",
                                     "description" =>  "<p>A duração da atividade é de aproximadamente 9h30. Recomenda-se não organizar outros planos para esse dia.</p>"
                                 ]
                             ]
@@ -1835,13 +1835,13 @@ class ExcurtionCharacteristicController extends Controller
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>February 1th to April 30th</p>",
-                                    "description" =>  "<p>The availability of this excursion is from February 1 to April 30</p>"
+                                    "description" =>  "<p>It is available from February 1 until the end of April</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>1 Fevereiro até 30 abril</p>",
-                                    "description" =>  "<p>A disponibilidade desta excursão é de 1 de Fevereiro a 30 de Abril</p>"
+                                    "description" =>  "<p>A excursão é disponível a partir do 1º dia de fevereiro até o fim de abril</p>"
                                 ]
                             ]
                         ],
@@ -1860,13 +1860,13 @@ class ExcurtionCharacteristicController extends Controller
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  '<p>Optional transfer</p>',
-                                    "description" =>  "<p>Optional transfer with bilingual guide and visit of approximately one hour to walkways.</p>"
+                                    "description" =>  "<p>Option with transfer, including bilingual guide and a visit of about one hour to the walkways.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  '<p>Transferência opcional</p>',
-                                    "description" =>  "<p>Traslado opcional com guia bilíngue e visita de aproximadamente uma hora às passarelas.</p>"
+                                    "description" =>  "<p>Traslado opcional, com guia bilíngue e visita de aproximadamente uma hora às passarelas.</p>"
                                 ]
                             ]
                         ],
@@ -1910,7 +1910,7 @@ class ExcurtionCharacteristicController extends Controller
                                 # INGLES
                                     "lenguage_id" =>  "2",
                                     "name"        =>  "<p>Suitable for 18 to 55 years old</p>",
-                                    "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 55 years ONLY.</span> No exceptions.</p>'
+                                    "description" =>  '<p>For <span style="color: #366895;">people between 18 and 55 years ONLY.</span> No exceptions.</p>'
                                 ],
                                 [
                                 # PORTUGUÉS
@@ -1927,20 +1927,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>Personas sedentarias con obesidad</p>",
-                                    "description" =>  "<p>Para tener una excelente experiencia en el Glaciar tanto niños como adultos deben tener la capacidad psicofísica suficiente para caminar 3 horas, de las cuales 1h15´ es sobre el hielo y con crampones.</p>"
+                                    "name"        =>  "<p>No apto para personas sedentarias</p>",
+                                    "description" =>  "<p>No apto para personas sedentarias</p>"
                                 ],
                                 [
                                     # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Sedentary people with obesity</p>",
-                                    "description" =>  "<p>To have an excellent experience in the Glacier, both children and adults must have sufficient psychophysical capacity to walk 3 hours, of which 1h15' is on the ice and with crampons</p>"
+                                    "name"        =>  "<p>Not suitable for sedentary people</p>",
+                                    "description" =>  "<p>Not suitable for sedentary people</p>"
                                 ],
                                 [
                                     # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>Pessoas sedentárias com obesidade</p>",
-                                    "description" =>  "<p>Para ter uma excelente experiência no Glaciar, crianças e adultos devem ter capacidade psicofísica suficiente para caminhar 3 horas, das quais 1h15' é no gelo e com crampons</p>"
+                                    "name"        =>  "<p>Não apta para pessoas sedentárias</p>",
+                                    "description" =>  "<p>Não apta para pessoas sedentárias</p>"
                                 ]
                             ]
                         ],
@@ -1958,14 +1958,14 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Moderate/High complexity</p>",
-                                    "description" =>  "<p>For you to have an excellent experience in the Glacier you must have sufficient psychophysical capacity to walk steadily for at least 3 hours, part of the journey being on the ice with crampons.</p>"
+                                    "name"        =>  "<p>Moderate/high difficulty</p>",
+                                    "description" =>  "<p>In order to have a great experience on the glacier, you should have the mental and physical capacity required to walk non-stop for 3 hours, partly on ice and with crampons.</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Moderada/Alta complexidade</p>",
-                                    "description" =>  "<p>Para que você desfrute de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para caminhar 3 horas, uma parte do percorrido sobre gelo e com grampos.</p>"
+                                    "description" =>  "<p>Para disfrutar de uma experiência excelente no Glaciar, é imprescindível contar com capacidade psicofísica suficiente para pelo menos 3 horas de caminhada constante, com uma parte do percorrido sobre gelo e com grampos.</p>"
                                 ]
                             ]
                         ],
@@ -1983,14 +1983,14 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>Items not included</p>",
-                                    "description" =>  "<p><strong>Not included:</strong> Entrance to the National Park | Food and drink | Personal clothing appropriate to the climatic conditions of the region. (cold, rain, wind, snow)</p>"
+                                    "name"        =>  "<p>This tour does not include</p>",
+                                    "description" =>  "<p><strong>Not included:</strong> Tickets for the national park | Food and drinks | Personal clothes adequate for the weather conditions of the area (cold, rain, wind, snow)</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
                                     "name"        =>  "<p>Itens não inclusos</p>",
-                                    "description" =>  "<p><strong>Não inclui:</strong> Entrada no Parque Nacional | Comida e bebida | Roupa pessoal adequada às condições climáticas da região. (frio, chuva, vento, neve)</p>"
+                                    "description" =>  "<p><strong>Não inclui:</strong> Ingresso ao Parque Nacional | Comida e bebida | Roupa pessoal adequada para as condições climáticas próprias da região. (Frio, chuva, vento e neve)</p>"
                                 ]
                             ]
                         ]
@@ -2032,48 +2032,12 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             "lenguage_id" => 2,
                             "name" => "About",
-                            "description" => '<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
-                            <p>&nbsp;</p>
-                            <p>Una vez en el Puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 10 minutos de navegaci&oacute;n frente a la imponente pared sur del Glaciar Perito Moreno.</p>
-                            <p>&nbsp;</p>
-                            <p>Al desembarcar en la Bah&iacute;a Puma, a solo 500mts del Glaciar, ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a. A partir de aqu&iacute;, comenzaremos el recorrido con una caminata de una hora aproximadamente por la costa del lago y luego por la morena al lado del hielo (terreno de rocas y tierra inestable).</p>
-                            <p>&nbsp;</p>
-                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
-                            <p>&nbsp;</p>
-                            <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
-                            <p>&nbsp;</p>
-                            <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
-                            <p>&nbsp;</p>
-                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>'
+                            "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">The tour starts when passengers are picked up in El Calafate. On our comfortable buses, on the way to Parque Nacional Los Glaciares, our tour guides will give you information on the place, the glacier and the tour.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Once you arrive at &ldquo;Bajo de las Sombras&rdquo; port (located on Route 11, 70 Km from El Calafate), you will board a ship to cross Lago Rico and arrive to the opposite coast after a 10-minute navigation in front of the stunning south face of Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we disembark on Bahia Puma, just 500 meters from the glacier, you will be received by our expert mountain guides. Then we will start the hike with a walk of about one hour on the lake coast and later on the moraine next to the ice (ground with rocks and unstable earth). <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we reach the glacier side, with its amazing blue ice shades, you will be divided into subgroups of up to 20 people each and you will have the crampons and helmets fitted, which are provided by the company, a few meters from the beautiful waterfall Cascada de las Cotorras. This tour is highly personalized (one guide every 10 passengers maximum). Once on the glacier, you will hear the safety instructions and we will explore together for about an hour this frozen paradise, which has been declared a World Heritage Site in 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">The level of difficulty of the circuit on the glacier is moderate/high. The ice surface is irregular, but firm and safe.&nbsp;The pace of the walk is continuous and there are few stops. You will walk for about 5 km. of land with rocks, earth and ice with crampons (The regular Minitrekking goes over 3 km.) The complete trekking takes about 3 hours.&nbsp; <br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">That is to say, you walk twice the distance of the regular Minitrekking in the same time.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">During the trekking, you will be able to see the typical and changing glacier formations, such as deep cracks, blue moulins, huge seracs and turquoise ponds. All the way you will hear the unique sound of the crampons sticking into the ice.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">At the end of the trekking on the ice, we will visit the waterfall base, from where we will walk back along the lateral moraine until we reach Bah&iacute;a Puma again. Once we are there, we will take the boat back to &ldquo;Bajo de las Sombras&rdquo; port, always looking at the ice wall in case we see a noisy calving. <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">The duration of this tour is about 9.5 hours, including the transfer and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from our port. There, you will have the chance to enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t book our transfer and go by your own means, this tour takes about four hours, leaving from the port and returning to the same point.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">This tour is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, as long as it is safe to go on the tour, it is not suspended. We are waiting for you!</span></strong></p>'
                         ],
                         [
                             "lenguage_id" => 3,
                             "name" => "Sobre esta experiência",
-                            "description" => '<p>La excursi&oacute;n comienza con la b&uacute;squeda de los pasajeros en El Calafate. En nuestros confortables buses, camino al Parque Nacional Los Glaciares, los gu&iacute;as de turismo les brindar&aacute;n informaci&oacute;n sobre el lugar, el glaciar y la excursi&oacute;n.</p>
-                            <p>&nbsp;</p>
-                            <p>Una vez en el Puerto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate) se embarca para cruzar el Lago Rico, llegando a la costa opuesta luego de aproximadamente 10 minutos de navegaci&oacute;n frente a la imponente pared sur del Glaciar Perito Moreno.</p>
-                            <p>&nbsp;</p>
-                            <p>Al desembarcar en la Bah&iacute;a Puma, a solo 500mts del Glaciar, ser&aacute;n recibidos por nuestros expertos gu&iacute;as de monta&ntilde;a. A partir de aqu&iacute;, comenzaremos el recorrido con una caminata de una hora aproximadamente por la costa del lago y luego por la morena al lado del hielo (terreno de rocas y tierra inestable).</p>
-                            <p>&nbsp;</p>
-                            <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
-                            <p>&nbsp;</p>
-                            <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
-                            <p>&nbsp;</p>
-                            <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
-                            <p>&nbsp;</p>
-                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
-                            <p>&nbsp;</p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>'
+                            "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">A excurs&atilde;o come&ccedil;a com a retirada dos passageiros na cidade de El Calafate. Em nossos confort&aacute;veis &ocirc;nibus, caminho ao Parque Nacional Los Glaciares, os guias de turismo oferecer&atilde;o informa&ccedil;&otilde;es sobre o local, a geleira e a excurs&atilde;o.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar ao porto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate), come&ccedil;a a navega&ccedil;&atilde;o em barco, atravessando o Lago Rico at&eacute; atingir a margem oposta, logo ap&oacute;s 10 minutos de navega&ccedil;&atilde;o com vista para a imponente parede sul do Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao desembarcar na Bahia Puma, apenas 500 metros da geleira, os passageiros ser&atilde;o recebidos por nossos espertos guias de montanha. O percorrido come&ccedil;a com uma caminhada de perto de uma hora pela margem do lago e, depois, pela morena ao lado do gelo (superf&iacute;cie inst&aacute;vel e rochosa).<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar &agrave; borda do glaciar, no meio de uma paisagem de incr&iacute;veis tonalidades de gelo azuis, ser&atilde;o organizados subgrupos com at&eacute; 20 pessoas cada um, e ser&atilde;o colocados os grampos e capacetes fornecidos pela empresa, perto da bonita cachoeira chamada Cascada de las Cotorras. A excurs&atilde;o &eacute; muito personalizada (com um guia cada, no m&aacute;ximo, 10 passageiros). J&aacute; na geleira, os passageiros receber&atilde;o instru&ccedil;&otilde;es sobre seguran&ccedil;a e caminhar&atilde;o perto de uma hora para desfrutar desse para&iacute;so gelado, que foi declarado Patrim&ocirc;nio da Humanidade em 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">O circuito sobre a geleira tem uma dificuldade m&eacute;dia/alta; a superf&iacute;cie do gelo &eacute; irregular, mas firme e segura.&nbsp;O ritmo da caminhada &eacute; constante e com poucas pausas para descansar. A dist&acirc;ncia percorrida &eacute; de perto de 5 km de pedras, terra e gelo com grampos (A dist&acirc;ncia do Minitrekking normal &eacute; de 3 km). O tempo de caminhada total &eacute; de aproximadamente 3 horas.<br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">Ou seja, os passageiros v&atilde;o caminhar uma dist&acirc;ncia duas vezes maior do que no Minitrekking comum, mas no mesmo tempo.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">No percorrido, os passageiros poder&atilde;o apreciar as forma&ccedil;&otilde;es caracter&iacute;sticas e em transforma&ccedil;&atilde;o de uma geleira, como profundas fendas, sumidouros azuis, enormes seracs e lagoas de cor azul turquesa. Sempre acompanhados pelo som &uacute;nico dos grampos que se cravam no gelo.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao concluir a caminhada no gelo, os passageiros visitar&atilde;o a base da queda d&acute;&aacute;gua e, a partir da&iacute;, retornar&atilde;o caminhando pela morena lateral at&eacute; chegarem outra vez &agrave; Bahia Puma. Na Bahia, embarcar&atilde;o para o Porto Bajo de las Sombras, sempre olhando para a parede de gelo, caso aconte&ccedil;a um estrondoso e surpreendente desprendimento.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">A dura&ccedil;&atilde;o da excurs&atilde;o mais o traslado de El Calafate &eacute; de aproximadamente 9:30 horas. A excurs&atilde;o inclui uma visita de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km de nosso porto. L&aacute; poder&atilde;o desfrutar da espetacular vista panor&acirc;mica do glaciar e percorrer algumas das trilhas autoguiadas. Se o passageiro n&atilde;o escolher nosso transporte e decidir utilizar seus pr&oacute;prios meios, a dura&ccedil;&atilde;o da excurs&atilde;o &eacute; de quatro horas aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">A excurs&atilde;o &eacute; realizada em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e de seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o ser&aacute; suspensa sempre que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitirem. Esperamos voc&ecirc;s!</span></strong></p>'
                         ]
                     ]
             ];
@@ -2104,12 +2068,12 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => '<li><strong>Obese persons.</strong> People with obesity may not participate. In the case of adults, the World Health Organization (WHO) defines obesity as when a person has a Body Mass Index (BMI) equal to or greater than 30. The BMI is calculated by dividing the weight of a person in kilos times the square of their height in meters: (kg/m2). If you have any questions or queries, send us an email to clientes@hieloyaventura.com</li>',
+                                        "description" => '<li><strong>Sedentary obese people.</strong> Obese people may not take the tour. The World Health Organization (WHO) determines an adult is obese when their body mass index (BMI) is equal to or higher than 30. The BMI is calculated by dividing an adult’s weight in kilograms by their square height in meters: (kg/m2). If you have any doubt or question, please contact us at clientes@hieloyaventura.com.</li>',
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => '<li><strong>Pessoas obesas.</strong> Pessoas com obesidade não podem participar. No caso dos adultos, a Organização Mundial de Saúde (OMS) define a obesidade como quando uma pessoa tem um Índice de Massa Corporal (IMC) igual ou superior a 30. O IMC é calculado dividindo o peso de uma pessoa em quilos vezes o quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou questão, envie-nos um email para clientes@hieloyaventura.com</li>'
+                                        "description" => '<li><strong>Pessoas obesas e sedentárias.</strong> As pessoas obesas não poderão participar. No caso de adultos, a Organização Mundial da Saúde (OMS) define que uma pessoa é obesa quando seu Índice de Massa Corporal (IMC) é igual ou superior a 30. O IMC é calculado dividindo o peso do indivíduo em quilos pelo quadrado de sua altura em metros: (kg/m2). Se tiver alguma dúvida ou consulta, pode enviar um e-mail para clientes@hieloyaventura.com</li>'
                                     ]
                                 ]
                             ],
@@ -2128,12 +2092,12 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>Pregnant</li>",
+                                        "description" => "<li>Pregnant people</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Grávida</li>",
+                                        "description" => "<li>Grávidas</li>",
                                     ]
                                 ]
                             ],
@@ -2175,7 +2139,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                     # INGLES
                                         "lenguage_id" =>  "2",
-                                        "name"        =>  "<p>Suitable for 18 to 55 years old</p>",
+                                        "name"        =>  "<p>For people between 18 and 55 years only. No exceptions.</p>",
                                         "description" =>  '<p>Suitable for <span style="color: #366895;">people between 18 and 55 years ONLY.</span> No exceptions.</p>'
                                     ],
                                     [
@@ -2201,12 +2165,12 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>People with a cardiac history. Persons who suffer from central or peripheral heart or vascular disease, whose heart or capabilities are limited, or people with stents, bypass, pacemakers or other prosthesis. Example: anticoagulant medication, stage 3 varicose veins (multiple thick varicose veins that can noticed).</li>",
+                                        "description" => "<li>People with a history of heart conditions, or suffer from central or peripheral heart or vascular diseases, whose heart or vascular capabilities are limited, or who have stents, a bypass, a pacemaker or other similar devices. For example: anticoagulant medication, stage 3 varicose veins (multiple apparent thick varicose veins).</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Pessoas com histórico de doença cardíaca. Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (são grossas e múltiplas).</li>",
+                                        "description" => "<li>Pessoas com problemas cardíacos. Pessoas com doenças cardiovasculares centrais ou periféricas, com capacidades cardíacas ou vasculares deficientes, ou quando utilizem stent, bypass, marca-passos ou outro tipo de prótese. Exemplo: medicamentos anti-coagulantes, varizes grau III (grossas e múltiplas).</li>",
                                     ]
                                 ]
                             ],
@@ -2225,12 +2189,12 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 2,
                                         "name" => null,
-                                        "description" => "<li>People who suffer from diseases caused by respiratory disabilities such as COPD, asthma, emphysema, among others.</li>",
+                                        "description" => "<li>People who suffer from diseases caused by respiratory impairment (COPD, asthma, emphysema, etc.).</li>",
                                     ],
                                     [
                                         "lenguage_id" => 3,
                                         "name" => null,
-                                        "description" => "<li>Pessoas que sofrem de doenças causadas por deficiências respiratórias como DPOC, asma, enfisema, entre outras.</li>",
+                                        "description" => "<li>Pessoas com doenças provocadas por deficiências respiratórias (EPOC, asma, enfisema, etc.).</li>",
                                     ]
                                 ]
                             ]
@@ -2260,8 +2224,8 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE KEEP IN MIND THE FOLLOWING:",
-                        "description" => "<p><strong>Devido ao grau de esforço e dificuldade (Médio/Alto) desta experiência com terrenos rochosos, terrenos instáveis ​​e gelo irregular mas firme e seguro e com o único objetivo de preservar a saúde, não poderão participar:</strong></p>"
+                        "name" => "BEFORE PURCHASING YOUR TICKETS, PLEASE TAKE INTO ACCOUNT THE FOLLOWING:",
+                        "description" => "<p><strong>Due to the degree of effort and difficulty of this experience (moderate/high) on rocky ground with unstable earth and irregular ice, but firm and safe, and for the sole purpose of preserving visitors’ health, the following people won’t be able to participate:</strong></p>"
                     ],
                     [
                         "lenguage_id" => 3,
@@ -2301,8 +2265,8 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Partida de El Calafate",
-                                        "description" => "70 km até a geleira."
+                                        "name" => "Saída de El Calafate",
+                                        "description" => "70 km para o glaciar."
                                     ]
                                 ]
                             ],
@@ -2319,13 +2283,13 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Boarding in port",
-                                        "description" => "10min of navigation."
+                                        "name" => "Boarding at the port",
+                                        "description" => "10-minute navigation."
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Embarque no porto",
-                                        "description" => "10min de navegação."
+                                        "name" => "Embarque no Porto",
+                                        "description" => "10 minutos de navegação."
                                     ]
                                 ]
                             ],
@@ -2342,12 +2306,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "trekking along the coast, moraine and glacier",
+                                        "name" => "Trekking along the coast, moraine and glacier",
                                         "description" => "3 hours."
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Trekking ao longo da costa, morena e geleira",
+                                        "name" => "Trekking pela borda, morena e geleira",
                                         "description" => "3 horas."
                                     ]
                                 ]
@@ -2360,17 +2324,17 @@ class ExcurtionCharacteristicController extends Controller
                                 "translables" => [
                                     [
                                         "lenguage_id" => 1,
-                                        "name" => "Visita a Cascada",
+                                        "name" => "Visita a cascada",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visit to Waterfall",
+                                        "name" => "Visit to waterfall",
                                         "description" => null
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Visita a Cachoeira",
+                                        "name" => "Visita à cachoeira",
                                         "description" => null
                                     ]
                                 ]
@@ -2388,12 +2352,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Return to port",
+                                        "name" => "Return to the port",
                                         "description" => "30min of navigation."
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Retornar ao porto",
+                                        "name" => "Retorno para o Porto",
                                         "description" => "30min de navegação."
                                     ]
                                 ]
@@ -2411,12 +2375,12 @@ class ExcurtionCharacteristicController extends Controller
                                     ],
                                     [
                                         "lenguage_id" => 2,
-                                        "name" => "Visit to walkways",
-                                        "description" => "1 hour approximately"
+                                        "name" => "Visit to the walkways",
+                                        "description" => "About 1 hour"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Visita a passarelas",
+                                        "name" => "Visita às passarelas",
                                         "description" => "1 hora aproximadamente"
                                     ]
                                 ]
@@ -2430,17 +2394,17 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => "Regreso a El Calafate",
-                                        "description" => "70km"
+                                        "description" => "70 km"
                                     ],
                                     [
                                         "lenguage_id" => 2,
                                         "name" => "Return to El Calafate",
-                                        "description" => "70km"
+                                        "description" => "70 km"
                                     ],
                                     [
                                         "lenguage_id" => 3,
-                                        "name" => "Voltar para El Calafate",
-                                        "description" => "70km"
+                                        "name" => "Retorno para El Calafate",
+                                        "description" => "70 km"
                                     ]
                                 ]
                             ]
@@ -2510,12 +2474,12 @@ class ExcurtionCharacteristicController extends Controller
                     ],
                     [
                         "lenguage_id" => 2,
-                        "name" => "Itinerario Minitrekking 2",
+                        "name" => "Minitrekking 2 itinerary",
                         "description" => null
                     ],
                     [
                         "lenguage_id" => 3,
-                        "name" => "Itinerario Minitrekking 2",
+                        "name" => "Itinerário Minitrekking 2",
                         "description" => null
                     ]
                 ]
@@ -2543,12 +2507,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => "<p>Wear comfortable and warm clothing. Waterproof jacket and pants, waterproof trekking boots or sports shoes with laces. Backpack, sunglasses, sunscreen, gloves and hat. The weather is changeable and you have to be prepared to avoid getting wet or cold.</p>"
+                                    "description" => "<p>Wear comfortable and warm clothes. Rain jacket and waterproof trousers, waterproof trekking boots or sports shoes with laces. Backpack, sunglasses, sunscreen, gloves and hat. You must be prepared for the changing weather conditions, so that you don’t get wet or cold.</p>"
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => "<p>Use roupas confortáveis ​​e quentes. Casaco e calças impermeáveis, botas de trekking impermeáveis ​​ou calçado desportivo com atacadores. Mochila, óculos de sol, protetor solar, luvas e chapéu. O clima é mutável e é preciso estar preparado para evitar molhar-se ou sentir frio.</p>"
+                                    "description" => "<p>Vestir roupa confortável e quente. Casaco, calças e botas de trekking impermeáveis, ou calçado esportivo com cordão. Mochila, óculos de sol, protetor solar, luvas e gorro. Como o clima é cambiante, é preciso estar preparado para não se molhar nem passar frio.</p>"
                                 ]
                             ]
                         ],
@@ -2566,12 +2530,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => "<p>Bring food and drink for the day. The company does not sell food and drinks</p>"
+                                    "description" => "<p>Take some food and drink for the day. The company does not sell food and drink</p>"
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => "<p>Levar comida e bebida para todo o dia. A empresa n&atilde;o oferece servi&ccedil;o de venda de comidas nem bebidas.</p>"
+                                    "description" => "<p>Levar comida e bebida para todo o dia. A empresa não oferece serviço de venda de comidas nem bebidas.</p>"
                                 ]
                             ]
                         ],
@@ -2590,12 +2554,12 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 2,
                                     "name" => null,
-                                    "description" => '<p>Tickets must be exhibited at the entrance of the Parque Nacional. You can buy your ticket here&nbsp;<a href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(<span style="color: #2471B9;">Select: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</span></strong></a>&nbsp;or pay it in cash (in Argentine pesos) when you arrive at the Parque Nacional.</p>'
+                                    "description" => '<p>You will have to exhibit your ticket for the national park. You can buy your ticket here&nbsp;<a href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(<span style="color: #2471B9;">Select: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</span></strong></a>&nbsp;or pay it in cash (in Argentine pesos) when you arrive at the National Park.</p>'
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => null,
-                                    "description" => '<p>Voc&ecirc; dever&aacute; apresentar seu ingresso ao Parque Nacional. Pode comprar o ingresso aqui&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Selecionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;ou pagar com dinheiro (pesos argentinos) ao chegar ao Parque Nacional.</p>'
+                                    "description" => '<p>Deve ser apresentado o comprovante de ingresso ao Parque Nacional. Pode comprar o ingresso aqui&nbsp;<span style="color: #2471B9;"><a style="color: #2471B9;" href="https://ventaweb.apn.gob.ar/reserva/inicio?dp=05" target="_blank" rel="noopener"><strong>(Selecionar: &ldquo;Acceso Corredor Rio Mitre y Glaciar Perito Moreno&rdquo;)</strong></a></span>&nbsp;ou pagar com dinheiro (pesos argentinos) ao chegar ao Parque Nacional.</p>'
                                 ]
                             ]
                         ]

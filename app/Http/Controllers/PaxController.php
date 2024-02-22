@@ -413,6 +413,12 @@ class PaxController extends Controller
                 ]
             ];
             
+            if (isset($newUserReservation->hotel_id) && $newUserReservation->hotel_id == 225) {
+                $turnFormated = $newUserReservation->turn->subMinutes(15)->format('H:i\h\s');
+            } else {
+                $turnFormated = $newUserReservation->turn->format('H:i\h\s');
+            }
+
             //Textos
             $thanks                  = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
             $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
@@ -421,7 +427,7 @@ class PaxController extends Controller
             $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer == 1 ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
             $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', "|  " . $quantity_paxes . "x $excurtionName");
             $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
-            $reservationTurn         = iconv('UTF-8', 'cp1250', $newUserReservation->turn->format('H:i\h\s'));
+            $reservationTurn         = iconv('UTF-8', 'cp1250', $turnFormated);
             $hotelName               = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->hotel_name);
             $details                 = iconv('UTF-8', 'cp1250', $details);
             $excurtionName           = iconv('UTF-8', 'cp1250', $excurtionName);
