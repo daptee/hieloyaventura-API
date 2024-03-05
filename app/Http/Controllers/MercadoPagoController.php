@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
+use Illuminate\Support\Facades\Http;
 
 class MercadoPagoController extends Controller
 {
@@ -74,19 +75,26 @@ class MercadoPagoController extends Controller
         return response()->json(['preference' => $preference->id], 200);
     }
 
-    public function notificationWebHook()
+    public function notificationWebHook(Request $request)
     {
-        $data = json_encode($_POST);
+        $data = json_encode($request->all());
         MercadoPago\SDK::setAccessToken(config('services.mercadopago.webhook.token'));
         Log::channel("notificationmp")->info($data);
-        // $payment = MercadoPago\Payment::find_by_id($_POST["data"]["id"]);
-
-        // dd($_POST["data"]["id"], $payment);
 
         switch($_POST["type"]) {
             case "payment":
-                $payment = MercadoPago\Payment::find_by_id($_POST["data"]["id"]);
+
+                if($_POST['action'] == "payment.created"){
+                    $id = $_POST["data"]["id"];
+                    $payment = MercadoPago\Payment::find_by_id($id);
+                }else{
+                    $id = $_POST["id"];
+                    $payment = MercadoPago\Payment::find_by_id($_POST["id"]);
+                }
+                
+                $payment2 = Http::get("https://api.mercadopago.com/v1/payments/$id");
                 Log::channel("notificationmp")->info($payment);
+                Log::channel("notificationmp")->info($payment2);
                 break;
             case "plan":
                 $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
@@ -106,7 +114,7 @@ class MercadoPagoController extends Controller
                 break;
         }
 
-        return response()->json(["payment" => $payment]);
+        return response()->json(["payment" => $payment], 200);
     }
 
 }
