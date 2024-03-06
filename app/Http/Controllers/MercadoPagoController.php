@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago;
@@ -77,43 +78,45 @@ class MercadoPagoController extends Controller
 
     public function notificationWebHook(Request $request)
     {
-        $data = json_encode($request->all());
-        MercadoPago\SDK::setAccessToken(config('services.mercadopago.webhook.token'));
-        Log::channel("notificationmp")->info($data);
-
-        switch($_POST["type"]) {
-            case "payment":
-
-                if($_POST['action'] == "payment.created"){
-                    $id = $_POST["data"]["id"];
+        try {
+            $token = config('services.mercadopago.webhook.token');
+            MercadoPago\SDK::setAccessToken($token);
+            Log::channel("notificationmp")->info($request);
+            $data = $request;
+            switch($data->type) {
+                case "payment":
+                    $id = $data->data['id'];
                     $payment = MercadoPago\Payment::find_by_id($id);
-                }else{
-                    $id = $_POST["id"];
-                    $payment = MercadoPago\Payment::find_by_id($_POST["id"]);
-                }
-                
-                $payment2 = Http::get("https://api.mercadopago.com/v1/payments/$id");
-                Log::channel("notificationmp")->info($payment);
-                Log::channel("notificationmp")->info($payment2);
-                break;
-            case "plan":
-                $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($plan);
-                break;
-            case "subscription":
-                $subcription = MercadoPago\Subscription::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($subcription);
-                break;
-            case "invoice":
-                $invoice = MercadoPago\Invoice::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($invoice);
-                break;
-            case "point_integration_wh":
-                // $_POST contiene la informaciòn relacionada a la notificaciòn.
-                Log::channel("notificationmp")->info($data);
-                break;
-        }
+                    Log::channel("notificationmp")->info($payment);
 
+                    $payment2 = Http::withHeaders([
+                        'Authorization' => 'Bearer '.$token,
+                        'Content-Type' => 'application/json',
+                    ])->get("https://api.mercadopago.com/v1/payments/$id");
+
+                    Log::channel("notificationmp")->info($payment2);
+                    break;
+                case "plan":
+                    $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
+                    Log::channel("notificationmp")->info($plan);
+                    break;
+                case "subscription":
+                    $subcription = MercadoPago\Subscription::find_by_id($_POST["data"]["id"]);
+                    Log::channel("notificationmp")->info($subcription);
+                    break;
+                case "invoice":
+                    $invoice = MercadoPago\Invoice::find_by_id($_POST["data"]["id"]);
+                    Log::channel("notificationmp")->info($invoice);
+                    break;
+                case "point_integration_wh":
+                    // $_POST contiene la informaciòn relacionada a la notificaciòn.
+                    Log::channel("notificationmp")->info($data);
+                    break;
+            }
+        } catch (Exception $e) {
+            Log::channel("notificationmp")->info('error: ' . $e->getMessage() . ', line: ' . $e->getLine());
+        }
+        
         return response()->json(["payment" => $payment], 200);
     }
 
