@@ -372,7 +372,7 @@ Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_cod
 Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
 // Webhook Mercado Libre
-Route::post('/mercadopago/notifications', [MercadoPagoController::class, 'notificationWebHook']);
+Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notificationWebHook']);
 // Route::post('/publication/update/price', [MercadoLibreController::class, 'update_publication_price']);
 // Route::post('/publication/update/status', [MercadoLibreController::class, 'update_publication_status']);
 // Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
