@@ -86,38 +86,17 @@ class MercadoPagoController extends Controller
             $data = $request;
             $type = $data->type ?? null;
             Log::channel("notificationmp")->info("type: $type");
-            switch($data->type) {
-                case "payment":
-                    $id = $data->data['id'];
-                    // $id = $data->id;
-                    Log::channel("notificationmp")->info($id);
-                    $payment = MercadoPago\Payment::find_by_id($id);
-                    Log::channel("notificationmp")->info($payment);
+            $id = $data->data['id'];
+            Log::channel("notificationmp")->info($id);
+            $payment = MercadoPago\Payment::find_by_id($id);
+            Log::channel("notificationmp")->info($payment);
 
-                    $payment2 = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
-                        'Content-Type' => 'application/json',
-                    ])->get("https://api.mercadopago.com/v1/payments/$id");
+            $payment2 = Http::withHeaders([
+                'Authorization' => 'Bearer '.$token,
+                'Content-Type' => 'application/json',
+            ])->get("https://api.mercadopago.com/v1/payments/$id");
 
-                    Log::channel("notificationmp")->info($payment2);
-                    break;
-                case "plan":
-                    $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
-                    Log::channel("notificationmp")->info($plan);
-                    break;
-                case "subscription":
-                    $subcription = MercadoPago\Subscription::find_by_id($_POST["data"]["id"]);
-                    Log::channel("notificationmp")->info($subcription);
-                    break;
-                case "invoice":
-                    $invoice = MercadoPago\Invoice::find_by_id($_POST["data"]["id"]);
-                    Log::channel("notificationmp")->info($invoice);
-                    break;
-                case "point_integration_wh":
-                    // $_POST contiene la informaciòn relacionada a la notificaciòn.
-                    Log::channel("notificationmp")->info($data);
-                    break;
-            }
+            Log::channel("notificationmp")->info($payment2);
         } catch (Exception $e) {
             Log::channel("notificationmperror")->info('error: ' . $e->getMessage() . ', line: ' . $e->getLine());
         }
