@@ -79,14 +79,17 @@ class MercadoPagoController extends Controller
     public function notificationWebHook(Request $request)
     {
         Log::channel("notificationmp")->info($request);
+        $payment = null;
         try {
             $token = config('services.mercadopago.webhook.token');
             MercadoPago\SDK::setAccessToken($token);
             $data = $request;
+            $type = $data->type ?? null;
+            Log::channel("notificationmp")->info("type: $type");
             switch($data->type) {
                 case "payment":
-                    // $id = $data->data['id'];
-                    $id = $data->id;
+                    $id = $data->data['id'];
+                    // $id = $data->id;
                     Log::channel("notificationmp")->info($id);
                     $payment = MercadoPago\Payment::find_by_id($id);
                     Log::channel("notificationmp")->info($payment);

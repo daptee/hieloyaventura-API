@@ -121,6 +121,13 @@ return [
             'level' => 'debug',
             'days' => 14,
         ],
+
+        'notificationmperror' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/notificationmp.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 
 ];
