@@ -86,7 +86,7 @@ class MercadoPagoController extends Controller
             $data = $request;
             $type = $data->type ?? null;
             Log::channel("notificationmp")->info("type: $type");
-            $id = $data->data['id'];
+            $id = $data->data->id;
             Log::channel("notificationmp")->info($id);
             $payment = MercadoPago\Payment::find_by_id($id);
             Log::channel("notificationmp")->info($payment);
