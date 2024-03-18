@@ -3793,7 +3793,7 @@ class ExcurtionCharacteristicController extends Controller
                             [
                                 "icon_id" => null,
                                 "order" => null,
-                                "icon" => '$stairs',
+                                "icon" => '$blue_stairs',
                                 "characteristics" => [],
                                 "translables" => [
                                     [
