@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
+use Illuminate\Support\Facades\Http;
 
 class MercadoPagoController extends Controller
 {
@@ -74,39 +76,34 @@ class MercadoPagoController extends Controller
         return response()->json(['preference' => $preference->id], 200);
     }
 
-    public function notificationWebHook()
+    public function notificationWebHook(Request $request)
     {
-        $data = json_encode($_POST);
-        MercadoPago\SDK::setAccessToken(config('services.mercadopago.webhook.token'));
-        Log::channel("notificationmp")->info($data);
-        // $payment = MercadoPago\Payment::find_by_id($_POST["data"]["id"]);
+        Log::channel("notificationmp")->info($request);
+        $payment = null;
+        try {
+            $token = config('services.mercadopago.webhook.token');
+            Log::channel("notificationmp")->info("token: $token");
+            MercadoPago\SDK::setAccessToken($token);
+            $data = $request;
+            Log::channel("notificationmp")->info("data: $data");
+            $type = $data->type ?? null;
+            Log::channel("notificationmp")->info("type: $type");
+            $id = $data->data['id'] ?? $data->data->id;
+            Log::channel("notificationmp")->info("id: $id");
+            $payment = MercadoPago\Payment::find_by_id($id);
+            Log::channel("notificationmp")->info($payment);
 
-        // dd($_POST["data"]["id"], $payment);
+            $payment2 = Http::withHeaders([
+                'Authorization' => 'Bearer '.$token,
+                'Content-Type' => 'application/json',
+            ])->get("https://api.mercadopago.com/v1/payments/$id");
 
-        switch($_POST["type"]) {
-            case "payment":
-                $payment = MercadoPago\Payment::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($payment);
-                break;
-            case "plan":
-                $plan = MercadoPago\Plan::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($plan);
-                break;
-            case "subscription":
-                $subcription = MercadoPago\Subscription::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($subcription);
-                break;
-            case "invoice":
-                $invoice = MercadoPago\Invoice::find_by_id($_POST["data"]["id"]);
-                Log::channel("notificationmp")->info($invoice);
-                break;
-            case "point_integration_wh":
-                // $_POST contiene la informaciòn relacionada a la notificaciòn.
-                Log::channel("notificationmp")->info($data);
-                break;
+            Log::channel("notificationmp")->info($payment2);
+        } catch (Exception $e) {
+            Log::channel("notificationmperror")->info('error: ' . $e->getMessage());
         }
-
-        return response()->json(["payment" => $payment]);
+        
+        return response()->json(["payment" => $payment], 200);
     }
 
 }
