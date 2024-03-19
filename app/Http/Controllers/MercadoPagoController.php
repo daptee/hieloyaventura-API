@@ -71,7 +71,7 @@ class MercadoPagoController extends Controller
                 ]
             ]
         ];
-        $preference->notification_url = config('app.url');
+        $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
         $preference->save();
 
         return response()->json(['preference' => $preference->id], 200);
