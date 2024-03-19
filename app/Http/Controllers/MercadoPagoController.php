@@ -71,6 +71,7 @@ class MercadoPagoController extends Controller
                 ]
             ]
         ];
+        $preference->notification_url = config('app.url');
         $preference->save();
 
         return response()->json(['preference' => $preference->id], 200);
@@ -81,7 +82,8 @@ class MercadoPagoController extends Controller
         Log::channel("notificationmp")->info($request);
         $payment = null;
         try {
-            $token = config('services.mercadopago.webhook.token');
+            // $token = config('services.mercadopago.webhook.token');
+            $token = config('services.mercadopago.dev.token');
             Log::channel("notificationmp")->info("token: $token");
             MercadoPago\SDK::setAccessToken($token);
             $data = $request;
