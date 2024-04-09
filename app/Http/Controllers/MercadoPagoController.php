@@ -44,11 +44,12 @@ class MercadoPagoController extends Controller
         // $item->category_descriptor = $category_descriptor;
 
         // Asi quiero implementarlo ahora
-        $item->category_descriptor = [
-            "route" => [
-                "departure_date_time" => $request->departure_date_time
-            ]
-        ];
+        // $item->category_descriptor = [
+        //     "route" => [
+        //         "departure_date_time" => $request->departure_date_time
+        //     ]
+        // ];
+        $item->departure_date_time = $request->departure_date_time;
         $preference->items = array($item);
 
         $object_payer = new stdClass;
