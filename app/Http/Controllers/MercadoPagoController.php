@@ -36,12 +36,19 @@ class MercadoPagoController extends Controller
         $item->quantity = $request->quantity;
         $item->unit_price = $request->unit_price;
 
-        $category_descriptor = new stdClass;
-        $category_descriptor_route = new stdClass;
-        $category_descriptor_route->departure_date_time = $request->departure_date_time;
-        $category_descriptor->route = $category_descriptor_route;
-        Log::debug(["item->category_descriptor" => $category_descriptor]);
-        $item->category_descriptor = $category_descriptor;
+        // // Asi es como esta actualmente
+        // $category_descriptor = new stdClass;
+        // $category_descriptor_route = new stdClass;
+        // $category_descriptor_route->departure_date_time = $request->departure_date_time;
+        // $category_descriptor->route = $category_descriptor_route;
+        // $item->category_descriptor = $category_descriptor;
+
+        // Asi quiero implementarlo ahora
+        $item->category_descriptor = [
+            "route" => [
+                "departure_date_time" => $request->departure_date_time
+            ]
+        ];
         $preference->items = array($item);
 
         $object_payer = new stdClass;
