@@ -11,72 +11,109 @@ use stdClass;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
+// use MercadoPago\Client\Preference\PreferenceClient;
+// use MercadoPago\Exceptions\MPApiException;
+// use MercadoPago\MercadoPagoConfig;
+
 class MercadoPagoController extends Controller
 {
     public function createPay(Request $request) {
 
-        // SDK de Mercado Pago
-        require base_path('vendor/autoload.php');
-        // Agrega credenciales
-        Log::debug(config('services.mercadopago.dev.token'));
-        MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
+            // SDK de Mercado Pago
+            require base_path('vendor/autoload.php');
+            // Agrega credenciales
+            Log::debug(config('services.mercadopago.dev.token'));
+            MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
-        // Crea un objeto de preferencia
-        $preference = new MercadoPago\Preference();
-        $preference->back_urls = array(
-            "success" => $request->url_back,
-            "failure" => $request->url_back,
-            "pending" => $request->url_back
-        );
-        $preference->auto_return = "approved";
+            // Crea un objeto de preferencia
+            $preference = new MercadoPago\Preference();
+            $preference->back_urls = array(
+                "success" => $request->url_back,
+                "failure" => $request->url_back,
+                "pending" => $request->url_back
+            );
+            $preference->auto_return = "approved";
 
-        // Crea un ítem en la preferencia
-        $item = new MercadoPago\Item();
-        $item->title = $request->title;
-        $item->quantity = $request->quantity;
-        $item->unit_price = $request->unit_price;
+            // Crea un ítem en la preferencia
+            $item = new MercadoPago\Item();
+            $item->title = $request->title;
+            $item->quantity = $request->quantity;
+            $item->unit_price = $request->unit_price;
 
-        // // Asi es como esta actualmente
-        // $category_descriptor = new stdClass;
-        // $category_descriptor_route = new stdClass;
-        // $category_descriptor_route->departure_date_time = $request->departure_date_time;
-        // $category_descriptor->route = $category_descriptor_route;
-        // $item->category_descriptor = $category_descriptor;
+            // $item->departure_date_time = $request->departure_date_time;
+            $category_descriptor = [
+                "route" => [
+                    "departure_date_time" => $request->departure_date_time
+                ]
+            ];
+            $item->category_descriptor = $category_descriptor;
+            $preference->items = array($item);
 
-        // Asi quiero implementarlo ahora
-        // $item->category_descriptor = [
-        //     "route" => [
-        //         "departure_date_time" => $request->departure_date_time
-        //     ]
-        // ];
-        $item->departure_date_time = $request->departure_date_time;
-        $preference->items = array($item);
-
-        $object_payer = new stdClass;
-        $object_payer->name = $request->payer_name;
-        $object_payer->email = $request->payer_email;
-        $preference->payer = $object_payer;
-        $preference->external_reference = $request->external_reference;
-        $preference->payment_methods = [
-            "excluded_payment_methods" => [
-                [
-                    "id" => "pagofacil"
+            $object_payer = new stdClass;
+            $object_payer->name = $request->payer_name;
+            $object_payer->email = $request->payer_email;
+            $preference->payer = $object_payer;
+            $preference->external_reference = $request->external_reference;
+            $preference->payment_methods = [
+                "excluded_payment_methods" => [
+                    [
+                        "id" => "pagofacil"
+                    ],
+                    [
+                        "id" => "rapipago"
+                    ]
                 ],
-                [
-                    "id" => "rapipago"
+                "excluded_payment_types" => [
+                    [
+                        "id" => "ticket"
+                    ]
                 ]
-            ],
-            "excluded_payment_types" => [
-                [
-                    "id" => "ticket"
-                ]
-            ]
-        ];
-        $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
-        $preference->save();
+            ];
+            $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
+            $preference->save();
 
-        return response()->json(['preference' => $preference->id], 200);
+            return response()->json(['preference' => $preference->id], 200);
     }
+
+    // public function createPay(Request $request) {
+
+    //     // SDK de Mercado Pago
+    //     require base_path('vendor/autoload.php');
+
+    //     MercadoPagoConfig::setAccessToken(config('services.mercadopago.dev.token'));
+
+    //     $client = new PreferenceClient();
+
+    //     try {
+    //         $request = [
+    //             "items" => [
+    //                 [
+    //                     "title" => $request->title,
+    //                     "quantity" => $request->quantity,
+    //                     "unit_price" => $request->unit_price,
+    //                     "category_descriptor" => [
+    //                         "route" => [
+    //                             "departure_date_time" => $request->departure_date_time
+    //                         ]
+    //                     ]
+    //                 ]
+    //             ]
+    //         ];
+        
+    //         $preference = $client->create($request);
+    //         // $departure_date_time = $preference->items[0]->category_descriptor["route"]["departure_date_time"];
+    //         // echo $departure_date_time;
+    //     } catch (MPApiException $e) {
+    //         echo "Status code: " . $e->getApiResponse()->getStatusCode() . "\n";
+    //         echo "Content: ";
+    //         var_dump($e->getApiResponse()->getContent());
+    //         echo "\n";
+    //     } catch (\Exception $e) {
+    //         echo $e->getMessage();
+    //     }
+
+    //     return response()->json(['preference' => $preference->id], 200);
+    // }
 
     public function notificationWebHook(Request $request)
     {
