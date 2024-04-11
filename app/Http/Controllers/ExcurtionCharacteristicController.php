@@ -1158,17 +1158,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Trekking sobre hielo",
-                        "description" => "1hr 15'"
+                        "description" => "1hr 15' aproximadamente"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Ice trekking",
-                        "description" => "1hr 15'"
+                        "description" => "Approximately 1hr 15'"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Trekking no gelo",
-                        "description" => "1hr 15'"
+                        "description" => "Aproximadamente 1h 15'"
                     ]
                 ]
             ];
@@ -1184,17 +1184,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Dificultad",
-                        "description" => "Moderada"
+                        "description" => "Media"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Difficulty",
-                        "description" => "Moderate"
+                        "description" => "Medium"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Dificuldade",
-                        "description" => "Moderada"
+                        "description" => "Media"
                     ]
                 ]
             ];
@@ -1716,17 +1716,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Caminata total",
-                        "description" => "3 km aprox"
+                        "description" => "3,5 km aprox"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Caminata total",
-                        "description" => "3 km aprox"
+                        "description" => "3.5 km aprox"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Caminata total",
-                        "description" => "3 km aprox"
+                        "description" => "3,5 km aprox"
                     ]
                 ]
             ];
@@ -2650,17 +2650,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Trekking sobre hielo",
-                        "description" => "1hr aproximadamente'"
+                        "description" => "1hr 15' aproximadamente"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Ice trekking",
-                        "description" => "Approximately 1hr"
+                        "description" => "Approximately 1hr 15'"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Trekking no gelo",
-                        "description" => "Aproximadamente 1h'"
+                        "description" => "Aproximadamente 1h 15'"
                     ]
                 ]
             ];
@@ -2676,17 +2676,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Dificultad",
-                        "description" => "Moderada/Alta"
+                        "description" => "Media"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Difficulty",
-                        "description" => "Moderate/High"
+                        "description" => "Medium"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Dificuldade",
-                        "description" => "Moderada/Alta"
+                        "description" => "Media"
                     ]
                 ]
             ];
@@ -3208,17 +3208,17 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "1",
                         "name" => "Caminata total",
-                        "description" => "4,5 km aprox"
+                        "description" => "5 km aprox"
                     ],
                     [
                         "lenguage_id" => "2",
                         "name" => "Caminata total",
-                        "description" => "4,5 km aprox"
+                        "description" => "5 km aprox"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Caminata total",
-                        "description" => "4,5 km aprox"
+                        "description" => "5 km aprox"
                     ]
                 ]
             ];
