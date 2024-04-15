@@ -98,12 +98,12 @@ class MercadoPagoController extends Controller
             [ 
                 "title" => $request->title,
                 "quantity" => (int)$request->quantity,
-                "unit_price" => (int)$request->unit_price,
-                "category_descriptor" => [ 
-                    "route" => [ 
-                        "departure_date_time" => $request->departure_date_time
-                    ]
-                ] 
+                "unit_price" => $request->unit_price,
+                // "category_descriptor" => [ 
+                //     "route" => [ 
+                //         "departure_date_time" => $request->departure_date_time
+                //     ]
+                // ] 
             ] 
         ]; 
         $preference->items = $items;
