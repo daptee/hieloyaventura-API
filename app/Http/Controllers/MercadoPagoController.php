@@ -101,7 +101,7 @@ class MercadoPagoController extends Controller
                 "unit_price" => (int)$request->unit_price,
                 "category_descriptor" => [ 
                     "route" => [ 
-                        "departure_date_time" => "2024-04-12T12:58:41.425-04:00"
+                        "departure_date_time" => "2024-04-12T12:58:41"
                     ]
                 ] 
             ] 
