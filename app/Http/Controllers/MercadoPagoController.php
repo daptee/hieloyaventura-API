@@ -11,108 +11,154 @@ use stdClass;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
-// use MercadoPago\Client\Preference\PreferenceClient;
-// use MercadoPago\Exceptions\MPApiException;
-// use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\Exceptions\MPApiException;
+use MercadoPago\Config;
 
 class MercadoPagoController extends Controller
 {
-    public function createPay(Request $request) {
-
-            // SDK de Mercado Pago
-            require base_path('vendor/autoload.php');
-            // Agrega credenciales
-            Log::debug(config('services.mercadopago.dev.token'));
-            MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
-
-            // Crea un objeto de preferencia
-            $preference = new MercadoPago\Preference();
-            $preference->back_urls = array(
-                "success" => $request->url_back,
-                "failure" => $request->url_back,
-                "pending" => $request->url_back
-            );
-            $preference->auto_return = "approved";
-
-            // Crea un ítem en la preferencia
-            $item = new MercadoPago\Item();
-            $item->title = $request->title;
-            $item->quantity = $request->quantity;
-            $item->unit_price = $request->unit_price;
-
-            // $item->departure_date_time = $request->departure_date_time;
-            $category_descriptor = [
-                "route" => [
-                    "departure_date_time" => $request->departure_date_time
-                ]
-            ];
-            $item->category_descriptor = $category_descriptor;
-            $preference->items = array($item);
-
-            $object_payer = new stdClass;
-            $object_payer->name = $request->payer_name;
-            $object_payer->email = $request->payer_email;
-            $preference->payer = $object_payer;
-            $preference->external_reference = $request->external_reference;
-            $preference->payment_methods = [
-                "excluded_payment_methods" => [
-                    [
-                        "id" => "pagofacil"
-                    ],
-                    [
-                        "id" => "rapipago"
-                    ]
-                ],
-                "excluded_payment_types" => [
-                    [
-                        "id" => "ticket"
-                    ]
-                ]
-            ];
-            $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
-            $preference->save();
-
-            return response()->json(['preference' => $preference->id], 200);
-    }
-
     // public function createPay(Request $request) {
 
-    //     // SDK de Mercado Pago
-    //     require base_path('vendor/autoload.php');
+    //         // SDK de Mercado Pago
+    //         require base_path('vendor/autoload.php');
+    //         // Agrega credenciales
+    //         Log::debug(config('services.mercadopago.dev.token'));
+    //         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
-    //     MercadoPagoConfig::setAccessToken(config('services.mercadopago.dev.token'));
+    //         // Crea un objeto de preferencia
+    //         $preference = new MercadoPago\Preference();
+    //         $preference->back_urls = array(
+    //             "success" => $request->url_back,
+    //             "failure" => $request->url_back,
+    //             "pending" => $request->url_back
+    //         );
+    //         $preference->auto_return = "approved";
 
-    //     $client = new PreferenceClient();
+    //         // Crea un ítem en la preferencia
+    //         $item = new MercadoPago\Item();
+    //         $item->title = $request->title;
+    //         $item->quantity = $request->quantity;
+    //         $item->unit_price = $request->unit_price;
+    //         // $item->departure_date_time = $request->departure_date_time;
 
-    //     try {
-    //         $request = [
-    //             "items" => [
+    //         $category_descriptor = [
+    //             "route" => [
+    //                 "departure_date_time" => $request->departure_date_time
+    //             ]
+    //         ];
+    //         $item->category_descriptor = $category_descriptor;
+    //         // $item->category_descriptor->route->departure_date_time = $request->category_descriptor;
+    //         // $item->category_id = "departure_" . strtotime($request->departure_date_time); 
+    //         // $item->category_id = strtotime($request->departure_date_time); 
+    //         // $item->category_id = $request->departure_date_time; 
+    //         $preference->items = array($item);
+
+    //         $object_payer = new stdClass;
+    //         $object_payer->name = $request->payer_name;
+    //         $object_payer->email = $request->payer_email;
+    //         $preference->payer = $object_payer;
+    //         $preference->external_reference = $request->external_reference;
+    //         $preference->payment_methods = [
+    //             "excluded_payment_methods" => [
     //                 [
-    //                     "title" => $request->title,
-    //                     "quantity" => $request->quantity,
-    //                     "unit_price" => $request->unit_price,
-    //                     "category_descriptor" => [
-    //                         "route" => [
-    //                             "departure_date_time" => $request->departure_date_time
-    //                         ]
-    //                     ]
+    //                     "id" => "pagofacil"
+    //                 ],
+    //                 [
+    //                     "id" => "rapipago"
+    //                 ]
+    //             ],
+    //             "excluded_payment_types" => [
+    //                 [
+    //                     "id" => "ticket"
     //                 ]
     //             ]
     //         ];
-        
-    //         $preference = $client->create($request);
-    //         // $departure_date_time = $preference->items[0]->category_descriptor["route"]["departure_date_time"];
-    //         // echo $departure_date_time;
-    //     } catch (MPApiException $e) {
-    //         echo "Status code: " . $e->getApiResponse()->getStatusCode() . "\n";
-    //         echo "Content: ";
-    //         var_dump($e->getApiResponse()->getContent());
-    //         echo "\n";
-    //     } catch (\Exception $e) {
-    //         echo $e->getMessage();
-    //     }
+    //         $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
+    //         $preference->save();
 
-    //     return response()->json(['preference' => $preference->id], 200);
+    //         // return response()->json(['preference' => $preference->id], 200);
+    //         return response()->json(['preference' => $preference->items], 200);
+    // }
+
+    public function createPay(Request $request)
+    {
+        require base_path('vendor/autoload.php');
+        Log::debug(config('services.mercadopago.dev.token'));
+        MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
+
+        $preference = new MercadoPago\Preference();
+        $preference->back_urls = array(
+            "success" => $request->url_back,
+            "failure" => $request->url_back,
+            "pending" => $request->url_back
+        );
+        $preference->auto_return = "approved";
+
+        $items = [
+            [ 
+                "title" => $request->title,
+                "quantity" => (int)$request->quantity,
+                "unit_price" => (int)$request->unit_price,
+                "category_descriptor" => [ 
+                    "route" => [ 
+                        "departure_date_time" => $request->departure_date_time
+                    ]
+                ] 
+            ] 
+        ]; 
+        $preference->items = $items;
+
+        $object_payer = new stdClass;
+        $object_payer->name = $request->payer_name;
+        $object_payer->email = $request->payer_email;
+        $preference->payer = $object_payer;
+        $preference->external_reference = $request->external_reference;
+        $preference->payment_methods = [
+            "excluded_payment_methods" => [
+                [
+                    "id" => "pagofacil"
+                ],
+                [
+                    "id" => "rapipago"
+                ]
+            ],
+            "excluded_payment_types" => [
+                [
+                    "id" => "ticket"
+                ]
+            ]
+        ];
+        $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
+        $preference->save();
+
+        return response()->json(['preference' => $preference->id], 200);
+}
+
+    // public function createPay(Request $request) 
+    // {
+    //     // SDK de Mercado Pago
+    //     require base_path('vendor/autoload.php');
+    //     // Agrega credenciales
+    //     Log::debug(config('services.mercadopago.dev.token'));
+
+    //     MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
+    //     $preference = new MercadoPago\Preference();
+    //     $items = [
+    //         [ 
+    //             "title" => $request->title,
+    //             "quantity" => (int)$request->quantity,
+    //             "unit_price" => (int)$request->unit_price,
+    //             "category_descriptor" => [ 
+    //                 "route" => [ 
+    //                     "departure_date_time" => $request->departure_date_time
+    //                 ]
+    //             ] 
+    //         ] 
+    //     ]; 
+    //     $preference->items = $items;
+    //     $preference->save(); 
+
+    //     return response()->json(['preference' => $preference], 200);
     // }
 
     public function notificationWebHook(Request $request)
