@@ -88,9 +88,9 @@ class MercadoPagoController extends Controller
         );
         $preference->auto_return = "approved";
 
-        $fecha = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->departure_date_time, 'UTC');
+        $fecha = Carbon::createFromFormat('Y/m/d\TH:i', $request->departure_date_time, 'UTC');
         $fecha_formateada = $fecha->setTimezone('-03:00')->format('Y-m-d\TH:i:s.vP');
-
+        
         $items = [
             [ 
                 "title" => $request->title,
