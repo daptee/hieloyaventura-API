@@ -171,11 +171,11 @@ class MercadoPagoController extends Controller
             if($request->type == "payment"){
                 MercadoPago\SDK::setAccessToken($token);
 
-                if(isset($request['data']['id'])){
-                    $id = $request['data']['id']; 
-                }else if(isset($request->data->id)){
-                    $id = $request->data->id;
-                }
+                // if(isset($request['data']['id'])){
+                //     $id = $request['data']['id']; 
+                // }else if(isset($request->data->id)){
+                //     $id = $request->data->id;
+                // }
 
                 // if(isset($id)){
                 //     $response_payment = Http::withHeaders([
