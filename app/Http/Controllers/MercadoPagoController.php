@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MercadoPagoNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
-
-use MercadoPago\Client\Preference\PreferenceClient;
-use MercadoPago\Exceptions\MPApiException;
-use MercadoPago\Config;
+use Carbon\Carbon;
 
 class MercadoPagoController extends Controller
 {
@@ -94,6 +88,9 @@ class MercadoPagoController extends Controller
         );
         $preference->auto_return = "approved";
 
+        $fecha = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->departure_date_time, 'UTC');
+        $fecha_formateada = $fecha->setTimezone('-03:00')->format('Y-m-d\TH:i:s.vP');
+
         $items = [
             [ 
                 "title" => $request->title,
@@ -101,7 +98,7 @@ class MercadoPagoController extends Controller
                 "unit_price" => (int)$request->unit_price,
                 "category_descriptor" => [ 
                     "route" => [ 
-                        "departure_date_time" => "2024-04-12T12:58:41"
+                        "departure_date_time" => $fecha_formateada
                     ]
                 ] 
             ] 
