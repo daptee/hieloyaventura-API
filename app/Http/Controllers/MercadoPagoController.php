@@ -2,26 +2,84 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MercadoPagoNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 class MercadoPagoController extends Controller
 {
-    public function createPay(Request $request) {
+    // public function createPay(Request $request) {
 
-        // SDK de Mercado Pago
+    //         // SDK de Mercado Pago
+    //         require base_path('vendor/autoload.php');
+    //         // Agrega credenciales
+    //         Log::debug(config('services.mercadopago.dev.token'));
+    //         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
+
+    //         // Crea un objeto de preferencia
+    //         $preference = new MercadoPago\Preference();
+    //         $preference->back_urls = array(
+    //             "success" => $request->url_back,
+    //             "failure" => $request->url_back,
+    //             "pending" => $request->url_back
+    //         );
+    //         $preference->auto_return = "approved";
+
+    //         // Crea un ítem en la preferencia
+    //         $item = new MercadoPago\Item();
+    //         $item->title = $request->title;
+    //         $item->quantity = $request->quantity;
+    //         $item->unit_price = $request->unit_price;
+    //         // $item->departure_date_time = $request->departure_date_time;
+
+    //         $category_descriptor = [
+    //             "route" => [
+    //                 "departure_date_time" => $request->departure_date_time
+    //             ]
+    //         ];
+    //         $item->category_descriptor = $category_descriptor;
+    //         // $item->category_descriptor->route->departure_date_time = $request->category_descriptor;
+    //         // $item->category_id = "departure_" . strtotime($request->departure_date_time); 
+    //         // $item->category_id = strtotime($request->departure_date_time); 
+    //         // $item->category_id = $request->departure_date_time; 
+    //         $preference->items = array($item);
+
+    //         $object_payer = new stdClass;
+    //         $object_payer->name = $request->payer_name;
+    //         $object_payer->email = $request->payer_email;
+    //         $preference->payer = $object_payer;
+    //         $preference->external_reference = $request->external_reference;
+    //         $preference->payment_methods = [
+    //             "excluded_payment_methods" => [
+    //                 [
+    //                     "id" => "pagofacil"
+    //                 ],
+    //                 [
+    //                     "id" => "rapipago"
+    //                 ]
+    //             ],
+    //             "excluded_payment_types" => [
+    //                 [
+    //                     "id" => "ticket"
+    //                 ]
+    //             ]
+    //         ];
+    //         $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
+    //         $preference->save();
+
+    //         // return response()->json(['preference' => $preference->id], 200);
+    //         return response()->json(['preference' => $preference->items], 200);
+    // }
+
+    public function createPay(Request $request)
+    {
         require base_path('vendor/autoload.php');
-        // Agrega credenciales
         Log::debug(config('services.mercadopago.dev.token'));
         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
-        // Crea un objeto de preferencia
         $preference = new MercadoPago\Preference();
         $preference->back_urls = array(
             "success" => $request->url_back,
@@ -30,27 +88,22 @@ class MercadoPagoController extends Controller
         );
         $preference->auto_return = "approved";
 
-        // Crea un ítem en la preferencia
-        $item = new MercadoPago\Item();
-        $item->title = $request->title;
-        $item->quantity = $request->quantity;
-        $item->unit_price = $request->unit_price;
-
-        // // Asi es como esta actualmente
-        // $category_descriptor = new stdClass;
-        // $category_descriptor_route = new stdClass;
-        // $category_descriptor_route->departure_date_time = $request->departure_date_time;
-        // $category_descriptor->route = $category_descriptor_route;
-        // $item->category_descriptor = $category_descriptor;
-
-        // Asi quiero implementarlo ahora
-        // $item->category_descriptor = [
-        //     "route" => [
-        //         "departure_date_time" => $request->departure_date_time
-        //     ]
-        // ];
-        $item->departure_date_time = $request->departure_date_time;
-        $preference->items = array($item);
+        $fecha = Carbon::createFromFormat('Y/m/d\TH:i', $request->departure_date_time, 'UTC');
+        $fecha_formateada = $fecha->setTimezone('-03:00')->format('Y-m-d\TH:i:s.vP');
+        
+        $items = [
+            [ 
+                "title" => $request->title,
+                "quantity" => (int)$request->quantity,
+                "unit_price" => (int)$request->unit_price,
+                "category_descriptor" => [ 
+                    "route" => [ 
+                        "departure_date_time" => $fecha_formateada
+                    ]
+                ] 
+            ] 
+        ]; 
+        $preference->items = $items;
 
         $object_payer = new stdClass;
         $object_payer->name = $request->payer_name;
@@ -76,7 +129,34 @@ class MercadoPagoController extends Controller
         $preference->save();
 
         return response()->json(['preference' => $preference->id], 200);
-    }
+}
+
+    // public function createPay(Request $request) 
+    // {
+    //     // SDK de Mercado Pago
+    //     require base_path('vendor/autoload.php');
+    //     // Agrega credenciales
+    //     Log::debug(config('services.mercadopago.dev.token'));
+
+    //     MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
+    //     $preference = new MercadoPago\Preference();
+    //     $items = [
+    //         [ 
+    //             "title" => $request->title,
+    //             "quantity" => (int)$request->quantity,
+    //             "unit_price" => (int)$request->unit_price,
+    //             "category_descriptor" => [ 
+    //                 "route" => [ 
+    //                     "departure_date_time" => $request->departure_date_time
+    //                 ]
+    //             ] 
+    //         ] 
+    //     ]; 
+    //     $preference->items = $items;
+    //     $preference->save(); 
+
+    //     return response()->json(['preference' => $preference], 200);
+    // }
 
     public function notificationWebHook(Request $request)
     {
@@ -91,11 +171,11 @@ class MercadoPagoController extends Controller
             if($request->type == "payment"){
                 MercadoPago\SDK::setAccessToken($token);
 
-                if(isset($request['data']['id'])){
-                    $id = $request['data']['id']; 
-                }else if(isset($request->data->id)){
-                    $id = $request->data->id;
-                }
+                // if(isset($request['data']['id'])){
+                //     $id = $request['data']['id']; 
+                // }else if(isset($request->data->id)){
+                //     $id = $request->data->id;
+                // }
 
                 // if(isset($id)){
                 //     $response_payment = Http::withHeaders([
