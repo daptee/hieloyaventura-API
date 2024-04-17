@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class MercadoPagoController extends Controller
 {
