@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use MercadoPago;
 use stdClass;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class MercadoPagoController extends Controller
 {
@@ -104,6 +105,7 @@ class MercadoPagoController extends Controller
             ] 
         ]; 
         $preference->items = $items;
+        $preference->statement_descriptor = "HIELOAVENTURA";
 
         $object_payer = new stdClass;
         $object_payer->name = $request->payer_name;
@@ -171,56 +173,59 @@ class MercadoPagoController extends Controller
             if($request->type == "payment"){
                 MercadoPago\SDK::setAccessToken($token);
 
-                // if(isset($request['data']['id'])){
-                //     $id = $request['data']['id']; 
-                // }else if(isset($request->data->id)){
-                //     $id = $request->data->id;
-                // }
+                if(isset($request['data']['id'])){
+                    $id = $request['data']['id']; 
+                }else if(isset($request->data->id)){
+                    $id = $request->data->id;
+                }
 
-                // if(isset($id)){
-                //     $response_payment = Http::withHeaders([
-                //         'Authorization' => 'Bearer '.$token,
-                //         'Content-Type' => 'application/json',
-                //     ])->get("https://api.mercadopago.com/v1/payments/$id");
+                if(isset($id)){
+                    $response_payment = Http::withHeaders([
+                        'Authorization' => 'Bearer '.$token,
+                        'Content-Type' => 'application/json',
+                    ])->get("https://api.mercadopago.com/v1/payments/$id");
 
+                    $payment = $response_payment->json();
+                    $response_payment_json_encode = json_encode($payment);
+                    Log::channel("notificationmp")->info("GET payment response: $response_payment_json_encode");
 
-                //     if($response_payment->status() != 200){
-                //         Log::channel("notificationmp")->info("error GET Payment: $id");
-                //         Log::channel("notificationmp")->info("message error: " . json_encode($response_payment->json()));
-                //     }else{
-                //         $payment = $response_payment->json();
+                    if($response_payment->status() != 200){
+                        Log::channel("notificationmp")->info("error GET Payment: $id");
+                        Log::channel("notificationmp")->info("message error: " . json_encode($response_payment->json()));
+                    }else{
+                        // $payment = $response_payment->json();
         
-                //         if(isset($payment['status'])){
-                //             $payment_status = $payment['status'];
-                //         }else if(isset($payment->status)){
-                //             $payment_status = $payment->status;
-                //         }
+                        // if(isset($payment['status'])){
+                        //     $payment_status = $payment['status'];
+                        // }else if(isset($payment->status)){
+                        //     $payment_status = $payment->status;
+                        // }
 
-                //         if(isset($payment['external_reference'])){
-                //             $external_reference = $payment['external_reference'];
-                //         }else if(isset($payment->external_reference)){
-                //             $external_reference = $payment->external_reference;
-                //         }
+                        // if(isset($payment['external_reference'])){
+                        //     $external_reference = $payment['external_reference'];
+                        // }else if(isset($payment->external_reference)){
+                        //     $external_reference = $payment->external_reference;
+                        // }
 
-                //         if(isset($payment_status) && isset($external_reference)){
+                        // if(isset($payment_status) && isset($external_reference)){
             
-                //             if($payment_status == "cancelled" || $payment_status == "rejected" || $payment_status == "refunded" || $payment_status == "charged_back"){
-                //                 try {
-                //                     Mail::to("ecommerce@hieloyaventura.com")->send(new MercadoPagoNotification($payment_status, $id, $external_reference));                        
-                //                 } catch (Exception $e) {
-                //                     Log::channel("notificationmperror")->info("error: " . $e->getMessage() . ", error en envio de mail a ventas@hieloyaventura.com, numero de pago: $id" . ", line: " . $e->getLine());
-                //                 }
-                //             }
+                        //     if($payment_status == "cancelled" || $payment_status == "rejected" || $payment_status == "refunded" || $payment_status == "charged_back"){
+                        //         try {
+                        //             Mail::to("ecommerce@hieloyaventura.com")->send(new MercadoPagoNotification($payment_status, $id, $external_reference));                        
+                        //         } catch (Exception $e) {
+                        //             Log::channel("notificationmperror")->info("error: " . $e->getMessage() . ", error en envio de mail a ventas@hieloyaventura.com, numero de pago: $id" . ", line: " . $e->getLine());
+                        //         }
+                        //     }
 
-                //         }else{
-                //             Log::channel("notificationmperror")->info("error: error en envio de mail a ventas@hieloyaventura.com, no se encontro payment status o external reference. Numero de pago: $id");
-                //         }
+                        // }else{
+                        //     Log::channel("notificationmperror")->info("error: error en envio de mail a ventas@hieloyaventura.com, no se encontro payment status o external reference. Numero de pago: $id");
+                        // }
         
-                //         Log::channel("notificationmp")->info("response payment json: " . json_encode($response_payment->json()));
-                //     }
-                // }else{
-                //     Log::channel("notificationmperror")->info('error: ID no encontrado');
-                // }
+                        // Log::channel("notificationmp")->info("response payment json: " . json_encode($response_payment->json()));
+                    }
+                }else{
+                    Log::channel("notificationmperror")->info('error: ID no encontrado');
+                }
             }
         } catch (Exception $e) {
             Log::channel("notificationmperror")->info('error: ' . $e->getMessage() . ', line: ' . $e->getLine());
