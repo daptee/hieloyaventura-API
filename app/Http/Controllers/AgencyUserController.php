@@ -36,6 +36,7 @@ class AgencyUserController extends Controller
             "last_name" => 'required',
             "email" => 'required|unique:agency_users',
             "agency_code" => 'required',
+            "can_view_all_sales" => 'required'
         ]);
 
         $user = new AgencyUser($request->all());
