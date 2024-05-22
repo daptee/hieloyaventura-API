@@ -44,6 +44,15 @@ class AgencyUserController extends Controller
             "can_view_all_sales" => 'required'
         ]);
 
+        if($request->agency_user_type_id == AgencyUserType::VENDEDOR){
+            $agency_user_seller_load = AgencyUserSellerLoad::where('agency_code', $request->agency_code)->first();
+            $maximum_load = $agency_user_seller_load->seller_load ?? 5;
+            $users_quantity = AgencyUser::where('agency_user_type_id', AgencyUserType::VENDEDOR)->where('agency_code', $request->agency_code)->count();
+            if($users_quantity >= $maximum_load){
+                return response()->json(["message" => "Cantidad maxima permitida de usuarios vendedores ya completa"], 400);
+            }
+        }
+
         $user = new AgencyUser($request->all());
         $user->password = Hash::make($request->password);
         $user->save();
