@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgencyUser;
+use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
+use App\Models\Audit;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class AgencyUserController extends Controller
@@ -121,4 +126,47 @@ class AgencyUserController extends Controller
 
         return response(compact("users", "total", "total_per_page", "current_page", "last_page"));
     }
+
+    public function user_seller_load(Request $request)
+    {
+        $request->validate([
+            'agency_code' => 'required',
+            'seller_load' => 'required'
+        ]);
+
+        $id_user = Auth::guard('agency')->user()->id;
+        try {
+            DB::beginTransaction();
+            
+            $agency_user_seller_load = AgencyUserSellerLoad::where('agency_code', $request->agency_code)->first();
+
+            if(!isset($agency_user_seller_load)){
+                $agency_user_seller_load = new AgencyUserSellerLoad();
+            }
+
+            $agency_user_seller_load->agency_code = $request->agency_code;
+            $agency_user_seller_load->seller_load = $request->seller_load;
+            $agency_user_seller_load->id_user = $id_user;
+            $agency_user_seller_load->save();
+
+            Audit::create(["id_user" => $id_user, "action" => ["action" => "maximum load of sellers", "data" => $request->all()]]);
+           
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::debug(["error" => "Error en carga de vendedores (agencia)", "message" => $e->getMessage(), "line" => $e->getLine()]);
+            return response()->json(["error" => "Error en carga de vendedores (agencia)", "message" => $e->getMessage(), "line" => $e->getLine()], 500);
+        }
+
+        return response()->json(["message" => "Carga de vendedores (agencia) exitosa"], 200);
+    }
+
+    public function get_user_seller_load($agency_code)
+    {
+        $agency_user_seller_load = AgencyUserSellerLoad::with('user')->where('agency_code', $agency_code)->first();
+        
+        return response()->json(["data" => $agency_user_seller_load], 200);
+    }
+
+
 }

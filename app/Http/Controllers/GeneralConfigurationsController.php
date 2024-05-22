@@ -38,10 +38,7 @@ class GeneralConfigurationsController extends Controller
         $general_configurations->configurations = json_encode($request->configurations);
         $general_configurations->save();
 
-        $audit = new Audit();
-        $audit->id_user = Auth::user()->id;
-        $audit->action = json_encode(["action" => "general configuration updated"]);
-        $audit->save();
+        Audit::create(["id_user" => Auth::user()->id, "action" => ["action" => "General configuration updated","data" => $request->all()]]);
 
         return $this->get_configurations();
     }

@@ -378,6 +378,9 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 // Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
 // Route::post('/publication/upload/invoice', [MercadoLibreController::class, 'upload_publication_invoice']);
 
+Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
+Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
+
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
 //         'email' => 'enzoamarilla@gmail.com',
