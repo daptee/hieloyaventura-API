@@ -16,6 +16,10 @@
         Nombre: {{ $data->nombre_completo_persona }}<br>
         Mail de personal: {{ $data->email_de_personal }} <br>
         Tel: {{ $data->tel_persona }}<br>
+        @if(isset($agency_user))
+        Agencia: {{ $agency_user['agency_name'] }}<br>
+        Usuario: {{ $agency_user['user_name'] }}<br>
+        @endif
         <br>
         Ponerse en contacto a la brevedad.
     </p>
