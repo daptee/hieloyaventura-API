@@ -131,7 +131,6 @@ class AgencyUserController extends Controller
     {
         $request->validate([
             'agency_code' => 'required',
-            'seller_load' => 'required'
         ]);
 
         $id_user = Auth::guard('agency')->user()->id;
