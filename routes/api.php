@@ -102,6 +102,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
+    Route::get('agency/users/seller', [AgencyUserController::class, 'get_users_seller']);
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);

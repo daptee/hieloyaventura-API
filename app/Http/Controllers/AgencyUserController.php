@@ -31,6 +31,13 @@ class AgencyUserController extends Controller
         return response(compact("users"));
     }
 
+    public function get_users_seller()
+    {
+        $users = $this->model::with($this->model::SHOW)->where('agency_user_type_id', AgencyUserType::VENDEDOR)->get();
+
+        return response(compact("users"));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
