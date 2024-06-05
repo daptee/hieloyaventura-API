@@ -31,9 +31,12 @@ class AgencyUserController extends Controller
         return response(compact("users"));
     }
 
-    public function get_users_seller()
+    public function get_users_seller($agency_code)
     {
-        $users = $this->model::with($this->model::SHOW)->where('agency_user_type_id', AgencyUserType::VENDEDOR)->get();
+        $users = $this->model::with($this->model::SHOW)
+                ->where('agency_user_type_id', AgencyUserType::VENDEDOR)
+                ->where('agency_code', $agency_code)
+                ->get();
 
         return response(compact("users"));
     }
@@ -89,6 +92,8 @@ class AgencyUserController extends Controller
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
+        $user->can_view_all_sales = $request->can_view_all_sales;
+
         // $user->agency_code = $request->agency_code;
         
         if($request->password)
