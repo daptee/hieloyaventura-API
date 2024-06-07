@@ -74,8 +74,8 @@ class AgencyUserController extends Controller
 
     public function update(Request $request, $id)
     {
-        if(!isset(Auth::guard('agency')->user()->agency_code))
-            return response()->json(['message' => 'Token is invalid.'], 400);
+        // if(!isset(Auth::guard('agency')->user()->agency_code) && !isset(Auth::user()->id))
+        //     return response()->json(['message' => 'Token is invalid.'], 400);
 
         $request->validate([
             // "agency_user_type_id" => 'required',
@@ -154,7 +154,7 @@ class AgencyUserController extends Controller
             'agency_code' => 'required',
         ]);
 
-        $id_user = Auth::guard('agency')->user()->id;
+        $id_user = Auth::guard('agency')->user()->id ?? Auth::user()->id;
         try {
             DB::beginTransaction();
             
