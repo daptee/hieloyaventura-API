@@ -11,4 +11,12 @@ class Audit extends Model
 
     protected $table = "audit";
 
+    protected $fillable = [
+        'id_user',
+        'action'
+    ];
+
+    protected $casts = [
+        "action" => 'json'
+    ];
 }

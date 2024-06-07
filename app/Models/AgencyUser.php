@@ -20,7 +20,8 @@ class AgencyUser extends Authenticatable implements JWTSubject
         "last_name",
         "email",
         "agency_code",
-        "active"
+        "active",
+        "can_view_all_sales"
     ];
 
     protected $hidden = [

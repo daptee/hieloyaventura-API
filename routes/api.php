@@ -102,6 +102,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
+    Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller']);
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
@@ -377,6 +378,9 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 // Route::post('/publication/update/status', [MercadoLibreController::class, 'update_publication_status']);
 // Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
 // Route::post('/publication/upload/invoice', [MercadoLibreController::class, 'upload_publication_invoice']);
+
+Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
+Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

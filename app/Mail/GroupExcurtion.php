@@ -12,18 +12,19 @@ class GroupExcurtion extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data, $email, $attach_file;
+    public $data, $email, $attach_file, $agency_user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data, $agency_user)
     {
         $this->data = $data;
         $this->email = $data['email'];
         $this->attach_file = $data['file'];
+        $this->agency_user = $agency_user; 
     }
 
     /**
