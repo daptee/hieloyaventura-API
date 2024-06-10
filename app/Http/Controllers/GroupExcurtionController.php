@@ -33,7 +33,7 @@ class GroupExcurtionController extends Controller
         }
 
         try {
-            Mail::to("grupos@hieloyaventura.com")->send(new GroupExcurtion($request, $agency_user));
+            Mail::to("grupos@hieloyaventura.com")->send(new GroupExcurtion($request, $agency_user, $request->file('attach_file')));
             return 'Mail enviado con exito!';
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));

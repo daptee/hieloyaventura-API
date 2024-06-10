@@ -19,11 +19,11 @@ class GroupExcurtion extends Mailable
      *
      * @return void
      */
-    public function __construct($data, $agency_user)
+    public function __construct($data, $agency_user, $attach_file)
     {
         $this->data = $data;
         $this->email = $data['email'];
-        $this->attach_file = $data['file'];
+        $this->attach_file = $attach_file;
         $this->agency_user = $agency_user; 
     }
 
@@ -43,6 +43,10 @@ class GroupExcurtion extends Mailable
         return $this->replyTo($this->email)
                     ->subject('Hielo & Aventura - nueva solicitud de reserva grupal')
                     ->view('emails.group-excurtion')
-                    ->attach($this->attach_file);
+                    ->attach($this->attach_file->getRealPath(),
+                        [
+                            'as' => $this->attach_file->getClientOriginalName(),
+                            'mime' => $this->attach_file->getClientMimeType(),
+                    ]);
     }
 }
