@@ -87,8 +87,8 @@ class AgencyUserController extends Controller
         ]);
 
         $user = AgencyUser::find($id);
-        // $user->agency_user_type_id = $request->agency_user_type_id;
-        // $user->user = $request->user;
+        $user->agency_user_type_id = $request->agency_user_type_id;
+        $user->user = $request->user;
         $user->name = $request->name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
