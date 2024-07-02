@@ -328,20 +328,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>15 Julio al 31 Mayo</p>",
-                                    "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo</p>"
+                                    "name"        =>  "<p>13 Julio al 31 Mayo</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 13 de Julio al 31 de Mayo</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>July 15th to May 31th</p>",
-                                    "description" =>  "<p>The availability of this excursion is from July 15 to May 31</p>"
+                                    "name"        =>  "<p>July 13th to May 31th</p>",
+                                    "description" =>  "<p>The availability of this excursion is from July 13 to May 31</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>15 Julho até 31 maio</p>",
-                                    "description" =>  "<p>A disponibilidade desta excursão é de 15 de Julho a 31 de Mayo</p>"
+                                    "name"        =>  "<p>13 Julho até 31 maio</p>",
+                                    "description" =>  "<p>A disponibilidade desta excursão é de 13 de Julho a 31 de Mayo</p>"
                                 ]
                             ]
                         ],
@@ -4936,20 +4936,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>15 julio a 31 mayo</p>",
-                                    "description" =>  "<p>La disponibilidad de esta excursión es del 15 de Julio al 31 de Mayo</p>"
+                                    "name"        =>  "<p>13 julio a 31 mayo</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 13 de Julio al 31 de Mayo</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>15 july to 31 may</p>",
-                                    "description" =>  "<p>The availability of this excursion is from July 15 to May 31</p>"
+                                    "name"        =>  "<p>13 july to 31 may</p>",
+                                    "description" =>  "<p>The availability of this excursion is from July 13 to May 31</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>15 de julho a 31 de maio</p>",
-                                    "description" =>  "<p>A disponibilidade desta excursão é de 15 de julho a 31 de maio</p>"
+                                    "name"        =>  "<p>13 de julho a 31 de maio</p>",
+                                    "description" =>  "<p>A disponibilidade desta excursão é de 13 de julho a 31 de maio</p>"
                                 ]
                             ]
                         ],
