@@ -34,4 +34,9 @@ class Pax extends Model
     {
         return $this->hasMany(PaxFile::class, 'pax_id', 'id');
     }
+
+    public function diseases()
+    {
+        return $this->hasMany(PassengerDisease::class, 'passenger_id', 'id');
+    }
 }
