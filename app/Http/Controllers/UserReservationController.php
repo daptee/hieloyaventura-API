@@ -463,4 +463,45 @@ class UserReservationController extends Controller
         return response()->json(["message" => "Test cancelar reservas completo"]);
 
     }
+
+    public function get_with_filters(Request $request)
+    {
+        $message = "Error al traer listado de {$this->sp}.";
+        $data = null;
+        try {
+            $data = UserReservation::with(['paxes.diseases.disease'])
+            ->select(['id', 'reservation_number', 'date', 'turn'])
+            ->where('excurtion_id', 2)
+            ->when($request->date_from !== null, function ($query) use ($request) {
+                return $query->where('date', '>=', $request->date_from);
+            })
+            ->when($request->date_to !== null, function ($query) use ($request) {
+                return $query->where('date', '<=', $request->date_to);
+            })
+            ->when($request->agency_id !== null, function ($query) use ($request) {
+                return $query->where('agency_id', $request->agency_id);
+            })
+            ->orderBy('id', 'desc')
+            ->get()
+            ->map(function ($userReservation) {
+                $reservationNumber = $userReservation->reservation_number;
+                $hasMedicalRecord = DB::table('medical_records')
+                    ->where('order_number', $reservationNumber)
+                    ->exists();
+                $hashReservationNumber = Crypt::encryptString($reservationNumber);
+                $medicalRecordLink = config('app.url_hya') . "/ficha-medica/" . $hashReservationNumber;
+
+                return array_merge($userReservation->toArray(), [
+                    'has_medical_record' => $hasMedicalRecord,
+                    'medical_record_link' => $medicalRecordLink,
+                ]);
+            });
+        } catch (Exception $error) {
+            return response(["message" => $message, "error" => $error->getMessage()], 500);
+        }
+
+        $message = ucfirst($this->sp) . " encontrad{$this->v}s exitosamente.";
+
+        return response(compact("message", "data"));
+    }
 }

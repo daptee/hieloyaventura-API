@@ -79,6 +79,7 @@ class MercadoPagoController extends Controller
     {
         require base_path('vendor/autoload.php');
         Log::debug(config('services.mercadopago.dev.token'));
+        Log::debug(["preference_external_reference" => $request->external_reference]);
         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
         $preference = new MercadoPago\Preference();

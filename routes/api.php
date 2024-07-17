@@ -141,6 +141,7 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::get('/number/{reservationNumber}', 'getByReservationNumber');
     Route::get('/number/encrypted/{reservationNumber}', 'getByReservationNumberEncrypted');
     Route::put('/{id}', 'update');
+    Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.verify']);
 });
 
 Route::post('users_reservations2/',[UserReservationController::class, 'store']);
