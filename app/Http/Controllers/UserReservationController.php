@@ -478,6 +478,9 @@ class UserReservationController extends Controller
             ->when($request->date_to !== null, function ($query) use ($request) {
                 return $query->where('date', '<=', $request->date_to);
             })
+            ->when($request->agency_id !== null, function ($query) use ($request) {
+                return $query->where('agency_id', $request->agency_id);
+            })
             ->orderBy('id', 'desc')
             ->get()
             ->map(function ($userReservation) {
