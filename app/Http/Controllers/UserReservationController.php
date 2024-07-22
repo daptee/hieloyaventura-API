@@ -315,7 +315,7 @@ class UserReservationController extends Controller
                         $userReservation->is_paid = 0;
                         $status_id = ReservationStatus::AUTOMATIC_CANCELED;
                         $userReservation->reservation_status_id = $status_id;
-                        $userReservation->reason_cancellation = "Reserva supera tiempo de espera maximo (30 min)";
+                        $userReservation->reason_cancellation = $datos['reason_cancellation'];
                         
                         break;
                 case ReservationStatus::PAYMENT_CONFIRMED:
