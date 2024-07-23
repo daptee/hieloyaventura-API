@@ -72,6 +72,7 @@ class CancelarReservas extends Command
                     if(isset(json_decode($resp)->RESULT)){
                         if(json_decode($resp)->RESULT == "OK" || json_decode($resp)->ERROR_MSG == "RSV:$reservation->reservation_number NO ENCONTRADA"){
                             $reservation->reservation_status_id = ReservationStatus::AUTOMATIC_CANCELED;
+                            $reservation->reason_cancellation = "Reserva supera tiempo de espera maximo (30 min)";
                             $reservation->save();
     
                             $user_reservation_status = new UserReservationStatusHistory();

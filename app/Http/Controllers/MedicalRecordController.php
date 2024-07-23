@@ -38,9 +38,12 @@ class MedicalRecordController extends Controller
                 $passengers_diseases = [];
                 $reservation_number = Crypt::decryptString($hash_reservation_number);
                 $user_reservation = UserReservation::where('reservation_number', $reservation_number)->first();
-                
-                if($user_reservation)
+
+                if($user_reservation){
                     AuditReservation::store_audit_reservation($user_reservation->id, ["operation" => "Carga ficha medica", "status" => "Ok"]);
+                }else{
+                    return response()->json([ 'message' => "Reserva inexistente."], 400);
+                }
 
                 $mailto = $mail_to;
             
@@ -78,6 +81,12 @@ class MedicalRecordController extends Controller
                         'diseases' => $diseases_passenger
                     ];
                 }
+
+                $medical_record = new MedicalRecord();
+                $medical_record->order_number = $reservation_number;
+                $medical_record->excurtion_date = $user_reservation->date ?? null;
+                $medical_record->passengers = json_encode($datos);
+                $medical_record->save();
 
             DB::commit();
 
