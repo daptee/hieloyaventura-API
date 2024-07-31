@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
 class AgencyUserController extends Controller
 {
@@ -100,6 +101,36 @@ class AgencyUserController extends Controller
             $user->password = Hash::make($request->password);
         
         $user->save();
+
+        $user = AgencyUser::getAllDataUser($user->id);
+        $message = "Usuario actualizado con exito";
+
+        return response(compact("user", "message"));
+    }
+
+    public function terms_and_conditions()
+    {
+        if(Auth::guard('agency')->user()->agency_user_type_id == AgencyUserType::ADMIN){
+            $id = Auth::guard('agency')->user()->id;
+        }else{
+            return response()->json(['message' => 'Usuario no válido.'], 400);
+        }
+        
+        $user = AgencyUser::find($id);
+        
+        try {
+            DB::beginTransaction();
+            //code...
+            $user->terms_and_conditions = now()->format('Y-m-d H:i:s');
+            $user->save();
+
+            Audit::create(["id_user" => $id, "action" => ["action" => "Acepta terminos y condiciones.", "data" => null]]);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::debug(["error" => "Error en carga de terminos y condiciones (usuario agencia)", "message" => $e->getMessage(), "line" => $e->getLine()]);
+            return response()->json(["error" => "Error en carga de terminos y condiciones (usuario agencia)", "message" => $e->getMessage(), "line" => $e->getLine()], 500);
+        }
 
         $user = AgencyUser::getAllDataUser($user->id);
         $message = "Usuario actualizado con exito";
