@@ -234,8 +234,8 @@ class AgencyUserController extends Controller
     
     public function agencies(Request $request)
     {
-        $desde = $request->desde;
-        $hasta = $request->hasta;
+        $desde = $request->DESDE;
+        $hasta = $request->HASTA;
         $url = $this->get_url();
         $response = Http::get("$url/Agencias?DESDE=$desde&HASTA=$hasta");   
         if ($response->successful()) {
@@ -247,7 +247,7 @@ class AgencyUserController extends Controller
 
     public function products(Request $request)
     {
-        $fecha = $request->fecha;
+        $fecha = $request->FECHA;
         $url = $this->get_url();
         $response = Http::get("$url/Productos?FECHA=$fecha");   
         if ($response->successful()) {
@@ -259,7 +259,7 @@ class AgencyUserController extends Controller
 
     public function passenger_types(Request $request)
     {
-        $leng = $request->leng ?? 'ES';
+        $leng = $request->LENG ?? 'ES';
         $url = $this->get_url();
         $response = Http::get("$url/TiposPasajeros?LENG=$leng");   
         if ($response->successful()) {
@@ -293,9 +293,9 @@ class AgencyUserController extends Controller
 
     public function shifts(Request $request)
     {
-        $fecha_desde = $request->date_from;
-        $fecha_hasta = $request->date_to;
-        $excursion_id = $request->excursion_id;
+        $fecha_desde = $request->FECHAD;
+        $fecha_hasta = $request->FECHAH;
+        $excursion_id = $request->PRD;
         $url = $this->get_url();
         $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
         if ($response->successful()) {
@@ -360,9 +360,9 @@ class AgencyUserController extends Controller
 
     public function reservationsAG(Request $request)
     {
-        $ag = $request->ag;
-        $desde_f = $request->desde_f;
-        $hasta_f = $request->hasta_f;
+        $ag = $request->AG;
+        $desde_f = $request->DESDEF;
+        $hasta_f = $request->HASTAF;
         $url = $this->get_url();
         $response = Http::get("$url/ReservasAG?AG=$ag&DESDEF=$desde_f&HASTAF=$hasta_f");   
         if ($response->successful()) {
