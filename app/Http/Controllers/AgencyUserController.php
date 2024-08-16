@@ -231,7 +231,7 @@ class AgencyUserController extends Controller
         }
         return $url;
     }
-    
+
     public function agencies(Request $request)
     {
         $desde = $request->DESDE;
@@ -360,11 +360,29 @@ class AgencyUserController extends Controller
 
     public function reservationsAG(Request $request)
     {
-        $ag = $request->AG;
-        $desde_f = $request->DESDEF;
-        $hasta_f = $request->HASTAF;
+        $AG = $request->AG;
+        $DESDEF = $request->DESDEF;
+        $HASTAF = $request->HASTAF;
+        $OPERADOR = $request->OPERADOR;
+        $PRD = $request->PRD;
+        $EST = $request->EST;
+        $DESDEC = $request->DESDEC;
+        $HASTAC = $request->HASTAC;
+
         $url = $this->get_url();
-        $response = Http::get("$url/ReservasAG?AG=$ag&DESDEF=$desde_f&HASTAF=$hasta_f");   
+        $response = Http::get("$url/ReservasAG?AG=$AG&DESDEF=$DESDEF&HASTAF=$HASTAF&OPERADOR=$OPERADOR&PRD=$PRD&EST=$EST&DESDEC=$DESDEC&HASTAC=$HASTAC");
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function ReservaxCodigo(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");   
         if ($response->successful()) {
             return $response->json();
         } else {

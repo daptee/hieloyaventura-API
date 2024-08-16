@@ -394,6 +394,8 @@ Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_
 Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation'])->middleware('jwt.verify');
 Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers'])->middleware('jwt.verify');
 Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG'])->middleware('jwt.verify');
+Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo'])->middleware('jwt.verify');
+
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
 //         'email' => 'enzoamarilla@gmail.com',
