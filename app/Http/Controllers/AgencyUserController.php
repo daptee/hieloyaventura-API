@@ -360,23 +360,42 @@ class AgencyUserController extends Controller
 
     public function reservationsAG(Request $request)
     {
-        $AG = $request->AG;
-        $DESDEF = $request->DESDEF;
-        $HASTAF = $request->HASTAF;
-        $OPERADOR = $request->OPERADOR;
-        $PRD = $request->PRD;
-        $EST = $request->EST;
-        $DESDEC = $request->DESDEC;
-        $HASTAC = $request->HASTAC;
+        $params = [];
 
-        $url = $this->get_url();
-        $response = Http::get("$url/ReservasAG?AG=$AG&DESDEF=$DESDEF&HASTAF=$HASTAF&OPERADOR=$OPERADOR&PRD=$PRD&EST=$EST&DESDEC=$DESDEC&HASTAC=$HASTAC");
+    if ($request->has('AG') && $request->AG !== null) {
+        $params['AG'] = $request->AG;
+    }
+    if ($request->has('DESDEF') && $request->DESDEF !== null) {
+        $params['DESDEF'] = $request->DESDEF;
+    }
+    if ($request->has('HASTAF') && $request->HASTAF !== null) {
+        $params['HASTAF'] = $request->HASTAF;
+    }
+    if ($request->has('OPERADOR') && $request->OPERADOR !== null) {
+        $params['OPERADOR'] = $request->OPERADOR;
+    }
+    if ($request->has('PRD') && $request->PRD !== null) {
+        $params['PRD'] = $request->PRD;
+    }
+    if ($request->has('EST') && $request->EST !== null) {
+        $params['EST'] = $request->EST;
+    }
+    if ($request->has('DESDEC') && $request->DESDEC !== null) {
+        $params['DESDEC'] = $request->DESDEC;
+    }
+    if ($request->has('HASTAC') && $request->HASTAC !== null) {
+        $params['HASTAC'] = $request->HASTAC;
+    }
 
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return $response->throw();
-        }
+    $url = $this->get_url();
+    $query = http_build_query($params);
+    $response = Http::get("$url/ReservasAG?$query");
+
+    if ($response->successful()) {
+        return $response->json();
+    } else {
+        return $response->throw();
+    }
     }
 
     public function ReservaxCodigo(Request $request)
