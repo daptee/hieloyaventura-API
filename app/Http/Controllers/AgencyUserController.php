@@ -337,8 +337,27 @@ class AgencyUserController extends Controller
     public function confirm_reservation(Request $request)
     {
         $url = $this->get_url();
-        $body_json = $request->all();
-        $response = Http::post("$url/ConfirmaReserva", $body_json);
+        // $body_json = $request->all();
+        $response = Http::asForm()->post("$url/ConfirmaReserva", [
+            'FAC_A_CUIT' => $request->FAC_A_CUIT,
+            'FAC_A_RSOCIAL' => $request->FAC_A_RSOCIAL,   
+            'FAC_A_SFISCAL' => $request->FAC_A_SFISCAL,   
+            'HOTEL' => $request->HOTEL,   
+            'MAIL' => $request->MAIL,   
+            'ORD' => $request->ORD,   
+            'PAX' => $request->PAX,   
+            'RSV' => $request->RSV,
+            'T1' => $request->T1,   
+            'T2' => $request->T2,   
+            'T3' => $request->T3,   
+            'T4' => $request->T4,   
+            'T5' => $request->T5,   
+            'TELEFONO' => $request->TELEFONO,   
+            'VTA_ADICIONAL' => $request->VTA_ADICIONAL,   
+            'VTA_NRO' => $request->VTA_NRO,   
+            'VTA_TOT' => $request->VTA_TOT   
+        ]);
+        // $response = Http::post("$url/ConfirmaReserva", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
