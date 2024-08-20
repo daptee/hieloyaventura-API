@@ -334,7 +334,7 @@ class AgencyUserController extends Controller
         }
     }
 
-    public function ConfirmaReserva(Request $request)
+    public function confirm_reservation(Request $request)
     {
         $url = $this->get_url();
         $body_json = $request->all();
