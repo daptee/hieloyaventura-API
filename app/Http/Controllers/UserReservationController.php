@@ -97,6 +97,23 @@ class UserReservationController extends Controller
         try {
             DB::beginTransaction();
 
+                $date = $datos['date'];
+                $turn = $datos['turn'];
+
+                $today = Carbon::today()->format('Y-m-d');
+
+                if ($date === $today) {
+                    $currentTime = Carbon::now();
+
+                    $turnTime = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $turn);
+
+                    $hoursDifference = $currentTime->diffInHours($turnTime, false);
+
+                    if ($hoursDifference < 2)
+                        return response(["message" => "Error al crear la reserva. Por favor elija otro turno."], 400);
+                    
+                }
+
                 // Verificar si ya existe un registro con el mismo reservation_number
                 $existingReservation = $this->model::where('reservation_number', $reservation_number)->first();
                 if ($existingReservation)

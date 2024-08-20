@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
@@ -219,5 +220,214 @@ class AgencyUserController extends Controller
         return response()->json(["data" => $agency_user_seller_load], 200);
     }
 
+    // HYA ENDPOINTS
+
+    public function get_url(){
+        $environment = config("app.environment");
+        if($environment == "DEV"){
+            $url = "https://apihya.hieloyaventura.com/apihya_dev";
+        }else{
+            $url = "https://apihya.hieloyaventura.com/apihya";
+        }
+        return $url;
+    }
+
+    public function agencies(Request $request)
+    {
+        $desde = $request->DESDE;
+        $hasta = $request->HASTA;
+        $url = $this->get_url();
+        $response = Http::get("$url/Agencias?DESDE=$desde&HASTA=$hasta");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function products(Request $request)
+    {
+        $fecha = $request->FECHA;
+        $url = $this->get_url();
+        $response = Http::get("$url/Productos?FECHA=$fecha");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function passenger_types(Request $request)
+    {
+        $leng = $request->LENG ?? 'ES';
+        $url = $this->get_url();
+        $response = Http::get("$url/TiposPasajeros?LENG=$leng");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function nationalities()
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/Naciones");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function hotels()
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/Hoteles");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function shifts(Request $request)
+    {
+        $fecha_desde = $request->FECHAD;
+        $fecha_hasta = $request->FECHAH;
+        $excursion_id = $request->PRD;
+        $url = $this->get_url();
+        $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function start_reservation(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/IniciaReserva", $body_json);   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function cancel_reservation(Request $request)
+    {
+        $this->validate($request, [
+            'RSV' => 'required',
+        ]);
+        
+        $url = $this->get_url();
+        $response = Http::asForm()->post("$url/CancelaReserva", [
+            'RSV' => $request->RSV   
+        ]);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function confirm_reservation(Request $request)
+    {
+        $url = $this->get_url();
+        // $body_json = $request->all();
+        $response = Http::asForm()->post("$url/ConfirmaReserva", [
+            'FAC_A_CUIT' => $request->FAC_A_CUIT,
+            'FAC_A_RSOCIAL' => $request->FAC_A_RSOCIAL,   
+            'FAC_A_SFISCAL' => $request->FAC_A_SFISCAL,   
+            'HOTEL' => $request->HOTEL,   
+            'MAIL' => $request->MAIL,   
+            'ORD' => $request->ORD,   
+            'PAX' => $request->PAX,   
+            'RSV' => $request->RSV,
+            'T1' => $request->T1,   
+            'T2' => $request->T2,   
+            'T3' => $request->T3,   
+            'T4' => $request->T4,   
+            'T5' => $request->T5,   
+            'TELEFONO' => $request->TELEFONO,   
+            'VTA_ADICIONAL' => $request->VTA_ADICIONAL,   
+            'VTA_NRO' => $request->VTA_NRO,   
+            'VTA_TOT' => $request->VTA_TOT   
+        ]);
+        // $response = Http::post("$url/ConfirmaReserva", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function confirm_passengers(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmaPasajeros", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function reservationsAG(Request $request)
+    {
+        $params = [];
+
+    if ($request->has('AG') && $request->AG !== null) {
+        $params['AG'] = $request->AG;
+    }
+    if ($request->has('DESDEF') && $request->DESDEF !== null) {
+        $params['DESDEF'] = $request->DESDEF;
+    }
+    if ($request->has('HASTAF') && $request->HASTAF !== null) {
+        $params['HASTAF'] = $request->HASTAF;
+    }
+    if ($request->has('OPERADOR') && $request->OPERADOR !== null) {
+        $params['OPERADOR'] = $request->OPERADOR;
+    }
+    if ($request->has('PRD') && $request->PRD !== null) {
+        $params['PRD'] = $request->PRD;
+    }
+    if ($request->has('EST') && $request->EST !== null) {
+        $params['EST'] = $request->EST;
+    }
+    if ($request->has('DESDEC') && $request->DESDEC !== null) {
+        $params['DESDEC'] = $request->DESDEC;
+    }
+    if ($request->has('HASTAC') && $request->HASTAC !== null) {
+        $params['HASTAC'] = $request->HASTAC;
+    }
+
+    $url = $this->get_url();
+    $query = http_build_query($params);
+    $response = Http::get("$url/ReservasAG?$query");
+
+    if ($response->successful()) {
+        return $response->json();
+    } else {
+        return $response->throw();
+    }
+    }
+
+    public function ReservaxCodigo(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    // END HYA ENDPOINTS
 
 }

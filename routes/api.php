@@ -383,6 +383,18 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.verify']);
+Route::get('/agency/hya/Agencias', [AgencyUserController::class, 'agencies']);
+Route::get('/agency/hya/Productos', [AgencyUserController::class, 'products']);
+Route::get('/agency/hya/TiposPasajeros', [AgencyUserController::class, 'passenger_types']);
+Route::get('/agency/hya/Naciones', [AgencyUserController::class, 'nationalities']);
+Route::get('/agency/hya/Hoteles', [AgencyUserController::class, 'hotels']);
+Route::get('/agency/hya/Turnos', [AgencyUserController::class, 'shifts']);
+Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation']);
+Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation']);
+Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation']);
+Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers']);
+Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG']);
+Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
