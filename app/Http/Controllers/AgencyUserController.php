@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationRequestChange;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
 use App\Models\Audit;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
@@ -411,4 +414,29 @@ class AgencyUserController extends Controller
 
     // END HYA ENDPOINTS
 
+
+    public function change_request(Request $request)
+    {
+        try {
+            $request->validate([
+                'reservation_number' => 'required',
+                'id_user' => 'required',
+                'agency_name' => 'required',
+                'request' => 'required',
+            ]);
+    
+            $user = User::find($request->id_user);
+            
+            if(!$user)
+                return response(["message" => "No se ha encontrado el usuario"], 422);
+
+            Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user));
+    
+            return 'Mail enviado con exito!';
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            // return $th->getMessage();
+            return 'Mail no enviado';
+        }
+    }
 }
