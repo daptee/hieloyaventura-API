@@ -425,13 +425,14 @@ class AgencyUserController extends Controller
                 'request' => 'required',
             ]);
     
-            $user = User::find($request->id_user);
+            $user = AgencyUser::find($request->id_user);
             
             if(!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user));
-    
+            // Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user));
+            Mail::to("slarramendy@daptee.com.ar")->send(new ReservationRequestChange($request, $user));
+            
             return 'Mail enviado con exito!';
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
