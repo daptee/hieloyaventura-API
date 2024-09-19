@@ -8,7 +8,7 @@
 </head>
 <body>
     <p>
-        El usuario {{ $data['user_name'] }} de la agencia {{ $data['agency_name'] }} ha solicitado un cambio sobre la reserva {{ $data['reservation_number'] }}.
+        El usuario {{ $user_name }} de la agencia {{ $data['agency_name'] }} ha solicitado un cambio sobre la reserva {{ $data['reservation_number'] }}.
         <br><br>
         Solicitud: {{ $data['request'] }}
         <br><br>
