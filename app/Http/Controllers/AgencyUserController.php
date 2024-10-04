@@ -386,6 +386,9 @@ class AgencyUserController extends Controller
     if ($request->has('DESDEC') && $request->DESDEC !== null) {
         $params['DESDEC'] = $request->DESDEC;
     }
+    if ($request->has('RSV') && $request->RSV !== null) {
+        $params['RSV'] = $request->RSV;
+    }
     if ($request->has('HASTAC') && $request->HASTAC !== null) {
         $params['HASTAC'] = $request->HASTAC;
     }
@@ -430,7 +433,7 @@ class AgencyUserController extends Controller
             if(!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            Mail::to("slarramendy@daptee.com.ar")->send(new ReservationRequestChange($request, $user->name));
+            Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user->name));
             
             return 'Mail enviado con exito!';
         } catch (\Throwable $th) {
