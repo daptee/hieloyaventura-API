@@ -1828,20 +1828,20 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                 #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  "<p>1 Febrero al 30 Abril</p>",
-                                    "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Febrero al 30 de Abril</p>"
+                                    "name"        =>  "<p>1 Octubre al 30 Abril</p>",
+                                    "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Octubre al 30 de Abril</p>"
                                 ],
                                 [
                                 # INGLES
                                     "lenguage_id" =>  "2",
-                                    "name"        =>  "<p>February 1th to April 30th</p>",
-                                    "description" =>  "<p>It is available from February 1 until the end of April</p>"
+                                    "name"        =>  "<p>October 1th to April 30th</p>",
+                                    "description" =>  "<p>It is available from October 1 until the end of April</p>"
                                 ],
                                 [
                                 # PORTUGUÉS
                                     "lenguage_id" =>  "3",
-                                    "name"        =>  "<p>1 Fevereiro até 30 abril</p>",
-                                    "description" =>  "<p>A excursão é disponível a partir do 1º dia de fevereiro até o fim de abril</p>"
+                                    "name"        =>  "<p>1 outubro até 30 abril</p>",
+                                    "description" =>  "<p>A excursão é disponível a partir do 1º dia de outubro até o fim de abril</p>"
                                 ]
                             ]
                         ],

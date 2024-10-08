@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
 use App\Mail\NotificationErrorConfirmationInape;
 use App\Mail\RegistrationPassword;
+use App\Mail\ReservationRequestChange;
 use App\Models\AuditReservation;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;

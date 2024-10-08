@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReservationRequestChange;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
 use App\Models\Audit;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
@@ -337,27 +340,8 @@ class AgencyUserController extends Controller
     public function confirm_reservation(Request $request)
     {
         $url = $this->get_url();
-        // $body_json = $request->all();
-        $response = Http::asForm()->post("$url/ConfirmaReserva", [
-            'FAC_A_CUIT' => $request->FAC_A_CUIT,
-            'FAC_A_RSOCIAL' => $request->FAC_A_RSOCIAL,   
-            'FAC_A_SFISCAL' => $request->FAC_A_SFISCAL,   
-            'HOTEL' => $request->HOTEL,   
-            'MAIL' => $request->MAIL,   
-            'ORD' => $request->ORD,   
-            'PAX' => $request->PAX,   
-            'RSV' => $request->RSV,
-            'T1' => $request->T1,   
-            'T2' => $request->T2,   
-            'T3' => $request->T3,   
-            'T4' => $request->T4,   
-            'T5' => $request->T5,   
-            'TELEFONO' => $request->TELEFONO,   
-            'VTA_ADICIONAL' => $request->VTA_ADICIONAL,   
-            'VTA_NRO' => $request->VTA_NRO,   
-            'VTA_TOT' => $request->VTA_TOT   
-        ]);
-        // $response = Http::post("$url/ConfirmaReserva", $body_json);
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmaReserva", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -402,6 +386,9 @@ class AgencyUserController extends Controller
     if ($request->has('DESDEC') && $request->DESDEC !== null) {
         $params['DESDEC'] = $request->DESDEC;
     }
+    if ($request->has('RSV') && $request->RSV !== null) {
+        $params['RSV'] = $request->RSV;
+    }
     if ($request->has('HASTAC') && $request->HASTAC !== null) {
         $params['HASTAC'] = $request->HASTAC;
     }
@@ -430,4 +417,29 @@ class AgencyUserController extends Controller
 
     // END HYA ENDPOINTS
 
+
+    public function change_request(Request $request)
+    {
+        try {
+            $request->validate([
+                'reservation_number' => 'required',
+                'id_user' => 'required',
+                'agency_name' => 'required',
+                'request' => 'required',
+            ]);
+    
+            $user = AgencyUser::find($request->id_user);
+            
+            if(!$user)
+                return response(["message" => "No se ha encontrado el usuario"], 422);
+
+            Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user->name));
+            
+            return 'Mail enviado con exito!';
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            // return $th->getMessage();
+            return 'Mail no enviado';
+        }
+    }
 }
