@@ -213,11 +213,6 @@ class UserReservationController extends Controller
                     // Guardo status en historial
                     UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
                 //
-                try {
-                    Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($newUserReservation, $request));
-                } catch (\Throwable $th) {
-                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-                }
 
             DB::commit();
         } catch (ModelNotFoundException $error) {
