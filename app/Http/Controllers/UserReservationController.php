@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserReservationAgencyRequest;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
+use App\Mail\ConfirmationReservation;
 use App\Mail\NotificationErrorConfirmationInape;
 use App\Mail\RegistrationPassword;
 use App\Mail\ReservationRequestChange;
@@ -212,6 +213,11 @@ class UserReservationController extends Controller
                     // Guardo status en historial
                     UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
                 //
+                try {
+                    Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($newUserReservation, $request));
+                } catch (\Throwable $th) {
+                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                }
 
             DB::commit();
         } catch (ModelNotFoundException $error) {
