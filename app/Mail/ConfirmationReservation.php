@@ -12,7 +12,7 @@ class ConfirmationReservation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data, $subject, $request;
+    public $data, $subject, $request, $turn;
 
     /**
      * Create a new message instance.
@@ -23,6 +23,11 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
+        if (isset($data->hotel_id) && $data->hotel_id == 225) {
+            $this->turn = $data->turn->subMinutes(15)->format('H:i\h\s');
+        } else {
+            $this->turn = $data->turn->format('H:i\h\s');
+        }
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
     }
 

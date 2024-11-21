@@ -12,18 +12,18 @@ class ReservationRequestChange extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $data, $reservation_number, $user_name;
+    public $data, $reservation_number, $user;
     public $attachment;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data, $user_name, $attachment = null)
+    public function __construct($data, $user, $attachment = null)
     {
         $this->data = $data;
         $this->reservation_number = $data['reservation_number'];
-        $this->user_name = $user_name;
+        $this->user = $user;
         $this->attachment = $attachment;
     }
 

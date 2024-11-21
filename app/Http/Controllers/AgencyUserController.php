@@ -436,7 +436,7 @@ class AgencyUserController extends Controller
             // Pasar el archivo adjunto si está presente
             $attachment = $request->file('attachment');
 
-            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user->name, $attachment));
+            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $attachment));
             
             return 'Mail enviado con exito!';
         } catch (\Throwable $th) {
