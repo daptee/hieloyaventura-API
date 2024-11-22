@@ -433,7 +433,10 @@ class AgencyUserController extends Controller
             if(!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            Mail::to("cotizaciones@hieloyaventura.com")->send(new ReservationRequestChange($request, $user->name));
+            // Pasar el archivo adjunto si está presente
+            $attachment = $request->file('attachment');
+
+            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $attachment));
             
             return 'Mail enviado con exito!';
         } catch (\Throwable $th) {

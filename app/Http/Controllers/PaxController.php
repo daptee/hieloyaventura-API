@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePaxRequest;
 use App\Http\Requests\UpdatePaxRequest;
+use App\Mail\ConfirmationReservation;
 use App\Models\Pax;
 use App\Models\ReservationStatus;
 use App\Mail\UserReservation as MailUserReservation;
@@ -201,6 +202,11 @@ class PaxController extends Controller
                 $user_reservation_status->user_reservation_id = $userReservation->id;
                 $user_reservation_status->save();
 
+                try {
+                    Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($userReservation, $request));
+                } catch (\Throwable $th) {
+                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                }
             });
 
         } catch (\Throwable $th) {

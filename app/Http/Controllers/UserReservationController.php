@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserReservationAgencyRequest;
 use App\Http\Requests\StoreUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationRequest;
 use App\Http\Requests\UpdateUserReservationStatusRequest;
+use App\Mail\ConfirmationReservation;
 use App\Mail\NotificationErrorConfirmationInape;
 use App\Mail\RegistrationPassword;
 use App\Mail\ReservationRequestChange;
