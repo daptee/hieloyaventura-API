@@ -594,7 +594,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
+                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos un mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -2063,7 +2063,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
+                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos un mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -3583,7 +3583,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
+                                        "description" => "<li><strong>Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos un mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
@@ -5197,7 +5197,7 @@ class ExcurtionCharacteristicController extends Controller
                                     [
                                         "lenguage_id" => 1,
                                         "name" => null,
-                                        "description" => "<li><strong> Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos una mail a clientes@hieloyaventura.com</li>",
+                                        "description" => "<li><strong> Personas sedentarias con obesidad.</strong> No podrán participar personas con obesidad. En el caso de los adultos, la Organización Mundial de la Salud (OMS) define que la obesidad es tal, cuando una persona presenta un Índice de Masa Corporal (IMC) igual o superior a 30. El IMC se calcula dividiendo el peso de una persona en kilos por el cuadrado de su talla en metros: (kg/m2). Ante cualquier duda o consulta, envíanos un mail a clientes@hieloyaventura.com</li>",
                                     ],
                                     [
                                         "lenguage_id" => 2,
