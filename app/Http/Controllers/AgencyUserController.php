@@ -237,10 +237,19 @@ class AgencyUserController extends Controller
 
     public function agencies(Request $request)
     {
-        $desde = $request->DESDE;
-        $hasta = $request->HASTA;
+        $params = [];
+
+        if ($request->has('DESDE') && $request->DESDE !== null) {
+            $params['DESDE'] = $request->DESDE;
+        }
+        if ($request->has('HASTA') && $request->HASTA !== null) {
+            $params['HASTA'] = $request->HASTA;
+        }
+
         $url = $this->get_url();
-        $response = Http::get("$url/Agencias?DESDE=$desde&HASTA=$hasta");   
+        $query = http_build_query($params);
+        $response = Http::get("$url/Agencias?$query");
+        
         if ($response->successful()) {
             return $response->json();
         } else {
