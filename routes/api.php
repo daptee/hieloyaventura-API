@@ -132,6 +132,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::post('/CancelaReserva', 'CancelaReserva');
     Route::post('/ConfirmaReserva', 'ConfirmaReserva');
     Route::post('/ConfirmaPasajeros', 'ConfirmaPasajeros');
+    Route::get('/Promociones', 'Promociones');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {

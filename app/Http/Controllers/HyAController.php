@@ -151,4 +151,15 @@ class HyAController extends Controller
             return $response->throw();
         }
     }
+
+    public function Promociones(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/Promociones?PROD=$request->PROD");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
 }
