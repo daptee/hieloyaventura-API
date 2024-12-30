@@ -162,4 +162,15 @@ class HyAController extends Controller
             return $response->throw();
         }
     }
+
+    public function RecuperaPrecioReserva(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/RecuperaPrecioReserva?RESERVA=$request->RESERVA");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
 }
