@@ -398,6 +398,8 @@ Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'conf
 Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG']);
 Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo']);
 Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request']);
+Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG']);
+Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [

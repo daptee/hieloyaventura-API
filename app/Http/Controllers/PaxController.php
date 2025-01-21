@@ -106,6 +106,7 @@ class PaxController extends Controller
 
                 //Mandar email con el PDF adjunto
                 $pathReservationPdf = $this->createPdf($userReservation);                                
+                // return $this->createPdf($userReservation);                                
                 $userReservation->pdf = $pathReservationPdf['urlToSave'];
                 $userReservation->save();
 
@@ -419,7 +420,10 @@ class PaxController extends Controller
                 ]
             ];
             
-            if (isset($newUserReservation->hotel_id) && $newUserReservation->hotel_id == 225) {
+            if (
+                ($newUserReservation->is_transfer == 1 && isset($newUserReservation->hotel_id) && $newUserReservation->hotel_id == 225) || 
+                ($newUserReservation->is_transfer == 0)
+            ){
                 $turnFormated = $newUserReservation->turn->subMinutes(15)->format('H:i\h\s');
             } else {
                 $turnFormated = $newUserReservation->turn->format('H:i\h\s');
@@ -560,7 +564,7 @@ class PaxController extends Controller
 
             $pdf->Output($pathToSavePdf, "F");
             
-            // return $pdf->Output();
+            return $pdf->Output();
 
             return [
                 'urlToSave' => $urlToSave, 

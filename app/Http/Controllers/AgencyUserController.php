@@ -424,6 +424,31 @@ class AgencyUserController extends Controller
         }
     }
 
+    public function ProductosAG(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/ProductosAG?FECHA=$request->FECHA");
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function TurnosAG(Request $request)
+    {
+        $fecha_desde = $request->FECHAD;
+        $fecha_hasta = $request->FECHAH;
+        $excursion_id = $request->PRD;
+        $url = $this->get_url();
+        $response = Http::get("$url/TurnosAG?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
     // END HYA ENDPOINTS
 
 
