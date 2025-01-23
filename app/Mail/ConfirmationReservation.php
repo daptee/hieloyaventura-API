@@ -23,11 +23,13 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
-        if (isset($data->hotel_id) && $data->hotel_id == 225) {
-            $this->turn = $data->turn->subMinutes(15)->format('H:i\h\s');
-        } else {
+        if ($data->is_transfer == "true") { // Si tiene traslado
+            $this->turn = isset($data->hotel_id) && $data->hotel_id == 225
+                ? $data->turn->subMinutes(15)->format('H:i\h\s') // Con traslado pero SIN hotel (Oficina H&A)
+                : $data->turn->format('H:i\h\s'); // Con traslado y hotel
+        } else { // Sin traslado
             $this->turn = $data->turn->format('H:i\h\s');
-        }
+        }        
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
     }
 
