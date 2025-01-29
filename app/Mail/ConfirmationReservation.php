@@ -23,7 +23,7 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
-        $this->turn = $data->turn->format('H:i\h\s');     
+        $this->turn = $request->turn ?? $data->turn->format('H:i\h\s');     
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
     }
 
