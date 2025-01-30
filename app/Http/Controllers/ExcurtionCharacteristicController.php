@@ -4201,12 +4201,12 @@ class ExcurtionCharacteristicController extends Controller
                     [
                         "lenguage_id" => "2",
                         "name" => "Difficulty",
-                        "description" => "Low"
+                        "description" => "High"
                     ],
                     [
                         "lenguage_id" => "3",
                         "name" => "Dificuldade",
-                        "description" => "Baixa"
+                        "description" => "Alta"
                     ]
                 ]
             ];
