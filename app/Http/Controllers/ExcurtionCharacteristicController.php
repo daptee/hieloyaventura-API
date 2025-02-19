@@ -3295,7 +3295,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     #ESPAÑOL
                                     "lenguage_id" =>  "1",
-                                    "name"        =>  '<p>12 horas (Día completo)</p>',
+                                    "name"        =>  '<p>12 horas (Todo el día)</p>',
                                     "description" =>  '<p>La actividad es de todo el día, y cuenta con 7 horas y media de caminata.</p>'
                                 ],
                                 [
