@@ -11,10 +11,12 @@
     
         Agencia: {{ $request->agency_name }}
         Excursion: {{ $data->excurtion->name }}
+        Nro reserva: {{ $data->reservation_number ?? '-' }}
         Fecha y hora: {{ $data->date->format('Y/m/d') }} - {{ $turn }}
         Traslado: {{ $data->is_transfer == 1 ? "Si" : "No" }}
-        Nombre: {{ $request->reservation_name }}
+        Nombre: {{ $request->reservation_name ?? '-' }}
         Pasajeros: {{ $request->number_of_passengers }}
+        Punto de encuentro: {{ $data->meeting_point }}
 
         Cualquier cosa puede contactarse con nosotros.
         Contacto: reservas@hieloyaventura.com
