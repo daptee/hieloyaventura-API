@@ -23,6 +23,7 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
+        $this->data->meeting_point = $this->defineMeetingPoint($data);
         $this->turn = $request->turn ?? $data->turn->format('H:i\h\s');
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
         /* $this->data = $data;
@@ -46,5 +47,17 @@ class ConfirmationReservation extends Mailable
     {
         return $this->subject($this->subject)
             ->view('emails.confirmation-reservation');
+    }
+
+    private function defineMeetingPoint($data)
+    {
+        if ($data->is_transfer) {
+            if (empty($data->hotel_name) && $data->hotel_id == 225) {
+                return 'Oficina H&A - Av. Libertador N°935';
+            }
+            return $data->hotel_name ?? '-';
+        }
+        
+        return 'Puerto "Bajo de las Sombras"';
     }
 }

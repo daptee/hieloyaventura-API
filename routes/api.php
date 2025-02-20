@@ -297,7 +297,7 @@ Route::get('web/general_configuration', [GeneralConfigurationsController::class,
 Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']); 
 
 Route::post('paxs', [PaxController::class, 'store']);
-Route::post('agency_paxs', [PaxController::class, 'store_type_agency']);
+Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
 Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
