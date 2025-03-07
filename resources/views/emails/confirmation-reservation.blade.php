@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Notificacion Pasajero</title>
 </head>
+
 <body>
-    <p style="white-space: pre-line">Hola {{ Auth::guard('agency')->user()->name }}. Esto es un correo automatico con la confirmacion de tu reserva.        
-    
+    <p style="white-space: pre-line">Hola {{ Auth::guard('agency')->user()->name }}. Esto es un correo automatico con la confirmacion de tu reserva.
+
         Agencia: {{ $request->agency_name }}
         Excursion: {{ $data->excurtion->name }}
         Nro reserva: {{ $data->reservation_number ?? '-' }}
@@ -16,7 +18,7 @@
         Traslado: {{ $data->is_transfer == 1 ? "Si" : "No" }}
         Nombre: {{ $request->reservation_name ?? '-' }}
         Pasajeros: {{ $request->number_of_passengers }}
-        Punto de encuentro: {{ $data->meeting_point }}
+        Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }}
 
         Cualquier cosa puede contactarse con nosotros.
         Contacto: reservas@hieloyaventura.com
@@ -28,4 +30,5 @@
         Hielo & Aventura.
     </p>
 </body>
+
 </html>
