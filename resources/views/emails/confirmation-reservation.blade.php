@@ -18,6 +18,7 @@
         Traslado: {{ $data->is_transfer == 1 ? "Si" : "No" }}
         Nombre: {{ $request->reservation_name ?? '-' }}
         Pasajeros: {{ $request->number_of_passengers }}
+        Hotel: {{ $data->is_transfer == 1 ? $data->hotel_name : "-" }}
         Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }}
 
         Cualquier cosa puede contactarse con nosotros.
