@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Response;
 use PDF;
 use setasign\Fpdi\Fpdi;
 
@@ -231,6 +232,28 @@ class UserReservationController extends Controller
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
 
         return response(compact("message", "newUserReservation"));
+    }
+
+    public function download_pdf_reservation_agency(Request $request)
+    {
+        $pdfPath = $request->input('pdf_path');
+
+        // Validar que se reciba un path válido
+        if (!$pdfPath) {
+            return response()->json(['error' => 'No se proporcionó una ruta válida.'], 400);
+        }
+
+        // Extraer la ruta del archivo desde la URL
+        $relativePath = str_replace(url('/'), '', $pdfPath); 
+        $absolutePath = public_path($relativePath);
+
+        // Verificar si el archivo existe
+        if (!file_exists($absolutePath)) {
+            return response()->json(['error' => 'El archivo no existe.'], 404);
+        }
+
+        // Descargar el archivo
+        return Response::download($absolutePath);
     }
 
     /**

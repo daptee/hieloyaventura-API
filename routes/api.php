@@ -371,6 +371,7 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 Route::get('agency/users', [AgencyUserController::class, 'index']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
 Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
+Route::post('agency/reservations/download', [UserReservationController::class, 'download_pdf_reservation_agency'])->middleware(['jwt.verify']);
 
 // Agency user reservations
 Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.verify']);
