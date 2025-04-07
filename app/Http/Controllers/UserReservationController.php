@@ -234,26 +234,17 @@ class UserReservationController extends Controller
         return response(compact("message", "newUserReservation"));
     }
 
-    public function download_pdf_reservation_agency(Request $request)
+    public function path_pdf_reservation_agency(Request $request)
     {
-        $pdfPath = $request->input('pdf_path');
+        $reservation_id = $request->input('reservation_id');
 
-        // Validar que se reciba un path válido
-        if (!$pdfPath) {
-            return response()->json(['error' => 'No se proporcionó una ruta válida.'], 400);
-        }
+        $userReservation = UserReservation::find($reservation_id);
 
-        // Extraer la ruta del archivo desde la URL
-        $relativePath = str_replace(url('/'), '', $pdfPath); 
-        $absolutePath = public_path($relativePath);
+        if(is_null($userReservation))
+            return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
-        // Verificar si el archivo existe
-        if (!file_exists($absolutePath)) {
-            return response()->json(['error' => 'El archivo no existe.'], 404);
-        }
-
-        // Descargar el archivo
-        return Response::download($absolutePath);
+        $path_pdf = $userReservation->pdf ?? null;
+        return response(compact("path_pdf"));
     }
 
     /**
