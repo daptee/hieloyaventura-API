@@ -235,11 +235,8 @@ class UserReservationController extends Controller
 
     public function path_pdf_reservation_agency(Request $request)
     {
-        $reservation_id = $request->input('reservation_id');
-
-        // $userReservation = UserReservation::find($reservation_id);
-        $userReservation = UserReservation::where('reservation_number', $reservation_id)->first();
-        dd('reservation id' . $reservation_id);
+        $userReservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
+        // dd('reservation id' . $reservation_id);
 
         if (is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
