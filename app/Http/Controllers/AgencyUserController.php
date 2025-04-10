@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ReservationRequestChange;
+use App\Mail\ReservationRequestChange2;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
@@ -467,16 +468,16 @@ class AgencyUserController extends Controller
             if(!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            // Pasar el archivo adjunto si está presente
-            $attachment = $request->file('attachment');
+            $attachments = $request->attachments;
 
-            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $attachment));
+            // Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $attachment));
+            Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $attachments));
             
-            return 'Mail enviado con exito!';
+            return response(["message" => "Mail enviado con éxito!"], 200);
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
             // return $th->getMessage();
-            return 'Mail no enviado';
+            return response(["message" => "Mail no enviado"], 500);
         }
     }
 }
