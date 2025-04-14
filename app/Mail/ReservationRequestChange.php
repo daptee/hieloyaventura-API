@@ -15,18 +15,18 @@ class ReservationRequestChange extends Mailable
     use Queueable, SerializesModels;
 
     public $data, $reservation_number, $user;
-    public $attachments;
+    public $files;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data, $user, $attachments = [])
+    public function __construct($data, $user, $files)
     {
         $this->data = $data;
         $this->reservation_number = $data['reservation_number'];
         $this->user = $user;
-        $this->attachments = $attachments;
+        $this->files = $files;
     }
 
     /**
@@ -39,7 +39,7 @@ class ReservationRequestChange extends Mailable
         // return $this->subject('Agencias - Solicitud de cambio reserva Nro: ' . $this->reservation_number)
         //             ->view('emails.reservation-request-change');
 
-        $attachedFiles = $this->attachments;
+        $attachedFiles = $this->files;
         $email = $this->subject('Agencias - Solicitud de cambio reserva Nro: ' . $this->reservation_number)
         ->view('emails.reservation-request-change');
 

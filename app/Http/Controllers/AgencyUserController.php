@@ -468,10 +468,10 @@ class AgencyUserController extends Controller
             if(!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            $attachments = $request->attachments;
+            $files = $request->attachments;
 
             // Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $attachment));
-            Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $attachments));
+            Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $files));
             
             return response(["message" => "Mail enviado con éxito!"], 200);
         } catch (\Throwable $th) {
