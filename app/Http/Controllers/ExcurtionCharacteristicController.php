@@ -2568,7 +2568,7 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Qué llevar en la excursión?",
+                        "name" => "¿Qué llevar en la excursión?",
                         "description" => null
                     ],
                     [
@@ -4088,7 +4088,7 @@ class ExcurtionCharacteristicController extends Controller
                 "translables" => [
                     [
                         "lenguage_id" => 1,
-                        "name" => "Que llevar en la excursión?",
+                        "name" => "¿Que llevar en la excursión?",
                         "description" => null
                     ],
                     [
