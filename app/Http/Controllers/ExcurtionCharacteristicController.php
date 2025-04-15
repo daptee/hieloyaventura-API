@@ -1802,20 +1802,20 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             #ESPAÑOL
                             "lenguage_id" =>  "1",
-                            "name"        =>  '<p>9:30 horas (Todo el día)</p>',
-                            "description" =>  '<p>La duración de la actividad es de aproximadamente 9.30hs. Se recomienda no organizar otros planes para ese día.</p>'
+                            "name"        =>  '<p>10 horas (Todo el día)</p>',
+                            "description" =>  '<p>La duración de la actividad es de aproximadamente 10hs. Se recomienda no organizar otros planes para ese día.</p>'
                         ],
                         [
                             # INGLES
                             "lenguage_id" =>  "2",
-                            "name"        =>  "<p>9.5 hours (Full day)</p>",
-                            "description" =>  "<p>The duration of the activity is approximately 9:30 a.m. It is recommended not to organize other plans for that day.</p>"
+                            "name"        =>  "<p>10 hours (Full day)</p>",
+                            "description" =>  "<p>The duration of the activity is approximately 10 a.m. It is recommended not to organize other plans for that day.</p>"
                         ],
                         [
                             # PORTUGUÉS
                             "lenguage_id" =>  "3",
-                            "name"        =>  "<p>9.30 horas (o dia inteiro)</p>",
-                            "description" =>  "<p>A duração da atividade é de aproximadamente 9h30. Recomenda-se não organizar outros planos para esse dia.</p>"
+                            "name"        =>  "<p>10 horas (o dia inteiro)</p>",
+                            "description" =>  "<p>A duração da atividade é de aproximadamente 10h. Recomenda-se não organizar outros planos para esse dia.</p>"
                         ]
                     ]
                 ],
@@ -1827,20 +1827,20 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             #ESPAÑOL
                             "lenguage_id" =>  "1",
-                            "name"        =>  "<p>1 Octubre al 30 Abril</p>",
-                            "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Octubre al 30 de Abril</p>"
+                            "name"        =>  "<p>1 Octubre al 31 Mayo</p>",
+                            "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Octubre al 31 de Mayo</p>"
                         ],
                         [
                             # INGLES
                             "lenguage_id" =>  "2",
-                            "name"        =>  "<p>October 1th to April 30th</p>",
-                            "description" =>  "<p>It is available from October 1 until the end of April</p>"
+                            "name"        =>  "<p>October 1th to May 31th</p>",
+                            "description" =>  "<p>It is available from October 1 until the end of May</p>"
                         ],
                         [
                             # PORTUGUÉS
                             "lenguage_id" =>  "3",
-                            "name"        =>  "<p>1 outubro até 30 abril</p>",
-                            "description" =>  "<p>A excursão é disponível a partir do 1º dia de outubro até o fim de abril</p>"
+                            "name"        =>  "<p>1 outubro até 31 maio</p>",
+                            "description" =>  "<p>A excursão é disponível a partir do 1º dia de outubro até o fim de maio</p>"
                         ]
                     ]
                 ],
