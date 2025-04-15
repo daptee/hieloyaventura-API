@@ -855,7 +855,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 1,
                                     "name" => "Regreso al Puerto",
-                                    "description" => "30 minurtos de navegación."
+                                    "description" => "30 minutos de navegación."
                                 ],
                                 [
                                     "lenguage_id" => 2,
@@ -1157,17 +1157,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Trekking sobre hielo",
-                    "description" => "1hr 15' aproximadamente"
+                    "description" => "1hr aproximadamente"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Ice trekking",
-                    "description" => "Approximately 1hr 15'"
+                    "description" => "Approximately 1hr"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Trekking no gelo",
-                    "description" => "Aproximadamente 1h 15'"
+                    "description" => "Aproximadamente 1h"
                 ]
             ]
         ];
@@ -1461,17 +1461,17 @@ class ExcurtionCharacteristicController extends Controller
             "translables" => [
                 [
                     "lenguage_id" => "1",
-                    "name" => "Precio actual",
+                    "name" => "Precio actual (Sin traslados)",
                     "description" => 42000
                 ],
                 [
                     "lenguage_id" => "2",
-                    "name" => "Actual Price",
+                    "name" => "Actual Price (Without transfer)",
                     "description" => 42000
                 ],
                 [
                     "lenguage_id" => "3",
-                    "name" => "Preço real",
+                    "name" => "Preço real (Sem transporte)",
                     "description" => 42000
                 ]
             ]
@@ -2349,7 +2349,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 1,
                                     "name" => "Regreso al Puerto",
-                                    "description" => "30 minurtos de navegación."
+                                    "description" => "30 minutos de navegación."
                                 ],
                                 [
                                     "lenguage_id" => 2,
