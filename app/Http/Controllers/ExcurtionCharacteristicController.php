@@ -2027,7 +2027,7 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p><span style="color: rgb(36, 113, 185);"><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
                             <p><span style="color: rgb(36, 113, 185);"><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan.</strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Las salidas durante el mes de mayo, est&atilde;n sujetas a las condiciones clim&atilde;ticas y del terreno. &iexcl;Los esperamos!</strong></span></p>'
+                            <p><span style="color: rgb(36, 113, 185);"><strong>Las salidas durante el mes de mayo, est&aacute;n sujetas a las condiciones clim&atilde;ticas y del terreno. &iexcl;Los esperamos!</strong></span></p>'
 
                 ],
                 [
