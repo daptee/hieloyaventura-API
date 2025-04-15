@@ -855,7 +855,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 1,
                                     "name" => "Regreso al Puerto",
-                                    "description" => "30 minurtos de navegación."
+                                    "description" => "30 minutos de navegación."
                                 ],
                                 [
                                     "lenguage_id" => 2,
@@ -1157,17 +1157,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Trekking sobre hielo",
-                    "description" => "1hr 15' aproximadamente"
+                    "description" => "1hr aproximadamente"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Ice trekking",
-                    "description" => "Approximately 1hr 15'"
+                    "description" => "Approximately 1hr"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Trekking no gelo",
-                    "description" => "Aproximadamente 1h 15'"
+                    "description" => "Aproximadamente 1h"
                 ]
             ]
         ];
@@ -1461,17 +1461,17 @@ class ExcurtionCharacteristicController extends Controller
             "translables" => [
                 [
                     "lenguage_id" => "1",
-                    "name" => "Precio actual",
+                    "name" => "Precio actual (Sin traslados)",
                     "description" => 42000
                 ],
                 [
                     "lenguage_id" => "2",
-                    "name" => "Actual Price",
+                    "name" => "Actual Price (Without transfer)",
                     "description" => 42000
                 ],
                 [
                     "lenguage_id" => "3",
-                    "name" => "Preço real",
+                    "name" => "Preço real (Sem transporte)",
                     "description" => 42000
                 ]
             ]
@@ -1802,20 +1802,20 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             #ESPAÑOL
                             "lenguage_id" =>  "1",
-                            "name"        =>  '<p>9:30 horas (Todo el día)</p>',
-                            "description" =>  '<p>La duración de la actividad es de aproximadamente 9.30hs. Se recomienda no organizar otros planes para ese día.</p>'
+                            "name"        =>  '<p>10 horas (Todo el día)</p>',
+                            "description" =>  '<p>La duración de la actividad es de aproximadamente 10hs. Se recomienda no organizar otros planes para ese día.</p>'
                         ],
                         [
                             # INGLES
                             "lenguage_id" =>  "2",
-                            "name"        =>  "<p>9.5 hours (Full day)</p>",
-                            "description" =>  "<p>The duration of the activity is approximately 9:30 a.m. It is recommended not to organize other plans for that day.</p>"
+                            "name"        =>  "<p>10 hours (Full day)</p>",
+                            "description" =>  "<p>The duration of the activity is approximately 10 a.m. It is recommended not to organize other plans for that day.</p>"
                         ],
                         [
                             # PORTUGUÉS
                             "lenguage_id" =>  "3",
-                            "name"        =>  "<p>9.30 horas (o dia inteiro)</p>",
-                            "description" =>  "<p>A duração da atividade é de aproximadamente 9h30. Recomenda-se não organizar outros planos para esse dia.</p>"
+                            "name"        =>  "<p>10 horas (o dia inteiro)</p>",
+                            "description" =>  "<p>A duração da atividade é de aproximadamente 10h. Recomenda-se não organizar outros planos para esse dia.</p>"
                         ]
                     ]
                 ],
@@ -1827,20 +1827,20 @@ class ExcurtionCharacteristicController extends Controller
                         [
                             #ESPAÑOL
                             "lenguage_id" =>  "1",
-                            "name"        =>  "<p>1 Octubre al 30 Abril</p>",
-                            "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Octubre al 30 de Abril</p>"
+                            "name"        =>  "<p>1 Octubre al 31 Mayo</p>",
+                            "description" =>  "<p>La disponibilidad de esta excursión es del 1 de Octubre al 31 de Mayo</p>"
                         ],
                         [
                             # INGLES
                             "lenguage_id" =>  "2",
-                            "name"        =>  "<p>October 1th to April 30th</p>",
-                            "description" =>  "<p>It is available from October 1 until the end of April</p>"
+                            "name"        =>  "<p>October 1th to May 31th</p>",
+                            "description" =>  "<p>It is available from October 1 until the end of May</p>"
                         ],
                         [
                             # PORTUGUÉS
                             "lenguage_id" =>  "3",
-                            "name"        =>  "<p>1 outubro até 30 abril</p>",
-                            "description" =>  "<p>A excursão é disponível a partir do 1º dia de outubro até o fim de abril</p>"
+                            "name"        =>  "<p>1 outubro até 31 maio</p>",
+                            "description" =>  "<p>A excursão é disponível a partir do 1º dia de outubro até o fim de maio</p>"
                         ]
                     ]
                 ],
@@ -2016,27 +2016,29 @@ class ExcurtionCharacteristicController extends Controller
                             <p>&nbsp;</p>
                             <p>Al llegar al borde del glaciar, con las sorprendentes tonalidades azules del hielo, se organizar&aacute;n subgrupos de un m&aacute;ximo de 20 personas cada uno y se les colocar&aacute;n los crampones y cascos provistos por la empresa a pocos metros de la hermosa Cascada de las Cotorras. Esta excursi&oacute;n es altamente personalizada (un gu&iacute;a cada 10 pasajeros m&aacute;ximo). Una vez sobre el glaciar, recibir&aacute;n una charla de seguridad y exploraremos juntos durante una hora aprox. este para&iacute;so helado, declarado Patrimonio de la Humanidad (1981).</p>
                             <p>&nbsp;</p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 5km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 3 horas aproximadamente.&nbsp;</strong></span></p>
+                            <p><span style="color: rgb(36, 113, 185);"><strong>El circuito sobre el glaciar es de dificultad media/alta, la superficie del hielo es irregular pero firme y segura.&nbsp;El ritmo de marcha es constante y se realizan pocas paradas. Se recorren 6km aprox. en terreno de rocas, tierra y hielo con crampones (El mini normal es 3km de recorrido) El tiempo de caminata total es de 4 horas aproximadamente.&nbsp;</strong></span></p>
                             <p><span style="color: rgb(36, 113, 185);"><strong>Es decir, se camina el doble de distancia en el mismo tiempo que en el Minitrekking com&uacute;n.</strong></span></p>
                             <p>&nbsp;</p>
                             <p>Durante la caminata se podr&aacute; apreciar las formaciones t&iacute;picas y cambiantes de un glaciar como profundas grietas, sumideros azules, enormes seracs y lagunas turquesas. Siempre acompa&ntilde;ados del sonido &uacute;nico de los crampones clav&aacute;ndose en el hielo.</p>
                             <p>&nbsp;</p>
                             <p>Al finalizar la caminata sobre el hielo, se visitar&aacute; la base del salto de agua, desde donde caminaremos de regreso por la morena lateral hasta llegar nuevamente a la Bah&iacute;a Puma. Una vez all&iacute;, embarcaremos de regreso hacia el Puerto Bajo de las Sombras, siempre mirando la pared de hielo por si nos sorprende con un estruendoso desprendimiento.</p>
                             <p>&nbsp;</p>
-                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 9:30 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte e ir por sus propios medios, esta excursi&oacute;n dura 4 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
+                            <p>La duraci&oacute;n de la excursi&oacute;n con el traslado desde El Calafate, es de 10 horas aproximadamente e incluye la visita de alrededor de 1 hora a las pasarelas del Glaciar Perito Moreno, ubicadas a 7 km de nuestro Puerto. All&iacute; podr&aacute;n disfrutar de la espectacular vista panor&aacute;mica del glaciar y recorrer alguno de los senderos autoguiados. En caso de no optar por nuestro transporte con visita a pasarelas e ir por sus propios medios, esta excursi&oacute;n dura 5 h aprox., saliendo desde el Puerto y regresando al mismo punto de partida.</p>
                             <p>&nbsp;</p>
                             <p><span style="color: rgb(36, 113, 185);"><strong>Esta excursi&oacute;n se realiza en un ambiente natural por lo cual las condiciones clim&aacute;ticas y caracter&iacute;sticas del glaciar y sus alrededores cambian diariamente. </strong></span></p>
-                            <p><span style="color: rgb(36, 113, 185);"><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan. &iexcl;Los esperamos!</strong></span></p>'
+                            <p><span style="color: rgb(36, 113, 185);"><strong>Sin embargo, no se suspende, mientras que las condiciones de seguridad lo permitan.</strong></span></p>
+                            <p><span style="color: rgb(36, 113, 185);"><strong>Las salidas durante el mes de mayo, est&aacute;n sujetas a las condiciones clim&aacute;ticas y del terreno. &iexcl;Los esperamos!</strong></span></p>'
+
                 ],
                 [
                     "lenguage_id" => 2,
                     "name" => "About",
-                    "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">The tour starts when passengers are picked up in El Calafate. On our comfortable buses, on the way to Parque Nacional Los Glaciares, our tour guides will give you information on the place, the glacier and the tour.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Once you arrive at &ldquo;Bajo de las Sombras&rdquo; port (located on Route 11, 70 Km from El Calafate), you will board a ship to cross Lago Rico and arrive to the opposite coast after a 10-minute navigation in front of the stunning south face of Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we disembark on Bahia Puma, just 500 meters from the glacier, you will be received by our expert mountain guides. Then we will start the hike with a walk of about one hour on the lake coast and later on the moraine next to the ice (ground with rocks and unstable earth). <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we reach the glacier side, with its amazing blue ice shades, you will be divided into subgroups of up to 20 people each and you will have the crampons and helmets fitted, which are provided by the company, a few meters from the beautiful waterfall Cascada de las Cotorras. This tour is highly personalized (one guide every 10 passengers maximum). Once on the glacier, you will hear the safety instructions and we will explore together for about an hour this frozen paradise, which has been declared a World Heritage Site in 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">The level of difficulty of the circuit on the glacier is moderate/high. The ice surface is irregular, but firm and safe.&nbsp;The pace of the walk is continuous and there are few stops. You will walk for about 5 km. of land with rocks, earth and ice with crampons (The regular Minitrekking goes over 3 km.) The complete trekking takes about 3 hours.&nbsp; <br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">That is to say, you walk twice the distance of the regular Minitrekking in the same time.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">During the trekking, you will be able to see the typical and changing glacier formations, such as deep cracks, blue moulins, huge seracs and turquoise ponds. All the way you will hear the unique sound of the crampons sticking into the ice.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">At the end of the trekking on the ice, we will visit the waterfall base, from where we will walk back along the lateral moraine until we reach Bah&iacute;a Puma again. Once we are there, we will take the boat back to &ldquo;Bajo de las Sombras&rdquo; port, always looking at the ice wall in case we see a noisy calving. <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">The duration of this tour is about 9.5 hours, including the transfer and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from our port. There, you will have the chance to enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t book our transfer and go by your own means, this tour takes about four hours, leaving from the port and returning to the same point.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">This tour is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, as long as it is safe to go on the tour, it is not suspended. We are waiting for you!</span></strong></p>'
+                    "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">The tour starts when passengers are picked up in El Calafate. On our comfortable buses, on the way to Parque Nacional Los Glaciares, our tour guides will give you information on the place, the glacier and the tour.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Once you arrive at &ldquo;Bajo de las Sombras&rdquo; port (located on Route 11, 70 Km from El Calafate), you will board a ship to cross Lago Rico and arrive to the opposite coast after a 10-minute navigation in front of the stunning south face of Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we disembark on Bahia Puma, just 500 meters from the glacier, you will be received by our expert mountain guides. Then we will start the hike with a walk of about one hour on the lake coast and later on the moraine next to the ice (ground with rocks and unstable earth). <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">When we reach the glacier side, with its amazing blue ice shades, you will be divided into subgroups of up to 20 people each and you will have the crampons and helmets fitted, which are provided by the company, a few meters from the beautiful waterfall Cascada de las Cotorras. This tour is highly personalized (one guide every 10 passengers maximum). Once on the glacier, you will hear the safety instructions and we will explore together for about an hour this frozen paradise, which has been declared a World Heritage Site in 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">The level of difficulty of the circuit on the glacier is moderate/high. The ice surface is irregular, but firm and safe.&nbsp;The pace of the walk is continuous and there are few stops. You will walk for about 6 km. of land with rocks, earth and ice with crampons (The regular Minitrekking goes over 4 km.) The complete trekking takes about 3 hours.&nbsp; <br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">That is to say, you walk twice the distance of the regular Minitrekking in the same time.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">During the trekking, you will be able to see the typical and changing glacier formations, such as deep cracks, blue moulins, huge seracs and turquoise ponds. All the way you will hear the unique sound of the crampons sticking into the ice.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">At the end of the trekking on the ice, we will visit the waterfall base, from where we will walk back along the lateral moraine until we reach Bah&iacute;a Puma again. Once we are there, we will take the boat back to &ldquo;Bajo de las Sombras&rdquo; port, always looking at the ice wall in case we see a noisy calving. <br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">The duration of this tour is about 10 hours, including the transfer and a one-hour guided visit to the walkways of Glaciar Perito Moreno, 7 km from our port. There, you will have the chance to enjoy the spectacular panoramic view of the glacier and walk along some of the self-guided paths. If you don&rsquo;t book our transfer with a visit to catwalks and go by your own means, this tour takes about five hours, leaving from the port and returning to the same point.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">This tour is carried out in a natural environment, so weather conditions and the glacier and its surroundings change every day. However, as long as it is safe to go on the tour, it is not suspended.</span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">All departures, scheduled for May, are subject to prevailing weather and terrain due to winter conditions. We are waiting for you!</span></strong></p>'
                 ],
                 [
                     "lenguage_id" => 3,
                     "name" => "Sobre esta experiência",
-                    "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">A excurs&atilde;o come&ccedil;a com a retirada dos passageiros na cidade de El Calafate. Em nossos confort&aacute;veis &ocirc;nibus, caminho ao Parque Nacional Los Glaciares, os guias de turismo oferecer&atilde;o informa&ccedil;&otilde;es sobre o local, a geleira e a excurs&atilde;o.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar ao porto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate), come&ccedil;a a navega&ccedil;&atilde;o em barco, atravessando o Lago Rico at&eacute; atingir a margem oposta, logo ap&oacute;s 10 minutos de navega&ccedil;&atilde;o com vista para a imponente parede sul do Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao desembarcar na Bahia Puma, apenas 500 metros da geleira, os passageiros ser&atilde;o recebidos por nossos espertos guias de montanha. O percorrido come&ccedil;a com uma caminhada de perto de uma hora pela margem do lago e, depois, pela morena ao lado do gelo (superf&iacute;cie inst&aacute;vel e rochosa).<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar &agrave; borda do glaciar, no meio de uma paisagem de incr&iacute;veis tonalidades de gelo azuis, ser&atilde;o organizados subgrupos com at&eacute; 20 pessoas cada um, e ser&atilde;o colocados os grampos e capacetes fornecidos pela empresa, perto da bonita cachoeira chamada Cascada de las Cotorras. A excurs&atilde;o &eacute; muito personalizada (com um guia cada, no m&aacute;ximo, 10 passageiros). J&aacute; na geleira, os passageiros receber&atilde;o instru&ccedil;&otilde;es sobre seguran&ccedil;a e caminhar&atilde;o perto de uma hora para desfrutar desse para&iacute;so gelado, que foi declarado Patrim&ocirc;nio da Humanidade em 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">O circuito sobre a geleira tem uma dificuldade m&eacute;dia/alta; a superf&iacute;cie do gelo &eacute; irregular, mas firme e segura.&nbsp;O ritmo da caminhada &eacute; constante e com poucas pausas para descansar. A dist&acirc;ncia percorrida &eacute; de perto de 5 km de pedras, terra e gelo com grampos (A dist&acirc;ncia do Minitrekking normal &eacute; de 3 km). O tempo de caminhada total &eacute; de aproximadamente 3 horas.<br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">Ou seja, os passageiros v&atilde;o caminhar uma dist&acirc;ncia duas vezes maior do que no Minitrekking comum, mas no mesmo tempo.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">No percorrido, os passageiros poder&atilde;o apreciar as forma&ccedil;&otilde;es caracter&iacute;sticas e em transforma&ccedil;&atilde;o de uma geleira, como profundas fendas, sumidouros azuis, enormes seracs e lagoas de cor azul turquesa. Sempre acompanhados pelo som &uacute;nico dos grampos que se cravam no gelo.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao concluir a caminhada no gelo, os passageiros visitar&atilde;o a base da queda d&acute;&aacute;gua e, a partir da&iacute;, retornar&atilde;o caminhando pela morena lateral at&eacute; chegarem outra vez &agrave; Bahia Puma. Na Bahia, embarcar&atilde;o para o Porto Bajo de las Sombras, sempre olhando para a parede de gelo, caso aconte&ccedil;a um estrondoso e surpreendente desprendimento.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">A dura&ccedil;&atilde;o da excurs&atilde;o mais o traslado de El Calafate &eacute; de aproximadamente 9:30 horas. A excurs&atilde;o inclui uma visita de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km de nosso porto. L&aacute; poder&atilde;o desfrutar da espetacular vista panor&acirc;mica do glaciar e percorrer algumas das trilhas autoguiadas. Se o passageiro n&atilde;o escolher nosso transporte e decidir utilizar seus pr&oacute;prios meios, a dura&ccedil;&atilde;o da excurs&atilde;o &eacute; de quatro horas aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">A excurs&atilde;o &eacute; realizada em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e de seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o ser&aacute; suspensa sempre que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitirem. Esperamos voc&ecirc;s!</span></strong></p>'
+                    "description" => '<p style="margin: 0cm 0cm 12pt; text-align: justify; line-height: 107%; font-size: 11pt; font-family: Calibri, sans-serif;"><span style="font-family: Stem-ExtraLight, sans-serif;">A excurs&atilde;o come&ccedil;a com a retirada dos passageiros na cidade de El Calafate. Em nossos confort&aacute;veis &ocirc;nibus, caminho ao Parque Nacional Los Glaciares, os guias de turismo oferecer&atilde;o informa&ccedil;&otilde;es sobre o local, a geleira e a excurs&atilde;o.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar ao porto &ldquo;Bajo de las Sombras&rdquo; (Ruta 11, a 70 km de El Calafate), come&ccedil;a a navega&ccedil;&atilde;o em barco, atravessando o Lago Rico at&eacute; atingir a margem oposta, logo ap&oacute;s 10 minutos de navega&ccedil;&atilde;o com vista para a imponente parede sul do Glaciar Perito Moreno.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao desembarcar na Bahia Puma, apenas 500 metros da geleira, os passageiros ser&atilde;o recebidos por nossos espertos guias de montanha. O percorrido come&ccedil;a com uma caminhada de perto de uma hora pela margem do lago e, depois, pela morena ao lado do gelo (superf&iacute;cie inst&aacute;vel e rochosa).<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao chegar &agrave; borda do glaciar, no meio de uma paisagem de incr&iacute;veis tonalidades de gelo azuis, ser&atilde;o organizados subgrupos com at&eacute; 20 pessoas cada um, e ser&atilde;o colocados os grampos e capacetes fornecidos pela empresa, perto da bonita cachoeira chamada Cascada de las Cotorras. A excurs&atilde;o &eacute; muito personalizada (com um guia cada, no m&aacute;ximo, 10 passageiros). J&aacute; na geleira, os passageiros receber&atilde;o instru&ccedil;&otilde;es sobre seguran&ccedil;a e caminhar&atilde;o perto de uma hora para desfrutar desse para&iacute;so gelado, que foi declarado Patrim&ocirc;nio da Humanidade em 1981.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">O circuito sobre a geleira tem uma dificuldade m&eacute;dia/alta; a superf&iacute;cie do gelo &eacute; irregular, mas firme e segura.&nbsp;O ritmo da caminhada &eacute; constante e com poucas pausas para descansar. A dist&acirc;ncia percorrida &eacute; de perto de 6 km de pedras, terra e gelo com grampos (A dist&acirc;ncia do Minitrekking normal &eacute; de 3 km). O tempo de caminhada total &eacute; de aproximadamente 4 horas.<br /><br /></span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #3686c3;">Ou seja, os passageiros v&atilde;o caminhar uma dist&acirc;ncia duas vezes maior do que no Minitrekking comum, mas no mesmo tempo.<br /><br /></span></strong><span style="font-family: Stem-ExtraLight, sans-serif;">No percorrido, os passageiros poder&atilde;o apreciar as forma&ccedil;&otilde;es caracter&iacute;sticas e em transforma&ccedil;&atilde;o de uma geleira, como profundas fendas, sumidouros azuis, enormes seracs e lagoas de cor azul turquesa. Sempre acompanhados pelo som &uacute;nico dos grampos que se cravam no gelo.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">Ao concluir a caminhada no gelo, os passageiros visitar&atilde;o a base da queda d&acute;&aacute;gua e, a partir da&iacute;, retornar&atilde;o caminhando pela morena lateral at&eacute; chegarem outra vez &agrave; Bahia Puma. Na Bahia, embarcar&atilde;o para o Porto Bajo de las Sombras, sempre olhando para a parede de gelo, caso aconte&ccedil;a um estrondoso e surpreendente desprendimento.<br /><br /></span><span style="font-family: Stem-ExtraLight, sans-serif;">A dura&ccedil;&atilde;o da excurs&atilde;o mais o traslado de El Calafate &eacute; de aproximadamente 10 horas. A excurs&atilde;o inclui uma visita de perto de uma hora &agrave;s passarelas do Glaciar Perito Moreno, a 7 km de nosso porto. L&aacute; poder&atilde;o desfrutar da espetacular vista panor&acirc;mica do glaciar e percorrer algumas das trilhas autoguiadas. Se o passageiro n&atilde;o escolher nosso transporte com uma visita &atilde;s passarelas e decidir utilizar seus pr&oacute;prios meios, a dura&ccedil;&atilde;o da excurs&atilde;o &eacute; de cinco horas aproximadamente, saindo do porto e voltando para o mesmo ponto de sa&iacute;da.<br /><br /></span><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;">A excurs&atilde;o &eacute; realizada em um ambiente natural e com condi&ccedil;&otilde;es clim&aacute;ticas e caracter&iacute;sticas da geleira e de seu entorno que mudam todos os dias. No entanto, a excurs&atilde;o n&atilde;o ser&aacute; suspensa sempre que as condi&ccedil;&otilde;es de seguran&ccedil;a o permitirem.</span></strong><strong><span style="font-family: Stem-ExtraLight, sans-serif; color: #2471b9;"> As sa&iacute;das durante o m&ecirc;s de maio est&atilde;o sujeitas &agrave;s condi&ccedil;&otilde;es clim&aacute;ticas e do terreno devido ao clima de inverno. Esperamos voc&ecirc;s!</span></strong></p>'
                 ]
             ]
         ];
@@ -2301,17 +2303,17 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 1,
                                     "name" => "Trekking por la costa, morena y glaciar",
-                                    "description" => "3 horas."
+                                    "description" => "34horas."
                                 ],
                                 [
                                     "lenguage_id" => 2,
                                     "name" => "Trekking along the coast, moraine and glacier",
-                                    "description" => "3 hours."
+                                    "description" => "4 hours."
                                 ],
                                 [
                                     "lenguage_id" => 3,
                                     "name" => "Trekking pela borda, morena e geleira",
-                                    "description" => "3 horas."
+                                    "description" => "4 horas."
                                 ]
                             ]
                         ],
@@ -2347,7 +2349,7 @@ class ExcurtionCharacteristicController extends Controller
                                 [
                                     "lenguage_id" => 1,
                                     "name" => "Regreso al Puerto",
-                                    "description" => "30 minurtos de navegación."
+                                    "description" => "30 minutos de navegación."
                                 ],
                                 [
                                     "lenguage_id" => 2,
@@ -2649,17 +2651,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Trekking sobre hielo",
-                    "description" => "1hr 15' aproximadamente"
+                    "description" => "1hr aproximadamente"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Ice trekking",
-                    "description" => "Approximately 1hr 15'"
+                    "description" => "Approximately 1hr"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Trekking no gelo",
-                    "description" => "Aproximadamente 1h 15'"
+                    "description" => "Aproximadamente 1h"
                 ]
             ]
         ];
@@ -2675,17 +2677,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Dificultad",
-                    "description" => "Media"
+                    "description" => "Alta"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Difficulty",
-                    "description" => "Medium"
+                    "description" => "High"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Dificuldade",
-                    "description" => "Media"
+                    "description" => "Alto"
                 ]
             ]
         ];
@@ -2879,17 +2881,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Trekking por bosque",
-                    "description" => "0"
+                    "description" => "1"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Trekking through forest",
-                    "description" => "0"
+                    "description" => "1"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Trekking pela floresta",
-                    "description" => "0"
+                    "description" => "1"
                 ]
             ]
         ];
@@ -2953,17 +2955,17 @@ class ExcurtionCharacteristicController extends Controller
             "translables" => [
                 [
                     "lenguage_id" => "1",
-                    "name" => "Precio actual",
+                    "name" => "Precio actual (Sin traslados)",
                     "description" => 210000
                 ],
                 [
                     "lenguage_id" => "2",
-                    "name" => "Actual Price",
+                    "name" => "Actual Price (Without transfer)",
                     "description" => 210000
                 ],
                 [
                     "lenguage_id" => "3",
-                    "name" => "Preço real",
+                    "name" => "Preço real (Sem transporte)",
                     "description" => 210000
                 ]
             ]
@@ -3207,17 +3209,17 @@ class ExcurtionCharacteristicController extends Controller
                 [
                     "lenguage_id" => "1",
                     "name" => "Caminata total",
-                    "description" => "5 km aprox"
+                    "description" => "6 km aprox"
                 ],
                 [
                     "lenguage_id" => "2",
                     "name" => "Caminata total",
-                    "description" => "5 km aprox"
+                    "description" => "6 km aprox"
                 ],
                 [
                     "lenguage_id" => "3",
                     "name" => "Caminata total",
-                    "description" => "5 km aprox"
+                    "description" => "6 km aprox"
                 ]
             ]
         ];

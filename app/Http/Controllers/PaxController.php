@@ -195,6 +195,8 @@ class PaxController extends Controller
                     }
                 }
 
+                $pathReservationPdf = $this->createPdf($userReservation, true);
+                $userReservation->pdf = $pathReservationPdf['urlToSave'];
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
 
@@ -287,7 +289,7 @@ class PaxController extends Controller
         //
     }
 
-    private function createPdf($newUserReservation)
+    private function createPdf($newUserReservation, $onlySave = false)
     {
         try {
             // Language
@@ -305,9 +307,18 @@ class PaxController extends Controller
             // $languageToPdf = $array_languages[1];
             $is_transfer = $newUserReservation->is_transfer == 1 ? "con_trf" : "sin_trf";
 
-            if (!is_dir('reservations'))
-                mkdir(public_path("reservations"));
+            if ($onlySave) {
 
+                if (!is_dir('reservations/agencies'))
+                    mkdir(public_path("reservations/agencies"));
+
+            } else {
+
+                if (!is_dir('reservations'))
+                    mkdir(public_path("reservations"));                
+
+            }
+    
             $date = $newUserReservation->date;
             $paxes = $newUserReservation->paxes;
             $paxes_name = "";
@@ -358,7 +369,12 @@ class PaxController extends Controller
             // $firstPage = $this->withOrWithoutTrf($excurtionName, $newUserReservation->is_transfer, $languageToPdf);
             // $secondPage = public_path("excursions/bases/$languageToPdf.pdf");
             $base_pdf = $languageToPdf . '_' . str_replace(' ', '_', $excurtionName);
-            $secondPage = public_path("excursions/bases/$is_transfer/$base_pdf.pdf");
+            if ($onlySave) {
+                $secondPage = public_path("excursions/bases/agencies/$is_transfer/$base_pdf.pdf");
+            } else {
+                $secondPage = public_path("excursions/bases/$is_transfer/$base_pdf.pdf");
+            }
+            // $secondPage = public_path("excursions/bases/$is_transfer/$base_pdf.pdf");
             // $secondPage = public_path("excursions/bases/$base_pdf.pdf");
             // $secondPage = public_path("excursions/bases/PT_Big_Ice.pdf");
 
@@ -430,8 +446,8 @@ class PaxController extends Controller
             //Textos
             $thanks                  = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
             $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
-            $contactFullName         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
-            $contactName             = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name);
+            // $contactFullName         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
+            $contactName             = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name ?? null);
             $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer == 1 ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
             $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', "|  " . $quantity_paxes . "x $excurtionName");
             $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
@@ -440,9 +456,14 @@ class PaxController extends Controller
             $details                 = iconv('UTF-8', 'cp1250', $details);
             $excurtionName           = iconv('UTF-8', 'cp1250', $excurtionName);
             $namePdf                 = "reservation-$newUserReservation->id" . "-$newUserReservation->reservation_number.pdf";
-            $pathToSavePdf           = public_path("reservations/$namePdf");
-            $urlToSave               = url("reservations/$namePdf");
+            if ($onlySave) {
+                $pathToSavePdf = public_path("reservations/agencies/$namePdf");
+                $urlToSave     = url("reservations/agencies/$namePdf");
+            } else {
+                $pathToSavePdf = public_path("reservations/$namePdf");
+                $urlToSave     = url("reservations/$namePdf");
 
+            }
 
             // now write some text above the imported page
             //Nro de reserva
