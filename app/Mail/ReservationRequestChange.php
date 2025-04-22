@@ -21,7 +21,7 @@ class ReservationRequestChange extends Mailable
      *
      * @return void
      */
-    public function __construct($data, $user, $files)
+    public function __construct($data, $user, $files = [])
     {
         $this->data = $data;
         $this->reservation_number = $data['reservation_number'];
@@ -41,13 +41,15 @@ class ReservationRequestChange extends Mailable
 
         $attachedFiles = $this->files;
         $email = $this->subject('Agencias - Solicitud de cambio reserva Nro: ' . $this->reservation_number)
-        ->view('emails.reservation-request-change');
+            ->view('emails.reservation-request-change');
 
-        foreach ($attachedFiles as $file) {
-            $email->attach($file->getRealPath(), [
-                'as' => $file->getClientOriginalName(),
-                'mime' => $file->getMimeType(),
-            ]);
+        if (is_array($attachedFiles)) {
+            foreach ($attachedFiles as $file) {
+                $email->attach($file->getRealPath(), [
+                    'as' => $file->getClientOriginalName(),
+                    'mime' => $file->getMimeType(),
+                ]);
+            }
         }
 
         return $email;
