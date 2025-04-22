@@ -43,11 +43,13 @@ class ReservationRequestChange extends Mailable
         $email = $this->subject('Agencias - Solicitud de cambio reserva Nro: ' . $this->reservation_number)
         ->view('emails.reservation-request-change');
 
-        foreach ($attachedFiles as $file) {
-            $email->attach($file->getRealPath(), [
-                'as' => $file->getClientOriginalName(),
-                'mime' => $file->getMimeType(),
-            ]);
+        if(isset($attachedFiles)){
+            foreach ($attachedFiles as $file) {
+                $email->attach($file->getRealPath(), [
+                    'as' => $file->getClientOriginalName(),
+                    'mime' => $file->getMimeType(),
+                ]);
+            }
         }
 
         return $email;
