@@ -21,7 +21,7 @@ class ReservationRequestChange extends Mailable
      *
      * @return void
      */
-    public function __construct($data, $user, $files)
+    public function __construct($data, $user, $files = [])
     {
         $this->data = $data;
         $this->reservation_number = $data['reservation_number'];

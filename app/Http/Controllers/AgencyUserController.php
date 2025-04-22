@@ -29,7 +29,7 @@ class AgencyUserController extends Controller
     public $v = "o"; //verbo ej:encontrado/a
     public $pr = "el"; //preposicion singular
     public $prp = "los"; //preposicion plural
-    
+
     public function index()
     {
         $users = $this->model::with($this->model::SHOW)->get();
@@ -40,9 +40,9 @@ class AgencyUserController extends Controller
     public function get_users_seller($agency_code)
     {
         $users = $this->model::with($this->model::SHOW)
-                ->where('agency_user_type_id', AgencyUserType::VENDEDOR)
-                ->where('agency_code', $agency_code)
-                ->get();
+            ->where('agency_user_type_id', AgencyUserType::VENDEDOR)
+            ->where('agency_code', $agency_code)
+            ->get();
 
         return response(compact("users"));
     }
@@ -60,11 +60,11 @@ class AgencyUserController extends Controller
             "can_view_all_sales" => 'required'
         ]);
 
-        if($request->agency_user_type_id == AgencyUserType::VENDEDOR){
+        if ($request->agency_user_type_id == AgencyUserType::VENDEDOR) {
             $agency_user_seller_load = AgencyUserSellerLoad::where('agency_code', $request->agency_code)->first();
             $maximum_load = $agency_user_seller_load->seller_load ?? 5;
             $users_quantity = AgencyUser::where('agency_user_type_id', AgencyUserType::VENDEDOR)->where('agency_code', $request->agency_code)->count();
-            if($users_quantity >= $maximum_load){
+            if ($users_quantity >= $maximum_load) {
                 return response()->json(["message" => "Cantidad maxima permitida de usuarios vendedores ya completa"], 400);
             }
         }
@@ -101,10 +101,10 @@ class AgencyUserController extends Controller
         $user->can_view_all_sales = $request->can_view_all_sales;
 
         // $user->agency_code = $request->agency_code;
-        
-        if($request->password)
+
+        if ($request->password)
             $user->password = Hash::make($request->password);
-        
+
         $user->save();
 
         $user = AgencyUser::getAllDataUser($user->id);
@@ -115,14 +115,14 @@ class AgencyUserController extends Controller
 
     public function terms_and_conditions()
     {
-        if(Auth::guard('agency')->user()->agency_user_type_id == AgencyUserType::ADMIN){
+        if (Auth::guard('agency')->user()->agency_user_type_id == AgencyUserType::ADMIN) {
             $id = Auth::guard('agency')->user()->id;
-        }else{
+        } else {
             return response()->json(['message' => 'Usuario no válido.'], 400);
         }
-        
+
         $user = AgencyUser::find($id);
-        
+
         try {
             DB::beginTransaction();
             //code...
@@ -168,11 +168,11 @@ class AgencyUserController extends Controller
     public function filter_code(Request $request)
     {
         $query = $this->model::with($this->model::SHOW)
-                ->when($request->agency_code, function ($query) use ($request) {
-                    return $query->where('agency_code', 'LIKE', '%'.$request->agency_code.'%');
-                })
-                ->orderBy('id', 'desc');
-    
+            ->when($request->agency_code, function ($query) use ($request) {
+                return $query->where('agency_code', 'LIKE', '%' . $request->agency_code . '%');
+            })
+            ->orderBy('id', 'desc');
+
         $total = $query->count();
         $total_per_page = 30;
         $data = $query->paginate($total_per_page);
@@ -193,10 +193,10 @@ class AgencyUserController extends Controller
         $id_user = Auth::guard('agency')->user()->id ?? Auth::user()->id;
         try {
             DB::beginTransaction();
-            
+
             $agency_user_seller_load = AgencyUserSellerLoad::where('agency_code', $request->agency_code)->first();
 
-            if(!isset($agency_user_seller_load)){
+            if (!isset($agency_user_seller_load)) {
                 $agency_user_seller_load = new AgencyUserSellerLoad();
             }
 
@@ -206,7 +206,7 @@ class AgencyUserController extends Controller
             $agency_user_seller_load->save();
 
             Audit::create(["id_user" => $id_user, "action" => ["action" => "maximum load of sellers", "data" => $request->all()]]);
-           
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -220,17 +220,18 @@ class AgencyUserController extends Controller
     public function get_user_seller_load($agency_code)
     {
         $agency_user_seller_load = AgencyUserSellerLoad::with('user')->where('agency_code', $agency_code)->first();
-        
+
         return response()->json(["data" => $agency_user_seller_load], 200);
     }
 
     // HYA ENDPOINTS
 
-    public function get_url(){
+    public function get_url()
+    {
         $environment = config("app.environment");
-        if($environment == "DEV"){
+        if ($environment == "DEV") {
             $url = "https://apihya.hieloyaventura.com/apihya_dev";
-        }else{
+        } else {
             $url = "https://apihya.hieloyaventura.com/apihya";
         }
         return $url;
@@ -250,7 +251,7 @@ class AgencyUserController extends Controller
         $url = $this->get_url();
         $query = http_build_query($params);
         $response = Http::get("$url/Agencias?$query");
-        
+
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -262,7 +263,7 @@ class AgencyUserController extends Controller
     {
         $fecha = $request->FECHA;
         $url = $this->get_url();
-        $response = Http::get("$url/Productos?FECHA=$fecha");   
+        $response = Http::get("$url/Productos?FECHA=$fecha");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -274,7 +275,7 @@ class AgencyUserController extends Controller
     {
         $leng = $request->LENG ?? 'ES';
         $url = $this->get_url();
-        $response = Http::get("$url/TiposPasajeros?LENG=$leng");   
+        $response = Http::get("$url/TiposPasajeros?LENG=$leng");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -285,7 +286,7 @@ class AgencyUserController extends Controller
     public function nationalities()
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Naciones");   
+        $response = Http::get("$url/Naciones");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -296,7 +297,7 @@ class AgencyUserController extends Controller
     public function hotels()
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Hoteles");   
+        $response = Http::get("$url/Hoteles");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -310,7 +311,7 @@ class AgencyUserController extends Controller
         $fecha_hasta = $request->FECHAH;
         $excursion_id = $request->PRD;
         $url = $this->get_url();
-        $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -322,7 +323,7 @@ class AgencyUserController extends Controller
     {
         $url = $this->get_url();
         $body_json = $request->all();
-        $response = Http::post("$url/IniciaReserva", $body_json);   
+        $response = Http::post("$url/IniciaReserva", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -335,10 +336,10 @@ class AgencyUserController extends Controller
         $this->validate($request, [
             'RSV' => 'required',
         ]);
-        
+
         $url = $this->get_url();
         $response = Http::asForm()->post("$url/CancelaReserva", [
-            'RSV' => $request->RSV   
+            'RSV' => $request->RSV
         ]);
         if ($response->successful()) {
             return $response->json();
@@ -375,49 +376,49 @@ class AgencyUserController extends Controller
     {
         $params = [];
 
-    if ($request->has('AG') && $request->AG !== null) {
-        $params['AG'] = $request->AG;
-    }
-    if ($request->has('DESDEF') && $request->DESDEF !== null) {
-        $params['DESDEF'] = $request->DESDEF;
-    }
-    if ($request->has('HASTAF') && $request->HASTAF !== null) {
-        $params['HASTAF'] = $request->HASTAF;
-    }
-    if ($request->has('OPERADOR') && $request->OPERADOR !== null) {
-        $params['OPERADOR'] = $request->OPERADOR;
-    }
-    if ($request->has('PRD') && $request->PRD !== null) {
-        $params['PRD'] = $request->PRD;
-    }
-    if ($request->has('EST') && $request->EST !== null) {
-        $params['EST'] = $request->EST;
-    }
-    if ($request->has('DESDEC') && $request->DESDEC !== null) {
-        $params['DESDEC'] = $request->DESDEC;
-    }
-    if ($request->has('RSV') && $request->RSV !== null) {
-        $params['RSV'] = $request->RSV;
-    }
-    if ($request->has('HASTAC') && $request->HASTAC !== null) {
-        $params['HASTAC'] = $request->HASTAC;
-    }
+        if ($request->has('AG') && $request->AG !== null) {
+            $params['AG'] = $request->AG;
+        }
+        if ($request->has('DESDEF') && $request->DESDEF !== null) {
+            $params['DESDEF'] = $request->DESDEF;
+        }
+        if ($request->has('HASTAF') && $request->HASTAF !== null) {
+            $params['HASTAF'] = $request->HASTAF;
+        }
+        if ($request->has('OPERADOR') && $request->OPERADOR !== null) {
+            $params['OPERADOR'] = $request->OPERADOR;
+        }
+        if ($request->has('PRD') && $request->PRD !== null) {
+            $params['PRD'] = $request->PRD;
+        }
+        if ($request->has('EST') && $request->EST !== null) {
+            $params['EST'] = $request->EST;
+        }
+        if ($request->has('DESDEC') && $request->DESDEC !== null) {
+            $params['DESDEC'] = $request->DESDEC;
+        }
+        if ($request->has('RSV') && $request->RSV !== null) {
+            $params['RSV'] = $request->RSV;
+        }
+        if ($request->has('HASTAC') && $request->HASTAC !== null) {
+            $params['HASTAC'] = $request->HASTAC;
+        }
 
-    $url = $this->get_url();
-    $query = http_build_query($params);
-    $response = Http::get("$url/ReservasAG?$query");
+        $url = $this->get_url();
+        $query = http_build_query($params);
+        $response = Http::get("$url/ReservasAG?$query");
 
-    if ($response->successful()) {
-        return $response->json();
-    } else {
-        return $response->throw();
-    }
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
     }
 
     public function ReservaxCodigo(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");   
+        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -442,7 +443,7 @@ class AgencyUserController extends Controller
         $fecha_hasta = $request->FECHAH;
         $excursion_id = $request->PRD;
         $url = $this->get_url();
-        $response = Http::get("$url/TurnosAG?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        $response = Http::get("$url/TurnosAG?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -461,17 +462,20 @@ class AgencyUserController extends Controller
                 'id_user' => 'required',
                 'agency_name' => 'required',
                 'request' => 'required',
+                'attachments' => 'nullable|array',
             ]);
-    
+
             $user = AgencyUser::find($request->id_user);
-            
-            if(!$user)
+
+            if (!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
-            $files = $request->attachments;
+
+            // $files = $request->attachments;
+            $files = $request->has('attachments') ? $request->attachments : [];
 
             Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $files));
-            
+
             return response(["message" => "Mail enviado con éxito!"], 200);
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
