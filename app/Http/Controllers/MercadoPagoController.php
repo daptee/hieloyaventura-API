@@ -92,19 +92,19 @@ class MercadoPagoController extends Controller
 
         $fecha = Carbon::createFromFormat('Y/m/d\TH:i', $request->departure_date_time, 'UTC');
         $fecha_formateada = $fecha->setTimezone('-03:00')->format('Y-m-d\TH:i:s.vP');
-        
+
         $items = [
-            [ 
+            [
                 "title" => $request->title,
                 "quantity" => (int)$request->quantity,
                 "unit_price" => (int)$request->unit_price,
-                "category_descriptor" => [ 
-                    "route" => [ 
+                "category_descriptor" => [
+                    "route" => [
                         "departure_date_time" => $fecha_formateada
                     ]
-                ] 
-            ] 
-        ]; 
+                ]
+            ]
+        ];
         $preference->items = $items;
         $preference->statement_descriptor = "HIELOAVENTURA";
 
@@ -126,13 +126,15 @@ class MercadoPagoController extends Controller
                 [
                     "id" => "ticket"
                 ]
-            ]
+            ],
+            "installments" => 3,
+            "default_installments" => 1
         ];
         $preference->notification_url = config('app.url') . '/api/mercadopago/notification';
         $preference->save();
 
         return response()->json(['preference' => $preference->id], 200);
-}
+    }
 
     // public function createPay(Request $request) 
     // {
@@ -171,18 +173,18 @@ class MercadoPagoController extends Controller
         try {
             $token = config('services.mercadopago.dev.token');
 
-            if($request->type == "payment"){
+            if ($request->type == "payment") {
                 MercadoPago\SDK::setAccessToken($token);
 
-                if(isset($request['data']['id'])){
-                    $id = $request['data']['id']; 
-                }else if(isset($request->data->id)){
+                if (isset($request['data']['id'])) {
+                    $id = $request['data']['id'];
+                } else if (isset($request->data->id)) {
                     $id = $request->data->id;
                 }
 
-                if(isset($id)){
+                if (isset($id)) {
                     $response_payment = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
+                        'Authorization' => 'Bearer ' . $token,
                         'Content-Type' => 'application/json',
                     ])->get("https://api.mercadopago.com/v1/payments/$id");
 
@@ -190,12 +192,12 @@ class MercadoPagoController extends Controller
                     $response_payment_json_encode = json_encode($payment);
                     Log::channel("notificationmp")->info("GET payment response: $response_payment_json_encode");
 
-                    if($response_payment->status() != 200){
+                    if ($response_payment->status() != 200) {
                         Log::channel("notificationmp")->info("error GET Payment: $id");
                         Log::channel("notificationmp")->info("message error: " . json_encode($response_payment->json()));
-                    }else{
+                    } else {
                         // $payment = $response_payment->json();
-        
+
                         // if(isset($payment['status'])){
                         //     $payment_status = $payment['status'];
                         // }else if(isset($payment->status)){
@@ -209,7 +211,7 @@ class MercadoPagoController extends Controller
                         // }
 
                         // if(isset($payment_status) && isset($external_reference)){
-            
+
                         //     if($payment_status == "cancelled" || $payment_status == "rejected" || $payment_status == "refunded" || $payment_status == "charged_back"){
                         //         try {
                         //             Mail::to("ecommerce@hieloyaventura.com")->send(new MercadoPagoNotification($payment_status, $id, $external_reference));                        
@@ -221,20 +223,19 @@ class MercadoPagoController extends Controller
                         // }else{
                         //     Log::channel("notificationmperror")->info("error: error en envio de mail a ventas@hieloyaventura.com, no se encontro payment status o external reference. Numero de pago: $id");
                         // }
-        
+
                         // Log::channel("notificationmp")->info("response payment json: " . json_encode($response_payment->json()));
                     }
-                }else{
+                } else {
                     Log::channel("notificationmperror")->info('error: ID no encontrado');
                 }
             }
         } catch (Exception $e) {
             Log::channel("notificationmperror")->info('error: ' . $e->getMessage() . ', line: ' . $e->getLine());
         }
-        
+
         Log::channel("notificationmp")->info("<------------------ ------------------>");
 
         return response()->json(["payment" => $payment], 200);
     }
-
 }
