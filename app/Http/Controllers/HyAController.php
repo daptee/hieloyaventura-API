@@ -7,22 +7,23 @@ use Illuminate\Support\Facades\Http;
 use Spatie\FlareClient\Truncation\TruncationStrategy;
 
 class HyAController extends Controller
-{    
-    public function get_url(){
+{
+    public function get_url()
+    {
         $environment = config("app.environment");
-        if($environment == "DEV"){
+        if ($environment == "DEV") {
             $url = "https://apihya.hieloyaventura.com/apihya_dev";
-        }else{
+        } else {
             $url = "https://apihya.hieloyaventura.com/apihya";
         }
         return $url;
     }
-    
+
     public function passengers_types(Request $request)
     {
         $leng = $request->leng ?? 'ES';
         $url = $this->get_url();
-        $response = Http::get("$url/TiposPasajeros?LENG=$leng");   
+        $response = Http::get("$url/TiposPasajeros?LENG=$leng");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -33,7 +34,7 @@ class HyAController extends Controller
     public function nationalities()
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Naciones");   
+        $response = Http::get("$url/Naciones");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -44,29 +45,40 @@ class HyAController extends Controller
     public function hotels()
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Hoteles");   
+        $response = Http::get("$url/Hoteles");
         if ($response->successful()) {
             return $response->json();
         } else {
             return $response->throw();
         }
     }
- 
+
     public function rates()
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Tarifas");   
+        $response = Http::get("$url/Tarifas");
         if ($response->successful()) {
             return $response->json();
         } else {
             return $response->throw();
         }
     }
-    
+
+    public function oferts()
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/Ofertas");
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
     public function excursions(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Productos?FECHA=$request->date");   
+        $response = Http::get("$url/Productos?FECHA=$request->date");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -80,7 +92,7 @@ class HyAController extends Controller
         $fecha_hasta = $request->date_to;
         $excursion_id = $request->excursion_id;
         $url = $this->get_url();
-        $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");   
+        $response = Http::get("$url/Turnos?FECHAD=$fecha_desde&FECHAH=$fecha_hasta&PRD=$excursion_id");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -91,7 +103,7 @@ class HyAController extends Controller
     public function ReservaxCodigo(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");   
+        $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -103,7 +115,7 @@ class HyAController extends Controller
     {
         $url = $this->get_url();
         $body_json = $request->all();
-        $response = Http::post("$url/IniciaReserva", $body_json);   
+        $response = Http::post("$url/IniciaReserva", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -116,10 +128,10 @@ class HyAController extends Controller
         $this->validate($request, [
             'RSV' => 'required',
         ]);
-        
+
         $url = $this->get_url();
         $response = Http::asForm()->post("$url/CancelaReserva", [
-            'RSV' => $request->RSV   
+            'RSV' => $request->RSV
         ]);
         if ($response->successful()) {
             return $response->json();
@@ -155,7 +167,7 @@ class HyAController extends Controller
     public function Promociones(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::get("$url/Promociones?PROD=$request->PROD");   
+        $response = Http::get("$url/Promociones?PROD=$request->PROD");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -166,7 +178,7 @@ class HyAController extends Controller
     public function RecuperaPrecioReserva(Request $request)
     {
         $url = $this->get_url();
-        $response = Http::get("$url/RecuperaPrecioReserva?RESERVA=$request->RESERVA");   
+        $response = Http::get("$url/RecuperaPrecioReserva?RESERVA=$request->RESERVA");
         if ($response->successful()) {
             return $response->json();
         } else {
