@@ -47,7 +47,6 @@ Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::put('user_edit', 'update')->middleware(['jwt.verify']);
     Route::put('new_password', 'updatePassword')->middleware(['jwt.verify']);
-
 });
 Route::get('faqs', [FaqController::class, 'index']);
 Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
@@ -125,6 +124,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/nationalities', 'nationalities');
     Route::get('/hotels', 'hotels');
     Route::get('/rates', 'rates');
+    Route::get('/oferts', 'oferts');
     Route::get('/excursions', 'excursions');
     Route::get('/shifts', 'shifts');
     Route::get('/ReservaxCodigo', 'ReservaxCodigo');
@@ -146,7 +146,7 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.verify']);
 });
 
-Route::post('users_reservations2/',[UserReservationController::class, 'store']);
+Route::post('users_reservations2/', [UserReservationController::class, 'store']);
 
 Route::get('/lenguages/{locale}', function ($locale) {
     //1 => spanish
@@ -167,7 +167,7 @@ Route::get('/lenguages/{locale}', function ($locale) {
 Route::prefix('consults')->controller(ConsultController::class)->group(function () {
     Route::post('/', 'store');
 });
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
     Artisan::call('optimize');
 
@@ -176,7 +176,7 @@ Route::get('/clear-cache', function() {
     ]);
 });
 
-Route::get('/clear-tokens', function() {
+Route::get('/clear-tokens', function () {
     Artisan::call('passport:purge');
     Artisan::call('passport:install');
 
@@ -185,7 +185,7 @@ Route::get('/clear-tokens', function() {
     ]);
 });
 
-Route::get('/storage-link', function(){
+Route::get('/storage-link', function () {
     Artisan::call('storage:link');
 
     return response()->json([
@@ -194,7 +194,7 @@ Route::get('/storage-link', function(){
 });
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
 
-Route::get('test-mail', function() {
+Route::get('test-mail', function () {
     try {
         $text = "Test de envio de mail Hielo y Aventura";
         Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
@@ -205,7 +205,7 @@ Route::get('test-mail', function() {
     }
 });
 
-Route::post('testeando-curl-post', function() {
+Route::post('testeando-curl-post', function () {
     try {
         $text = "Test de envio de mail Hielo y Aventura";
         Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
@@ -219,7 +219,7 @@ Route::post('testeando-curl-post', function() {
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
 Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics']);
 
-Route::post('process-cv', function(Request $request) {
+Route::post('process-cv', function (Request $request) {
     try {
         $request->validate([
             'nombre_y_apellido' => 'required',
@@ -228,7 +228,7 @@ Route::post('process-cv', function(Request $request) {
 
         $cv = $request->file('file');
         $fileName   = time() . '.' . $cv->getClientOriginalExtension();
-        
+
         Storage::putFileAs('public/process-cv', $cv, $fileName);
 
         $path = "storage/process-cv/$fileName";
@@ -252,7 +252,7 @@ Route::post('passenger/diseases/{hash_reservation_number}/{mail_to}', [MedicalRe
 Route::post('medical/record', [MedicalRecordController::class, 'medical_record']);
 
 // Route::post('contact', [ContactController::class, 'form_contact']);
-Route::post('contact-form', function(Request $request) {
+Route::post('contact-form', function (Request $request) {
     try {
         $request->validate([
             'nombre_y_apellido' => 'required',
@@ -268,7 +268,7 @@ Route::post('contact-form', function(Request $request) {
     }
 });
 
-Route::post('online-return', function(Request $request) {
+Route::post('online-return', function (Request $request) {
     try {
         $request->validate([
             'nro_reserva'       => 'required',
@@ -294,19 +294,19 @@ Route::post('agency-recover-password-user', [UserController::class, 'agency_reco
 
 
 Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']);
-Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']); 
+Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']);
 
 Route::post('paxs', [PaxController::class, 'store']);
 Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
 Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
 
-Route::get('test-api-cr', function() {
-    
+Route::get('test-api-cr', function () {
+
     $client = new Client();
 
     $fields = json_encode(array("RSV" => "349268"));
-    $url = config('app.api_hya')."/CancelaReservaM2";
+    $url = config('app.api_hya') . "/CancelaReservaM2";
     $response = $client->post($url, [
         'body' => $fields,
         'headers' => [
@@ -319,13 +319,13 @@ Route::get('test-api-cr', function() {
     return $body;
 });
 
-Route::get('curl/test-api-cancelar/reserva', function() {
-    
+Route::get('curl/test-api-cancelar/reserva', function () {
+
     try {
-        $url = config('app.api_hya')."/CancelaReservaM2";
+        $url = config('app.api_hya') . "/CancelaReservaM2";
 
         $curl = curl_init();
-        $fields = json_encode( array("RSV" => "432837") );
+        $fields = json_encode(array("RSV" => "432837"));
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
