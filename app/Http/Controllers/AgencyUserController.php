@@ -403,6 +403,9 @@ class AgencyUserController extends Controller
         if ($request->has('HASTAC') && $request->HASTAC !== null) {
             $params['HASTAC'] = $request->HASTAC;
         }
+        if ($request->has('HOTEL') && $request->HOTEL !== null) {
+            $params['HOTEL'] = $request->HOTEL;
+        }
 
         $url = $this->get_url();
         $query = http_build_query($params);
