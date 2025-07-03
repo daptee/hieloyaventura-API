@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader;
 
 class AgencyUserController extends Controller
 {
@@ -484,6 +486,91 @@ class AgencyUserController extends Controller
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
             // return $th->getMessage();
             return response(["message" => "Mail no enviado"], 500);
+        }
+    }
+
+    public function resumen_servicios_diarios(Request $request)
+    {
+        $date = $request->input('date');
+        $agency_name = $request->input('agency_name');
+        $data = $request->input('data', []);
+
+        $pdf = new Fpdi();
+        $pdf->SetAutoPageBreak(false);
+
+        // Split data into groups
+        $firstPageItems = array_slice($data, 0, 20);
+        $remainingItems = array_slice($data, 20);
+        $additionalPages = array_chunk($remainingItems, 24);
+
+        // Load base template (first page)
+        $templatePath1 = storage_path('app/public/bases_resumenes/BASE-H1.pdf');
+        $pdf->setSourceFile($templatePath1);
+        $tplIdx = $pdf->importPage(1);
+        $pdf->addPage();
+        $pdf->useTemplate($tplIdx, 0, 0, null, null, true);
+
+        // Header: date, serve yourself to, provider
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetXY(8, 47); 
+        $pdf->Write(0, $date);
+        $pdf->SetXY(36, 47);
+        $pdf->Write(0, 'Hielo & Aventura');
+        $pdf->SetXY(72.9, 47);
+        $pdf->Write(0, $agency_name);
+
+        // Print data for the first page (max 20)
+        $this->writeRows($pdf, $firstPageItems, 66.5);
+
+        // Additional pages (24 records each)
+        if (!empty($additionalPages)) {
+            $templatePath2 = storage_path('app/public/bases_resumenes/BASE-H1-PAGE2.pdf');
+
+            foreach ($additionalPages as $pageItems) {
+                $pdf->setSourceFile($templatePath2);
+                $tplIdx = $pdf->importPage(1);
+                $pdf->addPage();
+                $pdf->useTemplate($tplIdx, 0, 0, null, null, true);
+
+                $this->writeRows($pdf, $pageItems, 32); // start higher on page 2
+            }
+        }
+
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
+        $path = public_path('pdfs/' . $filename);
+
+        if (!file_exists(public_path('pdfs'))) {
+            mkdir(public_path('pdfs'), 0755, true);
+        }
+        
+        $pdf->Output($path, 'F');
+
+        return response()->json([
+            'path' => 'pdfs/' . $filename,
+            'url' => asset('pdfs/' . $filename)
+        ]);
+    }
+
+    private function writeRows($pdf, $items, $startY)
+    {
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetTextColor(0, 128, 128); // Light blue
+
+        $rowHeight = 8.81;
+        $currentY = $startY;
+
+        foreach ($items as $item) {
+            $pdf->SetXY(10, $currentY);
+            $pdf->Cell(22, 7, $item['reservation_number'], 0, 0);
+            $pdf->Cell(45, 7, $item['pax'], 0, 0);
+            $pdf->Cell(15, 7, $item['number_of_passengers'], 0, 0);
+            $pdf->Cell(33, 7, $item['excursion'], 0, 0);
+            $pdf->Cell(42, 7, $item['hotel'], 0, 0);
+            $pdf->Cell(16, 7, $item['transfer'], 0, 0);
+            $pdf->Cell(0, 7, $item['hour'], 0, 1);
+
+            $currentY += $rowHeight;
         }
     }
 }
