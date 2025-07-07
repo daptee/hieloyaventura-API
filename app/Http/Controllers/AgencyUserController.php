@@ -521,7 +521,7 @@ class AgencyUserController extends Controller
         $pdf->Write(0, $agency_name);
 
         // Print data for the first page (max 20)
-        $this->writeRows($pdf, $firstPageItems, 66.1);
+        $this->writeRows($pdf, $firstPageItems, 65.5);
 
         // Additional pages (24 records each)
         if (!empty($additionalPages)) {
@@ -743,19 +743,21 @@ class AgencyUserController extends Controller
 
     private function writeRows($pdf, $items, $startY)
     {
-        $rowHeight = 8.80;
+        $rowHeight = 8.83;
         $currentY = $startY;
-        $defaultFont = ['Helvetica', '', 9];
+        $defaultFont = ['Helvetica', '', 8.50];
 
         foreach ($items as $item) {
             $x = 8;
             $pdf->SetFont(...$defaultFont);
 
             // Rva
-            $this->drawCell($pdf, $x, $currentY, 22, $rowHeight, $item['reservation_number'], [220, 220, 220]);
+            // $this->drawCell($pdf, $x, $currentY, 22, $rowHeight, $item['reservation_number'], [220, 220, 220]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 22, $rowHeight, $item['reservation_number'], 16, [220, 220, 220]);
 
             // Pasajero
-            $this->drawCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], [173, 216, 230]);
+            // $this->drawCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], [173, 216, 230]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], 25, [173, 216, 230]);
 
             // Cant
             $this->drawCell($pdf, $x, $currentY, 16.8, $rowHeight, $item['number_of_passengers'], [255, 255, 153]);
@@ -785,6 +787,30 @@ class AgencyUserController extends Controller
         $x += $width;
     }
 
+//     private function drawCell($pdf, &$x, $y, $width, $height, $text, $fillColor)
+// {
+//     // Colorear fondo
+//     $pdf->SetFillColor(...$fillColor);
+//     $pdf->Rect($x, $y, $width, $height, 'F'); // Dibuja el fondo de la celda
+
+//     // Medimos el ancho y alto del texto
+//     $pdf->SetFont('Helvetica', '',  8.50); // Asegurate de tener siempre la misma fuente para medir correctamente
+//     $textWidth = $pdf->GetStringWidth($text);
+//     $fontHeight = $pdf->FontSize; // Altura de la fuente actual en milímetro
+
+//     // Calculamos posición centrada
+//     $textX = $x + ($width - $textWidth) / 2;
+//     $textY = $y + ($height - $fontHeight) / 2;
+
+//     // Posicionamos el texto
+//     $pdf->SetXY($textX, $textY);
+//     $pdf->Cell($textWidth, $fontHeight, $text, 0, 0, 'C', false);
+
+//     // Avanzamos X
+//     $x += $width;
+// }
+
+
     private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor)
     {
         $defaultFontSize = 8.81;
@@ -794,7 +820,7 @@ class AgencyUserController extends Controller
         $fontSize = $defaultFontSize;
         if (strlen($text) > $maxLength) {
             $fontSize = $reducedFontSize;
-            $text = wordwrap($text, ($maxLength + 2), "\n", true);
+            $text = wordwrap($text, ($maxLength + 2), "\n", false);
         }
 
         $pdf->SetFont('Helvetica', '', $fontSize);
