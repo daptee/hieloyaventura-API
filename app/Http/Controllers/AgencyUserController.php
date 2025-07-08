@@ -24,6 +24,7 @@ use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
  use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class AgencyUserController extends Controller
 {
@@ -638,27 +639,77 @@ class AgencyUserController extends Controller
         $pdf->SetXY($x, $y); // restaurar Y por si sigue otra celda
     }
 
+    // public function resumen_servicios_diarios_excel(Request $request)
+    // {
+    //     $data = $request->input('data', []);
+    //     $export = new ServiciosDiariosExport($data);
+
+    //     $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.xlsx';
+    //     $path = public_path('excels/' . $filename);
+
+    //     if (!file_exists(public_path('excels'))) {
+    //         mkdir(public_path('excels'), 0755, true);
+    //     }
+
+    //     $excelData = Excel::raw($export, \Maatwebsite\Excel\Excel::XLSX);
+
+    //     if (File::put($path, $excelData) === false) {
+    //         return response()->json(['error' => 'No se pudo guardar el archivo'], 500);
+    //     }
+
+    //     return response()->json([
+    //         'path' => 'excels/' . $filename,
+    //         'url' => asset('excels/' . $filename),
+    //     ]);
+    // }
+
     public function resumen_servicios_diarios_excel(Request $request)
     {
-        $data = $request->input('data', []);
-        $export = new ServiciosDiariosExport($data);
+        $data = $request->data;
 
-        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.xlsx';
-        $path = public_path('excels/' . $filename);
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.csv';
+        $filepath = 'excels/' . $filename;
 
-        if (!file_exists(public_path('excels'))) {
-            mkdir(public_path('excels'), 0755, true);
+        // Nos aseguramos de que la carpeta exista
+        Storage::makeDirectory('excels');
+
+        // Abrimos un archivo en modo escritura dentro del disco local
+        $handle = fopen(storage_path('app/' . $filepath), 'w');
+
+        // Opcional: escribir BOM para UTF-8
+        fwrite($handle, "\xEF\xBB\xBF");
+
+        // Encabezados del CSV
+        fputcsv($handle, [
+            'Nro Reserva',
+            'Pasajero',
+            'Cant',
+            'Excursion',
+            'Hotel',
+            'Transfer',
+            'Hora',
+        ],';');
+
+        // Filas de datos
+        foreach ($data as $item) {
+            fputcsv($handle, [
+                $item['reservation_number'],
+                $item['pax'],
+                $item['number_of_passengers'],
+                $item['excursion'],
+                $item['hotel'],
+                $item['transfer'],
+                $item['hour'],
+            ], ';');
         }
 
-        $excelData = Excel::raw($export, \Maatwebsite\Excel\Excel::XLSX);
-
-        if (File::put($path, $excelData) === false) {
-            return response()->json(['error' => 'No se pudo guardar el archivo'], 500);
-        }
+        fclose($handle);
 
         return response()->json([
-            'path' => 'excels/' . $filename,
-            'url' => asset('excels/' . $filename),
+            'message' => 'Archivo generado exitosamente.',
+            'path' => $filepath,
+            'full_path' => storage_path('app/' . $filepath),
+            'download_url' => url('/storage/' . $filepath), // Si usás disk public
         ]);
     }
 
