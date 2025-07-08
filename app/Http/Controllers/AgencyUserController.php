@@ -668,18 +668,19 @@ class AgencyUserController extends Controller
         $data = $request->data;
 
         $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.csv';
-        $filepath = 'excels/' . $filename;
+        $fullPath = storage_path('app/excels/' . $filename);
 
-        // Nos aseguramos de que la carpeta exista
-        Storage::makeDirectory('excels');
+        // Nos aseguramos de que el directorio exista
+        if (!file_exists(dirname($fullPath))) {
+            mkdir(dirname($fullPath), 0777, true);
+        }
 
-        // Abrimos un archivo en modo escritura dentro del disco local
-        $handle = fopen(storage_path('app/' . $filepath), 'w');
+        $handle = fopen($fullPath, 'w');
 
-        // Opcional: escribir BOM para UTF-8
+        // UTF-8 BOM
         fwrite($handle, "\xEF\xBB\xBF");
 
-        // Encabezados del CSV
+        // Cabeceras
         fputcsv($handle, [
             'Nro Reserva',
             'Pasajero',
@@ -688,9 +689,9 @@ class AgencyUserController extends Controller
             'Hotel',
             'Transfer',
             'Hora',
-        ],';');
+        ], ';');
 
-        // Filas de datos
+        // Filas
         foreach ($data as $item) {
             fputcsv($handle, [
                 $item['reservation_number'],
@@ -707,9 +708,8 @@ class AgencyUserController extends Controller
 
         return response()->json([
             'message' => 'Archivo generado exitosamente.',
-            'path' => $filepath,
-            'full_path' => storage_path('app/' . $filepath),
-            'download_url' => url('/storage/' . $filepath), // Si usás disk public
+            'path' => $filename,
+            'full_path' => $fullPath,
         ]);
     }
 
