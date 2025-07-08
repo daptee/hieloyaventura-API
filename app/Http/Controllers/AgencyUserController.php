@@ -668,11 +668,11 @@ class AgencyUserController extends Controller
         $data = $request->data;
 
         $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.csv';
-        $fullPath = storage_path('app/excels/' . $filename);
+        $fullPath = public_path('excels/' . $filename);
 
         // Nos aseguramos de que el directorio exista
-        if (!file_exists(dirname($fullPath))) {
-            mkdir(dirname($fullPath), 0777, true);
+        if (!file_exists(public_path('excels'))) {
+            mkdir(public_path('excels'), 0755, true);
         }
 
         $handle = fopen($fullPath, 'w');
@@ -708,8 +708,8 @@ class AgencyUserController extends Controller
 
         return response()->json([
             'message' => 'Archivo generado exitosamente.',
-            'path' => $filename,
-            'full_path' => $fullPath,
+            'path' => 'excels/' . $filename,
+            'url' => asset('excels/' . $filename),
         ]);
     }
 
