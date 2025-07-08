@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ServiciosDiariosExport;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Models\AgencyUser;
@@ -18,9 +19,11 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
+ use Illuminate\Support\Facades\File;
 
 class AgencyUserController extends Controller
 {
@@ -558,189 +561,6 @@ class AgencyUserController extends Controller
         ]);
     }
 
-    // private function writeRows($pdf, $items, $startY)
-    // {
-    //     $pdf->SetFont('Helvetica', '', 9);
-    //     $pdf->SetTextColor(0, 128, 128); // Light blue
-
-    //     $rowHeight = 8.81;
-    //     $currentY = $startY;
-
-    //     foreach ($items as $item) {
-    //         $pdf->SetXY(10, $currentY);
-    //         // $pdf->Cell(22, 7, $item['reservation_number'], 0, 0);
-    //         // $pdf->Cell(45, 7, $item['pax'], 0, 0);
-    //         // $pdf->Cell(15, 7, $item['number_of_passengers'], 0, 0);
-    //         // $pdf->Cell(33, 7, $item['excursion'], 0, 0);
-    //         // $pdf->Cell(42, 7, $item['hotel'], 0, 0);
-    //         // $pdf->Cell(16, 7, $item['transfer'], 0, 0);
-    //         // $pdf->Cell(0, 7, $item['hour'], 0, 1);
-    //         // $pdf->Cell(20, 7, $item['reservation_number'], 0, 0); // Rva
-    //         // $pdf->Cell(42, 7, $item['pax'], 0, 0);               // Pasajero
-    //         // $pdf->Cell(12, 7, $item['number_of_passengers'], 0, 0); // Cant
-    //         // $pdf->Cell(30, 7, $item['excursion'], 0, 0);         // Excursion
-    //         // $pdf->Cell(50, 7, $item['hotel'], 0, 0);             // Hotel (aumentado)
-    //         // $pdf->Cell(12, 7, $item['transfer'], 0, 0);          // Transfer (achicado)
-    //         // $pdf->Cell(0, 7, $item['hour'], 0, 1);               // Hora
-    //         $pdf->Cell(20, 7, $item['reservation_number'], 0, 0); // Rva
-    //         $pdf->Cell(42, 7, $item['pax'], 0, 0);               // Pasajero
-    //         $pdf->Cell(12, 7, $item['number_of_passengers'], 0, 0, 'C'); // Cant
-    //         $pdf->Cell(30, 7, $item['excursion'], 0, 0);         // Excursion
-    //         $pdf->Cell(50, 7, strlen($item['hotel']) > 20 ? substr($item['hotel'], 0, 20) . '...' : $item['hotel'], 0, 0);             // Hotel (aumentado)
-    //         $pdf->Cell(12, 7, $item['transfer'], 0, 0);          // Transfer (achicado)
-    //         $pdf->Cell(0, 7, $item['hour'], 0, 1, 'C');               // Hora
-
-    //         $currentY += $rowHeight;
-    //     }
-    // }
-
-    // private function writeRows($pdf, $items, $startY)
-    // {
-    //     $pdf->SetFont('Helvetica', '', 9);
-    //     $rowHeight = 8.81;
-    //     $currentY = $startY;
-
-    //     foreach ($items as $item) {
-    //         $x = 10;
-
-    //         // Rva (gris claro)
-    //         $pdf->SetFillColor(220, 220, 220);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(20, $rowHeight, $item['reservation_number'], 0, 0, 'L', true);
-    //         $x += 20;
-
-    //         // Pasajero (celeste)
-    //         $pdf->SetFillColor(173, 216, 230);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(42, $rowHeight, $item['pax'], 0, 0, 'L', true);
-    //         $x += 42;
-
-    //         // Cant (amarillo claro)
-    //         $pdf->SetFillColor(255, 255, 153);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(12, $rowHeight, $item['number_of_passengers'], 0, 0, 'C', true);
-    //         $x += 12;
-
-    //         // Excursion (verde claro)
-    //         $pdf->SetFillColor(204, 255, 204);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(30, $rowHeight, $item['excursion'], 0, 0, 'L', true);
-    //         $x += 30;
-
-    //         // Hotel (rosado claro)
-    //         $pdf->SetFillColor(255, 204, 204);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(50, $rowHeight, $item['hotel'], 0, 0, 'L', true);
-    //         $x += 50;
-
-    //         // Transfer (naranja claro)
-    //         $pdf->SetFillColor(255, 229, 204);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(12, $rowHeight, $item['transfer'], 0, 0, 'C', true);
-    //         $x += 12;
-
-    //         // Hora (lila claro)
-    //         $pdf->SetFillColor(230, 204, 255);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(0, $rowHeight, $item['hour'], 0, 1, 'C', true);
-
-    //         $currentY += $rowHeight;
-    //     }
-    // }
-
-    // private function writeRows($pdf, $items, $startY)
-    // {
-    //     $pdf->SetFont('Helvetica', '', 9);
-    //     $rowHeight = 9;
-    //     $currentY = $startY;
-
-    //     foreach ($items as $item) {
-    //         $x = 8;
-
-    //         // Rva
-    //         $pdf->SetFillColor(220, 220, 220);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(22, $rowHeight, $item['reservation_number'], 0, 0, 'C', true);
-    //         $x += 22;
-
-    //         // Pasajero
-    //         $pdf->SetFillColor(173, 216, 230);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(42.2, $rowHeight, $item['pax'], 0, 0, 'C', true);
-    //         $x += 42.2;
-
-    //         // Cant
-    //         $pdf->SetFillColor(255, 255, 153);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(16.8, $rowHeight, $item['number_of_passengers'], 0, 0, 'C', true);
-    //         $x += 16.8;
-
-    //         // Excursion
-    //         $pdf->SetFillColor(204, 255, 204);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(33.5, $rowHeight, $item['excursion'], 0, 0, 'C', true);
-    //         $x += 33.5;
-
-    //         // Hotel
-    //         // $hotel = strlen($item['hotel']) > 25 
-    //         // ? substr($item['hotel'], 0, 22) . '...' 
-    //         // : $item['hotel'];
-
-    //         // Log::debug($hotel);
-    //         // $pdf->SetFillColor(255, 204, 204);
-    //         // $pdf->SetXY($x, $currentY);
-    //         // $pdf->Cell(38.5, $rowHeight, $hotel, 0, 0, 'C', true);
-    //         // $x += 38.5;
-            
-    //         $hotel = $item['hotel'];
-    //         $originalFontSize = 9;
-    //         $fontSize = $originalFontSize;
-    //         $hotelMaxLength = 25;
-    //         $hotelWidth = 38.5;
-    //         $lineHeight = $rowHeight / 2;
-
-    //         if (strlen($hotel) > $hotelMaxLength) {
-    //             $fontSize = 7;
-    //             $hotel = wordwrap($hotel, 20, "\n", true);
-    //         }
-
-    //         $pdf->SetFont('Helvetica', '', $fontSize);
-    //         $pdf->SetFillColor(255, 204, 204);
-
-    //         // calcular líneas para centrar vertical
-    //         $lines = substr_count($hotel, "\n") + 1;
-    //         $totalTextHeight = $lineHeight * $lines;
-    //         if (strlen($item['hotel']) < $hotelMaxLength) {
-    //             $adjustedY = $currentY + (($rowHeight - $totalTextHeight) / 2);
-    //         }else{
-    //             $adjustedY = $currentY;
-    //         }
-    //         // escribir centrado vertical y horizontal
-    //         $pdf->SetXY($x, $adjustedY);
-    //         $pdf->MultiCell($hotelWidth, $lineHeight, $hotel, 0, 'C', true);
-
-    //         // avanzar cursor X y restaurar Y para siguiente celda
-    //         $x += $hotelWidth;
-    //         $pdf->SetXY($x, $currentY);
-
-    //         // volver a fuente original
-    //         $pdf->SetFont('Helvetica', '', $originalFontSize);
-
-    //         // Transfer
-    //         $pdf->SetFillColor(255, 229, 204);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(17.5, $rowHeight, $item['transfer'], 0, 0, 'C', true);
-    //         $x += 17.5;
-
-    //         // Hora
-    //         $pdf->SetFillColor(230, 204, 255);
-    //         $pdf->SetXY($x, $currentY);
-    //         $pdf->Cell(23.5, $rowHeight, $item['hour'], 0, 1, 'C', true);
-
-    //         $currentY += $rowHeight;
-    //     }
-    // }
-
     private function writeRows($pdf, $items, $startY)
     {
         $rowHeight = 8.83;
@@ -787,30 +607,6 @@ class AgencyUserController extends Controller
         $x += $width;
     }
 
-//     private function drawCell($pdf, &$x, $y, $width, $height, $text, $fillColor)
-// {
-//     // Colorear fondo
-//     $pdf->SetFillColor(...$fillColor);
-//     $pdf->Rect($x, $y, $width, $height, 'F'); // Dibuja el fondo de la celda
-
-//     // Medimos el ancho y alto del texto
-//     $pdf->SetFont('Helvetica', '',  8.50); // Asegurate de tener siempre la misma fuente para medir correctamente
-//     $textWidth = $pdf->GetStringWidth($text);
-//     $fontHeight = $pdf->FontSize; // Altura de la fuente actual en milímetro
-
-//     // Calculamos posición centrada
-//     $textX = $x + ($width - $textWidth) / 2;
-//     $textY = $y + ($height - $fontHeight) / 2;
-
-//     // Posicionamos el texto
-//     $pdf->SetXY($textX, $textY);
-//     $pdf->Cell($textWidth, $fontHeight, $text, 0, 0, 'C', false);
-
-//     // Avanzamos X
-//     $x += $width;
-// }
-
-
     private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor)
     {
         $defaultFontSize = 8.81;
@@ -842,5 +638,28 @@ class AgencyUserController extends Controller
         $pdf->SetXY($x, $y); // restaurar Y por si sigue otra celda
     }
 
+    public function resumen_servicios_diarios_excel(Request $request)
+    {
+        $data = $request->input('data', []);
+        $export = new ServiciosDiariosExport($data);
+
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.xlsx';
+        $path = public_path('excels/' . $filename);
+
+        if (!file_exists(public_path('excels'))) {
+            mkdir(public_path('excels'), 0755, true);
+        }
+
+        $excelData = Excel::raw($export, \Maatwebsite\Excel\Excel::XLSX);
+
+        if (File::put($path, $excelData) === false) {
+            return response()->json(['error' => 'No se pudo guardar el archivo'], 500);
+        }
+
+        return response()->json([
+            'path' => 'excels/' . $filename,
+            'url' => asset('excels/' . $filename),
+        ]);
+    }
 
 }

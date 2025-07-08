@@ -402,6 +402,7 @@ Route::post('/agency/users_reservations/request/change', [AgencyUserController::
 Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG']);
 Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
 Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);
+Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
