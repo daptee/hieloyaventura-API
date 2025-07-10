@@ -23,7 +23,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
- use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class AgencyUserController extends Controller
@@ -517,7 +517,7 @@ class AgencyUserController extends Controller
         // Header: date, serve yourself to, provider
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetXY(8, 47); 
+        $pdf->SetXY(8, 47);
         $pdf->Write(0, $date);
         $pdf->SetXY(36, 47);
         $pdf->Write(0, 'Hielo & Aventura');
@@ -553,7 +553,7 @@ class AgencyUserController extends Controller
         if (!file_exists(public_path('pdfs'))) {
             mkdir(public_path('pdfs'), 0755, true);
         }
-        
+
         $pdf->Output($path, 'F');
 
         return response()->json([
@@ -729,7 +729,7 @@ class AgencyUserController extends Controller
             'Cant',
             'Excursion',
             'Hotel',
-            'Transfer',
+            'Transfer con H&A',
             'Hora',
         ], ';');
 
@@ -754,5 +754,4 @@ class AgencyUserController extends Controller
             'url' => asset('excels/' . $filename),
         ]);
     }
-
 }
