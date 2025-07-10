@@ -638,7 +638,7 @@ class AgencyUserController extends Controller
         $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
 
         $pdf->SetXY($x, $adjustedY);
-        $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', true);
+        $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', false);
 
         $x += $width;
         $pdf->SetFont('Helvetica', '', $defaultFontSize);
