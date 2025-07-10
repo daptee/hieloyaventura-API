@@ -541,25 +541,25 @@ class AgencyUserController extends Controller
             }
         }
 
-        // $content = $pdf->Output('PDFFFFFF.pdf', 'S');
+        $content = $pdf->Output('PDFFFFFF.pdf', 'S');
 
-        // return response($content)
-        //     ->header('Content-Type', 'application/pdf')
-        //     ->header('Content-Disposition', 'inline; filename="PDFFFFFF.pdf"');
+        return response($content)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="PDFFFFFF.pdf"');
 
-        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
-        $path = public_path('pdfs/' . $filename);
+        // $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
+        // $path = public_path('pdfs/' . $filename);
 
-        if (!file_exists(public_path('pdfs'))) {
-            mkdir(public_path('pdfs'), 0755, true);
-        }
+        // if (!file_exists(public_path('pdfs'))) {
+        //     mkdir(public_path('pdfs'), 0755, true);
+        // }
         
-        $pdf->Output($path, 'F');
+        // $pdf->Output($path, 'F');
 
-        return response()->json([
-            'path' => 'pdfs/' . $filename,
-            'url' => asset('pdfs/' . $filename)
-        ]);
+        // return response()->json([
+        //     'path' => 'pdfs/' . $filename,
+        //     'url' => asset('pdfs/' . $filename)
+        // ]);
     }
 
     private function writeRows($pdf, $items, $startY)
@@ -578,7 +578,7 @@ class AgencyUserController extends Controller
 
             // Pasajero
             // $this->drawCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], [173, 216, 230]);
-            $this->drawMultiLineCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], 25, [173, 216, 230]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], 22, [173, 216, 230]);
 
             // Cant
             $this->drawCell($pdf, $x, $currentY, 16.8, $rowHeight, $item['number_of_passengers'], [255, 255, 153]);
@@ -588,7 +588,7 @@ class AgencyUserController extends Controller
             // $this->drawCell($pdf, $x, $currentY, 33.5, $rowHeight, $item['excursion'], [204, 255, 204]);
 
             // Hotel (especial)
-            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 25, [255, 204, 204]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 20, [255, 204, 204]);
 
             // Transfer
             $this->drawCell($pdf, $x, $currentY, 17.5, $rowHeight, $item['transfer'], [255, 229, 204]);
