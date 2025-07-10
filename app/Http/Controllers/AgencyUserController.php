@@ -564,9 +564,18 @@ class AgencyUserController extends Controller
 
     private function writeRows($pdf, $items, $startY)
     {
+        $maxHotelLength = 20;
         $rowHeight = 8.83;
         $currentY = $startY;
         $defaultFont = ['Helvetica', '', 8.50];
+
+        $reduceHotelFont = false;
+        foreach ($items as $item) {
+            if (strlen($item['hotel']) > $maxHotelLength) {
+                $reduceHotelFont = true;
+                break;
+            }
+        }
 
         foreach ($items as $item) {
             $x = 8;
@@ -588,7 +597,7 @@ class AgencyUserController extends Controller
             // $this->drawCell($pdf, $x, $currentY, 33.5, $rowHeight, $item['excursion'], [204, 255, 204]);
 
             // Hotel (especial)
-            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 18, [255, 204, 204]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 20, [255, 204, 204], $reduceHotelFont);
 
             // Transfer
             $this->drawCell($pdf, $x, $currentY, 17.5, $rowHeight, $item['transfer'], [255, 229, 204]);
@@ -608,33 +617,59 @@ class AgencyUserController extends Controller
         $x += $width;
     }
 
-    private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor)
+    // private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor)
+    // {
+    //     $defaultFontSize = 8.81;
+    //     $reducedFontSize = 7.2;
+    //     $lineHeight = $cellHeight / 2;
+
+    //     $fontSize = $defaultFontSize;
+    //     if (strlen($text) > $maxLength) {
+    //         $fontSize = $reducedFontSize;
+    //         $text = wordwrap($text, ($maxLength + 2), "\n", false);
+    //     }
+
+    //     $pdf->SetFont('Helvetica', '', $fontSize);
+    //     $pdf->SetFillColor(...$fillColor);
+
+    //     // $lines = substr_count($text, "\n") + 1;
+    //     // $totalTextHeight = $lineHeight * $lines;
+
+    //     // // centrado vertical
+    //     // $adjustedY = (strlen($text) <= $maxLength)
+    //     //     ? $y + (($cellHeight - $totalTextHeight) / 2)
+    //     //     : $y;
+
+    //     $lines = substr_count($text, "\n") + 1;
+    //     $totalTextHeight = $lineHeight * $lines;
+
+    //     // centrado vertical universal
+    //     $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
+
+    //     $pdf->SetXY($x, $adjustedY);
+    //     $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', false);
+
+    //     $x += $width;
+    //     $pdf->SetFont('Helvetica', '', $defaultFontSize);
+    //     $pdf->SetXY($x, $y); // restaurar Y por si sigue otra celda
+    // }
+
+    private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor, $forceSmallFont = false)
     {
-        $defaultFontSize = 8.81;
+        $defaultFontSize = 8.50;
         $reducedFontSize = 7.2;
         $lineHeight = $cellHeight / 2;
 
-        $fontSize = $defaultFontSize;
-        if (strlen($text) > $maxLength) {
-            $fontSize = $reducedFontSize;
+        $fontSize = $forceSmallFont ? $reducedFontSize : $defaultFontSize;
+        if ($forceSmallFont || strlen($text) > $maxLength) {
             $text = wordwrap($text, ($maxLength + 2), "\n", false);
         }
 
         $pdf->SetFont('Helvetica', '', $fontSize);
         $pdf->SetFillColor(...$fillColor);
 
-        // $lines = substr_count($text, "\n") + 1;
-        // $totalTextHeight = $lineHeight * $lines;
-
-        // // centrado vertical
-        // $adjustedY = (strlen($text) <= $maxLength)
-        //     ? $y + (($cellHeight - $totalTextHeight) / 2)
-        //     : $y;
-
         $lines = substr_count($text, "\n") + 1;
         $totalTextHeight = $lineHeight * $lines;
-
-        // centrado vertical universal
         $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
 
         $pdf->SetXY($x, $adjustedY);
@@ -642,8 +677,9 @@ class AgencyUserController extends Controller
 
         $x += $width;
         $pdf->SetFont('Helvetica', '', $defaultFontSize);
-        $pdf->SetXY($x, $y); // restaurar Y por si sigue otra celda
+        $pdf->SetXY($x, $y);
     }
+
 
     // public function resumen_servicios_diarios_excel(Request $request)
     // {
