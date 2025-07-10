@@ -541,25 +541,25 @@ class AgencyUserController extends Controller
             }
         }
 
-        $content = $pdf->Output('PDFFFFFF.pdf', 'S');
+        // $content = $pdf->Output('PDFFFFFF.pdf', 'S');
 
-        return response($content)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'inline; filename="PDFFFFFF.pdf"');
+        // return response($content)
+        //     ->header('Content-Type', 'application/pdf')
+        //     ->header('Content-Disposition', 'inline; filename="PDFFFFFF.pdf"');
 
-        // $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
-        // $path = public_path('pdfs/' . $filename);
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
+        $path = public_path('pdfs/' . $filename);
 
-        // if (!file_exists(public_path('pdfs'))) {
-        //     mkdir(public_path('pdfs'), 0755, true);
-        // }
+        if (!file_exists(public_path('pdfs'))) {
+            mkdir(public_path('pdfs'), 0755, true);
+        }
         
-        // $pdf->Output($path, 'F');
+        $pdf->Output($path, 'F');
 
-        // return response()->json([
-        //     'path' => 'pdfs/' . $filename,
-        //     'url' => asset('pdfs/' . $filename)
-        // ]);
+        return response()->json([
+            'path' => 'pdfs/' . $filename,
+            'url' => asset('pdfs/' . $filename)
+        ]);
     }
 
     private function writeRows($pdf, $items, $startY)
@@ -588,7 +588,7 @@ class AgencyUserController extends Controller
             // $this->drawCell($pdf, $x, $currentY, 33.5, $rowHeight, $item['excursion'], [204, 255, 204]);
 
             // Hotel (especial)
-            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 20, [255, 204, 204]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 18, [255, 204, 204]);
 
             // Transfer
             $this->drawCell($pdf, $x, $currentY, 17.5, $rowHeight, $item['transfer'], [255, 229, 204]);
@@ -623,16 +623,22 @@ class AgencyUserController extends Controller
         $pdf->SetFont('Helvetica', '', $fontSize);
         $pdf->SetFillColor(...$fillColor);
 
+        // $lines = substr_count($text, "\n") + 1;
+        // $totalTextHeight = $lineHeight * $lines;
+
+        // // centrado vertical
+        // $adjustedY = (strlen($text) <= $maxLength)
+        //     ? $y + (($cellHeight - $totalTextHeight) / 2)
+        //     : $y;
+
         $lines = substr_count($text, "\n") + 1;
         $totalTextHeight = $lineHeight * $lines;
 
-        // centrado vertical
-        $adjustedY = (strlen($text) < $maxLength)
-            ? $y + (($cellHeight - $totalTextHeight) / 2)
-            : $y;
+        // centrado vertical universal
+        $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
 
         $pdf->SetXY($x, $adjustedY);
-        $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', false);
+        $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', true);
 
         $x += $width;
         $pdf->SetFont('Helvetica', '', $defaultFontSize);
