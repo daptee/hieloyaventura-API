@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ServiciosDiariosExport;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Models\AgencyUser;
@@ -18,7 +19,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Http\Parser\AuthHeaders;
+use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class AgencyUserController extends Controller
 {
@@ -403,6 +409,9 @@ class AgencyUserController extends Controller
         if ($request->has('HASTAC') && $request->HASTAC !== null) {
             $params['HASTAC'] = $request->HASTAC;
         }
+        if ($request->has('HOTEL') && $request->HOTEL !== null) {
+            $params['HOTEL'] = $request->HOTEL;
+        }
 
         $url = $this->get_url();
         $query = http_build_query($params);
@@ -482,5 +491,267 @@ class AgencyUserController extends Controller
             // return $th->getMessage();
             return response(["message" => "Mail no enviado"], 500);
         }
+    }
+
+    public function resumen_servicios_diarios(Request $request)
+    {
+        $date = $request->input('date');
+        $agency_name = $request->input('agency_name');
+        $data = $request->input('data', []);
+
+        $pdf = new Fpdi();
+        $pdf->SetAutoPageBreak(false);
+
+        // Split data into groups
+        $firstPageItems = array_slice($data, 0, 20);
+        $remainingItems = array_slice($data, 20);
+        $additionalPages = array_chunk($remainingItems, 24);
+
+        // Load base template (first page)
+        $templatePath1 = storage_path('app/public/bases_resumenes/BASE-H1.pdf');
+        $pdf->setSourceFile($templatePath1);
+        $tplIdx = $pdf->importPage(1);
+        $pdf->addPage();
+        $pdf->useTemplate($tplIdx, 0, 0, null, null, true);
+
+        // Header: date, serve yourself to, provider
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->SetXY(8, 47);
+        $pdf->Write(0, $date);
+        $pdf->SetXY(36, 47);
+        $pdf->Write(0, 'Hielo & Aventura');
+        $pdf->SetXY(72.9, 47);
+        $pdf->Write(0, $agency_name);
+
+        // Print data for the first page (max 20)
+        $this->writeRows($pdf, $firstPageItems, 65.5);
+
+        // Additional pages (24 records each)
+        if (!empty($additionalPages)) {
+            $templatePath2 = storage_path('app/public/bases_resumenes/BASE-H1-PAGE2.pdf');
+
+            foreach ($additionalPages as $pageItems) {
+                $pdf->setSourceFile($templatePath2);
+                $tplIdx = $pdf->importPage(1);
+                $pdf->addPage();
+                $pdf->useTemplate($tplIdx, 0, 0, null, null, true);
+
+                $this->writeRows($pdf, $pageItems, 31.1); // start higher on page 2
+            }
+        }
+
+        // $content = $pdf->Output('PDFFFFFF.pdf', 'S');
+
+        // return response($content)
+        //     ->header('Content-Type', 'application/pdf')
+        //     ->header('Content-Disposition', 'inline; filename="PDFFFFFF.pdf"');
+
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.pdf';
+        $path = public_path('pdfs/' . $filename);
+
+        if (!file_exists(public_path('pdfs'))) {
+            mkdir(public_path('pdfs'), 0755, true);
+        }
+
+        $pdf->Output($path, 'F');
+
+        return response()->json([
+            'path' => 'pdfs/' . $filename,
+            'url' => asset('pdfs/' . $filename)
+        ]);
+    }
+
+    private function writeRows($pdf, $items, $startY)
+    {
+        $maxHotelLength = 20;
+        $rowHeight = 8.83;
+        $currentY = $startY;
+        $defaultFont = ['Helvetica', '', 8.50];
+
+        $reduceHotelFont = false;
+        foreach ($items as $item) {
+            if (strlen($item['hotel']) > $maxHotelLength) {
+                $reduceHotelFont = true;
+                break;
+            }
+        }
+
+        foreach ($items as $item) {
+            $x = 8;
+            $pdf->SetFont(...$defaultFont);
+
+            // Rva
+            // $this->drawCell($pdf, $x, $currentY, 22, $rowHeight, $item['reservation_number'], [220, 220, 220]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 22, $rowHeight, $item['reservation_number'], 16, [220, 220, 220]);
+
+            // Pasajero
+            // $this->drawCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], [173, 216, 230]);
+            $this->drawMultiLineCell($pdf, $x, $currentY, 42.2, $rowHeight, $item['pax'], 22, [173, 216, 230]);
+
+            // Cant
+            $this->drawCell($pdf, $x, $currentY, 16.8, $rowHeight, $item['number_of_passengers'], [255, 255, 153]);
+
+            // Excursion (especial)
+            $this->drawMultiLineCell($pdf, $x, $currentY, 33.5, $rowHeight, $item['excursion'], 16, [204, 255, 204]);
+            // $this->drawCell($pdf, $x, $currentY, 33.5, $rowHeight, $item['excursion'], [204, 255, 204]);
+
+            // Hotel (especial)
+            $this->drawMultiLineCell($pdf, $x, $currentY, 38.5, $rowHeight, $item['hotel'], 20, [255, 204, 204], $reduceHotelFont);
+
+            // Transfer
+            $this->drawCell($pdf, $x, $currentY, 17.5, $rowHeight, $item['transfer'], [255, 229, 204]);
+
+            // Hora
+            $this->drawCell($pdf, $x, $currentY, 23.5, $rowHeight, $item['hour'], [230, 204, 255]);
+
+            $currentY += $rowHeight;
+        }
+    }
+
+    private function drawCell($pdf, &$x, $y, $width, $height, $text, $fillColor)
+    {
+        $pdf->SetFillColor(...$fillColor);
+        $pdf->SetXY($x, $y);
+        $pdf->Cell($width, $height, $text, 0, 0, 'C', false);
+        $x += $width;
+    }
+
+    // private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor)
+    // {
+    //     $defaultFontSize = 8.81;
+    //     $reducedFontSize = 7.2;
+    //     $lineHeight = $cellHeight / 2;
+
+    //     $fontSize = $defaultFontSize;
+    //     if (strlen($text) > $maxLength) {
+    //         $fontSize = $reducedFontSize;
+    //         $text = wordwrap($text, ($maxLength + 2), "\n", false);
+    //     }
+
+    //     $pdf->SetFont('Helvetica', '', $fontSize);
+    //     $pdf->SetFillColor(...$fillColor);
+
+    //     // $lines = substr_count($text, "\n") + 1;
+    //     // $totalTextHeight = $lineHeight * $lines;
+
+    //     // // centrado vertical
+    //     // $adjustedY = (strlen($text) <= $maxLength)
+    //     //     ? $y + (($cellHeight - $totalTextHeight) / 2)
+    //     //     : $y;
+
+    //     $lines = substr_count($text, "\n") + 1;
+    //     $totalTextHeight = $lineHeight * $lines;
+
+    //     // centrado vertical universal
+    //     $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
+
+    //     $pdf->SetXY($x, $adjustedY);
+    //     $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', false);
+
+    //     $x += $width;
+    //     $pdf->SetFont('Helvetica', '', $defaultFontSize);
+    //     $pdf->SetXY($x, $y); // restaurar Y por si sigue otra celda
+    // }
+
+    private function drawMultiLineCell($pdf, &$x, $y, $width, $cellHeight, $text, $maxLength, $fillColor, $forceSmallFont = false)
+    {
+        $defaultFontSize = 8.50;
+        $reducedFontSize = 7.2;
+        $lineHeight = $cellHeight / 2;
+
+        $fontSize = $forceSmallFont ? $reducedFontSize : $defaultFontSize;
+        if ($forceSmallFont || strlen($text) > $maxLength) {
+            $text = wordwrap($text, ($maxLength + 2), "\n", false);
+        }
+
+        $pdf->SetFont('Helvetica', '', $fontSize);
+        $pdf->SetFillColor(...$fillColor);
+
+        $lines = substr_count($text, "\n") + 1;
+        $totalTextHeight = $lineHeight * $lines;
+        $adjustedY = $y + (($cellHeight - $totalTextHeight) / 2);
+
+        $pdf->SetXY($x, $adjustedY);
+        $pdf->MultiCell($width, $lineHeight, $text, 0, 'C', false);
+
+        $x += $width;
+        $pdf->SetFont('Helvetica', '', $defaultFontSize);
+        $pdf->SetXY($x, $y);
+    }
+
+
+    // public function resumen_servicios_diarios_excel(Request $request)
+    // {
+    //     $data = $request->input('data', []);
+    //     $export = new ServiciosDiariosExport($data);
+
+    //     $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.xlsx';
+    //     $path = public_path('excels/' . $filename);
+
+    //     if (!file_exists(public_path('excels'))) {
+    //         mkdir(public_path('excels'), 0755, true);
+    //     }
+
+    //     $excelData = Excel::raw($export, \Maatwebsite\Excel\Excel::XLSX);
+
+    //     if (File::put($path, $excelData) === false) {
+    //         return response()->json(['error' => 'No se pudo guardar el archivo'], 500);
+    //     }
+
+    //     return response()->json([
+    //         'path' => 'excels/' . $filename,
+    //         'url' => asset('excels/' . $filename),
+    //     ]);
+    // }
+
+    public function resumen_servicios_diarios_excel(Request $request)
+    {
+        $data = $request->data;
+
+        $filename = 'resumen-servicios-diarios-' . now()->format('Ymd_His') . '.csv';
+        $fullPath = public_path('excels/' . $filename);
+
+        // Nos aseguramos de que el directorio exista
+        if (!file_exists(public_path('excels'))) {
+            mkdir(public_path('excels'), 0755, true);
+        }
+
+        $handle = fopen($fullPath, 'w');
+
+        // UTF-8 BOM
+        fwrite($handle, "\xEF\xBB\xBF");
+
+        // Cabeceras
+        fputcsv($handle, [
+            'Nro Reserva',
+            'Pasajero',
+            'Cant',
+            'Excursion',
+            'Hotel',
+            'Transfer con H&A',
+            'Hora',
+        ], ';');
+
+        // Filas
+        foreach ($data as $item) {
+            fputcsv($handle, [
+                $item['reservation_number'],
+                $item['pax'],
+                $item['number_of_passengers'],
+                $item['excursion'],
+                $item['hotel'],
+                $item['transfer'],
+                $item['hour'],
+            ], ';');
+        }
+
+        fclose($handle);
+
+        return response()->json([
+            'message' => 'Archivo generado exitosamente.',
+            'path' => 'excels/' . $filename,
+            'url' => asset('excels/' . $filename),
+        ]);
     }
 }
