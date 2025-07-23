@@ -27,7 +27,7 @@ class UserReservation extends Model
         'excurtion',
         'billing_data',
         'contact_data',
-        'paxes.files', 
+        'paxes.files',
         'reservation_paxes.pax_type',
         'status_history.status',
         'rejected_history',
@@ -47,6 +47,7 @@ class UserReservation extends Model
         'reservation_number',
         'user_id',
         'agency_id',
+        'user_agency_id',
         'hotel_id',
         'excurtion_id',
         'reservation_status_id',
@@ -68,12 +69,17 @@ class UserReservation extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    
+
+    public function userAgency(): BelongsTo
+    {
+        return $this->belongsTo(AgencyUser::class, 'user_agency_id', 'id');
+    }
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(ReservationStatus::class, 'reservation_status_id', 'id');
     }
-    
+
     public function excurtion(): BelongsTo
     {
         return $this->belongsTo(Excurtion::class, 'excurtion_id', 'id');
@@ -129,15 +135,15 @@ class UserReservation extends Model
         $hash_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         $reservation_number = $userReservation->reservation_number;
         $excurtion_name = $userReservation->excurtion->name;
-    
+
         // Mail voucher
-            try {
-                Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-                return ["status" => 200];
-            } catch (\Throwable $th) {
-                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-                return ["message" => "Error al enviar el mail.", "status" => 500];
-            }
+        try {
+            Mail::to($mailTo)->send(new MailUserReservation($mailTo, public_path(parse_url($userReservation->pdf, PHP_URL_PATH)), $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));
+            return ["status" => 200];
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            return ["message" => "Error al enviar el mail.", "status" => 500];
+        }
         //
     }
 }
