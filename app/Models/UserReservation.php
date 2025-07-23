@@ -36,6 +36,7 @@ class UserReservation extends Model
 
     const INDEX = [
         'user',
+        'userAgency',
         'status',
         'status_history.status',
         'excurtion',
