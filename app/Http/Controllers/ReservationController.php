@@ -38,44 +38,47 @@ class ReservationController extends Controller
         $message = "Error al traer listado de {$this->sp}.";
         try {
             $query = UserReservation::with($this->model::INDEX)
-            ->when($request->date_from !== null, function ($query) use ($request) {
-                return $query->where('date', '>=', $request->date_from);
-            })
-            ->when($request->date_to !== null, function ($query) use ($request) {
-                return $query->where('date', '<=', $request->date_to);
-            })
-            ->when($request->creation_date_from !== null, function ($query) use ($request) {
-                return $query->where('created_at', '>=', $request->creation_date_from);
-            }) 
-            ->when($request->creation_date_to !== null, function ($query) use ($request) {
-                return $query->where('created_at', '<=', $request->creation_date_to);
-            })
-            ->when($request->excurtion_id !== null, function ($query) use ($request) {
-                return $query->where('excurtion_id', $request->excurtion_id);
-            })
-            ->when($request->reservation_status_id !== null, function ($query) use ($request) {
-                return $query->where('reservation_status_id', $request->reservation_status_id);
-            })
-            // ->when($request->q !== null, function ($query) use ($request) {
-            //     return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
-            // })
-            ->when($request->q !== null, function ($query) use ($request) {
-                return  $query->where(function ($query) use ($request) {
-                        $query->where('reservation_number', 'LIKE', '%'.$request->q.'%')
-                              ->orWhereHas('user', function ($q) use ($request) {
-                                $q->where('email', 'LIKE', '%'.$request->q.'%');
-                              });
-                });
-            })
-            ->when($request->internal_closed !== null, function ($query) use ($request) {
-                return $query->where('internal_closed', $request->internal_closed);
-            })
-            ->when($request->t !== null, function ($query) use ($request) {
-                return $query->whereHas('user', function ($q) use ($request) {
-                    $q->where('email', 'LIKE', '%'.$request->t.'%');
-                });
-            })
-            ->orderBy('id', 'desc');
+                ->when($request->date_from !== null, function ($query) use ($request) {
+                    return $query->where('date', '>=', $request->date_from);
+                })
+                ->when($request->date_to !== null, function ($query) use ($request) {
+                    return $query->where('date', '<=', $request->date_to);
+                })
+                ->when($request->creation_date_from !== null, function ($query) use ($request) {
+                    return $query->where('created_at', '>=', $request->creation_date_from);
+                })
+                ->when($request->creation_date_to !== null, function ($query) use ($request) {
+                    return $query->where('created_at', '<=', $request->creation_date_to);
+                })
+                ->when($request->excurtion_id !== null, function ($query) use ($request) {
+                    return $query->where('excurtion_id', $request->excurtion_id);
+                })
+                ->when($request->reservation_status_id !== null, function ($query) use ($request) {
+                    return $query->where('reservation_status_id', $request->reservation_status_id);
+                })
+                // ->when($request->q !== null, function ($query) use ($request) {
+                //     return $query->where('reservation_number', 'LIKE', '%'.$request->q.'%');
+                // })
+                ->when($request->q !== null, function ($query) use ($request) {
+                    return  $query->where(function ($query) use ($request) {
+                        $query->where('reservation_number', 'LIKE', '%' . $request->q . '%')
+                            ->orWhereHas('user', function ($q) use ($request) {
+                                $q->where('email', 'LIKE', '%' . $request->q . '%');
+                            });
+                    });
+                })
+                ->when($request->internal_closed !== null, function ($query) use ($request) {
+                    return $query->where('internal_closed', $request->internal_closed);
+                })
+                ->when($request->t !== null, function ($query) use ($request) {
+                    return $query->whereHas('user', function ($q) use ($request) {
+                        $q->where('email', 'LIKE', '%' . $request->t . '%');
+                    });
+                })
+                ->when($request->agency_id !== null, function ($query) use ($request) {
+                    return $query->where('agency_id', $request->agency_id);
+                })
+                ->orderBy('id', 'desc');
 
             $total = $query->count();
             $total_per_page = 30;
@@ -130,7 +133,7 @@ class ReservationController extends Controller
     {
         $userReservation = $this->getAllReservation($id);
 
-        if(!$userReservation)
+        if (!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
         return response(compact("userReservation"));
@@ -180,26 +183,26 @@ class ReservationController extends Controller
     public function resend_email_welcome(Request $request)
     {
         $userReservation = UserReservation::find($request->user_reservation_id);
-        
-        if(!$userReservation)
+
+        if (!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
-        
+
         $user = User::find($userReservation->user_id);
 
-        if(!$user)
+        if (!$user)
             return response(["message" => "No se ha encontrado el usuario"], 422);
 
         $pass = Str::random(8);
         $passHashed = Hash::make($pass);
-        $user->update([ 'password' => $passHashed ]);
-        
+        $user->update(['password' => $passHashed]);
+
         //Email de Bienvenida
-            try {
-                Mail::to($user->email)->send(new RegistrationPassword($user->email, $pass, $userReservation->language_id));
-            } catch (\Throwable $th) {
-                Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-                return response(["message" => "Error al enviar el mail."], 500);
-            }
+        try {
+            Mail::to($user->email)->send(new RegistrationPassword($user->email, $pass, $userReservation->language_id));
+        } catch (\Throwable $th) {
+            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            return response(["message" => "Error al enviar el mail."], 500);
+        }
         //
 
         return response(["message" => "Mail enviado con exito."]);
@@ -208,13 +211,13 @@ class ReservationController extends Controller
     public function resend_email_voucher(Request $request)
     {
         $userReservation = UserReservation::find($request->user_reservation_id);
-        
-        if(!$userReservation)
+
+        if (!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
-       
+
         $response = UserReservation::send_mail_user_reservation_voucher($userReservation);
-    
-        if($response['status'] != 200)
+
+        if ($response['status'] != 200)
             return response(["message" => $response['message'], "status" => $response['status']]);
 
         return response(["message" => "Mail enviado con exito."]);
@@ -224,7 +227,7 @@ class ReservationController extends Controller
     {
         $userReservation = UserReservation::find($id);
 
-        if(!$userReservation)
+        if (!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
         $userReservation->internal_closed = $request->internal_closed;
@@ -243,7 +246,7 @@ class ReservationController extends Controller
         ]);
 
         $userReservation = UserReservation::find($request->user_reservation_id);
-        if(!$userReservation)
+        if (!$userReservation)
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
         $observation = new UserReservationObservationsHistory();
@@ -263,7 +266,7 @@ class ReservationController extends Controller
             "new_user_id" => ['required', 'integer', Rule::exists('users', 'id')],
         ]);
 
-        if(Auth::user()->type_user == UserType::ADMIN)
+        if (Auth::user()->type_user == UserType::ADMIN)
             return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
 
         $userReservation = UserReservation::find($request->reservation_id);
@@ -272,5 +275,4 @@ class ReservationController extends Controller
 
         return response(["message" => "Usuario asignado a la reserva con exito.", "userReservation" => $userReservation]);
     }
-
 }
