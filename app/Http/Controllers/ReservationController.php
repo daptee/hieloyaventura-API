@@ -35,7 +35,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $message = "Error al traer listado de {$this->sp}.";
         try {
             $query = UserReservation::with($this->model::INDEX)
