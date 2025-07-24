@@ -82,7 +82,7 @@ class ReservationController extends Controller
                 ->when($request->only_web !== null && $request->only_web == 1, function ($query) {
                     return $query->whereNull('agency_id');
                 })
-                ->when($request->only_web == null || $request->only_web == 0, function ($query) {
+                ->when($request->only_web !== null && $request->only_web == 0, function ($query) {
                     return $query->whereNotNull('agency_id');
                 })
                 ->orderBy('id', 'desc');
