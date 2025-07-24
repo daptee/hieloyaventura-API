@@ -207,6 +207,7 @@ class UserReservationController extends Controller
             $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
             $newUserReservation->user_id = null;
             $newUserReservation->agency_id = $request->agency_code;
+            $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id;
             $newUserReservation->language_id = 1;
             $newUserReservation->save();
 
