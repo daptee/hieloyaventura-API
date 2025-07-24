@@ -78,6 +78,9 @@ class ReservationController extends Controller
                 ->when($request->agency_id !== null, function ($query) use ($request) {
                     return $query->where('agency_id', $request->agency_id);
                 })
+                ->when($request->only_web !== null && $request->only_web === 1, function ($query) {
+                    return $query->whereNull('agency_id');
+                })
                 ->orderBy('id', 'desc');
 
             $total = $query->count();
