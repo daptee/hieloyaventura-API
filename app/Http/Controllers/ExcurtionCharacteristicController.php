@@ -47,7 +47,13 @@ class ExcurtionCharacteristicController extends Controller
     public function store(StoreExcurtionCharacteristicRequest $request, $id)
     {
         $message = "Error al crear en la característica.";
-        $datos = $this->datos($id);
+        // $datos = $this->datos($id);
+        $datos = $request->all();
+        // dd($request->all()['characteristics'][0], $this->datos($id)['characteristics'][0]);
+
+        // $json_encode_datos = json_encode($datos, JSON_PRETTY_PRINT);
+        // file_put_contents("php_data_$id.json", $json_encode_datos);
+        // return $json_encode_datos;
 
         $excurtion = Excurtion::findOrFail($id);
 
