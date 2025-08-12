@@ -17,6 +17,7 @@ use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoLibreController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaxController;
+use App\Http\Controllers\PictureExcurtionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationStatusController;
 use App\Http\Controllers\TicketController;
@@ -218,6 +219,8 @@ Route::post('testeando-curl-post', function () {
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
 Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics']);
+Route::post('excurtion/pictures/manage/files', [PictureExcurtionController::class, 'manage']);
+Route::get('excurtion/{id}/pictures/files', [PictureExcurtionController::class, 'getByExcurtion']);
 
 Route::post('process-cv', function (Request $request) {
     try {
