@@ -63,6 +63,11 @@ class ExcurtionCharacteristicController extends Controller
 
             $excurtion->characteristics2()->detach();
 
+            if(isset($datos['link_map'])){
+                $excurtion->link_map = $datos['link_map'];
+                $excurtion->save();
+            }
+            
             foreach ($datos['characteristics'] as $characteristic) {
                 Characteristic::addCharacteristic($characteristic, $excurtion->id, null);
             }
