@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePictureExcurtionRequest;
 use App\Http\Requests\UpdatePictureExcurtionRequest;
+use App\Models\Excurtion;
 use App\Models\PictureExcurtion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,21 +30,39 @@ class PictureExcurtionController extends Controller
                     'type' => 'nullable|string',
                 ])->validate();
 
-                if($fileData['type'] == "vid"){
-                    $url_path = $fileData['file'];
-                }else{
-                    $path = $this->saveImage($fileData['file']);
-                    $url_path = url($path);
+                switch ($fileData['type']) {
+                    case 'vid':
+                        $url_path = $fileData['file'];
+                        break;
+                    case 'logo':
+                        $path = $this->saveImage($fileData['file'], "excursions/logos");
+                        $url_path = null;
+                        $excurtion = Excurtion::find($fileData['excurtion_id']); 
+                        $excurtion->icon = substr($path, 1);
+                        $excurtion->save();
+
+                        return response()->json([
+                            'status' => 'success',
+                            'excurtion' => $excurtion
+                        ]);
+                        break;
+                    
+                    default:
+                        $path = $this->saveImage($fileData['file']);
+                        $url_path = url($path);
+                        break;
                 }
                 
-                $created = PictureExcurtion::create([
-                    'link' => $url_path,
-                    'order' => $fileData['order'] ?? 0,
-                    'excurtion_id' => $fileData['excurtion_id'],
-                    'type' => $fileData['type'] ?? 'pic',
-                ]);
-                
-                $result['created'][] = $created;
+                if($url_path){
+                    $created = PictureExcurtion::create([
+                        'link' => $url_path,
+                        'order' => $fileData['order'] ?? 0,
+                        'excurtion_id' => $fileData['excurtion_id'],
+                        'type' => $fileData['type'] ?? 'pic',
+                    ]);
+                    
+                    $result['created'][] = $created;
+                }
             }
         }
 
@@ -90,11 +109,13 @@ class PictureExcurtionController extends Controller
         ]);
     }
 
-    private function saveImage($file)
+    private function saveImage($file, $url_path = null)
     {
+        $url_base = $url_path ?? "store/pictureExcurtion";
+
         $fileName = Str::random(5) . time() . '.' . $file->extension();
-        $file->move(public_path("store/pictureExcurtion"), $fileName);
-        $path = "/store/pictureExcurtion/$fileName";
+        $file->move(public_path("$url_base"), $fileName);
+        $path = "/$url_base/$fileName";
         return $path; // URL pública
     }
 
