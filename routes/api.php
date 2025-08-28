@@ -407,6 +407,8 @@ Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
 Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);
 Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
 
+Route::get('/users/types', [UserController::class, 'types_user']);
+
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
 //         'email' => 'enzoamarilla@gmail.com',

@@ -13,6 +13,8 @@ class UserType extends Model
 
     const CLIENTE = 1;
     const ADMIN = 2;
+    const VENDEDOR = 3;
+    const EDITOR = 4;
 
     protected $hidden = ['created_at', 'updated_at'];
 }
