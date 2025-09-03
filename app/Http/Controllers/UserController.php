@@ -66,6 +66,11 @@ class UserController extends Controller
         return response(compact("users"));
     }
 
+    public function types_user(Request $request)
+    {
+        $types_user = UserType::all();
+        return response(compact("types_user"));
+    }
 
     // public function store(StoreUserRequest $request)
     // {
