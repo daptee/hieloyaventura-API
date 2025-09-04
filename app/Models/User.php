@@ -99,11 +99,11 @@ class User extends Authenticatable implements JWTSubject
 
     public static function getAllDataUser($user_type_id, $id)
     {
-        $array_data = ['user_type', 'language', 'nationality'];
-        
-        if($user_type_id == UserType::ADMIN)
-            array_push($array_data, 'modules.module');
-        
+        $array_data = ['user_type', 'language', 'nationality', 'modules.module'];
+
+        // if($user_type_id == UserType::ADMIN)
+        //     array_push($array_data, 'modules.module');
+
         return User::with($array_data)->find($id);
     }
 }

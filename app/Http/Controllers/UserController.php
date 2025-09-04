@@ -118,6 +118,23 @@ class UserController extends Controller
             }
         }
 
+        if ($user->user_type_id == UserType::VENDEDOR) {
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::RESERVAS_WEB;
+            $user_module->save();
+        }
+        if ($user->user_type_id == UserType::EDITOR) {
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::CONFIGURACIONES;
+            $user_module->save();
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::EXCURSIONES;
+            $user_module->save();
+        }
+
         $user = User::getAllDataUser($user->user_type_id, $user->id);
 
         return response(compact(
@@ -200,9 +217,9 @@ class UserController extends Controller
         $user->birth_date = $request->birthdate;
         $user->phone = $request->phone;
         $user->nationality_id = $request->nationality_id;
+        $user->user_type_id = $request->user_type_id;
 
         if ($user->user_type_id == UserType::ADMIN) {
-
             if ($request->modules) {
                 UserModule::where('user_id', $id)->delete();
 
@@ -215,7 +232,24 @@ class UserController extends Controller
             }
         }
 
-        $user->user_type_id = $request->user_type_id;
+        if ($user->user_type_id == UserType::VENDEDOR) {
+            UserModule::where('user_id', $id)->delete();
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::RESERVAS_WEB;
+            $user_module->save();
+        }
+        if ($user->user_type_id == UserType::EDITOR) {
+            UserModule::where('user_id', $id)->delete();
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::CONFIGURACIONES;
+            $user_module->save();
+            $user_module = new UserModule();
+            $user_module->user_id = $user->id;
+            $user_module->module_id = Module::EXCURSIONES;
+            $user_module->save();
+        }
 
         $user->save();
 
