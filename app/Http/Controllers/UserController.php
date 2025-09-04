@@ -41,19 +41,19 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::with($this->model::INDEX)->when($request->user_type_id, function ($query) use ($request) {
-                    return $query->where('user_type_id', $request->user_type_id);
-                })
-                ->when($request->q, function ($query) use ($request) {
-                    return $query->where('name', 'LIKE', '%'.$request->q.'%')
-                                 ->orWhere('email', 'LIKE', '%'.$request->q.'%');
-                })
-                ->orderBy('id', 'desc');
-            
-                $total = $query->count();
-                $total_per_page = 30;
-                $data = $query->paginate($total_per_page);
-                $current_page = $request->page ?? $data->currentPage();
-                $last_page = $data->lastPage();
+            return $query->where('user_type_id', $request->user_type_id);
+        })
+            ->when($request->q, function ($query) use ($request) {
+                return $query->where('name', 'LIKE', '%' . $request->q . '%')
+                    ->orWhere('email', 'LIKE', '%' . $request->q . '%');
+            })
+            ->orderBy('id', 'desc');
+
+        $total = $query->count();
+        $total_per_page = 30;
+        $data = $query->paginate($total_per_page);
+        $current_page = $request->page ?? $data->currentPage();
+        $last_page = $data->lastPage();
 
         $users = $data;
 
@@ -74,20 +74,20 @@ class UserController extends Controller
 
     // public function store(StoreUserRequest $request)
     // {
-        // $message = "Error al crear en la {$this->s}.";
-        // $data = $request->all();
+    // $message = "Error al crear en la {$this->s}.";
+    // $data = $request->all();
 
-        // $new = new $this->model($data);
-        // try {
-        //     $new->save();
-        //     $data = $this->model::with($this->model::SHOW)->findOrFail($new->id);
-        // } catch (ModelNotFoundException $error) {
-        //     return response(["message" => $this->message_404, "error" => $error->getMessage()], 404);
-        // } catch (Exception $error) {
-        //     return response(["message" => $this->message_store_500, "error" => $error->getMessage()], 500);
-        // }
-        // $message = $this->message_show_200;
-        // return response(compact("message", "data"));
+    // $new = new $this->model($data);
+    // try {
+    //     $new->save();
+    //     $data = $this->model::with($this->model::SHOW)->findOrFail($new->id);
+    // } catch (ModelNotFoundException $error) {
+    //     return response(["message" => $this->message_404, "error" => $error->getMessage()], 404);
+    // } catch (Exception $error) {
+    //     return response(["message" => $this->message_store_500, "error" => $error->getMessage()], 500);
+    // }
+    // $message = $this->message_show_200;
+    // return response(compact("message", "data"));
     // }
 
     public function store(Request $request)
@@ -109,7 +109,7 @@ class UserController extends Controller
         $user->nationality_id = $request->nationality_id;
         $user->save();
 
-        if($request->user_type_id == UserType::ADMIN){
+        if ($request->user_type_id == UserType::ADMIN) {
             foreach ($request->modules as $module) {
                 $user_module = new UserModule();
                 $user_module->user_id = $user->id;
@@ -117,11 +117,12 @@ class UserController extends Controller
                 $user_module->save();
             }
         }
-        
+
         $user = User::getAllDataUser($user->user_type_id, $user->id);
 
         return response(compact(
-            "user", $user
+            "user",
+            $user
         ));
     }
 
@@ -172,7 +173,7 @@ class UserController extends Controller
 
         try {
             DB::beginTransaction();
-                $user->save();
+            $user->save();
             DB::commit();
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
@@ -186,13 +187,13 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if(!isset($user))
+        if (!isset($user))
             return response()->json(['message' => 'Usuario no valido.'], 400);
 
         $user->name = $request->name;
         $user->email = $request->email;
 
-        if($request->password)
+        if ($request->password)
             $user->password = Hash::make($request->password); // consultar seba antes de subir
 
         $user->dni = $request->dni;
@@ -200,11 +201,11 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->nationality_id = $request->nationality_id;
 
-        if($user->user_type_id == UserType::ADMIN){
-            
-            if($request->modules){
+        if ($user->user_type_id == UserType::ADMIN) {
+
+            if ($request->modules) {
                 UserModule::where('user_id', $id)->delete();
-                
+
                 foreach ($request->modules as $module) {
                     $user_module = new UserModule();
                     $user_module->user_id = $user->id;
@@ -212,17 +213,18 @@ class UserController extends Controller
                     $user_module->save();
                 }
             }
-
         }
-        
+
+        $user->user_type_id = $request->user_type_id;
+
         $user->save();
 
         $user = User::getAllDataUser($user->user_type_id, $user->id);
 
         return response(compact(
-            "user", $user
+            "user",
+            $user
         ));
-
     }
 
     public function updatePassword(UpdateUserPasswordRequest $request)
@@ -230,29 +232,28 @@ class UserController extends Controller
         $user = auth()->user();
 
         $credentials = [
-            'email' => $user->email, 
+            'email' => $user->email,
             'password' => $request->current_password
         ];
 
-        try{
+        try {
             if ($token = JWTAuth::attempt($credentials)) {
                 DB::beginTransaction();
-                    $new_password_hashed = Hash::make($request->new_password);
-                    $user->password = $new_password_hashed;
+                $new_password_hashed = Hash::make($request->new_password);
+                $user->password = $new_password_hashed;
 
-                    $user->save();
+                $user->save();
                 DB::commit();
             } else {
                 return response()->json(['message' => 'Contraseña actual no válida.'], 422);
             }
-
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error(print_r($e->getMessage(), true));
         }
 
         return response()->json([
-            'message' => 'La contraseña se actualizó con éxito', 
+            'message' => 'La contraseña se actualizó con éxito',
             'user' => $user,
             'token' => $token
         ]);
@@ -262,14 +263,14 @@ class UserController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if(!$user)
+        if (!$user)
             return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
-        
+
         try {
             $new_password = Str::random(16);
             $user->password = Hash::make($new_password);
             $user->save();
-            
+
             $data = [
                 'name' => $user->nombre,
                 'email' => $user->email,
@@ -279,7 +280,7 @@ class UserController extends Controller
         } catch (Exception $error) {
             return response(["error" => $error->getMessage()], 500);
         }
-       
+
         return response()->json(['message' => 'Correo enviado con exito.'], 200);
     }
 
@@ -287,14 +288,14 @@ class UserController extends Controller
     {
         $user = AgencyUser::where('email', $request->email)->first();
 
-        if(!$user)
+        if (!$user)
             return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
-        
+
         try {
             $new_password = Str::random(16);
             $user->password = Hash::make($new_password);
             $user->save();
-            
+
             $data = [
                 'name' => $user->nombre,
                 'email' => $user->email,
@@ -304,7 +305,7 @@ class UserController extends Controller
         } catch (Exception $error) {
             return response(["error" => $error->getMessage()], 500);
         }
-       
+
         return response()->json(['message' => 'Correo enviado con exito.'], 200);
     }
 
@@ -316,16 +317,16 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        
-        if(!$user)
+
+        if (!$user)
             return response(["message" => "ID Usuario invalido."], 422);
 
-        if(Auth::user()->type_user == UserType::ADMIN)
+        if (Auth::user()->type_user == UserType::ADMIN)
             return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
-        
+
         $count_user_reservations = ModelsUserReservation::where('user_id', $id)->count();
 
-        if($count_user_reservations > 0)
+        if ($count_user_reservations > 0)
             return response(["message" => "Este usuario posee reservas asociadas."], 422);
 
         $user->delete();
