@@ -69,16 +69,29 @@ class PictureExcurtionController extends Controller
         // 🟡 ACTUALIZAR
         if ($request->has('update')) {
             foreach ($request->update as $updateData) {
-                $picture = PictureExcurtion::findOrFail($updateData['id']);
+                $picture = PictureExcurtion::find($updateData['id']);
                 
                 if(isset($updateData['order'])){
                     $picture->order = $updateData['order'];
                 }
 
-                if(isset($updateData['file'])){
-                    unlink(public_path(parse_url($picture->link, PHP_URL_PATH)));
-                    $path = $this->saveImage($updateData['file']);
-                    $picture->link = url($path);
+                if(isset($updateData['type'])){
+                    switch ($updateData['type']) {
+                        case 'vid':
+                            if(isset($updateData['file'])){
+                                $picture->link = $updateData['file']; 
+                            }
+                            break;
+
+                        default:
+                            if(isset($updateData['file'])){
+                                unlink(public_path(parse_url($picture->link, PHP_URL_PATH)));
+                                $path = $this->saveImage($updateData['file']);
+                                $picture->link = url($path);
+                            }
+                        break;
+
+                    }
                 }
 
                 $picture->save();
