@@ -501,9 +501,12 @@ class UserReservationController extends Controller
         $message = "Error al traer listado de {$this->sp}.";
         $data = null;
         try {
-            $data = UserReservation::with(['paxes.diseases.disease'])
-                ->select(['id', 'reservation_number', 'date', 'turn'])
+            $data = UserReservation::with(['paxes.diseases.disease', 'user'])
+                ->select(['id', 'reservation_number', 'date', 'turn', 'user_id'])
                 ->where('excurtion_id', 2)
+                ->when($request->user_id !== null, function ($query) use ($request) {
+                    return $query->where('user_id', $request->user_id);
+                })
                 ->when($request->date_from !== null, function ($query) use ($request) {
                     return $query->where('date', '>=', $request->date_from);
                 })
