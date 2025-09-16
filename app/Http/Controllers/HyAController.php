@@ -190,11 +190,7 @@ class HyAController extends Controller
     {
         $url = $this->get_url();
         $body_json = $request->all();
-        // $response = Http::post("$url/CreaSolicitudAG", $body_json);
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ])->post("$url/CreaSolicitudAG", $body_json);
+        $response = Http::post("$url/CreaSolicitudAG", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
