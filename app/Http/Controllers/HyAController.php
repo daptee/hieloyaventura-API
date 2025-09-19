@@ -185,4 +185,51 @@ class HyAController extends Controller
             return $response->throw();
         }
     }
+
+    public function CreaSolicitudAG(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/CreaSolicitudAG", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function SolicitudesAG(Request $request)
+    {
+        // Validaciones manuales para devolver 400
+        $requiredFields = ['DESDEF', 'HASTAF', 'AG'];
+
+        foreach ($requiredFields as $field) {
+            if (!$request->filled($field)) {
+                return response()->json([
+                    'message' => 'Faltan campos obligatorios',
+                    'error' => "El campo {$field} es obligatorio"
+                ], 400);
+            }
+        }
+
+        $url = $this->get_url();
+        $completeURL = $url . "/SolicitudesAG";
+
+        // Armo los parámetros de la query solo con lo que llegue en el request
+        $queryParams = http_build_query($request->only([
+            'DESDEF',
+            'HASTAF',
+            'AG',
+            'PROD',
+            'EST'
+        ]));
+
+        $response = Http::get($completeURL . '?' . $queryParams);
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
 }
