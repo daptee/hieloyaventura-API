@@ -15,7 +15,7 @@
         Agencia: {{ $request->agency_name }} <br>
         Excursion: {{ $data->excurtion->name }} <br>
         Nro reserva: {{ $data->reservation_number ?? '-' }} <br>
-        Fecha y hora: {{ $data->date->format('Y/m/d') }} - {{ $turn }} <br>
+        Fecha y hora: {{ $data->date->format('d/m/Y') }} - {{ $turn }} <br>
         Traslado: {{ $data->is_transfer == 1 ? "Si" : "No" }} <br>
         Nombre: {{ $request->reservation_name ?? '-' }} <br>
         Pasajeros: {{ $request->number_of_passengers }} <br>
