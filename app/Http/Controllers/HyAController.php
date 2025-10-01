@@ -189,16 +189,10 @@ class HyAController extends Controller
 
     public function CreaSolicitudAG(Request $request)
     {
-        dd([
-            'AGENCIA' => $request->input('AGENCIA'),
-            'PARAFECHA' => $request->input('PARAFECHA'),
-            'pasajeros' => $request->input('pasajeros'),
-            'all' => $request->all(),
-            'raw' => $request->getContent()
-        ]);
         $url = $this->get_url();
         $body_json = $request->all();
         $response = Http::post("$url/CreaSolicitudAG", $body_json);
+        dd($body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
