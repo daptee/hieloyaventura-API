@@ -202,7 +202,7 @@ class HyAController extends Controller
     {
 
         $url = $this->get_url();
-        $response = Http::get("$url/SolicitudesAG?DESDEF=$request->DESDEF&HASTf=$request->HASTAF&AG=$request->AG");
+        $response = Http::get("$url/SolicitudesAG?DESDEF=$request->DESDEF&HASTF=$request->HASTAF&AG=$request->AG");
         if ($response->successful()) {
             return $response->json();
         } else {
