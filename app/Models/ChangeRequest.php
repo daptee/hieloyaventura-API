@@ -13,7 +13,7 @@ class ChangeRequest extends Model
 
     protected $fillable = [
         'user_id',
-        'excurtion_id',
+        'user_reservation_id',
         'text',
     ];
 
@@ -23,9 +23,9 @@ class ChangeRequest extends Model
         return $this->belongsTo(AgencyUser::class, 'user_id');
     }
 
-    public function excurtion()
+    public function reservation()
     {
-        return $this->belongsTo(Excurtion::class, 'excurtion_id');
+        return $this->belongsTo(UserReservation::class, 'user_reservation_id');
     }
 
     public function files()

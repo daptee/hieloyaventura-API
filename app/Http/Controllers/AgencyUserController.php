@@ -487,19 +487,16 @@ class AgencyUserController extends Controller
             if (!$reservation)
                 return response(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
 
-            if(!$reservation->excurtion_id)
-                return response(["message" => "Esta reserva no tiene la excursion asociada."], 422);
-
             $change_request = ChangeRequest::create([
                 'user_id' => $user->id,
-                'excurtion_id' => $reservation->excurtion_id,
+                'user_reservation_id' => $reservation->id,
                 'text' => $request->input('request'),
             ]);
 
             $storedFiles = [];
 
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
+            if ($request->attachments) {
+                foreach ($request->attachments as $file) {
                         $fileName = uniqid() . '_' . $file->getClientOriginalName();
                         $path = $file->move(public_path('change_requests'), $fileName);
 
@@ -527,14 +524,18 @@ class AgencyUserController extends Controller
         }
     }
 
-    public function get_excursion_requests($excurtion_id)
+    public function get_reservation_requests($reservation_number)
     {
         try {
-            $requests = ChangeRequest::where('excurtion_id', $excurtion_id)->with(['excurtion', 'user', 'files'])->get();
+            $reservation = UserReservation::where('reservation_number', $reservation_number)->first();
+
+            if (!$reservation)
+                return response(["message" => "No se ha encontrado una reserva asociada a nro de reserva enviado."], 422);
+
+            $requests = ChangeRequest::where('user_reservation_id', $reservation->id)->with(['reservation', 'user', 'files'])->get();
 
             return response()->json([
-                "excurtion_id" => $excurtion_id,
-                "data" => $requests
+                "data" =>$requests
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
