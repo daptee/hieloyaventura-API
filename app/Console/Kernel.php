@@ -17,6 +17,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('cancelar:reservas')->everyMinute();
         $schedule->command('notificar:pasajeros')->everyMinute();
+        $schedule->command('pdfs:borrar-viejos')->monthlyOn(1, '03:00');
+        $schedule->command('pdfs:agencias-borrar-viejos')->monthlyOn(1, '03:10');
     }
 
     /**
