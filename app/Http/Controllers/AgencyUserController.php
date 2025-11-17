@@ -9,7 +9,10 @@ use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
 use App\Models\Audit;
+use App\Models\ChangeRequest;
+use App\Models\ChangeRequestFile;
 use App\Models\User;
+use App\Models\UserReservation;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -479,17 +482,66 @@ class AgencyUserController extends Controller
             if (!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
+            $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
+        
+            if (!$reservation)
+                return response(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
+
+            $change_request = ChangeRequest::create([
+                'user_id' => $user->id,
+                'user_reservation_id' => $reservation->id,
+                'text' => $request->input('request'),
+            ]);
+
+            $storedFiles = [];
+
+            if ($request->attachments) {
+                foreach ($request->attachments as $file) {
+                        $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                        $path = $file->move(public_path('change_requests'), $fileName);
+
+                        $storedFiles[] = public_path('change_requests/' . $fileName);
+
+                        ChangeRequestFile::create([
+                            'change_request_id' => $change_request->id,
+                            'path' => 'change_requests/' . $fileName, // ruta relativa
+                            'original_name' => $file->getClientOriginalName(),
+                        ]);
+                }
+            }
 
             // $files = $request->attachments;
-            $files = $request->has('attachments') ? $request->attachments : [];
+            // $files = $request->has('attachments') ? $request->attachments : [];
 
-            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $files));
+            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
+            // Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
 
             return response(["message" => "Mail enviado con éxito!"], 200);
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
             // return $th->getMessage();
             return response(["message" => "Mail no enviado"], 500);
+        }
+    }
+
+    public function get_reservation_requests($reservation_number)
+    {
+        try {
+            $reservation = UserReservation::where('reservation_number', $reservation_number)->first();
+
+            if (!$reservation)
+                return response(["message" => "No se ha encontrado una reserva asociada a nro de reserva enviado."], 422);
+
+            $requests = ChangeRequest::where('user_reservation_id', $reservation->id)->with(['reservation', 'user', 'files'])->get();
+
+            return response()->json([
+                "data" =>$requests
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "Error al obtener las solicitudes de cambio de una excursion",
+                "error" => $th->getMessage()
+            ], 500);
         }
     }
 

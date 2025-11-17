@@ -404,6 +404,7 @@ Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'conf
 Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG']);
 Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo']);
 Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request']);
+Route::get('/agency/reservation/{reservation}/requests', [AgencyUserController::class, 'get_reservation_requests']);
 Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG']);
 Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
 Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);

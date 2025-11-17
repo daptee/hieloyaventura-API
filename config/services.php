@@ -38,6 +38,7 @@ return [
         'dev' => [
             'token' => env('MP_ACCESS_TOKEN_DEV')
         ],
+        'platform_id' => env('MP_PLATFORM_ID'),
         // 'prod' => [
         //     'token' => env('MP_ACCESS_TOKEN_PROD')
         // ]

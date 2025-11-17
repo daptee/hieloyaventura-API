@@ -200,7 +200,16 @@ class HyAController extends Controller
 
     public function SolicitudesAG(Request $request)
     {
-        // Validaciones manuales para devolver 400
+
+        $url = $this->get_url();
+        $response = Http::get("$url/SolicitudesAG?DESDEF=$request->DESDEF&HASTF=$request->HASTAF&AG=$request->AG");
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+
+        /* // Validaciones manuales para devolver 400
         $requiredFields = ['DESDEF', 'HASTAF', 'AG'];
 
         foreach ($requiredFields as $field) {
@@ -230,6 +239,6 @@ class HyAController extends Controller
             return $response->json();
         } else {
             return $response->throw();
-        }
+        } */
     }
 }
