@@ -83,7 +83,7 @@ class MercadoPagoController extends Controller
 
         MercadoPago\SDK::setAccessToken(config('services.mercadopago.dev.token'));
 
-        MercadoPago\SDK::setPlatformId(config('services.mercadopago.platform_id'));
+        // MercadoPago\SDK::setPlatformId(config('services.mercadopago.platform_id'));
 
         $preference = new MercadoPago\Preference();
         $preference->back_urls = array(
