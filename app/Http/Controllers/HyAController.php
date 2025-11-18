@@ -241,4 +241,15 @@ class HyAController extends Controller
             return $response->throw();
         } */
     }
+
+    public function ValidaCupon(Request $request)
+    {
+        $url = $this->get_url();
+        $response = Http::get("$url/ValidaCupon?CUPON=$request->CUPON&PROD=$request->PROD&FECHA_TURNO=$request->FECHA_TURNO");
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
 }
