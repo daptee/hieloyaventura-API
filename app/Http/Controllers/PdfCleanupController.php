@@ -65,7 +65,7 @@ class PdfCleanupController extends Controller
             $deletedCount = count($deletedFiles);
 
             // 3) LOG EN ESPAÑOL
-            $logMessage = "🧹 [API] Limpieza de PDFs por rango\n"
+            $logMessage = "🧹 [API] Limpieza de PDFs por rango (Manual)\n"
                 . "Rango solicitado: {$startDate->toDateString()} → {$endDate->toDateString()}\n"
                 . "Carpeta: {$directory}\n"
                 . "Eliminados: {$deletedCount}\n"
@@ -82,7 +82,7 @@ class PdfCleanupController extends Controller
 
             Log::build([
                 'driver' => 'single',
-                'path' => storage_path('logs/pdf_cleanup_manual.log'),
+                'path' => storage_path('logs/pdf_cleanup.log'),
             ])->info($logMessage);
 
             // 4) RESPUESTA EN ESPAÑOL
@@ -158,7 +158,7 @@ class PdfCleanupController extends Controller
             $deletedCount = count($deletedFiles);
 
             // 3) LOG EN ESPAÑOL
-            $logMessage = "🧹 [API] Limpieza de PDFs por rango\n"
+            $logMessage = "🧹 [API] Limpieza de PDFs por rango (Manual)\n"
                 . "Rango solicitado: {$startDate->toDateString()} → {$endDate->toDateString()}\n"
                 . "Carpeta: {$directory}\n"
                 . "Eliminados: {$deletedCount}\n"
@@ -175,7 +175,7 @@ class PdfCleanupController extends Controller
 
             Log::build([
                 'driver' => 'single',
-                'path' => storage_path('logs/agencies/pdf_cleanup_manual.log'),
+                'path' => storage_path('logs/agencies_pdf_cleanup.log'),
             ])->info($logMessage);
 
             // 4) RESPUESTA EN ESPAÑOL
