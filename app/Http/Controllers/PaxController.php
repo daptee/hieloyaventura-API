@@ -380,7 +380,7 @@ class PaxController extends Controller
 
             // initiate FPDI
             $pdf = new Fpdi();
-
+            $pdf->SetCompression(true);
             // $pdf->AddPage();
             // set the source file
             // $pdf->setSourceFile($firstPage);
@@ -579,7 +579,6 @@ class PaxController extends Controller
             $pdf->SetTextColor(54, 134, 195);
             // $pdf->Write(0, $excurtionName);
             // $pdf->MultiCell(62, 8, $excurtionName, 0, 'C');
-
 
             $pdf->Output($pathToSavePdf, "F");
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoLibreController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaxController;
+use App\Http\Controllers\PdfCleanupController;
 use App\Http\Controllers\PictureExcurtionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationStatusController;
@@ -412,6 +413,9 @@ Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::clas
 Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
 
 Route::get('/users/types', [UserController::class, 'types_user']);
+
+Route::delete('/pdfs/delete-by-range', [PdfCleanupController::class, 'deleteByRange']);
+Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'deleteByRangeAgencies']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
