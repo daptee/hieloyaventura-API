@@ -509,7 +509,8 @@ class AgencyUserController extends Controller
             }
 
             // reservas@hieloyaventura.com
-            Mail::to("enzo100amarilla@gmail.com")->send(
+            // enzo100amarilla@gmail.com
+            Mail::to("reservas@hieloyaventura.com")->send(
                 new ReservationRequestChange($request, $user, $storedFiles)
             );
 
