@@ -513,8 +513,8 @@ class AgencyUserController extends Controller
             // $files = $request->attachments;
             // $files = $request->has('attachments') ? $request->attachments : [];
 
-            Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
-            // Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
+            // Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
+            Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
 
             return response(["message" => "Mail enviado con éxito!"], 200);
         } catch (\Throwable $th) {
