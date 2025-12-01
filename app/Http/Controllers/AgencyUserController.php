@@ -464,8 +464,6 @@ class AgencyUserController extends Controller
     }
 
     // END HYA ENDPOINTS
-
-
     public function change_request(Request $request)
     {
         try {
@@ -478,14 +476,14 @@ class AgencyUserController extends Controller
             ]);
 
             $user = AgencyUser::find($request->id_user);
-
             if (!$user)
                 return response(["message" => "No se ha encontrado el usuario"], 422);
 
             $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
-        
             if (!$reservation)
                 return response(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
+
+            DB::beginTransaction();
 
             $change_request = ChangeRequest::create([
                 'user_id' => $user->id,
@@ -497,29 +495,34 @@ class AgencyUserController extends Controller
 
             if ($request->attachments) {
                 foreach ($request->attachments as $file) {
-                        $fileName = uniqid() . '_' . $file->getClientOriginalName();
-                        $path = $file->move(public_path('change_requests'), $fileName);
+                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                    $path = $file->move(public_path('change_requests'), $fileName);
 
-                        $storedFiles[] = public_path('change_requests/' . $fileName);
+                    $storedFiles[] = public_path('change_requests/' . $fileName);
 
-                        ChangeRequestFile::create([
-                            'change_request_id' => $change_request->id,
-                            'path' => 'change_requests/' . $fileName, // ruta relativa
-                            'original_name' => $file->getClientOriginalName(),
-                        ]);
+                    ChangeRequestFile::create([
+                        'change_request_id' => $change_request->id,
+                        'path' => 'change_requests/' . $fileName,
+                        'original_name' => $file->getClientOriginalName(),
+                    ]);
                 }
             }
 
-            // $files = $request->attachments;
-            // $files = $request->has('attachments') ? $request->attachments : [];
+            // reservas@hieloyaventura.com
+            Mail::to("enzo100amarilla@gmail.com")->send(
+                new ReservationRequestChange($request, $user, $storedFiles)
+            );
 
-            // Mail::to("reservas@hieloyaventura.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
-            Mail::to("enzo100amarilla@gmail.com")->send(new ReservationRequestChange($request, $user, $storedFiles));
+            DB::commit();
 
             return response(["message" => "Mail enviado con éxito!"], 200);
+
         } catch (\Throwable $th) {
-            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
-            // return $th->getMessage();
+
+            DB::rollBack();
+
+            Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
+
             return response(["message" => "Mail no enviado"], 500);
         }
     }
