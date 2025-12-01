@@ -57,7 +57,7 @@ class ReservationRequestChange extends Mailable
                 }
             }
         }
-
+        
         return $email;
     }
 }
