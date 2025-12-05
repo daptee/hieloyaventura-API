@@ -320,53 +320,65 @@ class AgencyUserController extends Controller
         try {
             $request->validate([
                 'id_solicitud' => 'required',
-                'pasajeros' => 'sometimes|array',
-                'pasajeros.*' => 'file|max:5120', // max in KB (5 MB)
-                'datos_adicionales' => 'sometimes|array',
-                'datos_adicionales.*' => 'file|max:5120',
             ]);
 
-            $pasajerosFiles = $request->file('pasajeros', []);
-            $adicionalesFiles = $request->file('datos_adicionales', []);
+            $storedFiles = [];
 
-            // Normalize single-file input to array (clients may send single file without [] notation)
-            if ($pasajerosFiles && !is_array($pasajerosFiles)) {
-                $pasajerosFiles = [$pasajerosFiles];
-            }
-            if ($adicionalesFiles && !is_array($adicionalesFiles)) {
-                $adicionalesFiles = [$adicionalesFiles];
-            }
+            // === FUNCION AUXILIAR ===
+            $saveFiles = function ($files, $prefix, &$storedFiles) {
+                if ($files && !is_array($files)) {
+                    $files = [$files];
+                }
 
-            // Build attachments array with file objects and custom names
-            $attachments = [];
-            foreach ($pasajerosFiles as $idx => $f) {
-                if (!$f) continue;
-                $ext = $f->getClientOriginalExtension();
-                $attachments[] = [
-                    'path' => $f->getRealPath(),
-                    'as' => 'pasajeros_' . ($idx + 1) . '.' . $ext,
-                    'mime' => $f->getClientMimeType(),
-                ];
-            }
+                $counter = 1;
 
-            foreach ($adicionalesFiles as $idx => $f) {
-                if (!$f) continue;
-                $ext = $f->getClientOriginalExtension();
-                $attachments[] = [
-                        'path' => $f->getRealPath(),
-                        'as' => 'adicionales_' . ($idx + 1) . '.' . $ext,
-                        'mime' => $f->getClientMimeType(),
-                ];
-            }
+                foreach ($files as $file) {
+                    if (!$file) continue;
 
-            Mail::to('enzo100amarilla@gmail.com')->send(new ReservationGroups($request->id_solicitud, $attachments));
+                    $ext = $file->getClientOriginalExtension();
+                    $fileName = "{$prefix}_{$counter}." . $ext;
+
+                    $path = $file->move(public_path('reservations_groups'), $fileName);
+
+                    $storedFiles[] = public_path("reservations_groups/" . $fileName);
+
+                    $counter++;
+                }
+            };
+
+            // === PASAJEROS ===
+            $saveFiles($request->file('pasajeros.files', []), 'pasajeros', $storedFiles);
+
+            // === DATOS ADICIONALES ===
+            $saveFiles($request->file('datos_adicionales.files', []), 'datos_adicionales', $storedFiles);
+
+
+            // === ENVIAR EMAIL ===
+            Mail::to("enzo100amarilla@gmail.com")->send(
+                new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles)
+            );
+
+            // === BORRAR ARCHIVOS (siempre al final) ===
+            foreach ($storedFiles as $file) {
+                if (file_exists($file)) {
+                    @unlink($file);
+                }
+            }
 
             return response()->json(['message' => 'Mail enviado con exito!'], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 400);
+
         } catch (\Throwable $th) {
-            Log::debug(['groups_by error: ' . $th->getMessage(), 'line' => $th->getLine()]);
-            // Log::error($th->getTraceAsString());
+            Log::error($th);
+
+            // BORRAR si falló algo
+            if (!empty($storedFiles)) {
+                foreach ($storedFiles as $file) {
+                    if (file_exists($file)) {
+                        @unlink($file);
+                    }
+                }
+            }
+
             return response()->json(['message' => 'Mail no enviado', 'error' => $th->getMessage()], 500);
         }
     }

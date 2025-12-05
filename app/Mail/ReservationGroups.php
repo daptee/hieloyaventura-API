@@ -11,7 +11,7 @@ class ReservationGroups extends Mailable
     use Queueable, SerializesModels;
 
     public $id_solicitud;
-    public $attachments;
+    public $files;
 
     /**
      * Create a new message instance.
@@ -19,10 +19,10 @@ class ReservationGroups extends Mailable
      * @param int $id_solicitud
      * @param array $attachments Array of ['path' => '/file/path', 'as' => 'custom_name', 'mime' => 'type']
      */
-    public function __construct($id_solicitud, $attachments = [])
+    public function __construct($id_solicitud, $files = [])
     {
         $this->id_solicitud = $id_solicitud;
-        $this->attachments = $attachments;
+        $this->files = $files;
     }
 
     /**
@@ -30,24 +30,26 @@ class ReservationGroups extends Mailable
      */
     public function build()
     {
-        $subject = "Reserva Agencias Grupos - Solicitud nro {$this->id_solicitud} - Archivos";
+        $email = $this->subject('Reserva Grupos - Solicitud: ' . $this->id_solicitud)
+            ->view('emails.reservation_groups');
 
-        $m = $this->subject($subject)
-            ->view('emails.reservation_groups')
-            ->with([
-                'id_solicitud' => $this->id_solicitud,
-            ]);
+        if (is_array($this->files)) {
+            foreach ($this->files as $filePath) {
+                if (file_exists($filePath)) {
 
-        // Attach files with custom names using file paths (simple, only 'path' entries)
-        foreach ($this->attachments as $att) {
-            if (is_array($att) && isset($att['path']) && file_exists($att['path'])) {
-                $m->attach($att['path'], [
-                    'as' => $att['as'] ?? basename($att['path']),
-                    'mime' => $att['mime'] ?? 'application/octet-stream',
-                ]);
+                    $mime = function_exists('mime_content_type')
+                        ? mime_content_type($filePath)
+                        : 'application/octet-stream';
+
+                    $email->attach($filePath, [
+                        'as' => basename($filePath),
+                        'mime' => $mime
+                    ]);
+                }
             }
         }
 
-        return $m;
+        return $email;
     }
+
 }

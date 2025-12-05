@@ -8,11 +8,10 @@
 </head>
 <body>
     <p>
-        Hola,
-
+        Hola, <br>
         Se deja en este correo los archivos adicionales adjuntados por el usuario en la generacion de grupos.
-
-        Muchas gracias,
+        <br><br>
+        Muchas gracias, <br>
         El equipo IT de Hielo & Aventura
     </p>
 </body>
