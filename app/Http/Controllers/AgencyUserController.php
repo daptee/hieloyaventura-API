@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ServiciosDiariosExport;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
+use App\Mail\ReservationGroups;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
@@ -311,6 +312,62 @@ class AgencyUserController extends Controller
             return $response->json();
         } else {
             return $response->throw();
+        }
+    }
+
+    public function groups_by(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_solicitud' => 'required',
+                'pasajeros' => 'sometimes|array',
+                'pasajeros.*' => 'file|max:5120', // max in KB (5 MB)
+                'datos_adicionales' => 'sometimes|array',
+                'datos_adicionales.*' => 'file|max:5120',
+            ]);
+
+            $pasajerosFiles = $request->file('pasajeros', []);
+            $adicionalesFiles = $request->file('datos_adicionales', []);
+
+            // Normalize single-file input to array (clients may send single file without [] notation)
+            if ($pasajerosFiles && !is_array($pasajerosFiles)) {
+                $pasajerosFiles = [$pasajerosFiles];
+            }
+            if ($adicionalesFiles && !is_array($adicionalesFiles)) {
+                $adicionalesFiles = [$adicionalesFiles];
+            }
+
+            // Build attachments array with file objects and custom names
+            $attachments = [];
+            foreach ($pasajerosFiles as $idx => $f) {
+                if (!$f) continue;
+                $ext = $f->getClientOriginalExtension();
+                $attachments[] = [
+                    'path' => $f->getRealPath(),
+                    'as' => 'pasajeros_' . ($idx + 1) . '.' . $ext,
+                    'mime' => $f->getClientMimeType(),
+                ];
+            }
+
+            foreach ($adicionalesFiles as $idx => $f) {
+                if (!$f) continue;
+                $ext = $f->getClientOriginalExtension();
+                $attachments[] = [
+                        'path' => $f->getRealPath(),
+                        'as' => 'adicionales_' . ($idx + 1) . '.' . $ext,
+                        'mime' => $f->getClientMimeType(),
+                ];
+            }
+
+            Mail::to('enzo100amarilla@gmail.com')->send(new ReservationGroups($request->id_solicitud, $attachments));
+
+            return response()->json(['message' => 'Mail enviado con exito!'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => 'Validation error', 'errors' => $e->errors()], 400);
+        } catch (\Throwable $th) {
+            Log::debug(['groups_by error: ' . $th->getMessage(), 'line' => $th->getLine()]);
+            // Log::error($th->getTraceAsString());
+            return response()->json(['message' => 'Mail no enviado', 'error' => $th->getMessage()], 500);
         }
     }
 
@@ -811,3 +868,4 @@ class AgencyUserController extends Controller
         ]);
     }
 }
+

@@ -398,6 +398,8 @@ Route::get('/agency/hya/Productos', [AgencyUserController::class, 'products']);
 Route::get('/agency/hya/TiposPasajeros', [AgencyUserController::class, 'passenger_types']);
 Route::get('/agency/hya/Naciones', [AgencyUserController::class, 'nationalities']);
 Route::get('/agency/hya/Hoteles', [AgencyUserController::class, 'hotels']);
+// Endpoint to receive group files from agencies and send them via email
+Route::post('agency/reservations/groups_by', [AgencyUserController::class, 'groups_by']);
 Route::get('/agency/hya/Turnos', [AgencyUserController::class, 'shifts']);
 Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation']);
 Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation']);
