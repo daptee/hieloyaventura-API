@@ -29,6 +29,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 class AgencyUserController extends Controller
 {
@@ -354,7 +355,7 @@ class AgencyUserController extends Controller
 
 
             // === ENVIAR EMAIL ===
-            Mail::to("enzo100amarilla@gmail.com")->send(
+            Mail::to(Config::get('services.notifications.reservation_groups_email'))->send(
                 new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles)
             );
 
