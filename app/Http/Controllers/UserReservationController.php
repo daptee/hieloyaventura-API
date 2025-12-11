@@ -360,10 +360,15 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 0;
                     $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
                     $userReservation->reservation_status_id = $status_id;
+                    
+                    // Incrementar contador de intentos fallidos
+                    $userReservation->confirmation_attempts = ($userReservation->confirmation_attempts ?? 0) + 1;
+                    
                     Log::debug([
                         "Response confirma reserva" => $request->response_cp,
                         "Comportamiento funcion" => $request->funcion_part,
-                        "Nro de reserva" => $userReservation->reservation_number
+                        "Nro de reserva" => $userReservation->reservation_number,
+                        "Intento de confirmacion" => $userReservation->confirmation_attempts
                     ]);
                     $last_status = UserReservationStatusHistory::where('user_reservation_id', $userReservation->id)->orderBy('created_at', 'DESC')->first();
                     // Email de notificacion error confirmacion inape
@@ -371,16 +376,16 @@ class UserReservationController extends Controller
                         if (isset($last_status)) {
                             if ($last_status->status_id != $status_id) {
                                 try {
-                                    Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
-                                    Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                    Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
+                                    Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                 } catch (Exception $error) {
                                     Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
                                 }
                             }
                         } else {
                             try {
-                                Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
-                                Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number));
+                                Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
+                                Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                             } catch (Exception $error) {
                                 Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
                             }
