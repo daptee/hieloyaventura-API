@@ -63,7 +63,8 @@ class UserReservation extends Model
         'notifications_accepted',
         'reservation_checked',
         'internal_closed',
-        'reason_cancellation'
+        'reason_cancellation',
+        'confirmation_attempts'
     ];
 
     public function user(): BelongsTo

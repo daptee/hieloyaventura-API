@@ -12,17 +12,18 @@ class NotificationErrorConfirmationInape extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $reservation_number, $subject;
+    public $reservation_number, $subject, $attempt;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($reservation_number)
+    public function __construct($reservation_number, $attempt = 1)
     {
         $this->reservation_number = $reservation_number;
-        $this->subject = "Reserva Nro $reservation_number - Error en confirmacion";
+        $this->attempt = $attempt;
+        $this->subject = "Reserva Nro $reservation_number - Error en confirmacion (Intento #{$attempt})";
     }
 
     /**

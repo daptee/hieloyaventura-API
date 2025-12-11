@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ServiciosDiariosExport;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
+use App\Mail\ReservationGroups;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
@@ -28,6 +29,7 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfReader;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 class AgencyUserController extends Controller
 {
@@ -311,6 +313,74 @@ class AgencyUserController extends Controller
             return $response->json();
         } else {
             return $response->throw();
+        }
+    }
+
+    public function groups_by(Request $request)
+    {
+        try {
+            $request->validate([
+                'id_solicitud' => 'required',
+            ]);
+
+            $storedFiles = [];
+
+            // === FUNCION AUXILIAR ===
+            $saveFiles = function ($files, $prefix, &$storedFiles) {
+                if ($files && !is_array($files)) {
+                    $files = [$files];
+                }
+
+                $counter = 1;
+
+                foreach ($files as $file) {
+                    if (!$file) continue;
+
+                    $ext = $file->getClientOriginalExtension();
+                    $fileName = "{$prefix}_{$counter}." . $ext;
+
+                    $path = $file->move(public_path('reservations_groups'), $fileName);
+
+                    $storedFiles[] = public_path("reservations_groups/" . $fileName);
+
+                    $counter++;
+                }
+            };
+
+            // === PASAJEROS ===
+            $saveFiles($request->file('pasajeros.files', []), 'pasajeros', $storedFiles);
+
+            // === DATOS ADICIONALES ===
+            $saveFiles($request->file('datos_adicionales.files', []), 'datos_adicionales', $storedFiles);
+
+
+            // === ENVIAR EMAIL ===
+            Mail::to(Config::get('services.notifications.reservation_groups_email'))->send(
+                new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles)
+            );
+
+            // === BORRAR ARCHIVOS (siempre al final) ===
+            foreach ($storedFiles as $file) {
+                if (file_exists($file)) {
+                    @unlink($file);
+                }
+            }
+
+            return response()->json(['message' => 'Mail enviado con exito!'], 200);
+
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            // BORRAR si falló algo
+            if (!empty($storedFiles)) {
+                foreach ($storedFiles as $file) {
+                    if (file_exists($file)) {
+                        @unlink($file);
+                    }
+                }
+            }
+
+            return response()->json(['message' => 'Mail no enviado', 'error' => $th->getMessage()], 500);
         }
     }
 
@@ -811,3 +881,4 @@ class AgencyUserController extends Controller
         ]);
     }
 }
+

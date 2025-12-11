@@ -43,4 +43,8 @@ return [
         //     'token' => env('MP_ACCESS_TOKEN_PROD')
         // ]
     ],
+
+    'notifications' => [
+        'reservation_groups_email' => env('RESERVATION_GROUPS_EMAIL', 'reservas@hieloyaventura.com'),
+    ],
 ];
