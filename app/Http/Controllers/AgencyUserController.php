@@ -321,6 +321,7 @@ class AgencyUserController extends Controller
         try {
             $request->validate([
                 'id_solicitud' => 'required',
+                'agency_name' => 'required'
             ]);
 
             $storedFiles = [];
@@ -353,10 +354,36 @@ class AgencyUserController extends Controller
             // === DATOS ADICIONALES ===
             $saveFiles($request->file('datos_adicionales.files', []), 'datos_adicionales', $storedFiles);
 
+            // === OBTENER NOMBRE USUARIO AGENCIA ===
+            $agencyUser = Auth::guard('agency')->user() ?? Auth::user() ?? null;
+            if (!$agencyUser) {
+                $request->validate([
+                    'user_name' => 'required',
+                    'user_last_name' => 'required'
+                ]);
+                $nombreUsuario = trim(($request->user_name ?? '') . ' ' . ($request->user_last_name ?? ''));
+            } else {
+                $nombreUsuario = trim(($agencyUser->name ?? '') . ' ' . ($agencyUser->last_name ?? ''));
+            }
+
+            // === PREPARAR DATOS DEL MAIL (usar lo que venga en el request o 'N/D') ===
+            $turno_fecha = $request->turno_fecha ?? null;
+            $turno_hora = $request->turno_hora ?? null;
+            $turno = trim(($turno_fecha ? $turno_fecha : '') . ' ' . ($turno_hora ? $turno_hora : ''));
+
+            $mailData = [
+                'nombreUsuario' => $nombreUsuario,
+                'nombreAgencia' => $request->agency_name,
+                'nombreExcursion' => $request->excursion_name ?? 'N/D',
+                'turno' => $turno ?: 'N/D',
+                'nombreReserva' => $request->nombre_reserva ?? 'N/D',
+                'cantPasajeros' => $request->cant_pasajeros ?? 'N/D',
+                'nroSolicitud' => $request->id_solicitud,
+            ];
 
             // === ENVIAR EMAIL ===
             Mail::to(Config::get('services.notifications.reservation_groups_email'))->send(
-                new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles)
+                new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles, $mailData)
             );
 
             // === BORRAR ARCHIVOS (siempre al final) ===

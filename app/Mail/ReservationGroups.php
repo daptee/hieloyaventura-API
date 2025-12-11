@@ -12,6 +12,7 @@ class ReservationGroups extends Mailable
 
     public $id_solicitud;
     public $files;
+    public $mailData;
 
     /**
      * Create a new message instance.
@@ -19,10 +20,11 @@ class ReservationGroups extends Mailable
      * @param int $id_solicitud
      * @param array $attachments Array of ['path' => '/file/path', 'as' => 'custom_name', 'mime' => 'type']
      */
-    public function __construct($id_solicitud, $files = [])
+    public function __construct($id_solicitud, $files = [], $mailData = [])
     {
         $this->id_solicitud = $id_solicitud;
         $this->files = $files;
+        $this->mailData = $mailData;
     }
 
     /**
