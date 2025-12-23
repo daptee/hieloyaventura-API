@@ -21,6 +21,7 @@
         Pasajeros: {{ $request->number_of_passengers }} <br>
         Hotel: {{ $data->is_transfer == 1 ? $data->hotel_name : "-" }} <br>
         Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }}
+        Precio: {{ $request->price ?? '-' }} <br>
 
         <br><br>
 
