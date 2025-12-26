@@ -492,6 +492,16 @@ class AgencyUserController extends Controller
                     $mailData
                 ));
 
+            if($agencyUser && $agencyUser->email){
+                Mail::to($agencyUser->email)
+                    ->send(new \App\Mail\ReservationGroupsClient(
+                        $request->id_solicitud,
+                        $storedFiles,
+                        $mailData
+                    ));
+            }
+
+
             // === LIMPIAR ARCHIVOS ===
             foreach ($storedFiles as $file) {
                 if (file_exists($file)) {
