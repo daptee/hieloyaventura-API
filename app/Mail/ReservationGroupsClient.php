@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ReservationGroups extends Mailable
+class ReservationGroupsClient extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,7 +33,7 @@ class ReservationGroups extends Mailable
     public function build()
     {
         $email = $this->subject('Reserva Grupos - Solicitud: ' . $this->id_solicitud)
-            ->view('emails.reservation_groups');
+            ->view('emails.reservation_groups_client');
 
         if (is_array($this->files)) {
             foreach ($this->files as $filePath) {

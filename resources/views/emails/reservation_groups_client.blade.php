@@ -14,23 +14,9 @@
 </head>
 <body>
 
-    @if (!empty($files) && count($files) > 0)
-        <p>
-            El usuario <strong>{{ $mailData['nombreUsuario'] ?? 'N/D' }}</strong>
-            de la agencia <strong>{{ $mailData['nombreAgencia'] ?? 'N/D' }}</strong>
-            ha adjuntado archivos correspondientes a la solicitud de grupos
-            nro <strong>{{ $id_solicitud }}</strong>.
-        </p>
-    @else
-        <p>
-            El usuario <strong>{{ $mailData['nombreUsuario'] ?? 'N/D' }}</strong>
-            de la agencia <strong>{{ $mailData['nombreAgencia'] ?? 'N/D' }}</strong>
-            ha enviado una solicitud de grupos
-            nro <strong>{{ $id_solicitud }}</strong>.
-        </p>
-        <br>
-        <p><strong>La solicitud de reservas no cuenta con datos sobre los pasajeros, ni archivos adjuntos.</strong></p>
-    @endif
+    <p>
+        Hola, te dejamos un resumen de la solicitud de grupos nro <strong>{{ $id_solicitud }}</strong> que has realizado.
+    </p>
 
     <p>
         Los datos de la solicitud son:<br><br>

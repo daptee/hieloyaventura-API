@@ -316,18 +316,116 @@ class AgencyUserController extends Controller
         }
     }
 
+    // public function groups_by(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'id_solicitud' => 'required',
+    //             'agency_name' => 'required'
+    //         ]);
+
+    //         $storedFiles = [];
+
+    //         // === FUNCION AUXILIAR ===
+    //         $saveFiles = function ($files, $prefix, &$storedFiles) {
+    //             if ($files && !is_array($files)) {
+    //                 $files = [$files];
+    //             }
+
+    //             $counter = 1;
+
+    //             foreach ($files as $file) {
+    //                 if (!$file) continue;
+
+    //                 $ext = $file->getClientOriginalExtension();
+    //                 $fileName = "{$prefix}_{$counter}." . $ext;
+
+    //                 $path = $file->move(public_path('reservations_groups'), $fileName);
+
+    //                 $storedFiles[] = public_path("reservations_groups/" . $fileName);
+
+    //                 $counter++;
+    //             }
+    //         };
+
+    //         // === PASAJEROS ===
+    //         $saveFiles($request->file('pasajeros.files', []), 'pasajeros', $storedFiles);
+
+    //         // === DATOS ADICIONALES ===
+    //         $saveFiles($request->file('datos_adicionales.files', []), 'datos_adicionales', $storedFiles);
+
+    //         // === OBTENER NOMBRE USUARIO AGENCIA ===
+    //         $agencyUser = Auth::guard('agency')->user() ?? Auth::user() ?? null;
+    //         if (!$agencyUser) {
+    //             $request->validate([
+    //                 'user_name' => 'required',
+    //                 'user_last_name' => 'required'
+    //             ]);
+    //             $nombreUsuario = trim(($request->user_name ?? '') . ' ' . ($request->user_last_name ?? ''));
+    //         } else {
+    //             $nombreUsuario = trim(($agencyUser->name ?? '') . ' ' . ($agencyUser->last_name ?? ''));
+    //         }
+
+    //         // === PREPARAR DATOS DEL MAIL (usar lo que venga en el request o 'N/D') ===
+    //         $turno_fecha = $request->turno_fecha ?? null;
+    //         $turno_hora = $request->turno_hora ?? null;
+    //         $turno = trim(($turno_fecha ? $turno_fecha : '') . ' ' . ($turno_hora ? $turno_hora : ''));
+
+    //         $mailData = [
+    //             'nombreUsuario' => $nombreUsuario,
+    //             'nombreAgencia' => $request->agency_name,
+    //             'nombreExcursion' => $request->excursion_name ?? 'N/D',
+    //             'turno' => $turno ?: 'N/D',
+    //             'nombreReserva' => $request->nombre_reserva ?? 'N/D',
+    //             'cantPasajeros' => $request->cant_pasajeros ?? 'N/D',
+    //             'nroSolicitud' => $request->id_solicitud,
+    //         ];
+
+    //         // === ENVIAR EMAIL ===
+    //         Mail::to(Config::get('services.notifications.reservation_groups_email'))->send(
+    //             new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles, $mailData)
+    //         );
+
+    //         // === BORRAR ARCHIVOS (siempre al final) ===
+    //         foreach ($storedFiles as $file) {
+    //             if (file_exists($file)) {
+    //                 @unlink($file);
+    //             }
+    //         }
+
+    //         return response()->json(['message' => 'Mail enviado con exito!'], 200);
+
+    //     } catch (\Throwable $th) {
+    //         Log::error($th);
+
+    //         // BORRAR si falló algo
+    //         if (!empty($storedFiles)) {
+    //             foreach ($storedFiles as $file) {
+    //                 if (file_exists($file)) {
+    //                     @unlink($file);
+    //                 }
+    //             }
+    //         }
+
+    //         return response()->json(['message' => 'Mail no enviado', 'error' => $th->getMessage()], 500);
+    //     }
+    // }
+
     public function groups_by(Request $request)
     {
+        $storedFiles = [];
+
         try {
             $request->validate([
                 'id_solicitud' => 'required',
+                'agency_name'  => 'required',
             ]);
 
-            $storedFiles = [];
-
-            // === FUNCION AUXILIAR ===
+            // === FUNCION AUXILIAR PARA GUARDAR ARCHIVOS ===
             $saveFiles = function ($files, $prefix, &$storedFiles) {
-                if ($files && !is_array($files)) {
+                if (!$files) return;
+
+                if (!is_array($files)) {
                     $files = [$files];
                 }
 
@@ -339,48 +437,94 @@ class AgencyUserController extends Controller
                     $ext = $file->getClientOriginalExtension();
                     $fileName = "{$prefix}_{$counter}." . $ext;
 
-                    $path = $file->move(public_path('reservations_groups'), $fileName);
+                    $file->move(public_path('reservations_groups'), $fileName);
 
-                    $storedFiles[] = public_path("reservations_groups/" . $fileName);
-
+                    $storedFiles[] = public_path("reservations_groups/{$fileName}");
                     $counter++;
                 }
             };
 
-            // === PASAJEROS ===
-            $saveFiles($request->file('pasajeros.files', []), 'pasajeros', $storedFiles);
+            // === OBTENER ARCHIVOS SIN ROMPER ===
+            $pasajerosFiles = $request->hasFile('pasajeros.files')
+                ? $request->file('pasajeros.files')
+                : [];
 
-            // === DATOS ADICIONALES ===
-            $saveFiles($request->file('datos_adicionales.files', []), 'datos_adicionales', $storedFiles);
+            $datosAdicionalesFiles = $request->hasFile('datos_adicionales.files')
+                ? $request->file('datos_adicionales.files')
+                : [];
 
+            // === GUARDAR ARCHIVOS (SI EXISTEN) ===
+            $saveFiles($pasajerosFiles, 'pasajeros', $storedFiles);
+            $saveFiles($datosAdicionalesFiles, 'datos_adicionales', $storedFiles);
 
-            // === ENVIAR EMAIL ===
-            Mail::to(Config::get('services.notifications.reservation_groups_email'))->send(
-                new \App\Mail\ReservationGroups($request->id_solicitud, $storedFiles)
+            // === USUARIO ===
+            $agencyUser = Auth::guard('agency')->user() ?? Auth::user();
+
+            if ($agencyUser) {
+                $nombreUsuario = trim(($agencyUser->name ?? '') . ' ' . ($agencyUser->last_name ?? ''));
+            } else {
+                $nombreUsuario = trim(
+                    ($request->user_name ?? 'N/D') . ' ' . ($request->user_last_name ?? '')
+                );
+            }
+
+            // === TURNO ===
+            $turno = trim(
+                ($request->turno_fecha ?? '') . ' ' . ($request->turno_hora ?? '')
             );
 
-            // === BORRAR ARCHIVOS (siempre al final) ===
+            // === DATA MAIL (todo opcional) ===
+            $mailData = [
+                'nombreUsuario'   => $nombreUsuario ?: 'N/D',
+                'nombreAgencia'   => $request->agency_name,
+                'nombreExcursion' => $request->excursion_name ?? 'N/D',
+                'turno'           => $turno ?: 'N/D',
+                'nombreReserva'   => $request->nombre_reserva ?? 'N/D',
+                'cantPasajeros'   => $request->cant_pasajeros ?? 'N/D',
+                'nroSolicitud'    => $request->id_solicitud,
+            ];
+
+            // === ENVIAR MAIL (CON O SIN ARCHIVOS) ===
+            Mail::to(config('services.notifications.reservation_groups_email'))
+                ->send(new \App\Mail\ReservationGroups(
+                    $request->id_solicitud,
+                    $storedFiles,
+                    $mailData
+                ));
+
+            if($agencyUser && $agencyUser->email){
+                Mail::to($agencyUser->email)
+                    ->send(new \App\Mail\ReservationGroupsClient(
+                        $request->id_solicitud,
+                        $storedFiles,
+                        $mailData
+                    ));
+            }
+
+
+            // === LIMPIAR ARCHIVOS ===
             foreach ($storedFiles as $file) {
                 if (file_exists($file)) {
                     @unlink($file);
                 }
             }
 
-            return response()->json(['message' => 'Mail enviado con exito!'], 200);
+            return response()->json(['message' => 'Mail enviado con éxito'], 200);
 
         } catch (\Throwable $th) {
+
             Log::error($th);
 
-            // BORRAR si falló algo
-            if (!empty($storedFiles)) {
-                foreach ($storedFiles as $file) {
-                    if (file_exists($file)) {
-                        @unlink($file);
-                    }
+            foreach ($storedFiles as $file) {
+                if (file_exists($file)) {
+                    @unlink($file);
                 }
             }
 
-            return response()->json(['message' => 'Mail no enviado', 'error' => $th->getMessage()], 500);
+            return response()->json([
+                'message' => 'Mail no enviado',
+                'error'   => $th->getMessage()
+            ], 500);
         }
     }
 
