@@ -21,7 +21,9 @@
         Pasajeros: {{ $request->number_of_passengers }} <br>
         Hotel: {{ $data->is_transfer == 1 ? $data->hotel_name : "-" }} <br>
         Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }} <br>
-        Precio: {{ $request->price ?? '-' }}
+        @if(isset($request->price))
+            Precio: {{ $request->price }}
+        @endif
 
         <br><br>
         Tarifa vigente al momento de confirmar la reserva. Puede sufrir cambios sin previo aviso.

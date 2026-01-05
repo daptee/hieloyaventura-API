@@ -24,7 +24,9 @@
         <strong>Excursión:</strong> {{ $mailData['nombreExcursion'] ?? 'N/D' }}<br>
         <strong>Turno:</strong> {{ $mailData['turno'] ?? 'N/D' }}<br>
         <strong>Nombre de la reserva:</strong> {{ $mailData['nombreReserva'] ?? 'N/D' }}<br>
-        <strong>Cantidad de pasajeros:</strong> {{ $mailData['cantPasajeros'] ?? 'N/D' }}
+        <strong>Cantidad de pasajeros:</strong> {{ $mailData['cantPasajeros'] ?? 'N/D' }}<br>
+        <strong>Traslado:</strong> {{ $mailData['traslado'] ?? 'N/D' }}<br>
+        <strong>Hotel:</strong> {{ $mailData['hotel'] ?? 'N/D' }}
     </p>
 
     <p>

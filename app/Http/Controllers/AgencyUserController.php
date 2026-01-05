@@ -482,6 +482,8 @@ class AgencyUserController extends Controller
                 'nombreReserva'   => $request->nombre_reserva ?? 'N/D',
                 'cantPasajeros'   => $request->cant_pasajeros ?? 'N/D',
                 'nroSolicitud'    => $request->id_solicitud,
+                'traslado'       => $request->traslado ?? 'N/D',
+                'hotel'         => $request->hotel ?? 'N/D',
             ];
 
             // === ENVIAR MAIL (CON O SIN ARCHIVOS) ===
