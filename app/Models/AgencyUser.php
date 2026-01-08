@@ -31,9 +31,10 @@ class AgencyUser extends Authenticatable implements JWTSubject
     ];
 
     const SHOW = [
-        'user_type'
+        'user_type',
+        'modules.agency_module'
     ];
-    
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -46,6 +47,11 @@ class AgencyUser extends Authenticatable implements JWTSubject
     public function user_type()
     {
         return $this->hasOne(AgencyUserType::class, 'id', 'agency_user_type_id');
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(AgencyUserModule::class, 'agency_user_id', 'id');
     }
 
     public static function getAllDataUser($id)

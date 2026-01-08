@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        Artisan::call('db:seed --class=AdminUserSeeder');
+        // Artisan::call('db:seed --class=AdminUserSeeder');
+        $this->call(AgencyModuleSeeder::class);
     }
 }

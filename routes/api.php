@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgencyModuleController;
 use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharacteristicController;
@@ -205,7 +206,7 @@ Route::get('test-mail', function () {
         Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
         return 'Mail enviado';
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         return 'Mail no enviado';
     }
 });
@@ -216,7 +217,7 @@ Route::post('testeando-curl-post', function () {
         Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
         return 'Mail enviado';
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         return 'Mail no enviado';
     }
 });
@@ -234,7 +235,7 @@ Route::post('process-cv', function (Request $request) {
         ]);
 
         $cv = $request->file('file');
-        $fileName   = time() . '.' . $cv->getClientOriginalExtension();
+        $fileName = time() . '.' . $cv->getClientOriginalExtension();
 
         Storage::putFileAs('public/process-cv', $cv, $fileName);
 
@@ -244,7 +245,7 @@ Route::post('process-cv', function (Request $request) {
 
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         // return $th->getMessage();
         return 'Mail no enviado';
     }
@@ -263,13 +264,13 @@ Route::post('contact-form', function (Request $request) {
     try {
         $request->validate([
             'nombre_y_apellido' => 'required',
-            'email'             => 'required',
-            'mensaje'           => 'required'
+            'email' => 'required',
+            'mensaje' => 'required'
         ]);
         Mail::to("info@hieloyaventura.com")->send(new ContactForm($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         // return $th->getMessage();
         return 'Mail no enviado';
     }
@@ -278,17 +279,17 @@ Route::post('contact-form', function (Request $request) {
 Route::post('online-return', function (Request $request) {
     try {
         $request->validate([
-            'nro_reserva'       => 'required',
+            'nro_reserva' => 'required',
             'nombre_y_apellido' => 'required',
-            'email'             => 'required',
-            'telefono'          => 'required',
-            'mensaje'           => 'required'
+            'email' => 'required',
+            'telefono' => 'required',
+            'mensaje' => 'required'
         ]);
 
         Mail::to("online@hieloyaventura.com")->send(new OnlineReturn($request));
         return 'Mail enviado con exito!';
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         // return $th->getMessage();
         return 'Mail no enviado';
     }
@@ -344,7 +345,7 @@ Route::get('curl/test-api-cancelar/reserva', function () {
 
         return "entre en try, resp: $resp";
     } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
         // return $th->getMessage();
         return "entre en catch";
     }
@@ -378,6 +379,7 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 Route::get('agency/users', [AgencyUserController::class, 'index']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
 Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
+Route::get('agency/modules', [AgencyModuleController::class, 'index']);
 Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.verify']);
 
 // Agency user reservations
@@ -426,7 +428,7 @@ Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'd
 //         'msg' => "Hola. Enviamos este correo para notificarle que su compra de la excursion nro 12345, no esta confirmada. Para ello, debe terminar de completar los datos de los pasajeros de la misma. Puede realizarlo desde el siguiente link:
 
 //                 IMPORTANTEe: Recuerde que si no completa estos datos, su reserva puede ser cancelada.
-                  
+
 //                 Muchas gracias. El equipo de Hielo & Aventura."
 //     ];
 //     return new NotificacionPasajero($r_10_min_data);

@@ -7,6 +7,7 @@ use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Mail\ReservationGroups;
 use App\Models\AgencyUser;
+use App\Models\AgencyUserModule;
 use App\Models\AgencyUserSellerLoad;
 use App\Models\AgencyUserType;
 use App\Models\Audit;
@@ -84,6 +85,15 @@ class AgencyUserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
+        if ($request->modules) {
+            foreach ($request->modules as $module_id) {
+                AgencyUserModule::create([
+                    'agency_user_id' => $user->id,
+                    'agency_module_id' => $module_id
+                ]);
+            }
+        }
+
         $user = AgencyUser::getAllDataUser($user->id);
 
         return response(compact("user"));
@@ -117,6 +127,16 @@ class AgencyUserController extends Controller
             $user->password = Hash::make($request->password);
 
         $user->save();
+
+        if ($request->modules) {
+            AgencyUserModule::where('agency_user_id', $id)->delete();
+            foreach ($request->modules as $module_id) {
+                AgencyUserModule::create([
+                    'agency_user_id' => $user->id,
+                    'agency_module_id' => $module_id
+                ]);
+            }
+        }
 
         $user = AgencyUser::getAllDataUser($user->id);
         $message = "Usuario actualizado con exito";
@@ -418,12 +438,13 @@ class AgencyUserController extends Controller
         try {
             $request->validate([
                 'id_solicitud' => 'required',
-                'agency_name'  => 'required',
+                'agency_name' => 'required',
             ]);
 
             // === FUNCION AUXILIAR PARA GUARDAR ARCHIVOS ===
             $saveFiles = function ($files, $prefix, &$storedFiles) {
-                if (!$files) return;
+                if (!$files)
+                    return;
 
                 if (!is_array($files)) {
                     $files = [$files];
@@ -432,7 +453,8 @@ class AgencyUserController extends Controller
                 $counter = 1;
 
                 foreach ($files as $file) {
-                    if (!$file) continue;
+                    if (!$file)
+                        continue;
 
                     $ext = $file->getClientOriginalExtension();
                     $fileName = "{$prefix}_{$counter}." . $ext;
@@ -475,15 +497,15 @@ class AgencyUserController extends Controller
 
             // === DATA MAIL (todo opcional) ===
             $mailData = [
-                'nombreUsuario'   => $nombreUsuario ?: 'N/D',
-                'nombreAgencia'   => $request->agency_name,
+                'nombreUsuario' => $nombreUsuario ?: 'N/D',
+                'nombreAgencia' => $request->agency_name,
                 'nombreExcursion' => $request->excursion_name ?? 'N/D',
-                'turno'           => $turno ?: 'N/D',
-                'nombreReserva'   => $request->nombre_reserva ?? 'N/D',
-                'cantPasajeros'   => $request->cant_pasajeros ?? 'N/D',
-                'nroSolicitud'    => $request->id_solicitud,
-                'traslado'       => $request->traslado ?? 'N/D',
-                'hotel'         => $request->hotel ?? 'N/D',
+                'turno' => $turno ?: 'N/D',
+                'nombreReserva' => $request->nombre_reserva ?? 'N/D',
+                'cantPasajeros' => $request->cant_pasajeros ?? 'N/D',
+                'nroSolicitud' => $request->id_solicitud,
+                'traslado' => $request->traslado ?? 'N/D',
+                'hotel' => $request->hotel ?? 'N/D',
             ];
 
             // === ENVIAR MAIL (CON O SIN ARCHIVOS) ===
@@ -494,7 +516,7 @@ class AgencyUserController extends Controller
                     $mailData
                 ));
 
-            if($agencyUser && $agencyUser->email){
+            if ($agencyUser && $agencyUser->email) {
                 Mail::to($agencyUser->email)
                     ->send(new \App\Mail\ReservationGroupsClient(
                         $request->id_solicitud,
@@ -525,7 +547,7 @@ class AgencyUserController extends Controller
 
             return response()->json([
                 'message' => 'Mail no enviado',
-                'error'   => $th->getMessage()
+                'error' => $th->getMessage()
             ], 500);
         }
     }
@@ -755,7 +777,7 @@ class AgencyUserController extends Controller
             $requests = ChangeRequest::where('user_reservation_id', $reservation->id)->with(['reservation', 'user', 'files'])->get();
 
             return response()->json([
-                "data" =>$requests
+                "data" => $requests
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
