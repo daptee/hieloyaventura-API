@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,12 @@
         }
     </style>
 </head>
+
 <body>
 
     <p>
-        Hola, te dejamos un resumen de la solicitud de grupos nro <strong>{{ $id_solicitud }}</strong> que has realizado.
+        Hola, te dejamos un resumen de la solicitud de grupos nro <strong>{{ $id_solicitud }}</strong> que has
+        realizado.
     </p>
 
     <p>
@@ -27,6 +30,9 @@
         <strong>Cantidad de pasajeros:</strong> {{ $mailData['cantPasajeros'] ?? 'N/D' }}<br>
         <strong>Traslado:</strong> {{ $mailData['traslado'] ?? 'N/D' }}<br>
         <strong>Hotel:</strong> {{ $mailData['hotel'] ?? 'N/D' }}
+        <br><br>
+        En breve recibirás en tu correo electrónico la confirmación de tu solicitud de grupos, donde se indicará el
+        número de reserva confirmada y el turno asignado.
     </p>
 
     <p>
@@ -35,4 +41,5 @@
     </p>
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\AgencyModuleController;
 use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\AuthController;
@@ -105,6 +106,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
     Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller']);
+    Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
@@ -112,6 +114,9 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('tickets', [TicketController::class, 'store']);
     Route::post('tickets/message', [TicketController::class, 'message']);
     Route::post('tickets/change/status', [TicketController::class, 'change_status']);
+
+    Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
+    Route::post('agencies', [AgencyController::class, 'store']);
 });
 
 Route::get('tickets', [TicketController::class, 'index']);
@@ -140,6 +145,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::post('/CreaSolicitudAG', 'CreaSolicitudAG');
     Route::get('/SolicitudesAG', 'SolicitudesAG');
     Route::get('/ValidaCupon', 'ValidaCupon');
+    Route::get('/CtaCteAG', 'CtaCteAG');
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
@@ -415,6 +421,17 @@ Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG
 Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
 Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);
 Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
+
+// External Agency HyA routes
+Route::prefix('agency/hya')->controller(App\Http\Controllers\AgencyExternalHyAController::class)->group(function () {
+    Route::get('/disponibilidad', 'getAvailability');
+    Route::get('/hoteles', 'getHotels');
+    Route::get('/nacionalidades', 'getNationalities');
+    Route::get('/reserva/consulta', 'getReservation');
+    Route::post('/reserva/generar', 'createReservation');
+    Route::post('/reserva/editar', 'editReservation');
+    Route::post('/reserva/cancelar', 'cancelReservation');
+});
 
 Route::get('/users/types', [UserController::class, 'types_user']);
 

@@ -59,6 +59,16 @@ class AgencyUserController extends Controller
         return response(compact("users"));
     }
 
+    public function get_users_no_admin($agency_code)
+    {
+        $users = $this->model::with($this->model::SHOW)
+            ->where('agency_user_type_id', '!=', AgencyUserType::ADMIN)
+            ->where('agency_code', $agency_code)
+            ->get();
+
+        return response(compact("users"));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -484,10 +494,12 @@ class AgencyUserController extends Controller
 
             if ($agencyUser) {
                 $nombreUsuario = trim(($agencyUser->name ?? '') . ' ' . ($agencyUser->last_name ?? ''));
+                $mailUsuario = trim(($agencyUser->email ?? ''));
             } else {
                 $nombreUsuario = trim(
                     ($request->user_name ?? 'N/D') . ' ' . ($request->user_last_name ?? '')
                 );
+                $mailUsuario = trim(($request->user_email ?? ''));
             }
 
             // === TURNO ===
@@ -498,6 +510,7 @@ class AgencyUserController extends Controller
             // === DATA MAIL (todo opcional) ===
             $mailData = [
                 'nombreUsuario' => $nombreUsuario ?: 'N/D',
+                'emailUsuarioAgencia' => $mailUsuario ?: 'N/D',
                 'nombreAgencia' => $request->agency_name,
                 'nombreExcursion' => $request->excursion_name ?? 'N/D',
                 'turno' => $turno ?: 'N/D',

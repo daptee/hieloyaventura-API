@@ -252,4 +252,19 @@ class HyAController extends Controller
             return $response->throw();
         }
     }
+
+    public function CtaCteAG(Request $request)
+    {
+        $url = $this->get_url();
+        $params = $request->all();
+        $query = http_build_query($params);
+        $response = Http::get("$url/CtaCteAG?$query");
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
 }
