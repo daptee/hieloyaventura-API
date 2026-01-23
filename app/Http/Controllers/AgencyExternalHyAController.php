@@ -41,19 +41,17 @@ class AgencyExternalHyAController extends Controller
             return ['error' => 'Invalid API Key', 'status' => 401];
         }
 
-        $generalConfig = GeneralConfigurations::first();
-        if (!$generalConfig) {
-            return ['error' => 'General configurations not found', 'status' => 500];
+        if (!$agency->configurations) {
+            return ['error' => 'Agency permissions not found', 'status' => 500];
         }
 
-        $configurations = json_decode($generalConfig->configurations, true);
-        $agencyId = (string) $agency->id;
+        $configurations = $agency->configurations;
 
-        if (!isset($configurations[$agencyId])) {
+        if (!isset($configurations[$request->excursion_id])) {
             return ['error' => 'Agency permissions not configured', 'status' => 403];
         }
 
-        $permissions = $configurations[$agencyId];
+        $permissions = $configurations[$request->excursion_id];
 
         // Check permission by path like 'disponibilty' or 'reservations.create'
         $keys = explode('.', $permissionPath);
@@ -79,13 +77,24 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $url = $this->get_url();
-        $response = Http::get("$url/Turnos", $request->all());
+        // $url = $this->get_url();
+        // $url = $this->get_url();
+        $agencyUserController = new AgencyUserController();
 
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
+        $internalRequest = new Request();
+        $internalRequest->replace([
+            'FECHAD' => $request->date_from,
+            'FECHAH' => $request->date_to,
+            'PRD' => $request->excursion_id,
+        ]);
+
+        try {
+            $response = $agencyUserController->TurnosAG($internalRequest);
+            return $response;
+        } catch (\Illuminate\Http\Client\RequestException $e) {
+            return response()->json($e->response->json(), $e->response->status());
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()], 500);
         }
     }
 
