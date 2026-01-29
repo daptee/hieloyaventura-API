@@ -122,7 +122,7 @@ class AgencyExternalHyAController extends Controller
 
     public function getReservation(Request $request)
     {
-        $validation = $this->validateAgency($request, 'reservations.create');
+        $validation = $this->validateAgency($request, 'reservations.show');
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
@@ -131,7 +131,7 @@ class AgencyExternalHyAController extends Controller
         }
 
         return $this->callAgencyUserController('ReservaxCodigo', [
-            'reservation_number' => $request->reservation_number,
+            'RSV' => $request->reservation_number,
         ]);
     }
 
