@@ -133,7 +133,7 @@ class UserReservationController extends Controller
                 try {
                     Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass, $datos['language_id']));
                 } catch (\Throwable $th) {
-                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                    Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                 }
                 //
                 //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email']
@@ -197,9 +197,12 @@ class UserReservationController extends Controller
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
-        // validar token -> agency
-        if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
-            return response(["message" => "agency_id invalido"], 400);
+        if (!isset($datos['X-API-KEY'])) {
+            // validar token -> agency
+            if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
+                return response(["message" => "agency_id invalido"], 400);
+
+        }
 
         try {
             DB::beginTransaction();
@@ -207,7 +210,7 @@ class UserReservationController extends Controller
             $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
             $newUserReservation->user_id = null;
             $newUserReservation->agency_id = $request->agency_code;
-            $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id;
+            $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id ?? null;
             $newUserReservation->language_id = 1;
             $newUserReservation->save();
 
@@ -231,7 +234,12 @@ class UserReservationController extends Controller
         $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
 
-        return response(compact("message", "newUserReservation"));
+        // return response(compact("message", "newUserReservation"));
+        return response()->json([
+            'message' => $message,
+            'newUserReservation' => $newUserReservation
+        ], 200);
+
     }
 
     public function path_pdf_reservation_agency(Request $request)
@@ -339,8 +347,8 @@ class UserReservationController extends Controller
                     $userReservation->reservation_status_id = $status_id;
 
                     RejectedReservation::create([
-                        'user_reservation_id'   => $userReservation->id,
-                        'data'                  => $datos['payment_details']
+                        'user_reservation_id' => $userReservation->id,
+                        'data' => $datos['payment_details']
                     ]);
                     break;
                 case ReservationStatus::AUTOMATIC_CANCELED:
@@ -360,10 +368,10 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 0;
                     $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
                     $userReservation->reservation_status_id = $status_id;
-                    
+
                     // Incrementar contador de intentos fallidos
                     $userReservation->confirmation_attempts = ($userReservation->confirmation_attempts ?? 0) + 1;
-                    
+
                     Log::debug([
                         "Response confirma reserva" => $request->response_cp,
                         "Comportamiento funcion" => $request->funcion_part,
@@ -379,7 +387,7 @@ class UserReservationController extends Controller
                                     Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                     Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                 } catch (Exception $error) {
-                                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()], true));
                                 }
                             }
                         } else {
@@ -387,11 +395,11 @@ class UserReservationController extends Controller
                                 Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                 Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                             } catch (Exception $error) {
-                                Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                                Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()], true));
                             }
                         }
                     } catch (\Throwable $th) {
-                        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                     }
                     //
 

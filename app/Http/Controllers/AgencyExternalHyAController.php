@@ -2,43 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agency;
-use App\Models\GeneralConfigurations;
-use App\Models\UserReservation;
+use App\Http\Requests\StorePaxRequest;
+use App\Http\Requests\StoreUserReservationAgencyRequest;
+use App\Http\Requests\StoreUserReservationRequest;
+use App\Mail\ConfirmationReservation;
 use App\Models\AgencyUser;
 use App\Models\ChangeRequest;
-use App\Models\ChangeRequestFile;
-use App\Mail\ReservationRequestChange;
+use App\Models\PaxFile;
+use App\Models\ReservationStatus;
+use App\Models\UserReservation;
+use App\Models\UserReservationStatusHistory;
+use Auth;
+use DB;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
+use App\Models\Pax;
 
 class AgencyExternalHyAController extends Controller
 {
-    private function get_url()
-    {
-        $environment = config("app.environment");
-        if ($environment == "DEV") {
-            return "https://apihya.hieloyaventura.com/apihya_dev";
-        } else {
-            return "https://apihya.hieloyaventura.com/apihya";
-        }
-    }
-
+    /**
+     * Validate agency permissions for a specific action
+     * The agency is already authenticated by the middleware
+     */
     private function validateAgency(Request $request, $permissionPath)
     {
-        $apiKey = $request->header('X-API-KEY') ?? $request->input('api_key');
-
-        if (!$apiKey) {
-            return ['error' => 'API Key is required', 'status' => 401];
-        }
-
-        $agency = Agency::where('api_key', $apiKey)->first();
+        $agency = $request->input('authenticated_agency');
 
         if (!$agency) {
-            return ['error' => 'Invalid API Key', 'status' => 401];
+            return ['error' => 'Agency not authenticated', 'status' => 500];
         }
 
         if (!$agency->configurations) {
@@ -47,11 +40,13 @@ class AgencyExternalHyAController extends Controller
 
         $configurations = $agency->configurations;
 
-        if (!isset($configurations[$request->excursion_id])) {
+        $excursion_id = $request->excursion_id ?? $request->excurtion_id;
+
+        if (!isset($configurations[$excursion_id])) {
             return ['error' => 'Agency permissions not configured', 'status' => 403];
         }
 
-        $permissions = $configurations[$request->excursion_id];
+        $permissions = $configurations[$excursion_id];
 
         // Check permission by path like 'disponibilty' or 'reservations.create'
         $keys = explode('.', $permissionPath);
@@ -71,25 +66,21 @@ class AgencyExternalHyAController extends Controller
         return ['agency' => $agency];
     }
 
-    public function getAvailability(Request $request)
+    /**
+     * Helper method to call AgencyUserController methods with consistent error handling
+     */
+    private function callAgencyUserController($method, $params = null)
     {
-        $validation = $this->validateAgency($request, 'disponibilty');
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
-        // $url = $this->get_url();
-        // $url = $this->get_url();
         $agencyUserController = new AgencyUserController();
 
-        $internalRequest = new Request();
-        $internalRequest->replace([
-            'FECHAD' => $request->date_from,
-            'FECHAH' => $request->date_to,
-            'PRD' => $request->excursion_id,
-        ]);
-
         try {
-            $response = $agencyUserController->TurnosAG($internalRequest);
+            if ($params === null) {
+                $response = $agencyUserController->$method();
+            } else {
+                $internalRequest = new Request();
+                $internalRequest->replace($params);
+                $response = $agencyUserController->$method($internalRequest);
+            }
             return $response;
         } catch (\Illuminate\Http\Client\RequestException $e) {
             return response()->json($e->response->json(), $e->response->status());
@@ -98,22 +89,26 @@ class AgencyExternalHyAController extends Controller
         }
     }
 
-    public function getHotels(Request $request)
+    public function getAvailability(Request $request)
     {
-        // Hoteles and Nationalities might not have explicit permissions in the example, 
-        // but we'll check 'disponibilty' as a base or just allow if agency is valid.
         $validation = $this->validateAgency($request, 'disponibilty');
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $url = $this->get_url();
-        $response = Http::get("$url/Hoteles");
+        return $this->callAgencyUserController('TurnosAG', [
+            'FECHAD' => $request->date_from,
+            'FECHAH' => $request->date_to,
+            'PRD' => $request->excursion_id,
+        ]);
+    }
 
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
-        }
+    public function getHotels(Request $request)
+    {
+        $validation = $this->validateAgency($request, 'disponibilty');
+        if (isset($validation['error']))
+            return response()->json(['message' => $validation['error']], $validation['status']);
+
+        return $this->callAgencyUserController('hotels');
     }
 
     public function getNationalities(Request $request)
@@ -122,49 +117,173 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $url = $this->get_url();
-        $response = Http::get("$url/Naciones");
-
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
-        }
+        return $this->callAgencyUserController('nationalities');
     }
 
     public function getReservation(Request $request)
-    {
-        $validation = $this->validateAgency($request, 'reservations.create'); // Or a generic 'reservations.view' if it existed, but using create for now
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
-        if (!$request->has('RSV')) {
-            return response()->json(['message' => 'RSV parameter is required'], 400);
-        }
-
-        $url = $this->get_url();
-        $response = Http::get("$url/ReservaxCodigo", ['RSV' => $request->RSV]);
-
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
-        }
-    }
-
-    public function createReservation(Request $request)
     {
         $validation = $this->validateAgency($request, 'reservations.create');
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $url = $this->get_url();
-        $response = Http::post("$url/IniciaReserva", $request->all());
+        if (!$request->has('reservation_number')) {
+            return response()->json(['message' => 'reservation_number parameter is required'], 400);
+        }
 
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
+        return $this->callAgencyUserController('ReservaxCodigo', [
+            'reservation_number' => $request->reservation_number,
+        ]);
+    }
+
+    public function createReservation(Request $request)
+    {
+        $validation = $this->validateAgency($request, 'reservations.create');
+        if (isset($validation['error'])) {
+            return response()->json(['message' => $validation['error']], $validation['status']);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            /** ---------------------------------
+             * 1️⃣ INICIAR RESERVA EN HYA
+             * ---------------------------------*/
+            // $startResponse = $this->callAgencyUserController(
+            //     'start_reservation',
+            //     [
+            //         'TUR' => $request->date . '+' . $request->turn,
+            //         'PSJ' => count($request->paxs_hya),
+            //         'PRD' => $request->excursion_id,
+            //         'TRF' => $request->has_transfer ? 'S' : 'N',
+            //         'AG' => $request->agency_id,
+            //     ]
+            // );
+
+            // if ($startResponse->getStatusCode() !== 200) {
+            //     return $startResponse;
+            // }
+
+            // $startData = $startResponse->getData(true);
+            // $reservationNumber = $startData['RSV'];
+            // $reservationNumber = '1234567';
+
+            /** ---------------------------------
+             * 2️⃣ CREAR USER_RESERVATION
+             * ---------------------------------*/
+            $userReservationRequest = new StoreUserReservationAgencyRequest();
+            // $userReservationRequest->replace(array_merge(
+            //     $request->all(),
+            //     [
+            //         'reservation_number' => $reservationNumber,
+            //         'date' => $request->date,
+            //         'turn' => $request->turn,
+            //     ]
+            // ));
+            $userReservationRequest->replace($request->all());
+
+            $userReservationController = new \App\Http\Controllers\UserReservationController();
+            $userReservationResponse = $userReservationController->store_type_agency($userReservationRequest);
+
+            // return $userReservationResponse;
+            if ($userReservationResponse->getStatusCode() !== 200) {
+                DB::rollBack();
+                return $userReservationResponse;
+            }
+
+            // dd($userReservationResponse);
+            $data = $userReservationResponse->getData(true); // true = array
+            $userReservation = $data['newUserReservation'];
+
+            /** ---------------------------------
+             * 3️⃣ CONFIRMAR RESERVA EN HYA
+             * ---------------------------------*/
+            // $confirmReservationResponse = $this->callAgencyUserController(
+            //     'confirm_reservation',
+            //     [
+            //         'RSV' => $reservationNumber,
+            //         'ORD' => $userReservation->id,
+            //         'OBSV' => $request->confirm_data['OBSV'] ?? '',
+            //         'TELEFONO' => $request->confirm_data['TELEFONO'] ?? '',
+            //         'T1' => 1,
+            //         'T2' => 0,
+            //         'T3' => 0,
+            //         'T4' => 0,
+            //         'T5' => 0
+            //     ]
+            // );
+
+            // if ($confirmReservationResponse->getStatusCode() !== 200) {
+            //     DB::rollBack();
+            //     return $confirmReservationResponse;
+            // }
+
+            /** ---------------------------------
+             * 4️⃣ CONFIRMAR PASAJEROS EN HYA
+             * ---------------------------------*/
+            // $confirmPassengersResponse = $this->callAgencyUserController(
+            //     'confirm_passengers',
+            //     [
+            //         'RSV' => $reservationNumber,
+            //         'T1' => 1,
+            //         'T2' => 0,
+            //         'T3' => 0,
+            //         'T4' => 0,
+            //         'T5' => 0,
+            //         'pasajeros' => $request->paxs_reservation,
+            //     ]
+            // );
+
+            // if ($confirmPassengersResponse->getStatusCode() !== 200) {
+            //     DB::rollBack();
+            //     return $confirmPassengersResponse;
+            // }
+
+            /** ---------------------------------
+             * 5️⃣ GUARDAR PASAJEROS INTERNOS
+             * ---------------------------------*/
+            $paxRequest = new StorePaxRequest();
+            // $paxRequest->replace(array_merge(
+            //     $request->all(),
+            //     [
+            //         'user_reservation_id' => $userReservation['id'],
+            //         'paxs' => $request->paxs_reservation,
+            //     ]
+            // ));
+
+            $paxRequest->replace([
+                'user_reservation_id' => $userReservation['id'],
+                'paxs' => $request->paxs_reservation,
+            ]);
+
+            $paxController = new \App\Http\Controllers\PaxController();
+            $paxResponse = $paxController->store_type_agency($paxRequest);
+
+            if ($paxResponse->getStatusCode() !== 200) {
+                DB::rollBack();
+                return $paxResponse;
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Reserva creada con éxito',
+                'data' => $userReservationResponse,
+                // 'reservation_number' => $reservationNumber,
+                // 'user_reservation_id' => $userReservation->id,
+            ], 200);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error createReservation', [
+                'error' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ]);
+
+            return response()->json([
+                'message' => 'Error al crear la reserva',
+                'error' => $th->getMessage(),
+                'line' => $th->getLine(),
+            ], 500);
         }
     }
 
@@ -174,69 +293,55 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $agency = $validation['agency'];
-
+        $agencyName = null;
         try {
+            // Validate that reservation_number is present
             $request->validate([
                 'reservation_number' => 'required',
-                'request' => 'required',
-                'attachments' => 'nullable|array',
+                'request' => 'required'
             ]);
 
+            $agency_code = $validation['agency']['agency_code'];
+
+            // eticion a api a carlos para obtener nombre de agencia
+            $agencyDataResponse = $this->callAgencyUserController(
+                'agencias',
+                [
+                    'DESDE' => $agency_code,
+                    'HASTA' => $agency_code
+                ]
+            );
+
+            $agencyResponse = $agencyDataResponse->getData(true);
+            $agencyName = $agencyResponse['NOMBRE'];
+
             $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
+            if (!$reservation)
+                return response(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
 
-            if (!$reservation) {
-                return response()->json(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
-            }
-
-            // Find a user for this agency to associate with the change request
-            $user = AgencyUser::where('agency_code', $agency->agency_code)->first();
-
-            DB::beginTransaction();
-
+            // Solicitud de cambio guardar en DB
             $change_request = ChangeRequest::create([
-                'user_id' => $user ? $user->id : null,
+                'user_id' => null,
+                'agency_code' => $agency_code,
                 'user_reservation_id' => $reservation->id,
                 'text' => $request->input('request'),
             ]);
 
-            $storedFiles = [];
+            // Get the email from environment variable
+            $recipientEmail = env('RESERVATION_MODIFICATION_EMAIL', 'enzo100amarilla@gmail.com');
 
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $fileName = uniqid() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('change_requests'), $fileName);
-                    $path = 'change_requests/' . $fileName;
-
-                    $storedFiles[] = public_path($path);
-
-                    ChangeRequestFile::create([
-                        'change_request_id' => $change_request->id,
-                        'path' => $path,
-                        'original_name' => $file->getClientOriginalName(),
-                    ]);
-                }
-            }
-
-            // Prepare pseudo-user if none found
-            if (!$user) {
-                $user = (object) [
-                    'name' => 'Agency External API',
-                    'last_name' => $agency->agency_code,
-                    'email' => null
-                ];
-            }
-
-            Mail::to("reservas@hieloyaventura.com")->send(
-                new ReservationRequestChange($request->all(), $user, $storedFiles)
+            // Send email with all request data
+            Mail::to($recipientEmail)->send(
+                new \App\Mail\AgencyReservationModification(
+                    $request->reservation_number,
+                    $agencyName,
+                    $request->all()
+                )
             );
 
-            DB::commit();
-
-            return response()->json(["message" => "Solicitud de edición enviada con éxito!"], 200);
+            return response()->json(["message" => "Solicitud de modificación enviada con éxito!"], 200);
 
         } catch (\Throwable $th) {
-            DB::rollBack();
             Log::error("Error in AgencyExternalHyAController@editReservation: " . $th->getMessage());
             return response()->json(["message" => "Error al procesar la solicitud", "error" => $th->getMessage()], 500);
         }
@@ -248,19 +353,12 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        if (!$request->has('RSV')) {
-            return response()->json(['message' => 'RSV parameter is required'], 400);
+        if (!$request->has('reservation_number')) {
+            return response()->json(['message' => 'reservation_number parameter is required'], 400);
         }
 
-        $url = $this->get_url();
-        $response = Http::asForm()->post("$url/CancelaReserva", [
-            'RSV' => $request->RSV
+        return $this->callAgencyUserController('cancel_reservation', [
+            'RSV' => $request->reservation_number,
         ]);
-
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            return response()->json($response->json(), $response->status());
-        }
     }
 }

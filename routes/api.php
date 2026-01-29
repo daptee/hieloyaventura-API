@@ -423,14 +423,14 @@ Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::clas
 Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
 
 // External Agency HyA routes
-Route::prefix('agency/hya')->controller(App\Http\Controllers\AgencyExternalHyAController::class)->group(function () {
-    Route::get('/disponibilidad', 'getAvailability');
-    Route::get('/hoteles', 'getHotels');
-    Route::get('/nacionalidades', 'getNationalities');
-    Route::get('/reserva/consulta', 'getReservation');
-    Route::post('/reserva/generar', 'createReservation');
-    Route::post('/reserva/editar', 'editReservation');
-    Route::post('/reserva/cancelar', 'cancelReservation');
+Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\Controllers\AgencyExternalHyAController::class)->group(function () {
+    Route::get('/availability', 'getAvailability');
+    Route::get('/hotels', 'getHotels');
+    Route::get('/nationalities', 'getNationalities');
+    Route::get('/reservation', 'getReservation');
+    Route::post('/reservation', 'createReservation');
+    Route::put('/reservation', 'editReservation');
+    Route::delete('/reservation', 'cancelReservation');
 });
 
 Route::get('/users/types', [UserController::class, 'types_user']);
