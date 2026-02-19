@@ -230,7 +230,7 @@ class AgencyExternalHyAController extends Controller
              * 1️⃣ INICIAR RESERVA EN HYA (Version AGINT)
              * ---------------------------------*/
             $body_array = [
-                'TUR' => $request->date . ' ' . $request->turn,
+                'TUR' => $request->date . '+' . $request->turn,
                 'PSJ' => (int) count($request->paxs_reservation),
                 'PRD' => (int) $request->excursion_id,
                 'TRF' => $request->has_transfer ? 'S' : 'N',
