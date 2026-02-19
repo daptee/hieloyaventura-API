@@ -277,7 +277,7 @@ class AgencyExternalHyAController extends Controller
             $reservationNumber = $startData['RESERVA'] ?? null;
             if (!$reservationNumber) {
                 return response()->json([
-                    'message' => 'Error crítico: El sistema externo no devolvió un número de reserva (RSV)',
+                    'message' => 'Error crítico: El sistema externo no devolvió un número de reserva (RESERVA)',
                     'step' => 1
                 ], 500);
             }
