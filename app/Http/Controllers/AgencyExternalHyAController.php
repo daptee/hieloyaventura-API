@@ -229,16 +229,28 @@ class AgencyExternalHyAController extends Controller
             /** ---------------------------------
              * 1️⃣ INICIAR RESERVA EN HYA (Version AGINT)
              * ---------------------------------*/
+            $body_array = [
+                'TUR' => $request->date . ' ' . $request->turn,
+                'PSJ' => (int) count($request->paxs_reservation),
+                'PRD' => (int) $request->excursion_id,
+                'TRF' => $request->has_transfer ? 'S' : 'N',
+                'AG' => $agency_code,
+                'OPERADOR' => -1,
+                'TVENTA' => 1
+            ];
+
+            Log::debug('body enviado a inicia reserva', $body_array);
+
             $startResponse = $this->callAgencyUserController(
                 'start_reservation',
                 [
-                    'TUR' => $request->date . '+' . $request->turn,
-                    'PSJ' => count($request->paxs_reservation),
-                    'PRD' => $request->excursion_id,
+                    'TUR' => $request->date . ' ' . $request->turn,
+                    'PSJ' => (int) count($request->paxs_reservation),
+                    'PRD' => (int) $request->excursion_id,
                     'TRF' => $request->has_transfer ? 'S' : 'N',
                     'AG' => $agency_code,
-                    'TVENTA' => 1,
-                    'OPERADOR' => -1
+                    'OPERADOR' => -1,
+                    'TVENTA' => 1
                 ]
             );
 
