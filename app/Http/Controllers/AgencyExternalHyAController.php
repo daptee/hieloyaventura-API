@@ -244,7 +244,7 @@ class AgencyExternalHyAController extends Controller
             $startResponse = $this->callAgencyUserController(
                 'start_reservation',
                 [
-                    'TUR' => $request->date . ' ' . $request->turn,
+                    'TUR' => $request->date . '+' . $request->turn,
                     'PSJ' => (int) count($request->paxs_reservation),
                     'PRD' => (int) $request->excursion_id,
                     'TRF' => $request->has_transfer ? 'S' : 'N',
