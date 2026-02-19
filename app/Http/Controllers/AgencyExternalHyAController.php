@@ -26,12 +26,17 @@ class AgencyExternalHyAController extends Controller
      * Validate agency permissions for a specific action
      * The agency is already authenticated by the middleware
      */
-    private function validateAgency(Request $request, $permissionPath)
+    private function validateAgency(Request $request, $permissionPath = null)
     {
         $agency = $request->input('authenticated_agency');
 
         if (!$agency) {
             return ['error' => 'Agency not authenticated', 'status' => 500];
+        }
+
+        // If no permission path is provided, we only validate the API key (which is already done by middleware)
+        if ($permissionPath === null) {
+            return ['agency' => $agency];
         }
 
         if (!$agency->configurations) {
@@ -42,8 +47,12 @@ class AgencyExternalHyAController extends Controller
 
         $excursion_id = $request->excursion_id ?? $request->excurtion_id;
 
+        if (!$excursion_id) {
+            return ['error' => 'excursion_id is required for this action', 'status' => 400];
+        }
+
         if (!isset($configurations[$excursion_id])) {
-            return ['error' => 'Agency permissions not configured', 'status' => 403];
+            return ['error' => 'Agency permissions not configured for this excursion', 'status' => 403];
         }
 
         $permissions = $configurations[$excursion_id];
@@ -132,7 +141,8 @@ class AgencyExternalHyAController extends Controller
 
     public function getHotels(Request $request)
     {
-        $validation = $this->validateAgency($request, 'disponibilty');
+        // solo validar api key
+        $validation = $this->validateAgency($request, null);
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
@@ -141,7 +151,8 @@ class AgencyExternalHyAController extends Controller
 
     public function getNationalities(Request $request)
     {
-        $validation = $this->validateAgency($request, 'disponibilty');
+        // quitar validacion
+        $validation = $this->validateAgency($request, null);
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
@@ -150,6 +161,9 @@ class AgencyExternalHyAController extends Controller
 
     public function getReservation(Request $request)
     {
+        // quitar validacion excursion id.
+        // validar que la reserva sea de la agencia.
+        // en caso de aplicar eso decir que no encuentra la reserva
         $validation = $this->validateAgency($request, 'reservations.show');
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
@@ -158,9 +172,23 @@ class AgencyExternalHyAController extends Controller
             return response()->json(['message' => 'reservation_number parameter is required'], 400);
         }
 
-        return $this->callAgencyUserController('ReservaxCodigo', [
+        $agency_code = $validation['agency']['agency_code'];
+
+        $response = $this->callAgencyUserController('ReservaxCodigo', [
             'RSV' => $request->reservation_number,
         ]);
+
+        if ($response->getStatusCode() === 200) {
+            $data = $response->getData(true);
+
+            // Validar que la reserva pertenezca a la agencia
+            // Dependiendo de la estructura de ReservaxCodigo, comparamos con AG o similar
+            if (isset($data['AG']) && (string) $data['AG'] !== (string) $agency_code) {
+                return response()->json(['message' => 'No se encontró la reserva solicitada para esta agencia'], 404);
+            }
+        }
+
+        return $response;
     }
 
     public function createReservation(Request $request)
@@ -175,22 +203,40 @@ class AgencyExternalHyAController extends Controller
 
             $agency_code = $validation['agency']['agency_code'];
 
-            $agency_name = $this->callAgencyUserController('agencies', [
+            $agenciesResponse = $this->callAgencyUserController('agencies', [
                 'DESDE' => $agency_code,
                 'HASTA' => $agency_code,
             ]);
+
+            if ($agenciesResponse->getStatusCode() !== 200) {
+                return response()->json([
+                    'message' => 'Error al obtener información de la agencia en el sistema externo',
+                    'error' => $this->getInternalError($agenciesResponse),
+                    'step' => 0
+                ], $agenciesResponse->getStatusCode());
+            }
+
+            $agenciesData = $agenciesResponse->getData(true);
+            if (empty($agenciesData) || !isset($agenciesData[0]['NOMBRE'])) {
+                return response()->json([
+                    'message' => 'No se encontró información para el código de agencia indicado en el sistema externo',
+                    'step' => 0
+                ], 404);
+            }
+
+            $agency_name = $agenciesData[0]['NOMBRE'] ?? 'Agencia sin nombre';
 
             /** ---------------------------------
              * 1️⃣ INICIAR RESERVA EN HYA (Version AGINT)
              * ---------------------------------*/
             $startResponse = $this->callAgencyUserController(
-                'IniciaReservaAGINT',
+                'start_reservation',
                 [
                     'TUR' => $request->date . '+' . $request->turn,
                     'PSJ' => count($request->paxs_reservation),
                     'PRD' => $request->excursion_id,
                     'TRF' => $request->has_transfer ? 'S' : 'N',
-                    'AG' => 'TEST AGENCY NAME', // $agency_name
+                    'AG' => $agency_code,
                     'TVENTA' => 1,
                     'OPERADOR' => -1
                 ]
@@ -371,15 +417,27 @@ class AgencyExternalHyAController extends Controller
 
             // eticion a api a carlos para obtener nombre de agencia
             $agencyDataResponse = $this->callAgencyUserController(
-                'agencias',
+                'agencies',
                 [
                     'DESDE' => $agency_code,
                     'HASTA' => $agency_code
                 ]
             );
 
+            if ($agencyDataResponse->getStatusCode() !== 200) {
+                return response()->json([
+                    'message' => 'Error al obtener información de la agencia en el sistema externo',
+                    'error' => $this->getInternalError($agencyDataResponse),
+                ], $agencyDataResponse->getStatusCode());
+            }
+
             $agencyResponse = $agencyDataResponse->getData(true);
-            $agencyName = $agencyResponse['NOMBRE'];
+            if (empty($agencyResponse) || !isset($agencyResponse[0]['NOMBRE'])) {
+                return response()->json([
+                    'message' => 'No se encontró información para el código de agencia indicado en el sistema externo',
+                ], 404);
+            }
+            $agencyName = $agencyResponse[0]['NOMBRE'];
 
             $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
             if (!$reservation)
