@@ -242,13 +242,15 @@ class AgencyExternalHyAController extends Controller
                 ]
             );
 
-            if ($startResponse->getStatusCode() !== 200) {
-                return response()->json([
-                    'message' => 'Error al iniciar la reserva en el sistema externo (H&A)',
-                    'error' => $this->getInternalError($startResponse),
-                    'step' => 1
-                ], $startResponse->getStatusCode());
-            }
+            // if ($startResponse->getStatusCode() !== 200) {
+            //     return response()->json([
+            //         'message' => 'Error al iniciar la reserva en el sistema externo (H&A)',
+            //         'error' => $this->getInternalError($startResponse),
+            //         'step' => 1
+            //     ], $startResponse->getStatusCode());
+            // }
+
+            Log::debug('Inicia reserva response', $startResponse->getData(true));
 
             $startData = $startResponse->getData(true);
 
