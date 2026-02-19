@@ -179,6 +179,7 @@ class AgencyExternalHyAController extends Controller
                 'DESDE' => $agency_code,
                 'HASTA' => $agency_code,
             ]);
+
             /** ---------------------------------
              * 1️⃣ INICIAR RESERVA EN HYA (Version AGINT)
              * ---------------------------------*/
@@ -189,7 +190,7 @@ class AgencyExternalHyAController extends Controller
                     'PSJ' => count($request->paxs_reservation),
                     'PRD' => $request->excursion_id,
                     'TRF' => $request->has_transfer ? 'S' : 'N',
-                    'AG' => $agency_name,
+                    'AG' => 'TEST AGENCY NAME', // $agency_name
                     'TVENTA' => 1,
                     'OPERADOR' => -1
                 ]
