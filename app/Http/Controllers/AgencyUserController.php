@@ -174,7 +174,7 @@ class AgencyUserController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::debug(["error" => "Error en carga de terminos y condiciones (usuario agencia)", "message" => $e->getMessage(), "line" => $e->getLine()]);
+            Log::debug("Error en carga de terminos y condiciones (usuario agencia)", ["message" => $e->getMessage(), "line" => $e->getLine()]);
             return response()->json(["error" => "Error en carga de terminos y condiciones (usuario agencia)", "message" => $e->getMessage(), "line" => $e->getLine()], 500);
         }
 
@@ -251,7 +251,7 @@ class AgencyUserController extends Controller
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
-            Log::debug(["error" => "Error en carga de vendedores (agencia)", "message" => $e->getMessage(), "line" => $e->getLine()]);
+            Log::debug("Error en carga de vendedores (agencia)", ["message" => $e->getMessage(), "line" => $e->getLine()]);
             return response()->json(["error" => "Error en carga de vendedores (agencia)", "message" => $e->getMessage(), "line" => $e->getLine()], 500);
         }
 
@@ -591,6 +591,18 @@ class AgencyUserController extends Controller
         }
     }
 
+    public function confirm_reservation_ag_int(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmarReservaAGINT", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
     public function cancel_reservation(Request $request)
     {
         $this->validate($request, [
@@ -625,6 +637,30 @@ class AgencyUserController extends Controller
         $url = $this->get_url();
         $body_json = $request->all();
         $response = Http::post("$url/ConfirmaPasajeros", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function IniciaReservaAGINT(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/IniciaReservaAGINT", $body_json);
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
+    public function ConfirmaReservaAGINT(Request $request)
+    {
+        $url = $this->get_url();
+        $body_json = $request->all();
+        $response = Http::post("$url/ConfirmaReservaAGINT", $body_json);
         if ($response->successful()) {
             return $response->json();
         } else {
