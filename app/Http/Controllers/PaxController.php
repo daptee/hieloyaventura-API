@@ -112,8 +112,12 @@ class PaxController extends Controller
 
             //Mandar email con el PDF adjunto
             $pathReservationPdf = $this->createPdf($userReservation);
-            // return $this->createPdf($userReservation);                                
-            $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            if (is_array($pathReservationPdf) && isset($pathReservationPdf['urlToSave'])) {
+                $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            } else {
+                Log::error("createPdf returned invalid result in PaxController::store", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
+                $userReservation->pdf = null;
+            }
             $userReservation->save();
 
             $mailTo = $userReservation->contact_data->email;
@@ -223,7 +227,12 @@ class PaxController extends Controller
                 }
 
                 $pathReservationPdf = $this->createPdf($userReservation, true);
-                $userReservation->pdf = $pathReservationPdf['urlToSave'];
+                if (is_array($pathReservationPdf) && isset($pathReservationPdf['urlToSave'])) {
+                    $userReservation->pdf = $pathReservationPdf['urlToSave'];
+                } else {
+                    Log::error("createPdf returned invalid result in PaxController::store_type_agency", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
+                    $userReservation->pdf = null;
+                }
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
 
