@@ -316,7 +316,7 @@ class AgencyExternalHyAController extends Controller
                 'HOTEL' => $request->hotel_id,
                 'PAX' => $request->pax ?? $request->contact_name,
                 'MAIL' => $request->contact_email ?? $request->email,
-                'T1' => $request->T1 ?? 0,
+                'T1' => count($request->paxs_reservation) ?? 0,
                 'T2' => $request->T2 ?? 0,
                 'T3' => $request->T3 ?? 0,
                 'T4' => $request->T4 ?? 0,
