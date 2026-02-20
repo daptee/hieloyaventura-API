@@ -483,7 +483,16 @@ class AgencyExternalHyAController extends Controller
                 ]));
 
                 $paxController = new \App\Http\Controllers\PaxController();
+                // Log payload sent to PaxController for debugging
+                $this->logIntegration("Paso 4: paxRequest payload", $paxRequest->all(), 'info');
+
                 $paxResponse = $paxController->store_type_agency($paxRequest);
+
+                // Log paxResponse status and payload (use extractor to avoid exceptions)
+                $this->logIntegration("Paso 4: paxResponse status and payload", [
+                    'status' => method_exists($paxResponse, 'getStatusCode') ? $paxResponse->getStatusCode() : null,
+                    'payload' => $this->extractResponseData($paxResponse)
+                ], 'info');
                 if ($paxResponse->getStatusCode() !== 200) {
                     DB::rollBack();
                     $errorMsg = $this->getInternalError($paxResponse);
