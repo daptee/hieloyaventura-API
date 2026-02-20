@@ -330,18 +330,23 @@ class AgencyExternalHyAController extends Controller
                 $confirmData['pasajeros'] = $request->paxs_reservation;
             }
 
+            Log::debug('body enviado a confirmar reserva', $confirmData);
+
             $confirmResponse = $this->callAgencyUserController('ConfirmaReservaAGINT', $confirmData);
 
-            if ($confirmResponse->getStatusCode() !== 200) {
-                DB::rollBack();
-                return response()->json([
-                    'message' => 'Error al confirmar la reserva en el sistema externo (H&A)',
-                    'error' => $this->getInternalError($confirmResponse),
-                    'step' => 3
-                ], $confirmResponse->getStatusCode());
-            }
+            // if ($confirmResponse->getStatusCode() !== 200) {
+            //     DB::rollBack();
+            //     return response()->json([
+            //         'message' => 'Error al confirmar la reserva en el sistema externo (H&A)',
+            //         'error' => $this->getInternalError($confirmResponse),
+            //         'step' => 3
+            //     ], $confirmResponse->getStatusCode());
+            // }
 
             $confirmResult = $confirmResponse->getData(true);
+
+            Log::debug('Confirma reserva response', $confirmResult);
+
             if (isset($confirmResult['RESULT']) && $confirmResult['RESULT'] === 'ERROR') {
                 DB::rollBack();
                 return response()->json([
