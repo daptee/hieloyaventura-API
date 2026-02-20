@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <p style="white-space: pre-line">Hola {{ Auth::guard('agency')->user()->name }}. Esto es un correo automatico con la confirmacion de tu reserva.
+    <p style="white-space: pre-line">Hola {{ Auth::guard('agency')->user()->name ?? $request->agency_name }}. Esto es un correo automatico con la confirmacion de tu reserva.
         <br> <br>
 
         Agencia: {{ $request->agency_name }} <br>
@@ -22,7 +22,7 @@
         Hotel: {{ $data->is_transfer == 1 ? $data->hotel_name : "-" }} <br>
         Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }} <br>
         @if(isset($request->price))
-            Precio: {{ $request->price }}
+        Precio: {{ $request->price }}
         @endif
 
         <br><br>
