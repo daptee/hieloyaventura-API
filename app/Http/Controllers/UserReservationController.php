@@ -223,6 +223,7 @@ class UserReservationController extends Controller
             $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED, "agency_code" => $request->agency_code]);
 
             $newUserReservation->user_id = null;
+            $newUserReservation->excurtion_id = $request->excurtion_id ?? $request->excursion_id ?? null;
             $newUserReservation->agency_id = $request->agency_code;
             $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id ?? null;
             $newUserReservation->language_id = 1;
@@ -253,7 +254,6 @@ class UserReservationController extends Controller
             'message' => $message,
             'newUserReservation' => $newUserReservation
         ], 200);
-
     }
 
     public function path_pdf_reservation_agency(Request $request)
