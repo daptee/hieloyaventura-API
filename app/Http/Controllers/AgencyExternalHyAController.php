@@ -314,6 +314,11 @@ class AgencyExternalHyAController extends Controller
             if ($request->has('paxs_reservation') && is_array($request->paxs_reservation)) {
                 $paxs = $request->paxs_reservation;
                 foreach ($paxs as &$pax) {
+                    if (!is_array($pax)) {
+                        $this->logIntegration('Skipping invalid pax entry (not array) in createReservation', ['entry' => $pax], 'warning');
+                        continue;
+                    }
+
                     $birthdate = $pax['birthdate'] ?? null;
                     $age = 0;
                     if ($birthdate) {
@@ -333,6 +338,11 @@ class AgencyExternalHyAController extends Controller
                     }
                     $pax['age'] = $age;
                 }
+                // Remove any null/invalid entries to avoid downstream errors
+                $paxs = array_values(array_filter($paxs, function ($item) {
+                    return is_array($item) && !empty($item);
+                }));
+
                 $request->merge(['paxs_reservation' => $paxs]);
             }
 
