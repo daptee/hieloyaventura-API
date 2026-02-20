@@ -82,7 +82,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
         ],
 
@@ -127,6 +127,13 @@ return [
             'path' => storage_path('logs/notificationmperror.log'),
             'level' => 'debug',
             'days' => 14,
+        ],
+
+        'agency_integration' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/agency_reservation_integration.log'),
+            'level' => 'debug',
+            'days' => 0, // 0 means keep all files
         ],
     ],
 
