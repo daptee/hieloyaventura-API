@@ -115,7 +115,7 @@ class AgencyExternalHyAController extends Controller
 
     private function getInternalError($response)
     {
-        $data = $response->getData(true);
+        $data = $this->extractResponseData($response);
         if (isset($data['message']))
             return $data['message'];
         if (isset($data['error']))
@@ -125,6 +125,56 @@ class AgencyExternalHyAController extends Controller
         if (isset($data['RESULT']))
             return $data['RESULT'];
         return 'Error no especificado';
+    }
+
+    /**
+     * Safely extract array data from various response types.
+     * Returns an array when possible, or an array with a 'message' key otherwise.
+     */
+    private function extractResponseData($response)
+    {
+        if (is_array($response)) {
+            return $response;
+        }
+
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response->getData(true);
+        }
+
+        if ($response instanceof \Illuminate\Http\Response || is_object($response)) {
+            try {
+                if (method_exists($response, 'getContent')) {
+                    $content = $response->getContent();
+                    $decoded = json_decode($content, true);
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                        return $decoded;
+                    }
+                    // Try to return original payload if available
+                    if (property_exists($response, 'original') && is_array($response->original)) {
+                        return $response->original;
+                    }
+                    return ['message' => $content];
+                }
+
+                if (method_exists($response, 'toArray')) {
+                    return $response->toArray();
+                }
+
+                return (array) $response;
+            } catch (\Throwable $th) {
+                return ['message' => $th->getMessage()];
+            }
+        }
+
+        if (is_string($response)) {
+            $decoded = json_decode($response, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+            return ['message' => $response];
+        }
+
+        return [];
     }
 
     /**
@@ -193,7 +243,7 @@ class AgencyExternalHyAController extends Controller
         ]);
 
         if ($response->getStatusCode() === 200) {
-            $data = $response->getData(true);
+            $data = $this->extractResponseData($response);
 
             // Validar que la reserva pertenezca a la agencia
             // Dependiendo de la estructura de ReservaxCodigo, comparamos con AG o similar
@@ -244,7 +294,7 @@ class AgencyExternalHyAController extends Controller
                 ], $agenciesResponse->getStatusCode());
             }
 
-            $agenciesData = $agenciesResponse->getData(true);
+            $agenciesData = $this->extractResponseData($agenciesResponse);
             if (empty($agenciesData) || !isset($agenciesData[0]['NOMBRE'])) {
                 $this->logIntegration("Error en Paso 0: No se encontró la agencia en el sistema de H&A", [
                     'agency_code' => $agency_code,
@@ -303,7 +353,7 @@ class AgencyExternalHyAController extends Controller
 
             $startResponse = $this->callAgencyUserController('start_reservation', $body_array);
 
-            $startData = $startResponse->getData(true);
+            $startData = $this->extractResponseData($startResponse);
             $this->logIntegration("Paso 1 Response: Respuesta de HyA (start_reservation)", [
                 'status' => $startResponse->getStatusCode(),
                 'response' => $startData
@@ -358,7 +408,7 @@ class AgencyExternalHyAController extends Controller
                 ], $userReservationResponse->getStatusCode());
             }
 
-            $userReservationData = $userReservationResponse->getData(true);
+            $userReservationData = $this->extractResponseData($userReservationResponse);
             $userReservation = $userReservationData['newUserReservation'];
             $this->logIntegration("Paso 2 OK: Reserva registrada en local", ['internal_id' => $userReservation['id']]);
 
@@ -391,7 +441,7 @@ class AgencyExternalHyAController extends Controller
             $this->logIntegration("Paso 3: Confirmando reserva en HyA (ConfirmaReservaAGINT)", $confirmData);
 
             $confirmResponse = $this->callAgencyUserController('ConfirmaReservaAGINT', $confirmData);
-            $confirmResult = $confirmResponse->getData(true);
+            $confirmResult = $this->extractResponseData($confirmResponse);
 
             $this->logIntegration("Paso 3 Response: Respuesta de HyA (ConfirmaReservaAGINT)", [
                 'status' => $confirmResponse->getStatusCode(),
@@ -471,7 +521,6 @@ class AgencyExternalHyAController extends Controller
                 'reservation_number' => $reservationNumber,
                 'user_reservation_id' => $userReservation['id'],
             ], 200);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             $this->logIntegration("CRITICAL ERROR en createReservation", [
@@ -521,7 +570,7 @@ class AgencyExternalHyAController extends Controller
                 ], $agencyDataResponse->getStatusCode());
             }
 
-            $agencyResponse = $agencyDataResponse->getData(true);
+            $agencyResponse = $this->extractResponseData($agencyDataResponse);
             if (empty($agencyResponse) || !isset($agencyResponse[0]['NOMBRE'])) {
                 return response()->json([
                     'message' => 'No se encontró información para el código de agencia indicado en el sistema externo',
@@ -554,7 +603,6 @@ class AgencyExternalHyAController extends Controller
             );
 
             return response()->json(["message" => "Solicitud de modificación enviada con éxito!"], 200);
-
         } catch (\Throwable $th) {
             Log::error("Error in AgencyExternalHyAController@editReservation: " . $th->getMessage());
             return response()->json(["message" => "Error al procesar la solicitud", "error" => $th->getMessage()], 500);
