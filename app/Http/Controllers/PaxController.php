@@ -179,6 +179,17 @@ class PaxController extends Controller
 
                     ini_set('memory_limit', '128M');
                     foreach ($paxs as $pax) {
+                        if (isset($pax['birthdate']) && str_contains($pax['birthdate'], '/')) {
+                            try {
+                                $pax['birthdate'] = Carbon::createFromFormat('d/m/Y', $pax['birthdate'])->format('Y-m-d');
+                            } catch (\Throwable $th) {
+                                try {
+                                    $pax['birthdate'] = Carbon::createFromFormat('d/m/y', $pax['birthdate'])->format('Y-m-d');
+                                } catch (\Throwable $th) {
+                                }
+                            }
+                        }
+
                         $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
                         if ($pax['files'] && count($pax['files']) != 0) {
                             foreach ($pax['files'] as $file) {
