@@ -417,10 +417,10 @@ class AgencyExternalHyAController extends Controller
                 $this->logIntegration("Paso 4: Guardando pasajeros en base de datos local");
 
                 $paxRequest = new StorePaxRequest();
-                $paxRequest->replace([
+                $paxRequest->replace(array_merge($request->all(), [
                     'user_reservation_id' => $userReservation['id'],
                     'paxs' => $request->paxs_reservation,
-                ]);
+                ]));
 
                 $paxController = new \App\Http\Controllers\PaxController();
                 $paxResponse = $paxController->store_type_agency($paxRequest);
