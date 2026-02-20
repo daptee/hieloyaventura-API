@@ -484,7 +484,6 @@ class AgencyExternalHyAController extends Controller
 
                 $paxController = new \App\Http\Controllers\PaxController();
                 $paxResponse = $paxController->store_type_agency($paxRequest);
-
                 if ($paxResponse->getStatusCode() !== 200) {
                     DB::rollBack();
                     $errorMsg = $this->getInternalError($paxResponse);
@@ -493,10 +492,15 @@ class AgencyExternalHyAController extends Controller
                         'error' => $errorMsg
                     ], 'error');
 
+                    // Log full response payload for debugging (may include trace/line)
+                    $full = $this->extractResponseData($paxResponse);
+                    $this->logIntegration("Paso 4: paxResponse full payload", $full, 'error');
+
                     return response()->json([
                         'message' => 'Error al guardar el detalle de pasajeros en la base de datos local',
                         'error' => $errorMsg,
-                        'step' => 4
+                        'step' => 4,
+                        'details' => $full
                     ], $paxResponse->getStatusCode());
                 }
                 $this->logIntegration("Paso 4 OK: Pasajeros guardados en local");

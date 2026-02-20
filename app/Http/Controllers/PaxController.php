@@ -241,8 +241,14 @@ class PaxController extends Controller
                 }
             });
         } catch (\Throwable $th) {
-            Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine()], true));
-            return response(["error" => $th->getMessage()], 500);
+            $payload = [
+                'message' => $th->getMessage(),
+                'line' => $th->getLine(),
+                'file' => $th->getFile(),
+                'trace' => $th->getTraceAsString(),
+            ];
+            Log::error(print_r([$th->getMessage() . " error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine(), $th->getTraceAsString()], true));
+            return response()->json($payload, 500);
         }
 
         return response(["message" => "Pasajeros guardados con exito"], 200);
