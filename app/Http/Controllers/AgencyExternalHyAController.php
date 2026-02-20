@@ -317,16 +317,16 @@ class AgencyExternalHyAController extends Controller
             }
 
             $confirmData = [
-                'RSV' => $reservationNumber,
-                'HOTEL' => $request->hotel_id,
-                'PAX' => $request->pax ?? $request->contact_name,
+                'RSV' => (int) $reservationNumber,
+                'HOTEL' => (int) $request->hotel_id,
+                'PAX' => (int) $request->pax ?? $request->contact_name,
                 'MAIL' => $request->contact_email ?? $request->email,
                 'T1' => $count_paxs,
                 'T2' => "0",
                 'T3' => "0",
                 'T4' => "0",
                 'T5' => "0",
-                'TELEFONO' => $request->contact_phone ?? $request->phone,
+                'TELEFONO' => (int) $request->contact_phone ?? $request->phone,
                 'OBSV' => $request->observations ?? $request->OBSV ?? '',
             ];
 
