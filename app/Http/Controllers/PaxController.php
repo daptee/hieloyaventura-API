@@ -72,8 +72,14 @@ class PaxController extends Controller
 
                 ini_set('memory_limit', '128M');
                 foreach ($paxs as $pax) {
+                    if (!is_array($pax)) {
+                        Log::warning(['message' => 'Skipping invalid pax entry (not array) in store()', 'nro_reserva' => $userReservation->reservation_number]);
+                        continue;
+                    }
+
                     $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                    if ($pax['files'] && count($pax['files']) != 0) {
+
+                    if (!empty($pax['files']) && is_array($pax['files']) && count($pax['files']) != 0) {
                         foreach ($pax['files'] as $file) {
                             if (is_a($file, 'Illuminate\Http\UploadedFile') && $file->isValid()) {
                                 $fileName = Str::random(5) . time() . '.' . $file->extension();
@@ -179,7 +185,12 @@ class PaxController extends Controller
 
                     ini_set('memory_limit', '128M');
                     foreach ($paxs as $pax) {
-                        if (isset($pax['birthdate']) && str_contains($pax['birthdate'], '/')) {
+                        if (!is_array($pax)) {
+                            Log::warning(['message' => 'Skipping invalid pax entry (not array) in store_type_agency()', 'nro_reserva' => $userReservation->reservation_number]);
+                            continue;
+                        }
+
+                        if (!empty($pax['birthdate']) && is_string($pax['birthdate']) && str_contains($pax['birthdate'], '/')) {
                             try {
                                 $pax['birthdate'] = Carbon::createFromFormat('d/m/Y', $pax['birthdate'])->format('Y-m-d');
                             } catch (\Throwable $th) {
@@ -191,7 +202,8 @@ class PaxController extends Controller
                         }
 
                         $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                        if (isset($pax['files']) && count($pax['files']) != 0) {
+
+                        if (!empty($pax['files']) && is_array($pax['files']) && count($pax['files']) != 0) {
                             foreach ($pax['files'] as $file) {
                                 $fileName = Str::random(5) . time() . '.' . $file->extension();
                                 $file->move(public_path("paxs/files/$request->user_reservation_id"), $fileName);
@@ -227,7 +239,6 @@ class PaxController extends Controller
                         Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                     }
                 }
-
             });
         } catch (\Throwable $th) {
             Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine()], true));
@@ -329,12 +340,10 @@ class PaxController extends Controller
 
                 if (!is_dir('reservations/agencies'))
                     mkdir(public_path("reservations/agencies"));
-
             } else {
 
                 if (!is_dir('reservations'))
                     mkdir(public_path("reservations"));
-
             }
 
             $date = $newUserReservation->date;
@@ -480,7 +489,6 @@ class PaxController extends Controller
             } else {
                 $pathToSavePdf = public_path("reservations/$namePdf");
                 $urlToSave = url("reservations/$namePdf");
-
             }
 
             // now write some text above the imported page
