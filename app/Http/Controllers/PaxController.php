@@ -232,23 +232,17 @@ class PaxController extends Controller
                 $user_reservation_status->user_reservation_id = $userReservation->id;
                 $user_reservation_status->save();
 
-                if (!isset($datos['X-API-KEY'])) {
+                /* if (!isset($datos['X-API-KEY'])) {
                     try {
                         Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($userReservation, $request));
                     } catch (\Throwable $th) {
                         Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                     }
-                }
+                } */
             });
         } catch (\Throwable $th) {
-            $payload = [
-                'message' => $th->getMessage(),
-                'line' => $th->getLine(),
-                'file' => $th->getFile(),
-                'trace' => $th->getTraceAsString(),
-            ];
             Log::error(print_r([$th->getMessage() . " error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine(), $th->getTraceAsString()], true));
-            return response()->json($payload, 500);
+            return response(["error" => $th->getMessage()], 500);
         }
 
         return response(["message" => "Pasajeros guardados con exito"], 200);

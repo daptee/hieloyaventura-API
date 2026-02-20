@@ -499,8 +499,7 @@ class AgencyExternalHyAController extends Controller
                     return response()->json([
                         'message' => 'Error al guardar el detalle de pasajeros en la base de datos local',
                         'error' => $errorMsg,
-                        'step' => 4,
-                        'details' => $full
+                        'step' => 4
                     ], $paxResponse->getStatusCode());
                 }
                 $this->logIntegration("Paso 4 OK: Pasajeros guardados en local");
