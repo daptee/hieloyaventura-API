@@ -16,7 +16,6 @@ class ConfirmationReservation extends Mailable
     public $agency_name;
     public $reservation_name;
     public $number_of_passengers;
-    public $agency_name;
 
     /**
      * Create a new message instance.
