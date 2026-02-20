@@ -311,9 +311,9 @@ class AgencyExternalHyAController extends Controller
             /** ---------------------------------
              * 3️⃣ CONFIRMACION Y CARGA DE PAXS EN HYA (AGINT)
              * ---------------------------------*/
-            $count_paxs = 0;
+            $count_paxs = "0";
             if ($request->has('paxs_reservation') && !empty($request->paxs_reservation)) {
-                $count_paxs = count($request->paxs_reservation);
+                $count_paxs = (int) count($request->paxs_reservation);
             }
 
             $confirmData = [
@@ -321,7 +321,7 @@ class AgencyExternalHyAController extends Controller
                 'HOTEL' => $request->hotel_id,
                 'PAX' => $request->pax ?? $request->contact_name,
                 'MAIL' => $request->contact_email ?? $request->email,
-                'T1' => "$count_paxs",
+                'T1' => $count_paxs,
                 'T2' => "0",
                 'T3' => "0",
                 'T4' => "0",
