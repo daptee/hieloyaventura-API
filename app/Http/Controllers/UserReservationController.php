@@ -206,8 +206,22 @@ class UserReservationController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // aca en caso de que llegue la fecha en formato d/m/y convertir a y-m-d
+            if (isset($datos['date']) && str_contains($datos['date'], '/')) {
+                try {
+                    $datos['date'] = Carbon::createFromFormat('d/m/Y', $datos['date'])->format('Y-m-d');
+                } catch (\Throwable $th) {
+                    try {
+                        $datos['date'] = Carbon::createFromFormat('d/m/y', $datos['date'])->format('Y-m-d');
+                    } catch (\Throwable $th) {
+                    }
+                }
+            }
+
             //Creo el registro en user_reservations
-            $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
+            $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED, "agency_code" => $request->agency_code]);
+
             $newUserReservation->user_id = null;
             $newUserReservation->agency_id = $request->agency_code;
             $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id ?? null;
@@ -372,7 +386,7 @@ class UserReservationController extends Controller
                     // Incrementar contador de intentos fallidos
                     $userReservation->confirmation_attempts = ($userReservation->confirmation_attempts ?? 0) + 1;
 
-                    Log::debug([
+                    Log::debug('Detalle de error en confirmación INAPE:', [
                         "Response confirma reserva" => $request->response_cp,
                         "Comportamiento funcion" => $request->funcion_part,
                         "Nro de reserva" => $userReservation->reservation_number,
