@@ -530,6 +530,10 @@ class AgencyExternalHyAController extends Controller
             $this->logIntegration("Paso 5: Enviando email de confirmación");
             try {
                 $internalRes = UserReservation::with(['status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($userReservation['id']);
+                // Ensure agency_name is available to the mailable (prefer controller $agency_name)
+                if (!isset($request->agency_name) && isset($agency_name)) {
+                    $request->merge(['agency_name' => $agency_name]);
+                }
                 Mail::to($request->contact_email ?? $request->email)->send(new ConfirmationReservation($internalRes, $request));
                 $this->logIntegration("Paso 5 OK: Email enviado");
             } catch (\Throwable $th) {

@@ -9,10 +9,10 @@
 </head>
 
 <body>
-    <p style="white-space: pre-line">Hola {{ Auth::guard('agency')->user()->name ?? $request->agency_name }}. Esto es un correo automatico con la confirmacion de tu reserva.
+    <p style="white-space: pre-line">Hola {{ $agency_name ?? Auth::guard('agency')->user()->name ?? $request->agency_name }}. Esto es un correo automatico con la confirmacion de tu reserva.
         <br> <br>
 
-        Agencia: {{ $request->agency_name }} <br>
+        Agencia: {{ $agency_name ?? $request->agency_name ?? ($data->agency_name ?? '-') }} <br>
         Excursion: {{ $data->excurtion->name }} <br>
         Nro reserva: {{ $data->reservation_number ?? '-' }} <br>
         Fecha y hora: {{ $data->date->format('d/m/Y') }} - {{ $turn }} <br>

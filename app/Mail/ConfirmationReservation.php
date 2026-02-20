@@ -13,6 +13,7 @@ class ConfirmationReservation extends Mailable
     use Queueable, SerializesModels;
 
     public $data, $subject, $request, $turn;
+    public $agency_name;
 
     /**
      * Create a new message instance.
@@ -23,6 +24,7 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
+        $this->agency_name = $request->agency_name ?? ($data->agency_name ?? null);
         $this->data->meeting_point = $this->defineMeetingPoint($data);
         $this->turn = $request->turn ?? $data->turn->format('H:i\h\s');
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
@@ -57,7 +59,7 @@ class ConfirmationReservation extends Mailable
             }
             return $data->hotel_name ?? '-';
         }
-        
+
         return 'Puerto "Bajo de las Sombras"';
     }
 }
