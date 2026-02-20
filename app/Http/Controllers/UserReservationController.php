@@ -197,12 +197,12 @@ class UserReservationController extends Controller
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
-        if (!isset($datos['X-API-KEY'])) {
-            // validar token -> agency
-            if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
-                return response(["message" => "agency_id invalido"], 400);
+        // if (!isset($datos['X-API-KEY'])) {
+        //     // validar token -> agency
+        //     if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
+        //         return response(["message" => "agency_id invalido"], 400);
 
-        }
+        // }
 
         try {
             DB::beginTransaction();

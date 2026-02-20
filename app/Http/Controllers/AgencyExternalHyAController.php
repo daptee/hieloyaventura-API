@@ -291,6 +291,8 @@ class AgencyExternalHyAController extends Controller
                 'agency_code' => $agency_code
             ]));
 
+            Log::debug('user reservation request', $userReservationRequest->all());
+
             $userReservationController = new \App\Http\Controllers\UserReservationController();
             $userReservationResponse = $userReservationController->store_type_agency($userReservationRequest);
 
