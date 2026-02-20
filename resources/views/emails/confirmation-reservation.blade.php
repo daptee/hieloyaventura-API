@@ -17,8 +17,8 @@
         Nro reserva: {{ $data->reservation_number ?? '-' }} <br>
         Fecha y hora: {{ $data->date->format('d/m/Y') }} - {{ $turn }} <br>
         Traslado: {{ $data->is_transfer == 1 ? "Si" : "No" }} <br>
-        Nombre: {{ $request->reservation_name ?? '-' }} <br>
-        Pasajeros: {{ $request->number_of_passengers }} <br>
+        Nombre: {{ $reservation_name ?? $request->reservation_name ?? '-' }} <br>
+        Pasajeros: {{ $number_of_passengers ?? $request->number_of_passengers ?? '-' }} <br>
         Hotel: {{ $data->is_transfer == 1 ? $data->hotel_name : "-" }} <br>
         Punto de encuentro: {{ $data->is_transfer == 1 ? $data->hotel_name : "Puerto Bajo de las Sombras" }} <br>
         @if(isset($request->price))
