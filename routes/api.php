@@ -427,7 +427,7 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     Route::get('/availability', 'getAvailability');
     Route::get('/hotels', 'getHotels');
     Route::get('/nationalities', 'getNationalities');
-    Route::get('/reservation', 'getReservation');
+    Route::get('/reservation/{reservation_number}', 'getReservation');
     Route::post('/reservation', 'createReservation');
     Route::put('/reservation', 'editReservation');
     Route::delete('/reservation', 'cancelReservation');

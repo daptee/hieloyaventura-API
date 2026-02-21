@@ -213,30 +213,20 @@ class AgencyExternalHyAController extends Controller
         return $this->callAgencyUserController('nationalities');
     }
 
-    public function getReservation(Request $request)
+    public function getReservation(Request $request, $reservation_number)
     {
-        // quitar validacion excursion id.
-        // validar que la reserva sea de la agencia.
-        // en caso de aplicar eso decir que no encuentra la reserva
-        $validation = $this->validateAgency($request, 'reservations.show');
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
-        if (!$request->has('reservation_number')) {
-            return response()->json(['message' => 'reservation_number parameter is required'], 400);
-        }
-
-        $agency_code = $validation['agency']['agency_code'];
+        // Solo validar API key (el middleware ya lo hace)
+        $agency = $request->input('authenticated_agency');
+        $agency_code = $agency->agency_code;
 
         $response = $this->callAgencyUserController('ReservaxCodigo', [
-            'RSV' => $request->reservation_number,
+            'RSV' => $reservation_number,
         ]);
 
         if ($response->getStatusCode() === 200) {
             $data = $this->extractResponseData($response);
 
             // Validar que la reserva pertenezca a la agencia
-            // Dependiendo de la estructura de ReservaxCodigo, comparamos con AG o similar
             if (isset($data['AG']) && (string) $data['AG'] !== (string) $agency_code) {
                 return response()->json(['message' => 'No se encontró la reserva solicitada para esta agencia'], 404);
             }
