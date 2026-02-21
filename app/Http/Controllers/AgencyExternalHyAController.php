@@ -196,7 +196,7 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'date_from' => 'required|date_format:d/m/Y',
             'date_to' => 'required|date_format:d/m/Y',
         ], [
@@ -205,6 +205,10 @@ class AgencyExternalHyAController extends Controller
             'date_to.required' => 'date_to is required',
             'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
 
         return $this->callAgencyUserController('TurnosAG', [
             'FECHAD' => $request->date_from,
