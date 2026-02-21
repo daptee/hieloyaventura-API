@@ -222,14 +222,18 @@ class AgencyExternalHyAController extends Controller
             'RSV' => $reservation_number,
         ]);
 
+        $unifiedMessage = 'The requested reservation was not found.';
+
         if ($response->getStatusCode() === 200) {
             $data = $this->extractResponseData($response);
 
             // Validar que la reserva pertenezca a la agencia
-            // Usamos AGENCIA ya que AG no siempre viene o no es el campo correcto según pruebas
             if (isset($data['AGENCIA']) && (string) $data['AGENCIA'] !== (string) $agency_code) {
-                return response()->json(['message' => 'No se encontró la reserva solicitada para esta agencia'], 404);
+                return response()->json(['message' => $unifiedMessage], 404);
             }
+        } else {
+            // Si la API interna devuelve error (usualmente 400 o 404 cuando no existe), unificamos el mensaje
+            return response()->json(['message' => $unifiedMessage], 404);
         }
 
         return $response;
