@@ -203,23 +203,13 @@ class AgencyExternalHyAController extends Controller
         ]);
     }
 
-    public function getHotels(Request $request)
+    public function getHotels()
     {
-        // solo validar api key
-        $validation = $this->validateAgency($request, null);
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
         return $this->callAgencyUserController('hotels');
     }
 
-    public function getNationalities(Request $request)
+    public function getNationalities()
     {
-        // quitar validacion
-        $validation = $this->validateAgency($request, null);
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
         return $this->callAgencyUserController('nationalities');
     }
 
@@ -566,19 +556,37 @@ class AgencyExternalHyAController extends Controller
 
     public function editReservation(Request $request)
     {
-        $validation = $this->validateAgency($request, 'reservations.edit');
+        // First validate agency API key only (no excursion required from client)
+        $validation = $this->validateAgency($request, null);
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
         $agencyName = null;
         try {
-            // Validate that reservation_number is present
+            // Validate that reservation_number and request text are present in the request body
             $request->validate([
                 'reservation_number' => 'required',
                 'request' => 'required'
             ]);
 
             $agency_code = $validation['agency']['agency_code'];
+
+            // Find reservation by reservation_number to determine excursion (no need for client to send it)
+            $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
+            if (!$reservation) {
+                return response()->json(['message' => 'No se ha encontrado una reserva asociada al reservation_number enviado.'], 422);
+            }
+
+            // Inject excursion id into request so validateAgency can check permissions
+            $request->merge(['excursion_id' => $reservation->excurtion_id ?? $reservation->excurtion_id ?? null]);
+
+            // Now validate agency permissions for this excursion
+            $validation2 = $this->validateAgency($request, 'reservations.edit');
+            if (isset($validation2['error'])) {
+                return response()->json(['message' => $validation2['error']], $validation2['status']);
+            }
+
+            // use the agency code from initial validation
 
             // eticion a api a carlos para obtener nombre de agencia
             $agencyDataResponse = $this->callAgencyUserController(
