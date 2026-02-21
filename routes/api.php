@@ -432,8 +432,11 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
         return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
     });
     Route::post('/reservation', 'createReservation');
-    Route::put('/reservation', 'editReservation');
-    Route::delete('/reservation/{reservation_number}', 'cancelReservation');
+    Route::put('/reservation/{reservation_number}', 'editReservation');
+    Route::put('/reservation', function () {
+        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+    });
+    Route::delete('/reservation/{reservation_number}', 'cancelReservation'); // VER CON CARLOS QUE DEVUELVE QUE NO ENCUENTRA LA RESERVA
     Route::delete('/reservation', function () {
         return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
     });

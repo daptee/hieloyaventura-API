@@ -558,41 +558,33 @@ class AgencyExternalHyAController extends Controller
         }
     }
 
-    public function editReservation(Request $request)
+    public function editReservation(Request $request, $reservation_number)
     {
-        // First validate agency API key only (no excursion required from client)
-        $validation = $this->validateAgency($request, null);
-        if (isset($validation['error']))
+        $agency = $request->input('authenticated_agency');
+        $agency_code = $agency->agency_code;
+        $unifiedMessage = 'The requested reservation was not found.';
+
+        // Validar que se reciba el campo 'request' en el body
+        if (!$request->has('request') || empty($request->input('request'))) {
+            return response()->json(['message' => 'The request field is required in the body.'], 400);
+        }
+
+        // Buscar reserva en DB local
+        $userReservation = \App\Models\UserReservation::where('reservation_number', $reservation_number)->first();
+
+        // Validar existencia y pertenencia
+        if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency_code) {
+            return response()->json(['message' => $unifiedMessage], 404);
+        }
+
+        // Validar permisos de la agencia para esta excursión
+        $validation = $this->validateAgency($request, 'reservations.update', $userReservation->excurtion_id);
+        if (isset($validation['error'])) {
             return response()->json(['message' => $validation['error']], $validation['status']);
+        }
 
-        $agencyName = null;
         try {
-            // Validate that reservation_number and request text are present in the request body
-            $request->validate([
-                'reservation_number' => 'required',
-                'request' => 'required'
-            ]);
-
-            $agency_code = $validation['agency']['agency_code'];
-
-            // Find reservation by reservation_number to determine excursion (no need for client to send it)
-            $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
-            if (!$reservation) {
-                return response()->json(['message' => 'No se ha encontrado una reserva asociada al reservation_number enviado.'], 422);
-            }
-
-            // Inject excursion id into request so validateAgency can check permissions
-            $request->merge(['excursion_id' => $reservation->excurtion_id ?? $reservation->excurtion_id ?? null]);
-
-            // Now validate agency permissions for this excursion
-            $validation2 = $this->validateAgency($request, 'reservations.edit');
-            if (isset($validation2['error'])) {
-                return response()->json(['message' => $validation2['error']], $validation2['status']);
-            }
-
-            // use the agency code from initial validation
-
-            // eticion a api a carlos para obtener nombre de agencia
+            // Obtener información de la agencia (especialmente el nombre para el mail)
             $agencyDataResponse = $this->callAgencyUserController(
                 'agencies',
                 [
@@ -601,40 +593,28 @@ class AgencyExternalHyAController extends Controller
                 ]
             );
 
-            if ($agencyDataResponse->getStatusCode() !== 200) {
-                return response()->json([
-                    'message' => 'Error al obtener información de la agencia en el sistema externo',
-                    'error' => $this->getInternalError($agencyDataResponse),
-                ], $agencyDataResponse->getStatusCode());
-            }
+            $agencyName = 'Agencia ' . $agency_code;
 
-            $agencyResponse = $this->extractResponseData($agencyDataResponse);
-            if (empty($agencyResponse) || !isset($agencyResponse[0]['NOMBRE'])) {
-                return response()->json([
-                    'message' => 'No se encontró información para el código de agencia indicado en el sistema externo',
-                ], 404);
+            if ($agencyDataResponse->getStatusCode() === 200) {
+                $agencyResponse = $this->extractResponseData($agencyDataResponse);
+                if (!empty($agencyResponse) && isset($agencyResponse[0]['NOMBRE'])) {
+                    $agencyName = $agencyResponse[0]['NOMBRE'];
+                }
             }
-            $agencyName = $agencyResponse[0]['NOMBRE'];
-
-            $reservation = UserReservation::where('reservation_number', $request->reservation_number)->first();
-            if (!$reservation)
-                return response(["message" => "No se ha encontrado una reserva asociada a reservation_number enviado."], 422);
 
             // Solicitud de cambio guardar en DB
-            $change_request = ChangeRequest::create([
+            \App\Models\ChangeRequest::create([
                 'user_id' => null,
-                'agency_code' => $agency_code,
-                'user_reservation_id' => $reservation->id,
+                'user_reservation_id' => $userReservation->id,
                 'text' => $request->input('request'),
             ]);
 
-            // Get the email from environment variable
-            $recipientEmail = env('RESERVATION_MODIFICATION_EMAIL', 'enzo100amarilla@gmail.com');
+            // Mail
+            $recipientEmail = env('RESERVATION_MODIFICATION_EMAIL', 'slarramendy@daptee.com.ar');
 
-            // Send email with all request data
             Mail::to($recipientEmail)->send(
                 new \App\Mail\AgencyReservationModification(
-                    $request->reservation_number,
+                    $reservation_number,
                     $agencyName,
                     $request->all()
                 )
