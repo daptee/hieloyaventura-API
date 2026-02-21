@@ -192,10 +192,6 @@ class AgencyExternalHyAController extends Controller
 
     public function getAvailability(Request $request)
     {
-        $validation = $this->validateAgency($request, 'disponibilty');
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
-
         try {
             $request->validate([
                 'date_from' => 'required|date_format:d/m/Y',
@@ -209,6 +205,10 @@ class AgencyExternalHyAController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['message' => collect($e->errors())->flatten()->first()], 400);
         }
+
+        $validation = $this->validateAgency($request, 'disponibilty');
+        if (isset($validation['error']))
+            return response()->json(['message' => $validation['error']], $validation['status']);
 
         return $this->callAgencyUserController('TurnosAG', [
             'FECHAD' => $request->date_from,
