@@ -655,7 +655,7 @@ class AgencyExternalHyAController extends Controller
         // Buscar reserva en DB local para obtener excursion_id y validar pertenencia
         $userReservation = \App\Models\UserReservation::where('reservation_number', $reservation_number)->first();
 
-        if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency->id) {
+        if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency->agency_code) {
             return response()->json(['message' => $unifiedMessage], 404);
         }
 
