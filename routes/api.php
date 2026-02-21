@@ -433,7 +433,10 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     });
     Route::post('/reservation', 'createReservation');
     Route::put('/reservation', 'editReservation');
-    Route::delete('/reservation', 'cancelReservation');
+    Route::delete('/reservation/{reservation_number}', 'cancelReservation');
+    Route::delete('/reservation', function () {
+        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+    });
 });
 
 Route::get('/users/types', [UserController::class, 'types_user']);

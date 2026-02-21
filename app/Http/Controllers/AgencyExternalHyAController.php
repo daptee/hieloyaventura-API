@@ -27,7 +27,7 @@ class AgencyExternalHyAController extends Controller
      * Validate agency permissions for a specific action
      * The agency is already authenticated by the middleware
      */
-    private function validateAgency(Request $request, $permissionPath = null)
+    private function validateAgency(Request $request, $permissionPath = null, $excursionId = null)
     {
         $agency = $request->input('authenticated_agency');
 
@@ -46,7 +46,7 @@ class AgencyExternalHyAController extends Controller
 
         $configurations = $agency->configurations;
 
-        $excursion_id = $request->excursion_id ?? $request->excurtion_id;
+        $excursion_id = $excursionId ?? $request->excursion_id ?? $request->excurtion_id;
 
         if (!$excursion_id) {
             return ['error' => 'excursion_id is required', 'status' => 400];
@@ -192,19 +192,15 @@ class AgencyExternalHyAController extends Controller
 
     public function getAvailability(Request $request)
     {
-        try {
-            $request->validate([
-                'date_from' => 'required|date_format:d/m/Y',
-                'date_to' => 'required|date_format:d/m/Y',
-            ], [
-                'date_from.required' => 'date_from is required',
-                'date_from.date_format' => 'date_from format must be dd/mm/yyyy',
-                'date_to.required' => 'date_to is required',
-                'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['message' => collect($e->errors())->flatten()->first()], 400);
-        }
+        $request->validate([
+            'date_from' => 'required|date_format:d/m/Y',
+            'date_to' => 'required|date_format:d/m/Y',
+        ], [
+            'date_from.required' => 'date_from is required',
+            'date_from.date_format' => 'date_from format must be dd/mm/yyyy',
+            'date_to.required' => 'date_to is required',
+            'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
+        ]);
 
         $validation = $this->validateAgency($request, 'disponibilty');
         if (isset($validation['error']))
@@ -651,18 +647,26 @@ class AgencyExternalHyAController extends Controller
         }
     }
 
-    public function cancelReservation(Request $request)
+    public function cancelReservation(Request $request, $reservation_number)
     {
-        $validation = $this->validateAgency($request, 'reservations.cancel');
-        if (isset($validation['error']))
-            return response()->json(['message' => $validation['error']], $validation['status']);
+        $agency = $request->input('authenticated_agency');
+        $unifiedMessage = 'The requested reservation was not found.';
 
-        if (!$request->has('reservation_number')) {
-            return response()->json(['message' => 'reservation_number parameter is required'], 400);
+        // Buscar reserva en DB local para obtener excursion_id y validar pertenencia
+        $userReservation = \App\Models\UserReservation::where('reservation_number', $reservation_number)->first();
+
+        if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency->id) {
+            return response()->json(['message' => $unifiedMessage], 404);
+        }
+
+        // Validar permisos de la agencia para esta excursión
+        $validation = $this->validateAgency($request, 'reservations.cancel', $userReservation->excurtion_id);
+        if (isset($validation['error'])) {
+            return response()->json(['message' => $validation['error']], $validation['status']);
         }
 
         return $this->callAgencyUserController('cancel_reservation', [
-            'RSV' => $request->reservation_number,
+            'RSV' => $reservation_number,
         ]);
     }
 }
