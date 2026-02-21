@@ -196,18 +196,18 @@ class AgencyExternalHyAController extends Controller
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
 
-        $validator = \Validator::make($request->all(), [
-            'date_from' => 'required|date_format:d/m/Y',
-            'date_to' => 'required|date_format:d/m/Y',
-        ], [
-            'date_from.required' => 'date_from is required',
-            'date_from.date_format' => 'date_from format must be dd/mm/yyyy',
-            'date_to.required' => 'date_to is required',
-            'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()->first()], 400);
+        try {
+            $request->validate([
+                'date_from' => 'required|date_format:d/m/Y',
+                'date_to' => 'required|date_format:d/m/Y',
+            ], [
+                'date_from.required' => 'date_from is required',
+                'date_from.date_format' => 'date_from format must be dd/mm/yyyy',
+                'date_to.required' => 'date_to is required',
+                'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['message' => collect($e->errors())->flatten()->first()], 400);
         }
 
         return $this->callAgencyUserController('TurnosAG', [
