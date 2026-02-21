@@ -99,16 +99,16 @@ class AgencyExternalHyAController extends Controller
             return response()->json($response, 200);
         } catch (\Illuminate\Http\Client\RequestException $e) {
             $errorData = $e->response->json();
+            $errorMessage = $errorData['message'] ?? $errorData['ERROR_MSG'] ?? $errorData['RESULT'] ?? $e->getMessage();
+
             return response()->json([
-                'message' => 'Error en la petición externa',
-                'error' => $errorData['message'] ?? $errorData['ERROR_MSG'] ?? $errorData['RESULT'] ?? $e->getMessage(),
-                'details' => $errorData
+                'message' => $errorMessage
             ], $e->response->status());
         } catch (\Throwable $th) {
+            Log::error("Error in AgencyExternalHyAController@callAgencyUserController: " . $th->getMessage());
             return response()->json([
-                'message' => $th->getMessage(),
-                'line' => $th->getLine(),
-                'file' => $th->getFile()
+                'message' => 'Ocurrió un error inesperado al procesar la solicitud.',
+                'error' => $th->getMessage()
             ], 500);
         }
     }
@@ -215,7 +215,6 @@ class AgencyExternalHyAController extends Controller
 
     public function getReservation(Request $request, $reservation_number)
     {
-        // Solo validar API key (el middleware ya lo hace)
         $agency = $request->input('authenticated_agency');
         $agency_code = $agency->agency_code;
 
@@ -227,7 +226,8 @@ class AgencyExternalHyAController extends Controller
             $data = $this->extractResponseData($response);
 
             // Validar que la reserva pertenezca a la agencia
-            if (isset($data['AG']) && (string) $data['AG'] !== (string) $agency_code) {
+            // Usamos AGENCIA ya que AG no siempre viene o no es el campo correcto según pruebas
+            if (isset($data['AGENCIA']) && (string) $data['AGENCIA'] !== (string) $agency_code) {
                 return response()->json(['message' => 'No se encontró la reserva solicitada para esta agencia'], 404);
             }
         }

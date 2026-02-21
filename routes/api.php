@@ -428,6 +428,9 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     Route::get('/hotels', 'getHotels');
     Route::get('/nationalities', 'getNationalities');
     Route::get('/reservation/{reservation_number}', 'getReservation');
+    Route::get('/reservation', function () {
+        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+    });
     Route::post('/reservation', 'createReservation');
     Route::put('/reservation', 'editReservation');
     Route::delete('/reservation', 'cancelReservation');
