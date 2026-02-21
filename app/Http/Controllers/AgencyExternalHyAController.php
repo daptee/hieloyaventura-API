@@ -49,7 +49,7 @@ class AgencyExternalHyAController extends Controller
         $excursion_id = $request->excursion_id ?? $request->excurtion_id;
 
         if (!$excursion_id) {
-            return ['error' => 'excursion_id is required for this action', 'status' => 400];
+            return ['error' => 'excursion_id is required', 'status' => 400];
         }
 
         if (!isset($configurations[$excursion_id])) {
@@ -195,6 +195,16 @@ class AgencyExternalHyAController extends Controller
         $validation = $this->validateAgency($request, 'disponibilty');
         if (isset($validation['error']))
             return response()->json(['message' => $validation['error']], $validation['status']);
+
+        $request->validate([
+            'date_from' => 'required|date_format:d/m/Y',
+            'date_to' => 'required|date_format:d/m/Y',
+        ], [
+            'date_from.required' => 'date_from is required',
+            'date_from.date_format' => 'date_from format must be dd/mm/yyyy',
+            'date_to.required' => 'date_to is required',
+            'date_to.date_format' => 'date_to format must be dd/mm/yyyy',
+        ]);
 
         return $this->callAgencyUserController('TurnosAG', [
             'FECHAD' => $request->date_from,
