@@ -578,7 +578,7 @@ class AgencyExternalHyAController extends Controller
         }
 
         // Validar permisos de la agencia para esta excursión
-        $validation = $this->validateAgency($request, 'reservations.update', $userReservation->excurtion_id);
+        $validation = $this->validateAgency($request, 'reservations.edit', $userReservation->excurtion_id);
         if (isset($validation['error'])) {
             return response()->json(['message' => $validation['error']], $validation['status']);
         }
