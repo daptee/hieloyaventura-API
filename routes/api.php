@@ -429,18 +429,22 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     Route::get('/nationalities', 'getNationalities');
     Route::get('/reservation/{reservation_number}', 'getReservation');
     Route::get('/reservation', function () {
-        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+        return response()->json(['message' => 'El número de reserva es obligatorio como parte de la URL (ej: /reservation/123456)'], 400);
     });
     Route::post('/reservation', 'createReservation');
     Route::put('/reservation/{reservation_number}', 'editReservation');
     Route::put('/reservation', function () {
-        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+        return response()->json(['message' => 'El número de reserva es obligatorio como parte de la URL (ej: /reservation/123456)'], 400);
     });
-    Route::delete('/reservation/{reservation_number}', 'cancelReservation'); // VER CON CARLOS QUE DEVUELVE QUE NO ENCUENTRA LA RESERVA
+    Route::delete('/reservation/{reservation_number}', 'cancelReservation');
     Route::delete('/reservation', function () {
-        return response()->json(['message' => 'reservation_number is required as part of the URL (e.g., /reservation/123456)'], 400);
+        return response()->json(['message' => 'El número de reserva es obligatorio como parte de la URL (ej: /reservation/123456)'], 400);
     });
 });
+// CONSULTAR PARA CARLOS
+// CONFIRMA PASAJEROS ARROJA ERROR
+// LA EDAD SE AGREGO PERO INICIALMENTE NO SE ENVIABA
+// 
 
 Route::get('/users/types', [UserController::class, 'types_user']);
 
