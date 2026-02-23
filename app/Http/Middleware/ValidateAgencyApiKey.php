@@ -21,7 +21,7 @@ class ValidateAgencyApiKey
 
         if (!$apiKey) {
             return response()->json([
-                'message' => 'API Key is required'
+                'message' => 'La API Key es obligatoria'
             ], 401);
         }
 
@@ -29,7 +29,7 @@ class ValidateAgencyApiKey
 
         if (!$agency) {
             return response()->json([
-                'message' => 'Invalid API Key'
+                'message' => 'API Key inválida'
             ], 401);
         }
 

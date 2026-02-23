@@ -349,7 +349,7 @@ class AgencyExternalHyAController extends Controller
                         }
                     }
                 }
-                $pax['age'] = $age;
+                $pax['age'] = (string) $age;
             }
             $request->merge(['paxs_reservation' => $paxs]);
 
