@@ -486,9 +486,12 @@ class AgencyExternalHyAController extends Controller
                 'T2' => "0",
                 'T3' => "0",
                 'T4' => "0",
-                'T5' => "0",
-                'pasajeros' => $paxs
+                'T5' => "0"
             ];
+
+            if (!empty($paxs)) {
+                $confirmData['pasajeros'] = $paxs;
+            }
 
             $this->logIntegration("Paso 3: Confirmando reserva", $confirmData);
             $confirmResponse = $this->callAgencyUserController('ConfirmaReservaAGINT', $confirmData);
