@@ -197,17 +197,10 @@ class UserReservationController extends Controller
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
-        // if (!isset($datos['X-API-KEY'])) {
-        //     // validar token -> agency
-        //     if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
-        //         return response(["message" => "agency_id invalido"], 400);
-
-        // }
-
         try {
             DB::beginTransaction();
 
-            // aca en caso de que llegue la fecha en formato d/m/y convertir a y-m-d
+            // Convierte la fecha a formato Y-m-d si viene separada por '/'
             if (isset($datos['date']) && str_contains($datos['date'], '/')) {
                 try {
                     $datos['date'] = Carbon::createFromFormat('d/m/Y', $datos['date'])->format('Y-m-d');
@@ -219,9 +212,8 @@ class UserReservationController extends Controller
                 }
             }
 
-            //Creo el registro en user_reservations
+            // Crear la reserva
             $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED, "agency_code" => $request->agency_code]);
-
             $newUserReservation->user_id = null;
             $newUserReservation->excurtion_id = $request->excurtion_id ?? $request->excursion_id ?? null;
             $newUserReservation->agency_id = $request->agency_code;
@@ -229,29 +221,35 @@ class UserReservationController extends Controller
             $newUserReservation->language_id = 1;
             $newUserReservation->save();
 
-            // Guardo status en historial
+            // Guardar datos de contacto (PAX de referencia)
+            $contactData = [
+                'user_reservation_id' => $newUserReservation->id,
+                'name' => $request->full_name ?? $request->pax ?? 'Sin Nombre',
+                'email' => $request->email ?? $request->contact_email ?? '',
+                'phone' => $request->phone ?? $request->contact_phone ?? '',
+            ];
+            \App\Models\ContactDataReservation::create($contactData);
+
+            // Guardar historial
             UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
-            //
 
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
-            $nro_reserva = $datos['reservation_number'];
-            Log::debug(print_r(["Error al crear la reserva (agencia) (1er catch, detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'] ?? 'N/A';
+            Log::debug("Error al crear la reserva (agencia) (ModelNotFound): " . $error->getMessage() . " nro_reserva: $nro_reserva");
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            $nro_reserva = $datos['reservation_number'];
-            Log::debug(print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'] ?? 'N/A';
+            Log::debug("Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva");
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
-        $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
 
-        // return response(compact("message", "newUserReservation"));
         return response()->json([
-            'message' => $message,
+            'message' => "Se ha creado {$this->pr} {$this->s} correctamente.",
             'newUserReservation' => $newUserReservation
         ], 200);
     }

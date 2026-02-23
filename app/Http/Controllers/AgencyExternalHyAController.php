@@ -95,16 +95,28 @@ class AgencyExternalHyAController extends Controller
             return response()->json($response, 200);
         } catch (\Illuminate\Http\Client\RequestException $e) {
             $errorData = $e->response->json();
-            $errorMessage = $errorData['message'] ?? $errorData['ERROR_MSG'] ?? $errorData['RESULT'] ?? 'Ocurrió un error en el sistema.';
+            $originalError = $errorData['message'] ?? $errorData['ERROR_MSG'] ?? $errorData['RESULT'] ?? $e->getMessage();
 
-            // Ocultar mensajes técnicos en la respuesta
+            // LOG DEL ERROR ORIGINAL PARA SOPORTE INTERNO
+            $this->logIntegration("Error técnico en callAgencyUserController ($method)", [
+                'status' => $e->response->status(),
+                'original_error' => $originalError,
+                'params' => $params
+            ], 'error');
+
+            $errorMessage = $originalError;
+            // Ocultar mensajes técnicos en la respuesta al cliente
             if (str_contains($errorMessage, '[FireDAC]')) {
                 $errorMessage = 'No se pudo completar la operación en este momento.';
             }
 
             return response()->json(['message' => $errorMessage], $e->response->status());
         } catch (\Throwable $th) {
-            Log::error("Error in AgencyExternalHyAController@callAgencyUserController: " . $th->getMessage());
+            $this->logIntegration("Excepción en callAgencyUserController ($method)", [
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine()
+            ], 'critical');
             return response()->json(['message' => 'Ocurrió un error inesperado al procesar la solicitud.'], 500);
         }
     }
@@ -540,6 +552,8 @@ class AgencyExternalHyAController extends Controller
 
     public function editReservation(Request $request, $reservation_number)
     {
+        $this->logIntegration("--- INICIO editReservation ---", array_merge(['reservation_number' => $reservation_number], $request->all()));
+
         $agency = $request->input('authenticated_agency');
         $agency_code = $agency->agency_code;
         $unifiedNotFound = 'La reserva solicitada no fue encontrada.';
@@ -554,17 +568,22 @@ class AgencyExternalHyAController extends Controller
 
         // Validar existencia y pertenencia
         if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency_code) {
+            $this->logIntegration("Error en editReservation: Reserva no encontrada o no pertenece a la agencia", ['reservation_number' => $reservation_number, 'agency_code' => $agency_code], 'warning');
             return response()->json(['message' => $unifiedNotFound], 404);
         }
 
         // Validar permisos de la agencia para esta excursión
         $validation = $this->validateAgency($request, 'reservations.edit', $userReservation->excurtion_id);
         if (isset($validation['error'])) {
+            $this->logIntegration("Error en editReservation: Sin permisos", $validation, 'warning');
             return response()->json(['message' => 'No tiene permisos para modificar esta reserva.'], 403);
         }
 
         try {
-            // Obtener información de la agencia
+            /** ---------------------------------
+             * 0️⃣ OBTENER INFO AGENCIA
+             * ---------------------------------*/
+            $this->logIntegration("Paso 0: Obteniendo información de agencia para email", ['agency_code' => $agency_code]);
             $agencyDataResponse = $this->callAgencyUserController('agencies', ['DESDE' => $agency_code, 'HASTA' => $agency_code]);
             $agencyName = 'Agencia ' . $agency_code;
 
@@ -574,27 +593,42 @@ class AgencyExternalHyAController extends Controller
                     $agencyName = $agencyResponse[0]['NOMBRE'];
                 }
             }
+            $this->logIntegration("Paso 0 OK: Nombre de agencia obtenido", ['name' => $agencyName]);
 
-            // Solicitud de cambio guardar en DB
+            /** ---------------------------------
+             * 1️⃣ REGISTRAR SOLICITUD DE CAMBIO
+             * ---------------------------------*/
+            $this->logIntegration("Paso 1: Registrando solicitud de cambio en DB local");
             \App\Models\ChangeRequest::create([
                 'user_id' => null,
                 'user_reservation_id' => $userReservation->id,
                 'text' => $request->input('request'),
             ]);
+            $this->logIntegration("Paso 1 OK: Cambio registrado");
 
-            // Mail
+            /** ---------------------------------
+             * 2️⃣ ENVIAR MAIL DE NOTIFICACIÓN
+             * ---------------------------------*/
+            $this->logIntegration("Paso 2: Enviando email de notificación de cambio");
             $recipientEmail = env('RESERVATION_MODIFICATION_EMAIL', 'slarramendy@daptee.com.ar');
             Mail::to($recipientEmail)->send(new \App\Mail\AgencyReservationModification($reservation_number, $agencyName, $request->all()));
+            $this->logIntegration("Paso 2 OK: Email enviado");
 
+            $this->logIntegration("--- FIN editReservation EXITOSO ---");
             return response()->json(["message" => "¡Solicitud de modificación enviada con éxito!"], 200);
         } catch (\Throwable $th) {
-            Log::error("Error in AgencyExternalHyAController@editReservation: " . $th->getMessage());
+            $this->logIntegration("CRITICAL ERROR en editReservation", [
+                'message' => $th->getMessage(),
+                'line' => $th->getLine()
+            ], 'critical');
             return response()->json(["message" => "Ocurrió un error al procesar su solicitud. Por favor, intente más tarde."], 500);
         }
     }
 
     public function cancelReservation(Request $request, $reservation_number)
     {
+        $this->logIntegration("--- INICIO cancelReservation ---", ['reservation_number' => $reservation_number]);
+
         $agency = $request->input('authenticated_agency');
         $unifiedNotFound = 'La reserva solicitada no fue encontrada.';
 
@@ -602,18 +636,29 @@ class AgencyExternalHyAController extends Controller
         $userReservation = \App\Models\UserReservation::where('reservation_number', $reservation_number)->first();
 
         if (!$userReservation || (string) $userReservation->agency_id !== (string) $agency->agency_code) {
+            $this->logIntegration("Error en cancelReservation: Reserva no encontrada o no pertenece", ['reservation_number' => $reservation_number], 'warning');
             return response()->json(['message' => $unifiedNotFound], 404);
         }
 
         // Validar permisos de la agencia para esta excursión
         $validation = $this->validateAgency($request, 'reservations.cancel', $userReservation->excurtion_id);
         if (isset($validation['error'])) {
+            $this->logIntegration("Error en cancelReservation: Sin permisos", $validation, 'warning');
             return response()->json(['message' => 'No tiene permisos para cancelar esta reserva.'], 403);
         }
 
         try {
+            /** ---------------------------------
+             * 1️⃣ CANCELAR EN HYA (Externo)
+             * ---------------------------------*/
+            $this->logIntegration("Paso 1: Cancelando reserva en sistema externo", ['RSV' => $reservation_number]);
             $response = $this->callAgencyUserController('cancel_reservation', ['RSV' => $reservation_number]);
             $cancelData = $this->extractResponseData($response);
+
+            $this->logIntegration("Paso 1 Response", [
+                'status' => $response->getStatusCode(),
+                'response' => $cancelData
+            ]);
 
             if ($response->getStatusCode() !== 200 || (isset($cancelData['RESULT']) && $cancelData['RESULT'] === 'ERROR')) {
                 $rawError = $cancelData['ERROR_MSG'] ?? $cancelData['message'] ?? 'Error desconocido';
@@ -625,9 +670,13 @@ class AgencyExternalHyAController extends Controller
                 ], $response->getStatusCode() === 200 ? 400 : $response->getStatusCode());
             }
 
+            $this->logIntegration("--- FIN cancelReservation EXITOSO ---");
             return response()->json(["message" => "La reserva ha sido cancelada con éxito."], 200);
         } catch (\Throwable $th) {
-            Log::error("Error in AgencyExternalHyAController@cancelReservation: " . $th->getMessage());
+            $this->logIntegration("CRITICAL ERROR en cancelReservation", [
+                'message' => $th->getMessage(),
+                'line' => $th->getLine()
+            ], 'critical');
             return response()->json(["message" => "Ocurrió un error al procesar la cancelación."], 500);
         }
     }
