@@ -445,6 +445,7 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
 // CONFIRMA PASAJEROS ARROJA ERROR
 // LA EDAD SE AGREGO PERO INICIALMENTE NO SE ENVIABA
 // En el PAX no se guarda lo que mando de la API sino que guarda que lo reserva desde agencias integracion
+// Al intentar cancelar reserva, me dice no encontrada pero si existe
 
 Route::get('/users/types', [UserController::class, 'types_user']);
 
