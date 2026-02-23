@@ -264,7 +264,7 @@ class AgencyExternalHyAController extends Controller
                 'pax' => 'required|string|max:255',
                 'contact_email' => 'required|email|max:255',
                 'contact_phone' => 'required|string|max:50',
-                'is_transfer' => 'nullable|boolean',
+                'is_transfer' => 'required|boolean',
                 'observations' => 'nullable|string',
                 'paxs_reservation' => 'nullable|array',
             ]);
@@ -369,12 +369,12 @@ class AgencyExternalHyAController extends Controller
                 'response' => $startData
             ]);
 
-            if (isset($startData['RESULT']) && $startData['RESULT'] === 'ERROR') {
+            if ($startResponse->getStatusCode() !== 200 || (isset($startData['RESULT']) && $startData['RESULT'] === 'ERROR')) {
                 $this->logIntegration("Error en Paso 1: HyA rechazó el inicio de reserva", $startData, 'error');
                 return response()->json([
                     'message' => 'El sistema externo (H&A) rechazó el inicio de la reserva',
-                    'error' => $startData['ERROR_MSG'] ?? 'Error desconocido'
-                ], 400);
+                    'error' => $startData['ERROR_MSG'] ?? $startData['message'] ?? 'Error desconocido'
+                ], $startResponse->getStatusCode() === 200 ? 400 : $startResponse->getStatusCode());
             }
 
             $reservationNumber = $startData['RESERVA'] ?? null;
@@ -447,13 +447,13 @@ class AgencyExternalHyAController extends Controller
                 'response' => $confirmResult
             ]);
 
-            if (isset($confirmResult['RESULT']) && $confirmResult['RESULT'] === 'ERROR') {
+            if ($confirmResponse->getStatusCode() !== 200 || (isset($confirmResult['RESULT']) && $confirmResult['RESULT'] === 'ERROR')) {
                 DB::rollBack();
                 $this->logIntegration("Error en Paso 3: HyA rechazó la confirmación", $confirmResult, 'error');
                 return response()->json([
                     'message' => 'El sistema externo (H&A) rechazó la confirmación de la reserva',
-                    'error' => $confirmResult['ERROR_MSG'] ?? 'Error desconocido'
-                ], 400);
+                    'error' => $confirmResult['ERROR_MSG'] ?? $confirmResult['message'] ?? 'Error desconocido'
+                ], $confirmResponse->getStatusCode() === 200 ? 400 : $confirmResponse->getStatusCode());
             }
 
             $this->logIntegration("Paso 3 OK: Reserva confirmada en HyA");
@@ -494,6 +494,7 @@ class AgencyExternalHyAController extends Controller
                 $internalReservation->save();
                 \App\Models\UserReservation::store_user_reservation_status_history(\App\Models\ReservationStatus::PAX_PENDING, $internalReservation->id);
             }
+
 
             DB::commit();
             $this->logIntegration("TRANSACCIÓN DB COMMIT EXITOSA");
