@@ -260,14 +260,16 @@ class AgencyExternalHyAController extends Controller
                 'date' => 'required|date_format:d/m/Y',
                 'turn' => 'required|date_format:H:i',
                 'hotel_id' => 'required|integer',
-                'contact_name' => 'required|string|max:255',
+                'hotel_name' => 'required|string|max:255',
+                'pax' => 'required|string|max:255',
                 'contact_email' => 'required|email|max:255',
                 'contact_phone' => 'required|string|max:50',
-                'has_transfer' => 'nullable|boolean',
+                'is_transfer' => 'nullable|boolean',
                 'observations' => 'nullable|string',
                 'paxs_reservation' => 'nullable|array',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->logIntegration("Error de validación de entrada", $e->errors(), 'warning');
             return response()->json([
                 'message' => 'Validation error',
                 'errors' => $e->errors()
@@ -299,6 +301,11 @@ class AgencyExternalHyAController extends Controller
 
             if ($agenciesResponse->getStatusCode() !== 200) {
                 $errorMsg = $this->getInternalError($agenciesResponse);
+                $this->logIntegration("Error en Paso 0: Error al obtener info de agencia externa", [
+                    'status' => $agenciesResponse->getStatusCode(),
+                    'error' => $errorMsg
+                ], 'error');
+
                 return response()->json([
                     'message' => 'Error al obtener información de la agencia en el sistema externo',
                     'error' => $errorMsg
@@ -307,12 +314,18 @@ class AgencyExternalHyAController extends Controller
 
             $agenciesData = $this->extractResponseData($agenciesResponse);
             if (empty($agenciesData) || !isset($agenciesData[0]['NOMBRE'])) {
+                $this->logIntegration("Error en Paso 0: No se encontró la agencia en el sistema de H&A", [
+                    'agency_code' => $agency_code,
+                    'response' => $agenciesData
+                ], 'error');
+
                 return response()->json([
                     'message' => 'No se encontró información para el código de agencia indicado en el sistema externo'
                 ], 404);
             }
 
             $agency_name = $agenciesData[0]['NOMBRE'] ?? 'Agencia sin nombre';
+            $this->logIntegration("Paso 0 OK: Agencia encontrada", ['name' => $agency_name]);
 
             // 3. Procesar pasajeros: Calcular edad de cada uno de forma robusta
             $paxs = $request->input('paxs_reservation', []);
@@ -341,7 +354,7 @@ class AgencyExternalHyAController extends Controller
                 'TUR' => $request->date . '+' . $request->turn,
                 'PSJ' => count($paxs),
                 'PRD' => (int) $request->excursion_id,
-                'TRF' => $request->has_transfer ? 'S' : 'N',
+                'TRF' => $request->is_transfer ? 'S' : 'N',
                 'AG' => $agency_code,
                 'OPERADOR' => -1,
                 'TVENTA' => 1
@@ -351,7 +364,13 @@ class AgencyExternalHyAController extends Controller
             $startResponse = $this->callAgencyUserController('start_reservation', $body_array);
             $startData = $this->extractResponseData($startResponse);
 
+            $this->logIntegration("Paso 1 Response: Respuesta de HyA", [
+                'status' => $startResponse->getStatusCode(),
+                'response' => $startData
+            ]);
+
             if (isset($startData['RESULT']) && $startData['RESULT'] === 'ERROR') {
+                $this->logIntegration("Error en Paso 1: HyA rechazó el inicio de reserva", $startData, 'error');
                 return response()->json([
                     'message' => 'El sistema externo (H&A) rechazó el inicio de la reserva',
                     'error' => $startData['ERROR_MSG'] ?? 'Error desconocido'
@@ -360,8 +379,11 @@ class AgencyExternalHyAController extends Controller
 
             $reservationNumber = $startData['RESERVA'] ?? null;
             if (!$reservationNumber) {
+                $this->logIntegration("Error en Paso 1: No se recibió RESERVA desde HyA", $startData, 'critical');
                 return response()->json(['message' => 'Error crítico: El sistema externo no devolvió un número de reserva'], 500);
             }
+
+            $this->logIntegration("Paso 1 OK: Reserva iniciada en HyA", ['RSV' => $reservationNumber]);
 
             /** ---------------------------------
              * 2️⃣ CREAR RESERVA EN NUESTRA DB
@@ -374,7 +396,8 @@ class AgencyExternalHyAController extends Controller
                 'agency_code' => $agency_code,
                 'excurtion_id' => $request->excursion_id,
                 'email' => $request->contact_email,
-                'phone' => $request->contact_phone
+                'phone' => $request->contact_phone,
+                'full_name' => $request->pax
             ]));
 
             $userReservationController = new \App\Http\Controllers\UserReservationController();
@@ -382,13 +405,20 @@ class AgencyExternalHyAController extends Controller
 
             if ($userResResponse->getStatusCode() !== 200) {
                 DB::rollBack();
+                $errorMsg = $this->getInternalError($userResResponse);
+                $this->logIntegration("Error en Paso 2: Error al registrar en DB local", [
+                    'status' => $userResResponse->getStatusCode(),
+                    'error' => $errorMsg
+                ], 'error');
+
                 return response()->json([
                     'message' => 'Error al registrar la reserva en la base de datos local',
-                    'error' => $this->getInternalError($userResResponse)
+                    'error' => $errorMsg
                 ], $userResResponse->getStatusCode());
             }
 
             $userReservationLocal = $this->extractResponseData($userResResponse)['newUserReservation'];
+            $this->logIntegration("Paso 2 OK: Reserva registrada en local", ['internal_id' => $userReservationLocal['id']]);
 
             /** ---------------------------------
              * 3️⃣ CONFIRMACION Y CARGA DE PAXS EN HYA
@@ -396,7 +426,7 @@ class AgencyExternalHyAController extends Controller
             $confirmData = [
                 'RSV' => (int) $reservationNumber,
                 'HOTEL' => (int) $request->hotel_id,
-                'PAX' => $request->contact_name,
+                'PAX' => $request->pax,
                 'MAIL' => $request->contact_email,
                 'TELEFONO' => $request->contact_phone,
                 'OBSV' => $request->observations ?? '',
@@ -412,18 +442,28 @@ class AgencyExternalHyAController extends Controller
             $confirmResponse = $this->callAgencyUserController('ConfirmaReservaAGINT', $confirmData);
             $confirmResult = $this->extractResponseData($confirmResponse);
 
+            $this->logIntegration("Paso 3 Response: Respuesta de HyA", [
+                'status' => $confirmResponse->getStatusCode(),
+                'response' => $confirmResult
+            ]);
+
             if (isset($confirmResult['RESULT']) && $confirmResult['RESULT'] === 'ERROR') {
                 DB::rollBack();
+                $this->logIntegration("Error en Paso 3: HyA rechazó la confirmación", $confirmResult, 'error');
                 return response()->json([
                     'message' => 'El sistema externo (H&A) rechazó la confirmación de la reserva',
                     'error' => $confirmResult['ERROR_MSG'] ?? 'Error desconocido'
                 ], 400);
             }
 
+            $this->logIntegration("Paso 3 OK: Reserva confirmada en HyA");
+
             /** ---------------------------------
              * 4️⃣ CONFIRMAR EN NUESTRA DB (PAXS)
              * ---------------------------------*/
             if (!empty($paxs)) {
+                $this->logIntegration("Paso 4: Guardando pasajeros en base de datos local");
+
                 $paxRequest = new StorePaxRequest();
                 $paxRequest->replace([
                     'user_reservation_id' => $userReservationLocal['id'],
@@ -435,12 +475,20 @@ class AgencyExternalHyAController extends Controller
 
                 if ($paxResponse->getStatusCode() !== 200) {
                     DB::rollBack();
+                    $errorMsg = $this->getInternalError($paxResponse);
+                    $this->logIntegration("Error en Paso 4: Error al guardar paxs en local", [
+                        'status' => $paxResponse->getStatusCode(),
+                        'error' => $errorMsg
+                    ], 'error');
+
                     return response()->json([
                         'message' => 'Error al guardar el detalle de pasajeros en la base de datos local',
-                        'error' => $this->getInternalError($paxResponse)
+                        'error' => $errorMsg
                     ], $paxResponse->getStatusCode());
                 }
+                $this->logIntegration("Paso 4 OK: Pasajeros guardados en local");
             } else {
+                $this->logIntegration("Paso 4 SKIP: No hay pasajeros para guardar, seteando estado pendiente");
                 $internalReservation = \App\Models\UserReservation::find($userReservationLocal['id']);
                 $internalReservation->reservation_status_id = \App\Models\ReservationStatus::PAX_PENDING;
                 $internalReservation->save();
@@ -448,14 +496,17 @@ class AgencyExternalHyAController extends Controller
             }
 
             DB::commit();
+            $this->logIntegration("TRANSACCIÓN DB COMMIT EXITOSA");
 
             /** ---------------------------------
              * 5️⃣ ENVIAR MAIL
              * ---------------------------------*/
+            $this->logIntegration("Paso 5: Enviando email de confirmación");
             try {
                 $internalRes = \App\Models\UserReservation::with(['status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($userReservationLocal['id']);
                 $request->merge(['agency_name' => $agency_name]);
                 Mail::to($request->contact_email)->send(new ConfirmationReservation($internalRes, $request));
+                $this->logIntegration("Paso 5 OK: Email enviado");
             } catch (\Throwable $th) {
                 $this->logIntegration("Error enviando mail", ['error' => $th->getMessage()], 'error');
             }
