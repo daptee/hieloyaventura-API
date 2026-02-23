@@ -218,7 +218,7 @@ class AgencyExternalHyAController extends Controller
         return $this->callAgencyUserController('TurnosAG', [
             'FECHAD' => $request->date_from,
             'FECHAH' => $request->date_to,
-            'PRD' => $request->excursion_id,
+            'PRD' => (string) $request->excursion_id,
         ]);
     }
 
@@ -239,7 +239,7 @@ class AgencyExternalHyAController extends Controller
         $unifiedNotFound = 'La reserva solicitada no fue encontrada.';
 
         $response = $this->callAgencyUserController('ReservaxCodigo', [
-            'RSV' => $reservation_number,
+            'RSV' => (string) $reservation_number,
         ]);
 
         if ($response->getStatusCode() === 200) {
@@ -396,13 +396,13 @@ class AgencyExternalHyAController extends Controller
              * 1️⃣ INICIAR RESERVA EN HYA
              * ---------------------------------*/
             $body_array = [
-                'TUR' => $request->date . '+' . $request->turn,
-                'PSJ' => $paxsCant,
-                'PRD' => (int) $request->excursion_id,
+                'TUR' => (string) $request->date . '+' . $request->turn,
+                'PSJ' => (string) $paxsCant,
+                'PRD' => (string) $request->excursion_id,
                 'TRF' => $request->is_transfer ? 'S' : 'N',
-                'AG' => $agency_code,
-                'OPERADOR' => -1,
-                'TVENTA' => 1
+                'AG' => (string) $agency_code,
+                'OPERADOR' => "-1",
+                'TVENTA' => "1"
             ];
 
             $this->logIntegration("Paso 1: Iniciando reserva", $body_array);
@@ -476,13 +476,13 @@ class AgencyExternalHyAController extends Controller
              * 3️⃣ CONFIRMACION Y CARGA DE PAXS EN HYA
              * ---------------------------------*/
             $confirmData = [
-                'RSV' => (int) $reservationNumber,
-                'HOTEL' => (int) $request->hotel_id,
-                'PAX' => $request->contact_name,
-                'MAIL' => $request->contact_email,
-                'TELEFONO' => $request->contact_phone,
-                'OBSV' => $request->observations ?? '',
-                'T1' => $paxsCant,
+                'RSV' => (string) $reservationNumber,
+                'HOTEL' => (string) $request->hotel_id,
+                'PAX' => (string) $request->contact_name,
+                'MAIL' => (string) $request->contact_email,
+                'TELEFONO' => (string) $request->contact_phone,
+                'OBSV' => (string) ($request->observations ?? ''),
+                'T1' => (string) $paxsCant,
                 'T2' => "0",
                 'T3' => "0",
                 'T4' => "0",
@@ -695,7 +695,7 @@ class AgencyExternalHyAController extends Controller
              * 1️⃣ CANCELAR EN HYA (Externo)
              * ---------------------------------*/
             $this->logIntegration("Paso 1: Cancelando reserva en sistema externo", ['RSV' => $reservation_number]);
-            $response = $this->callAgencyUserController('cancel_reservation', ['RSV' => $reservation_number]);
+            $response = $this->callAgencyUserController('cancel_reservation', ['RSV' => (string) $reservation_number]);
             $cancelData = $this->extractResponseData($response);
 
             $this->logIntegration("Paso 1 Response", [
