@@ -278,7 +278,7 @@ class AgencyExternalHyAController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->logIntegration("Error de validación de entrada", $e->errors(), 'warning');
             return response()->json([
-                'message' => 'Validation error',
+                'message' => 'Error en las validaciones',
                 'errors' => $e->errors()
             ], 400);
         }
