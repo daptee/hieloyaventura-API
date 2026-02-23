@@ -359,12 +359,16 @@ class AgencyExternalHyAController extends Controller
 
             // 3. Procesar pasajeros: Validar cantidad y calcular edades
             $paxsCant = (int) $request->input('paxs_cant');
-            $paxs = $request->input('paxs_information', []);
+            $paxs = $request->input('paxs_information');
 
-            if (!empty($paxs) && count($paxs) !== $paxsCant) {
-                return response()->json([
-                    'message' => 'La cantidad de pasajeros en paxs_information debe coincidir con paxs_cant.'
-                ], 400);
+            if ($request->has('paxs_information') && $paxs !== null) {
+                if (!is_array($paxs) || count($paxs) !== $paxsCant) {
+                    return response()->json([
+                        'message' => 'La cantidad de pasajeros en paxs_information debe coincidir con paxs_cant.'
+                    ], 400);
+                }
+            } else {
+                $paxs = [];
             }
 
             foreach ($paxs as &$pax) {
