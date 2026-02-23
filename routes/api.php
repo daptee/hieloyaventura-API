@@ -442,8 +442,6 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     });
 });
 // CONSULTAR PARA CARLOS
-// CONFIRMA PASAJEROS ARROJA ERROR
-// Al intentar cancelar reserva, me dice no encontrada pero si existe
 
 // TODO - REVISAR QUE LA EDAD SE CALCULE CORRECTAMENTE, SEGUN LA FECHA DE LA EXCURSION
 

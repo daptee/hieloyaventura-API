@@ -267,13 +267,18 @@ class AgencyExternalHyAController extends Controller
                 'date' => 'required|date_format:d/m/Y',
                 'turn' => 'required|date_format:H:i',
                 'hotel_id' => 'required|integer',
-                'hotel_name' => 'required|string|max:255',
-                'pax' => 'required|string|max:255',
+                'paxs_cant' => 'required|integer|min:1',
+                'contact_name' => 'required|string|max:255',
                 'contact_email' => 'required|email|max:255',
                 'contact_phone' => 'required|string|max:50',
                 'is_transfer' => 'required|boolean',
                 'observations' => 'nullable|string',
-                'paxs_reservation' => 'nullable|array',
+                'paxs_information' => 'nullable|array',
+            ], [
+                'paxs_cant.required' => 'La cantidad de pasajeros (paxs_cant) es obligatoria.',
+                'paxs_cant.integer' => 'La cantidad de pasajeros debe ser un número entero.',
+                'paxs_cant.min' => 'La cantidad de pasajeros debe ser al menos 1.',
+                'contact_name.required' => 'El nombre de contacto (contact_name) es obligatorio.',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->logIntegration("Error de validación de entrada", $e->errors(), 'warning');
@@ -297,7 +302,7 @@ class AgencyExternalHyAController extends Controller
             DB::beginTransaction();
 
             /** ---------------------------------
-             * 0️⃣ OBTENER INFO AGENCIA (Externo)
+             * 0️⃣ OBTENER INFO AGENCIA Y HOTEL
              * ---------------------------------*/
             $this->logIntegration("Paso 0: Obteniendo información de agencia externa", ['agency_code' => $agency_code]);
 
@@ -333,8 +338,35 @@ class AgencyExternalHyAController extends Controller
             $agency_name = $agenciesData[0]['NOMBRE'] ?? 'Agencia';
             $this->logIntegration("Paso 0 OK: Agencia encontrada", ['name' => $agency_name]);
 
-            // 3. Procesar pasajeros: Calcular edad de cada uno de forma robusta
-            $paxs = $request->input('paxs_reservation', []);
+            // Obtener nombre del hotel mediante el ID
+            $this->logIntegration("Paso 0.1: Obteniendo información del hotel", ['hotel_id' => $request->hotel_id]);
+            $hotelResponse = $this->callAgencyUserController('hotels');
+            $hotelsData = $this->extractResponseData($hotelResponse);
+            $hotel_name = null;
+
+            if ($hotelResponse->getStatusCode() === 200 && is_array($hotelsData)) {
+                $hotelFound = collect($hotelsData)->firstWhere('CODIGO', (string) $request->hotel_id);
+                if ($hotelFound) {
+                    $hotel_name = $hotelFound['HOTEL'];
+                }
+            }
+
+            if (!$hotel_name) {
+                $this->logIntegration("Error en Paso 0.1: Hotel no encontrado", ['hotel_id' => $request->hotel_id], 'error');
+                return response()->json(['message' => 'El hotel seleccionado no es válido.'], 400);
+            }
+            $this->logIntegration("Paso 0.1 OK: Hotel encontrado", ['name' => $hotel_name]);
+
+            // 3. Procesar pasajeros: Validar cantidad y calcular edades
+            $paxsCant = (int) $request->input('paxs_cant');
+            $paxs = $request->input('paxs_information', []);
+
+            if (!empty($paxs) && count($paxs) !== $paxsCant) {
+                return response()->json([
+                    'message' => 'La cantidad de pasajeros en paxs_information debe coincidir con paxs_cant.'
+                ], 400);
+            }
+
             foreach ($paxs as &$pax) {
                 $age = 0;
                 $birthdate = $pax['birthdate'] ?? null;
@@ -351,6 +383,9 @@ class AgencyExternalHyAController extends Controller
                 }
                 $pax['age'] = (string) $age;
             }
+            // No mergeamos de vuelta paxs_information porque el controller interno espera paxs_reservation o similar?
+            // UserReservationController store_type_agency usa $request->paxs (via StorePaxRequest en Paso 4) o $request->all()?
+            // Vamos a normalizar para el controller interno y externo.
             $request->merge(['paxs_reservation' => $paxs]);
 
             /** ---------------------------------
@@ -358,7 +393,7 @@ class AgencyExternalHyAController extends Controller
              * ---------------------------------*/
             $body_array = [
                 'TUR' => $request->date . '+' . $request->turn,
-                'PSJ' => count($paxs),
+                'PSJ' => $paxsCant,
                 'PRD' => (int) $request->excursion_id,
                 'TRF' => $request->is_transfer ? 'S' : 'N',
                 'AG' => $agency_code,
@@ -410,7 +445,8 @@ class AgencyExternalHyAController extends Controller
                 'excurtion_id' => $request->excursion_id,
                 'email' => $request->contact_email,
                 'phone' => $request->contact_phone,
-                'full_name' => $request->pax
+                'full_name' => $request->contact_name,
+                'hotel_name' => $hotel_name // Pasamos el nombre obtenido internamente
             ]));
 
             $userReservationController = new \App\Http\Controllers\UserReservationController();
@@ -438,11 +474,11 @@ class AgencyExternalHyAController extends Controller
             $confirmData = [
                 'RSV' => (int) $reservationNumber,
                 'HOTEL' => (int) $request->hotel_id,
-                'PAX' => $request->pax,
+                'PAX' => $request->contact_name,
                 'MAIL' => $request->contact_email,
                 'TELEFONO' => $request->contact_phone,
                 'OBSV' => $request->observations ?? '',
-                'T1' => count($paxs),
+                'T1' => $paxsCant,
                 'T2' => "0",
                 'T3' => "0",
                 'T4' => "0",

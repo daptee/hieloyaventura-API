@@ -179,14 +179,14 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"agency_code\": \"124\",\n  \"date\": \"28/02/2026\",\n  \"excursion_id\": 1,\n  \"hotel_id\": \"4\",\n  \"hotel_name\": \"ALAMOS\",\n  \"pax\": \"Nombre del Titular\",\n  \"contact_email\": \"contacto@agencia.com\",\n  \"is_transfer\": true,\n  \"contact_phone\": \"1120202020\",\n  \"observations\": \"Pedido especial de pickup\",\n  \"turn\": \"10:00\",\n  \"paxs_reservation\": [\n    {\n      \"birthdate\": \"22/03/1992\",\n      \"dni\": \"12345678\",\n      \"name\": \"Juan Perez\",\n      \"nationality_id\": \"11\"\n    }\n  ]\n}",
+          "raw": "{\n  \"agency_code\": \"124\",\n  \"date\": \"28/02/2026\",\n  \"excursion_id\": 1,\n  \"hotel_id\": \"4\",\n  \"paxs_cant\": 1,\n  \"contact_name\": \"Nombre del Titular\",\n  \"contact_email\": \"contacto@agencia.com\",\n  \"is_transfer\": true,\n  \"contact_phone\": \"1120202020\",\n  \"observations\": \"Pedido especial de pickup\",\n  \"turn\": \"10:00\",\n  \"paxs_information\": [\n    {\n      \"birthdate\": \"22/03/1992\",\n      \"dni\": \"12345678\",\n      \"name\": \"Juan Perez\",\n      \"nationality_id\": \"11\"\n    }\n  ]\n}",
           "options": {
             "raw": {
               "language": "json"
             }
           }
         },
-        "description": "✨ **Creación de Nueva Reserva**\n\nCrea y confirma una reserva en el sistema de Hielo & Aventura.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*agency_code`: Código de agencia.\n- `*date`: Fecha (DD/MM/YYYY).\n- `*turn`: Turno (HH:mm).\n- `*excursion_id`: ID de la excursión.\n- `*hotel_id`: ID del hotel.\n- `*pax`: Nombre del titular.\n- `*contact_email`: Email de contacto.\n- `*contact_phone`: Teléfono de contacto.\n- `*is_transfer`: ¿Requiere traslado? (boolean).\n- `paxs_reservation`: Lista de pasajeros con `name`, `dni`, `birthdate` y `nationality_id`.",
+        "description": "✨ **Creación de Nueva Reserva**\n\nCrea y confirma una reserva en el sistema de Hielo & Aventura.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*agency_code`: Código de agencia.\n- `*date`: Fecha (DD/MM/YYYY).\n- `*turn`: Turno (HH:mm).\n- `*excursion_id`: ID de la excursión.\n- `*hotel_id`: ID del hotel (el nombre se obtiene automáticamente).\n- `*paxs_cant`: Cantidad total de pasajeros (número entero).\n- `*contact_name`: Nombre del titular o contacto de la reserva.\n- `*contact_email`: Email de contacto.\n- `*contact_phone`: Teléfono de contacto.\n- `*is_transfer`: ¿Requiere traslado? (boolean).\n- `paxs_information`: Lista opcional de pasajeros con `name`, `dni`, `birthdate` y `nationality_id`. Si se envía, la cantidad de elementos debe coincidir con `paxs_cant`.",
         "url": {
           "raw": "{{base_url}}/api/agencies/v1/reservation",
           "host": [
