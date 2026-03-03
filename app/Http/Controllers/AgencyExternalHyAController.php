@@ -310,11 +310,39 @@ class AgencyExternalHyAController extends Controller
             return response()->json(['message' => $validation['error']], $validation['status']);
         }
 
-        return $this->callAgencyUserController('TurnosAG', [
+        $response = $this->callAgencyUserController('TurnosAG', [
             'FECHAD' => $request->date_from,
             'FECHAH' => $request->date_to,
             'PRD' => (string) $request->excursion_id,
         ]);
+
+        if ($response->getStatusCode() !== 200) {
+            return $response;
+        }
+
+        $raw = $this->extractResponseData($response);
+
+        $data = [
+            'excursion_id'   => $raw['CODIGO']   ?? null,
+            'excursion_name' => $raw['PRODUCTOD'] ?? null,
+            'turns'          => collect($raw['TURNOS'] ?? [])->map(fn($turn) => [
+                'date'                         => $turn['FECHA']              ?? null,
+                'turn'                         => $turn['TURNO']              ?? null,
+                'pickup_turn'                  => $turn['PICKUP']             ?? null,
+                'available_spots'              => $turn['TOD']                ?? null,
+                'available_spots_with_transfer'=> $turn['TRD']                ?? null,
+                'value'                        => $turn['VALOR_TOTAL']        ?? null,
+                'transfer_value'               => $turn['VALOR_TRF']          ?? null,
+                'value_offer'                  => $turn['VALOR_TOTAL_OFERTA'] ?? null,
+                'transfer_value_offer'         => $turn['VALOR_TRF_OFERTA']   ?? null,
+                'offer_name'                   => $turn['TITULO_OFERTA']      ?? null,
+            ])->values()->all(),
+        ];
+
+        return response()->json([
+            'message' => 'Disponibilidad obtenida con éxito.',
+            'data'    => $data,
+        ], 200);
     }
 
     public function getHotels()
