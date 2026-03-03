@@ -337,18 +337,55 @@ class AgencyExternalHyAController extends Controller
             'RSV' => (string) $reservation_number,
         ]);
 
-        if ($response->getStatusCode() === 200) {
-            $data = $this->extractResponseData($response);
-
-            // Validar que la reserva pertenezca a la agencia
-            if (isset($data['AGENCIA']) && (string) $data['AGENCIA'] !== (string) $agency_code) {
-                return response()->json(['message' => $unifiedNotFound], 404);
-            }
-        } else {
+        if ($response->getStatusCode() !== 200) {
             return response()->json(['message' => $unifiedNotFound], 404);
         }
 
-        return $response;
+        $raw = $this->extractResponseData($response);
+
+        // Validar que la reserva pertenezca a la agencia
+        if (isset($raw['AGENCIA']) && (string) $raw['AGENCIA'] !== (string) $agency_code) {
+            return response()->json(['message' => $unifiedNotFound], 404);
+        }
+
+        $paxsCant         = (int) ($raw['CUANTOS'] ?? 0);
+        $paxsWithTransfer = (int) ($raw['CUANTOS_CON_TRANSFER'] ?? 0);
+
+        $pasajeros = collect($raw['PASAJEROS'] ?? [])->map(function ($pax) {
+            return [
+                'name'        => $pax['NOMBRE']       ?? null,
+                'dni'         => $pax['DOCUMENTO']    ?? null,
+                'birthdate'   => $pax['FNACIMIENTO']  ?? null,
+                'nationality' => [
+                    'id'   => $pax['NACIONALIDAD']  ?? null,
+                    'name' => $pax['NACIONALIDADD'] ?? null,
+                ],
+            ];
+        })->values()->all();
+
+        $data = [
+            'reservation_number' => $raw['RESERVA']      ?? null,
+            'excursion_name'     => $raw['PRODUCTO']     ?? null,
+            'turn'               => $raw['TURNO']        ?? null,
+            'pickup_turn'        => $raw['PICKUP']       ?? null,
+            'created_at'         => $raw['FECHA_COMPRA'] ?? null,
+            'paxs_cant'          => $paxsCant,
+            'is_transfer'        => $paxsWithTransfer > 0 && $paxsWithTransfer === $paxsCant,
+            'contact_name'       => $raw['PAX']          ?? null,
+            'contact_email'      => $raw['MAIL']         ?? null,
+            'contact_phone'      => $raw['TELEFONO']     ?? null,
+            'observations'       => $raw['OBSV']         ?? null,
+            'hotel'              => [
+                'id'   => $raw['HOTEL'] ?? null,
+                'name' => null, // la API no retorna el nombre en esta consulta
+            ],
+            'paxs_information'   => $pasajeros,
+        ];
+
+        return response()->json([
+            'message' => 'Reserva obtenida con éxito.',
+            'data'    => $data,
+        ], 200);
     }
 
     public function createReservation(Request $request)
