@@ -360,10 +360,9 @@ class AgencyExternalHyAController extends Controller
         $agency = $validation['agency'];
         $agency_code = $agency->agency_code;
 
-        // 3. Validación de edades de pasajeros (según permiso passengers.age_validation)
-        // TODO: Leer el valor real desde $agency->configurations[$excursion_id]['passengers']['age_validation']
-        // Por ahora se simula como siempre true
-        $shouldValidatePassengersAge = true;
+        // 3. Validación de edades de pasajeros (según permiso passengers.age_validation en las configuraciones de la agencia)
+        $ageValidationPermission = $this->validateAgency($request, 'passengers.age_validation');
+        $shouldValidatePassengersAge = !isset($ageValidationPermission['error']);
 
         $paxsForAgeValidation = $request->input('paxs_information');
         if ($shouldValidatePassengersAge && !empty($paxsForAgeValidation)) {
