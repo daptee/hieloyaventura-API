@@ -319,12 +319,47 @@ class AgencyExternalHyAController extends Controller
 
     public function getHotels()
     {
-        return $this->callAgencyUserController('hotels');
+        $response = $this->callAgencyUserController('hotels');
+
+        if ($response->getStatusCode() !== 200) {
+            return $response;
+        }
+
+        $raw = $this->extractResponseData($response);
+
+        $data = collect($raw)->map(fn($item) => [
+            'id'   => $item['CODIGO'] ?? null,
+            'name' => $item['HOTEL']  ?? null,
+        ])->values()->all();
+
+        return response()->json([
+            'message' => 'Listado de hoteles obtenido con éxito.',
+            'data'    => $data,
+        ], 200);
     }
 
     public function getNationalities()
     {
-        return $this->callAgencyUserController('nationalities');
+        $response = $this->callAgencyUserController('nationalities');
+
+        if ($response->getStatusCode() !== 200) {
+            return $response;
+        }
+
+        $raw = $this->extractResponseData($response);
+
+        $data = collect($raw)->map(fn($item) => [
+            'id'   => $item['ID'] ?? null,
+            'name' => [
+                'es' => $item['NACION_ESP'] ?? null,
+                'en' => $item['NACION_ING'] ?? null,
+            ],
+        ])->values()->all();
+
+        return response()->json([
+            'message' => 'Listado de nacionalidades obtenido con éxito.',
+            'data'    => $data,
+        ], 200);
     }
 
     public function getReservation(Request $request, $reservation_number)
