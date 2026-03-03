@@ -231,7 +231,40 @@ class AgencyExternalHyAController extends Controller
             $params['RSV'] = (string) $request->reservation_number;
         }
 
-        return $this->callAgencyUserController('reservationsAG', $params);
+        $response = $this->callAgencyUserController('reservationsAG', $params);
+
+        if ($response->getStatusCode() !== 200) {
+            return $response;
+        }
+
+        $raw = $this->extractResponseData($response);
+
+        $data = collect($raw)->map(function ($item) {
+            $paxsCant         = (int) ($item['CUANTOS'] ?? 0);
+            $paxsWithTransfer = (int) ($item['CUANTOS_CON_TRANSFER'] ?? 0);
+
+            return [
+                'reservation_number' => $item['RESERVA']       ?? null,
+                'turn'               => $item['TURNO']          ?? null,
+                'pickup_turn'        => $item['PICKUP']         ?? null,
+                'created_at'         => $item['FECHA_COMPRA']   ?? null,
+                'paxs_cant'          => $paxsCant,
+                'is_transfer'        => $paxsWithTransfer > 0 && $paxsWithTransfer === $paxsCant,
+                'contact_name'       => $item['PAX']            ?? null,
+                'contact_email'      => $item['MAIL']           ?? null,
+                'contact_phone'      => $item['TELEFONO']       ?? null,
+                'hotel'              => [
+                    'id'   => $item['HOTEL_ID'] ?? null,
+                    'name' => $item['HOTEL']    ?? null,
+                ],
+                'excursion_name'     => $item['PRODUCTO']       ?? null,
+            ];
+        })->values()->all();
+
+        return response()->json([
+            'message' => 'Listado de reservas obtenido con éxito.',
+            'data'    => $data,
+        ], 200);
     }
 
     public function updateSettings(Request $request)
