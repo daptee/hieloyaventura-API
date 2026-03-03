@@ -352,10 +352,26 @@ class AgencyExternalHyAController extends Controller
         $paxsWithTransfer = (int) ($raw['CUANTOS_CON_TRANSFER'] ?? 0);
 
         $pasajeros = collect($raw['PASAJEROS'] ?? [])->map(function ($pax) {
+            $rawBirthdate = $pax['FNACIMIENTO'] ?? null;
+            $birthdate = null;
+            if ($rawBirthdate) {
+                try {
+                    // La API externa retorna en formato M/D/YY (ej: 3/22/92)
+                    $birthdate = Carbon::createFromFormat('n/j/y', $rawBirthdate)->format('d/m/Y');
+                } catch (\Throwable $e) {
+                    try {
+                        // Fallback por si ya viene en DD/MM/YYYY
+                        $birthdate = Carbon::createFromFormat('d/m/Y', $rawBirthdate)->format('d/m/Y');
+                    } catch (\Throwable $_) {
+                        $birthdate = $rawBirthdate;
+                    }
+                }
+            }
+
             return [
                 'name'        => $pax['NOMBRE']       ?? null,
                 'dni'         => $pax['DOCUMENTO']    ?? null,
-                'birthdate'   => $pax['FNACIMIENTO']  ?? null,
+                'birthdate'   => $birthdate,
                 'nationality' => [
                     'id'   => $pax['NACIONALIDAD']  ?? null,
                     'name' => $pax['NACIONALIDADD'] ?? null,
