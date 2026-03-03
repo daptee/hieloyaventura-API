@@ -12,7 +12,8 @@ class Agency extends Model
     protected $fillable = [
         "agency_code",
         "api_key",
-        "configurations"
+        "configurations",
+        "email_integration_notification"
     ];
 
     protected $casts = [

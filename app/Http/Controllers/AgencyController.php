@@ -67,6 +67,42 @@ class AgencyController extends Controller
         }
     }
 
+    public function updateSettings(Request $request)
+    {
+        try {
+            $request->validate([
+                'agency_code' => 'required|string',
+                'email_integration_notification' => 'required|email|max:255',
+            ]);
+
+            $agency = Agency::where('agency_code', $request->agency_code)->first();
+
+            if (!$agency) {
+                return response()->json(['message' => 'Agencia no encontrada'], 404);
+            }
+
+            $agency->email_integration_notification = $request->email_integration_notification;
+            $agency->save();
+
+            return response()->json([
+                'message' => 'Configuración actualizada con éxito.',
+                'email_integration_notification' => $agency->email_integration_notification,
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error en las validaciones',
+                'errors' => $e->errors()
+            ], 400);
+        } catch (Exception $e) {
+            Log::error("Error updating agency settings: " . $e->getMessage());
+            return response()->json([
+                'message' => 'Error al actualizar la configuración',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function show($agency_code)
     {
         try {

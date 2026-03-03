@@ -117,6 +117,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
 
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);
+    Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
 });
 
 Route::get('tickets', [TicketController::class, 'index']);
@@ -181,6 +182,8 @@ Route::prefix('consults')->controller(ConsultController::class)->group(function 
 });
 Route::get('/clear-cache', function () {
     Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
     Artisan::call('optimize');
 
     return response()->json([
@@ -427,6 +430,7 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     Route::get('/availability', 'getAvailability');
     Route::get('/hotels', 'getHotels');
     Route::get('/nationalities', 'getNationalities');
+    Route::get('/reservations', 'getReservations');
     Route::get('/reservation/{reservation_number}', 'getReservation');
     Route::get('/reservation', function () {
         return response()->json(['message' => 'El número de reserva es obligatorio como parte de la URL (ej: /reservation/123456)'], 400);
@@ -440,6 +444,7 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
     Route::delete('/reservation', function () {
         return response()->json(['message' => 'El número de reserva es obligatorio como parte de la URL (ej: /reservation/123456)'], 400);
     });
+    Route::put('/settings', 'updateSettings');
 });
 // CONSULTAR PARA CARLOS
 

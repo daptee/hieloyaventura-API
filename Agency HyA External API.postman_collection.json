@@ -122,6 +122,56 @@
       "response": []
     },
     {
+      "name": "Listado de Reservas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "📋 **Listado de Reservas de la Agencia**\n\nRetorna el listado de reservas asociadas a la agencia autenticada. El código de agencia se obtiene automáticamente del API Key.\n\n### 📋 Parámetros Opcionales (query params)\n- `date_from`: Fecha de inicio (DD/MM/YYYY). Filtra reservas desde esta fecha.\n- `date_to`: Fecha de fin (DD/MM/YYYY). Filtra reservas hasta esta fecha.\n- `reservation_number`: Número de reserva específica.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservations?date_from=01/01/2026&date_to=31/03/2026",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservations"
+          ],
+          "query": [
+            {
+              "key": "date_from",
+              "value": "01/01/2026",
+              "description": "📅 Fecha inicio (DD/MM/YYYY)"
+            },
+            {
+              "key": "date_to",
+              "value": "31/03/2026",
+              "description": "📅 Fecha fin (DD/MM/YYYY)"
+            },
+            {
+              "key": "reservation_number",
+              "value": "",
+              "description": "🔢 Número de reserva específica",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Consultar Reserva",
       "request": {
         "method": "GET",
@@ -179,14 +229,14 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"agency_code\": \"124\",\n  \"date\": \"28/02/2026\",\n  \"excursion_id\": 1,\n  \"hotel_id\": \"4\",\n  \"paxs_cant\": 1,\n  \"contact_name\": \"Nombre del Titular\",\n  \"contact_email\": \"contacto@agencia.com\",\n  \"is_transfer\": true,\n  \"contact_phone\": \"1120202020\",\n  \"observations\": \"Pedido especial de pickup\",\n  \"turn\": \"10:00\",\n  \"paxs_information\": [\n    {\n      \"birthdate\": \"22/03/1992\",\n      \"dni\": \"12345678\",\n      \"name\": \"Juan Perez\",\n      \"nationality_id\": \"11\"\n    }\n  ]\n}",
+          "raw": "{\n  \"date\": \"28/02/2026\",\n  \"excursion_id\": 1,\n  \"hotel_id\": \"4\",\n  \"paxs_cant\": 1,\n  \"contact_name\": \"Nombre del Titular\",\n  \"contact_email\": \"contacto@agencia.com\",\n  \"is_transfer\": true,\n  \"contact_phone\": \"1120202020\",\n  \"observations\": \"Pedido especial de pickup\",\n  \"turn\": \"10:00\",\n  \"paxs_information\": [\n    {\n      \"birthdate\": \"22/03/1992\",\n      \"dni\": \"12345678\",\n      \"name\": \"Juan Perez\",\n      \"nationality_id\": \"11\"\n    }\n  ]\n}",
           "options": {
             "raw": {
               "language": "json"
             }
           }
         },
-        "description": "✨ **Creación de Nueva Reserva**\n\nCrea y confirma una reserva en el sistema de Hielo & Aventura.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*agency_code`: Código de agencia.\n- `*date`: Fecha (DD/MM/YYYY).\n- `*turn`: Turno (HH:mm).\n- `*excursion_id`: ID de la excursión.\n- `*hotel_id`: ID del hotel (el nombre se obtiene automáticamente).\n- `*paxs_cant`: Cantidad total de pasajeros (número entero).\n- `*contact_name`: Nombre del titular o contacto de la reserva.\n- `*contact_email`: Email de contacto.\n- `*contact_phone`: Teléfono de contacto.\n- `*is_transfer`: ¿Requiere traslado? (boolean).\n- `paxs_information`: Lista opcional de pasajeros con `name`, `dni`, `birthdate` y `nationality_id`. Si se envía, la cantidad de elementos debe coincidir con `paxs_cant`.",
+        "description": "✨ **Creación de Nueva Reserva**\n\nCrea y confirma una reserva en el sistema de Hielo & Aventura. El código de agencia se obtiene automáticamente del API Key.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*date`: Fecha de la excursión (DD/MM/YYYY).\n- `*turn`: Turno (HH:mm).\n- `*excursion_id`: ID de la excursión.\n- `*hotel_id`: ID del hotel (el nombre se obtiene automáticamente).\n- `*paxs_cant`: Cantidad total de pasajeros (número entero).\n- `*contact_name`: Nombre del titular o contacto de la reserva.\n- `*contact_email`: Email de contacto.\n- `*contact_phone`: Teléfono de contacto.\n- `*is_transfer`: ¿Requiere traslado? (boolean).\n\n### 📋 Parámetros Opcionales\n- `observations`: Observaciones o pedidos especiales.\n- `paxs_information`: Lista de pasajeros con `name`, `dni`, `birthdate` (DD/MM/YYYY) y `nationality_id`. Si se envía, la cantidad de elementos debe coincidir con `paxs_cant`.\n\n### ⚠️ Validación de Edades\nAlgunas excursiones tienen restricciones de edad que se calculan al momento de la excursión. Si algún pasajero no cumple el requisito, la reserva será rechazada.",
         "url": {
           "raw": "{{base_url}}/api/agencies/v1/reservation",
           "host": [
@@ -246,6 +296,52 @@
               "value": "647773",
               "description": "🔢 Número de reserva"
             }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Configuración de Integración",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email_integration_notification\": \"notificaciones@agencia.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "⚙️ **Configuración de la Integración**\n\nPermite configurar el email al que se enviarán las notificaciones de la integración. Si el registro no existe, se crea; si ya existe, se actualiza.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*email_integration_notification`: Email al que se enviarán las notificaciones.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/settings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "settings"
           ]
         }
       },

@@ -198,6 +198,68 @@ class AgencyExternalHyAController extends Controller
         }
     }
 
+    public function getReservations(Request $request)
+    {
+        try {
+            $request->validate([
+                'date_from' => 'nullable|date_format:d/m/Y',
+                'date_to' => 'nullable|date_format:d/m/Y',
+                'reservation_number' => 'nullable|string',
+            ], [
+                'date_from.date_format' => 'El formato de fecha de inicio debe ser dd/mm/yyyy.',
+                'date_to.date_format' => 'El formato de fecha de fin debe ser dd/mm/yyyy.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error en las validaciones',
+                'errors' => $e->errors()
+            ], 400);
+        }
+
+        $agency = $request->input('authenticated_agency');
+        $agency_code = $agency->agency_code;
+
+        $params = ['AG' => (string) $agency_code];
+
+        if ($request->filled('date_from')) {
+            $params['DESDEF'] = $request->date_from;
+        }
+        if ($request->filled('date_to')) {
+            $params['HASTAF'] = $request->date_to;
+        }
+        if ($request->filled('reservation_number')) {
+            $params['RSV'] = (string) $request->reservation_number;
+        }
+
+        return $this->callAgencyUserController('reservationsAG', $params);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        try {
+            $request->validate([
+                'email_integration_notification' => 'required|email|max:255',
+            ], [
+                'email_integration_notification.required' => 'El campo email_integration_notification es obligatorio.',
+                'email_integration_notification.email' => 'El valor de email_integration_notification debe ser un email válido.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Error en las validaciones',
+                'errors' => $e->errors()
+            ], 400);
+        }
+
+        $agency = $request->input('authenticated_agency');
+        $agency->email_integration_notification = $request->email_integration_notification;
+        $agency->save();
+
+        return response()->json([
+            'message' => 'Configuración actualizada con éxito.',
+            'email_integration_notification' => $agency->email_integration_notification,
+        ], 200);
+    }
+
     public function getAvailability(Request $request)
     {
         $request->validate([
@@ -297,6 +359,67 @@ class AgencyExternalHyAController extends Controller
 
         $agency = $validation['agency'];
         $agency_code = $agency->agency_code;
+
+        // 3. Validación de edades de pasajeros (según permiso passengers.age_validation)
+        // TODO: Leer el valor real desde $agency->configurations[$excursion_id]['passengers']['age_validation']
+        // Por ahora se simula como siempre true
+        $shouldValidatePassengersAge = true;
+
+        $paxsForAgeValidation = $request->input('paxs_information');
+        if ($shouldValidatePassengersAge && !empty($paxsForAgeValidation)) {
+            $excursionId = (int) $request->excursion_id;
+            $ageRules = [
+                1 => ['min' => 8,  'max' => 65],
+                2 => ['min' => 18, 'max' => 50],
+                3 => ['min' => 6,  'max' => 70],
+                4 => null, // sin límite de edad
+                5 => ['min' => 18, 'max' => 55],
+            ];
+
+            if (isset($ageRules[$excursionId]) && $ageRules[$excursionId] !== null) {
+                $rule = $ageRules[$excursionId];
+                try {
+                    $excursionDate = Carbon::createFromFormat('d/m/Y', $request->date);
+                } catch (\Throwable $e) {
+                    $this->logIntegration("Error al parsear fecha de excursión para validación de edades", ['date' => $request->date], 'warning');
+                    return response()->json(['message' => 'El formato de la fecha de la excursión no es válido.'], 400);
+                }
+
+                foreach ($paxsForAgeValidation as $index => $pax) {
+                    $birthdate = $pax['birthdate'] ?? null;
+                    if (!$birthdate) {
+                        continue;
+                    }
+                    try {
+                        $birthdateCarbon = Carbon::createFromFormat('d/m/Y', $birthdate);
+                    } catch (\Throwable $e) {
+                        try {
+                            $birthdateCarbon = Carbon::createFromFormat('d/m/y', $birthdate);
+                        } catch (\Throwable $_) {
+                            $this->logIntegration("Error al parsear fecha de nacimiento del pasajero", ['birthdate' => $birthdate], 'warning');
+                            continue;
+                        }
+                    }
+
+                    $ageAtExcursion = $birthdateCarbon->diffInYears($excursionDate);
+
+                    if ($ageAtExcursion < $rule['min'] || $ageAtExcursion > $rule['max']) {
+                        $passengerName = $pax['name'] ?? "Pasajero " . ($index + 1);
+                        $this->logIntegration("Validación de edad fallida", [
+                            'passenger' => $passengerName,
+                            'age_at_excursion' => $ageAtExcursion,
+                            'rule' => $rule,
+                            'excursion_id' => $excursionId,
+                        ], 'warning');
+                        return response()->json([
+                            'message' => "La edad del pasajero \"{$passengerName}\" no es válida para esta excursión. Se requiere una edad entre {$rule['min']} y {$rule['max']} años al momento de la excursión (edad calculada: {$ageAtExcursion} años).",
+                        ], 400);
+                    }
+                }
+
+                $this->logIntegration("Validación de edades OK", ['excursion_id' => $excursionId]);
+            }
+        }
 
         try {
             DB::beginTransaction();
