@@ -834,7 +834,12 @@ class AgencyExternalHyAController extends Controller
             try {
                 $internalRes = \App\Models\UserReservation::with(['status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($userReservationLocal['id']);
                 $request->merge(['agency_name' => $agency_name]);
-                Mail::to($request->contact_email)->send(new ConfirmationReservation($internalRes, $request));
+                $notificationEmail = $agency->email_integration_notification ?? null;
+                if ($notificationEmail) {
+                    Mail::to($notificationEmail)->send(new ConfirmationReservation($internalRes, $request));
+                } else {
+                    $this->logIntegration("Paso 5 SKIP: No hay email_integration_notification configurado para la agencia");
+                }
                 $this->logIntegration("Paso 5 OK: Email enviado");
             } catch (\Throwable $th) {
                 $this->logIntegration("Error enviando mail", ['error' => $th->getMessage()], 'error');

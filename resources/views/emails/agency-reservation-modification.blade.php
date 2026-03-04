@@ -12,7 +12,8 @@
             background-color: #f0f2f5;
             font-family: 'Nunito', Arial, sans-serif;
             color: #333333;
-            padding: 30px 15px;
+            margin: 0;
+            padding: 0;
         }
         .wrapper {
             max-width: 600px;
@@ -151,8 +152,8 @@
         }
     </style>
 </head>
-<body>
-    <div class="wrapper">
+<body style="background-color: #f0f2f5; margin: 0; padding: 0;">
+    <div class="wrapper" style="background-color: #f0f2f5; padding: 30px 15px;">
 
         {{-- LOGO --}}
         <div class="email-header">
@@ -165,7 +166,7 @@
         <div class="card">
 
             <p class="greeting">Hola, 👋</p>
-            <p class="recipient-name">Equipo de Operaciones</p>
+            <p class="recipient-name">Equipo de Reservas</p>
 
             <p class="subject-title">Pedido de Modificación de Reserva</p>
 

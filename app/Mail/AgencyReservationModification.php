@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -66,13 +65,22 @@ class AgencyReservationModification extends Mailable
     }
 
     /**
-     * Format field name: replace underscores with spaces and capitalize properly
-     * 
+     * Format field name: replace underscores with spaces and capitalize properly.
+     * Spanish overrides take precedence for known field names.
+     *
      * @param string $fieldName
      * @return string
      */
     private function formatFieldName($fieldName)
     {
+        $spanishLabels = [
+            'request' => 'Requerimiento',
+        ];
+
+        if (isset($spanishLabels[$fieldName])) {
+            return $spanishLabels[$fieldName];
+        }
+
         // Replace underscores with spaces
         $withSpaces = str_replace('_', ' ', $fieldName);
 
