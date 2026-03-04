@@ -845,7 +845,6 @@ class AgencyExternalHyAController extends Controller
             return response()->json([
                 'message' => 'Reserva creada y confirmada con éxito',
                 'reservation_number' => $reservationNumber,
-                'user_reservation_id' => $userReservationLocal['id'],
             ], 200);
 
         } catch (\Throwable $th) {
