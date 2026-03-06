@@ -499,6 +499,19 @@ class AgencyExternalHyAController extends Controller
             ], 400);
         }
 
+        // 1b. Validar que la fecha no sea anterior a hoy
+        try {
+            $reservationDate = Carbon::createFromFormat('d/m/Y', $request->date)->startOfDay();
+            if ($reservationDate->lt(Carbon::today())) {
+                $this->logIntegration("Fecha de reserva anterior a hoy", ['date' => $request->date], 'warning');
+                return response()->json([
+                    'message' => 'La fecha de la reserva no puede ser anterior a la fecha de hoy.'
+                ], 400);
+            }
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'El formato de la fecha no es válido.'], 400);
+        }
+
         // 2. Validar permisos de la agencia para esta excursión
         $validation = $this->validateAgency($request, 'reservations.create');
         if (isset($validation['error'])) {
@@ -835,10 +848,16 @@ class AgencyExternalHyAController extends Controller
                 $internalRes = \App\Models\UserReservation::with(['status', 'excurtion', 'billing_data', 'contact_data', 'paxes', 'reservation_paxes'])->find($userReservationLocal['id']);
                 $request->merge(['agency_name' => $agency_name]);
                 $notificationEmail = $agency->email_integration_notification ?? null;
+
+                if (!$notificationEmail && !empty($agenciesData[0]['EMAIL'])) {
+                    $notificationEmail = $agenciesData[0]['EMAIL'];
+                    $this->logIntegration("Paso 5: Usando email principal de la agencia", ['email' => $notificationEmail]);
+                }
+
                 if ($notificationEmail) {
                     Mail::to($notificationEmail)->send(new ConfirmationReservation($internalRes, $request));
                 } else {
-                    $this->logIntegration("Paso 5 SKIP: No hay email_integration_notification configurado para la agencia");
+                    $this->logIntegration("Paso 5 SKIP: No se encontró ningún email de notificación para la agencia");
                 }
                 $this->logIntegration("Paso 5 OK: Email enviado");
             } catch (\Throwable $th) {

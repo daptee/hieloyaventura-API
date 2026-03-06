@@ -118,6 +118,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);
     Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
+    Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 });
 
 Route::get('tickets', [TicketController::class, 'index']);
