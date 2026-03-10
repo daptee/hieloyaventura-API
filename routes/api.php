@@ -130,7 +130,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/oferts', 'oferts');
     Route::get('/excursions', 'excursions');
     Route::get('/shifts', 'shifts');
-    Route::get('/ReservaxCodigo', 'ReservaxCodigo')->middleware(['jwt.verify']);
+    Route::get('/ReservaxCodigo', 'ReservaxCodigo');
     Route::post('/IniciaReserva', 'IniciaReserva');
     Route::post('/CancelaReserva', 'CancelaReserva');
     Route::post('/ConfirmaReserva', 'ConfirmaReserva');
