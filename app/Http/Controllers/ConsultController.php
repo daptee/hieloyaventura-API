@@ -6,6 +6,7 @@ use App\Http\Requests\StoreConsultRequest;
 use App\Mail\ConsultResponse;
 use App\Models\Consult;
 use App\Models\EmailAdressConsults;
+use App\Models\Module;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ class ConsultController extends Controller
 
     public function index(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::CONFIGURACIONES)) return $error;
+
         $message = "Error al traer listado de {$this->sp}.";
         try {
             $data = $this->model::with($this->model::INDEX);
@@ -64,6 +67,8 @@ class ConsultController extends Controller
 
     public function changeConsultEmail(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::CONFIGURACIONES)) return $error;
+
         EmailAdressConsults::updateOrCreate([], ['email' => $request->email]);
     }
 }

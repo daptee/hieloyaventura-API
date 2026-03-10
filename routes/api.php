@@ -188,7 +188,7 @@ Route::get('/clear-cache', function () {
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store'])->middleware(['jwt.verify']);
 Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics'])->middleware(['jwt.verify']);
-Route::post('excurtion/pictures/manage/files', [PictureExcurtionController::class, 'manage']);
+Route::post('excurtion/pictures/manage/files', [PictureExcurtionController::class, 'manage'])->middleware(['jwt.verify']);
 Route::get('excurtion/{id}/pictures/files', [PictureExcurtionController::class, 'getByExcurtion']);
 
 Route::post('process-cv', function (Request $request) {

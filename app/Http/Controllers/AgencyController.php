@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AgencyIntegrationWelcome;
 use App\Models\Agency;
+use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -72,6 +73,8 @@ class AgencyController extends Controller
 
     public function updateSettings(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
         try {
             $request->validate([
                 'agency_code' => 'required|string',
@@ -185,6 +188,8 @@ class AgencyController extends Controller
 
     public function show($agency_code)
     {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
         try {
             $agency = Agency::where('agency_code', $agency_code)->first();
 

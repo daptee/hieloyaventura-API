@@ -41,6 +41,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::USUARIOS)) return $error;
+
         $query = User::with($this->model::INDEX)->when($request->user_type_id, function ($query) use ($request) {
             return $query->where('user_type_id', $request->user_type_id);
         })
@@ -63,6 +65,8 @@ class UserController extends Controller
 
     public function get_all_with_out_filters()
     {
+        if ($error = $this->requireAdminModule(Module::USUARIOS)) return $error;
+
         $users = User::with($this->model::INDEX)->get();
         return response(compact("users"));
     }

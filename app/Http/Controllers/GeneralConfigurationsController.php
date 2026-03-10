@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Audit;
 use App\Models\GeneralConfigurations;
+use App\Models\Module;
 use App\Models\Web;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,8 @@ class GeneralConfigurationsController extends Controller
 
     public function store(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::CONFIGURACIONES)) return $error;
+
         if(!isset($request->configurations))
             return response()->json([ 'message' => "No se puede guardar 'configurations' vacio."], 400);
 

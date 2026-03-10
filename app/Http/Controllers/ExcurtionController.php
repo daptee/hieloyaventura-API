@@ -7,6 +7,7 @@ use App\Http\Requests\StoreExcurtionRequest;
 use App\Http\Requests\UpdateExcurtionRequest;
 use App\Models\Characteristic;
 use App\Models\Excurtion;
+use App\Models\Module;
 use App\Models\PictureExcurtion;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -65,6 +66,8 @@ class ExcurtionController extends Controller
 
     public function store(StoreExcurtionRequest $request)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
@@ -179,6 +182,8 @@ class ExcurtionController extends Controller
      */
     public function update(UpdateExcurtionRequest $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al editar {$this->s}.";
         $datos = $request->all();
 
