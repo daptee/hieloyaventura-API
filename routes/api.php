@@ -23,7 +23,6 @@ use App\Http\Controllers\PdfCleanupController;
 use App\Http\Controllers\PictureExcurtionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationStatusController;
-use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
@@ -111,17 +110,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 
-    Route::post('tickets', [TicketController::class, 'store']);
-    Route::post('tickets/message', [TicketController::class, 'message']);
-    Route::post('tickets/change/status', [TicketController::class, 'change_status']);
-
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);
     Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
     Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 });
-
-Route::get('tickets', [TicketController::class, 'index'])->middleware(['jwt.verify']);
 
 Route::post('create/log', [LogController::class, 'store_log']);
 
@@ -191,22 +184,6 @@ Route::get('/clear-cache', function () {
     ]);
 })->middleware(['jwt.verify']);
 
-Route::get('/clear-tokens', function () {
-    Artisan::call('passport:purge');
-    Artisan::call('passport:install');
-
-    return response()->json([
-        "message" => "Tokens config successfully"
-    ]);
-})->middleware(['jwt.verify']);
-
-Route::get('/storage-link', function () {
-    Artisan::call('storage:link');
-
-    return response()->json([
-        "message" => "The links have been created."
-    ]);
-})->middleware(['jwt.verify']);
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store'])->middleware(['jwt.verify']);
@@ -294,7 +271,6 @@ Route::post('web/general_configuration', [GeneralConfigurationsController::class
 Route::post('paxs', [PaxController::class, 'store']);
 Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
-Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva'])->middleware(['jwt.verify']);
 
 Route::get('modules/user', [UserController::class, 'get_modules']);
 

@@ -15,7 +15,6 @@ class AgencyUser extends Authenticatable implements JWTSubject
     protected $fillable = [
         "agency_user_type_id",
         "user",
-        "password",
         "name",
         "last_name",
         "email",
