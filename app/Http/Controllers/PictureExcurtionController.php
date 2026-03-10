@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePictureExcurtionRequest;
 use App\Http\Requests\UpdatePictureExcurtionRequest;
 use App\Models\Excurtion;
+use App\Models\Module;
 use App\Models\PictureExcurtion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,6 +15,8 @@ class PictureExcurtionController extends Controller
 {
     public function manage(Request $request)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $result = [
             'created' => [],
             'updated' => [],

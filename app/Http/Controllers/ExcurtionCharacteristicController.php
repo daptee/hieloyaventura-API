@@ -9,6 +9,7 @@ use App\Models\Characteristic;
 use App\Models\CharacteristicTranslable;
 use App\Models\Excurtion;
 use App\Models\ExcurtionCharacteristic;
+use App\Models\Module;
 use App\Models\PictureExcurtion;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -46,6 +47,8 @@ class ExcurtionCharacteristicController extends Controller
      */
     public function store(StoreExcurtionCharacteristicRequest $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la característica.";
         // $datos = $this->datos($id);
         $datos = $request->all();
@@ -88,6 +91,8 @@ class ExcurtionCharacteristicController extends Controller
 
     public function store_excurtion_characteristics(Request $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la característica.";
         $datos = $this->datos2($id, $request);
 
