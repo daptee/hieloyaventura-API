@@ -672,9 +672,8 @@ class AgencyUserController extends Controller
     {
         $params = [];
 
-        if ($request->has('AG') && $request->AG !== null) {
-            $params['AG'] = $request->AG;
-        }
+        // Forzar el código de agencia al del usuario autenticado para prevenir acceso a datos de otras agencias
+        $params['AG'] = Auth::guard('agency')->user()->agency_code;
         if ($request->has('DESDEF') && $request->DESDEF !== null) {
             $params['DESDEF'] = $request->DESDEF;
         }

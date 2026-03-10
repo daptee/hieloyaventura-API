@@ -385,11 +385,11 @@ Route::post('reservations/resend/email_voucher', [ReservationController::class, 
 Route::post('reservations/update/internal_closed/{id}', [ReservationController::class, 'update_internal_closed'])->middleware(['jwt.verify']);
 Route::post('reservations/new/observation', [ReservationController::class, 'new_observation'])->middleware(['jwt.verify']);
 
-// Agency users 
-Route::get('agency/users', [AgencyUserController::class, 'index']);
-Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
-Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
-Route::get('agency/modules', [AgencyModuleController::class, 'index']);
+// Agency users
+Route::get('agency/users', [AgencyUserController::class, 'index'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/modules', [AgencyModuleController::class, 'index'])->middleware(['jwt.admin_or_agency']);
 Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.verify']);
 
 // Agency user reservations
@@ -405,26 +405,26 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.verify']);
-Route::get('/agency/hya/Agencias', [AgencyUserController::class, 'agencies']);
+Route::get('/agency/hya/Agencias', [AgencyUserController::class, 'agencies'])->middleware(['jwt.admin_or_agency']);
 Route::get('/agency/hya/Productos', [AgencyUserController::class, 'products']);
 Route::get('/agency/hya/TiposPasajeros', [AgencyUserController::class, 'passenger_types']);
 Route::get('/agency/hya/Naciones', [AgencyUserController::class, 'nationalities']);
 Route::get('/agency/hya/Hoteles', [AgencyUserController::class, 'hotels']);
 // Endpoint to receive group files from agencies and send them via email
-Route::post('agency/reservations/groups_by', [AgencyUserController::class, 'groups_by']);
+Route::post('agency/reservations/groups_by', [AgencyUserController::class, 'groups_by'])->middleware(['jwt.agency']);
 Route::get('/agency/hya/Turnos', [AgencyUserController::class, 'shifts']);
-Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation']);
-Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation']);
-Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation']);
-Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers']);
-Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG']);
-Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo']);
-Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request']);
-Route::get('/agency/reservation/{reservation}/requests', [AgencyUserController::class, 'get_reservation_requests']);
-Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG']);
-Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
-Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);
-Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
+Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo'])->middleware(['jwt.agency']);
+Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request'])->middleware(['jwt.agency']);
+Route::get('/agency/reservation/{reservation}/requests', [AgencyUserController::class, 'get_reservation_requests'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel'])->middleware(['jwt.agency']);
 
 // External Agency HyA routes
 Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\Controllers\AgencyExternalHyAController::class)->group(function () {
