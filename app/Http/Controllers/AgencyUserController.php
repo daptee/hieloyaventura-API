@@ -302,11 +302,18 @@ class AgencyUserController extends Controller
 
     public function user_seller_load(Request $request)
     {
+        if (Auth::guard('agency')->check()) {
+            $id_user = Auth::guard('agency')->user()->id;
+            // Agencia solo puede configurar su propia carga
+            $request->merge(['agency_code' => Auth::guard('agency')->user()->agency_code]);
+        } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+            $id_user = getAuthenticatedAdmin()->id;
+        }
+
         $request->validate([
             'agency_code' => 'required',
         ]);
-
-        $id_user = Auth::guard('agency')->user()->id ?? Auth::user()->id;
         try {
             DB::beginTransaction();
 
@@ -335,6 +342,13 @@ class AgencyUserController extends Controller
 
     public function get_user_seller_load($agency_code)
     {
+        if (Auth::guard('agency')->check()) {
+            // Agencia solo puede ver su propia configuración
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+        } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        }
+
         $agency_user_seller_load = AgencyUserSellerLoad::with('user')->where('agency_code', $agency_code)->first();
 
         return response()->json(["data" => $agency_user_seller_load], 200);
