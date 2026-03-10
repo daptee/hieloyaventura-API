@@ -279,6 +279,10 @@ class UserReservationController extends Controller
         if (is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
 
+        // Verificar que la reserva pertenece al usuario autenticado
+        if ($userReservation->user_id !== auth()->user()->id)
+            return response(["message" => "No autorizado"], 403);
+
         $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
     }
@@ -526,9 +530,13 @@ class UserReservationController extends Controller
         $message = "Error al traer listado de {$this->sp}.";
         $data = null;
         try {
+            // Forzar agency_id al del usuario de agencia autenticado para prevenir acceso a datos de otras agencias
+            $agency_id = Auth::guard('agency')->user()->agency_code;
+
             $data = UserReservation::with(['paxes.diseases.disease', 'userAgency'])
                 ->select(['id', 'reservation_number', 'date', 'turn', 'user_agency_id'])
                 ->where('excurtion_id', 2)
+                ->where('agency_id', $agency_id)
                 ->when($request->user_id !== null, function ($query) use ($request) {
                     return $query->where('user_agency_id', $request->user_id);
                 })
@@ -537,9 +545,6 @@ class UserReservationController extends Controller
                 })
                 ->when($request->date_to !== null, function ($query) use ($request) {
                     return $query->where('date', '<=', $request->date_to);
-                })
-                ->when($request->agency_id !== null, function ($query) use ($request) {
-                    return $query->where('agency_id', $request->agency_id);
                 })
                 ->orderBy('id', 'desc')
                 ->get()

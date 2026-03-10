@@ -276,7 +276,7 @@ class ReservationController extends Controller
             "new_user_id" => ['required', 'integer', Rule::exists('users', 'id')],
         ]);
 
-        if (Auth::user()->type_user == UserType::ADMIN)
+        if (Auth::user()->user_type_id != UserType::ADMIN)
             return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
 
         $userReservation = UserReservation::find($request->reservation_id);

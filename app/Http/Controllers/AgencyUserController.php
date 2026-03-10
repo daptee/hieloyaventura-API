@@ -15,6 +15,7 @@ use App\Models\ChangeRequest;
 use App\Models\ChangeRequestFile;
 use App\Models\User;
 use App\Models\UserReservation;
+use App\Models\UserType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,15 @@ class AgencyUserController extends Controller
 
     public function index()
     {
-        $users = $this->model::with($this->model::SHOW)->get();
+        // Admin: ve todos los usuarios de todas las agencias
+        // Usuario de agencia: solo ve los usuarios de su propia agencia
+        if (Auth::guard('agency')->check()) {
+            $users = $this->model::with($this->model::SHOW)
+                ->where('agency_code', Auth::guard('agency')->user()->agency_code)
+                ->get();
+        } else {
+            $users = $this->model::with($this->model::SHOW)->get();
+        }
 
         return response(compact("users"));
     }
@@ -71,6 +80,9 @@ class AgencyUserController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $request->validate([
             "agency_user_type_id" => 'required',
             "user" => 'required',
@@ -111,8 +123,8 @@ class AgencyUserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // if(!isset(Auth::guard('agency')->user()->agency_code) && !isset(Auth::user()->id))
-        //     return response()->json(['message' => 'Token is invalid.'], 400);
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
 
         $request->validate([
             // "agency_user_type_id" => 'required',
@@ -132,6 +144,44 @@ class AgencyUserController extends Controller
         $user->can_view_all_sales = $request->can_view_all_sales;
 
         // $user->agency_code = $request->agency_code;
+
+        if ($request->password)
+            $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        if ($request->modules) {
+            AgencyUserModule::where('agency_user_id', $id)->delete();
+            foreach ($request->modules as $module_id) {
+                AgencyUserModule::create([
+                    'agency_user_id' => $user->id,
+                    'agency_module_id' => $module_id
+                ]);
+            }
+        }
+
+        $user = AgencyUser::getAllDataUser($user->id);
+        $message = "Usuario actualizado con exito";
+
+        return response(compact("user", "message"));
+    }
+
+    public function update_self(Request $request)
+    {
+        $id = Auth::guard('agency')->user()->id;
+
+        $request->validate([
+            "name" => 'required',
+            "last_name" => 'required',
+            "email" => 'required|unique:agency_users,email,' . $id,
+        ]);
+
+        $user = AgencyUser::find($id);
+        $user->user = $request->user;
+        $user->name = $request->name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->can_view_all_sales = $request->can_view_all_sales;
 
         if ($request->password)
             $user->password = Hash::make($request->password);
@@ -208,9 +258,16 @@ class AgencyUserController extends Controller
 
     public function filter_code(Request $request)
     {
+        // Si el caller es un usuario de agencia, forzar agency_code al propio
+        if (Auth::guard('agency')->check()) {
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+        } else {
+            $agency_code = $request->agency_code;
+        }
+
         $query = $this->model::with($this->model::SHOW)
-            ->when($request->agency_code, function ($query) use ($request) {
-                return $query->where('agency_code', 'LIKE', '%' . $request->agency_code . '%');
+            ->when($agency_code, function ($query) use ($agency_code) {
+                return $query->where('agency_code', 'LIKE', '%' . $agency_code . '%');
             })
             ->orderBy('id', 'desc');
 
@@ -282,11 +339,18 @@ class AgencyUserController extends Controller
     {
         $params = [];
 
-        if ($request->has('DESDE') && $request->DESDE !== null) {
-            $params['DESDE'] = $request->DESDE;
-        }
-        if ($request->has('HASTA') && $request->HASTA !== null) {
-            $params['HASTA'] = $request->HASTA;
+        if (Auth::guard('agency')->check()) {
+            // Agency users can only see their own agency
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+            $params['DESDE'] = $agency_code;
+            $params['HASTA'] = $agency_code;
+        } else {
+            if ($request->has('DESDE') && $request->DESDE !== null) {
+                $params['DESDE'] = $request->DESDE;
+            }
+            if ($request->has('HASTA') && $request->HASTA !== null) {
+                $params['HASTA'] = $request->HASTA;
+            }
         }
 
         $url = $this->get_url();
@@ -672,9 +736,8 @@ class AgencyUserController extends Controller
     {
         $params = [];
 
-        if ($request->has('AG') && $request->AG !== null) {
-            $params['AG'] = $request->AG;
-        }
+        // Forzar el código de agencia al del usuario autenticado para prevenir acceso a datos de otras agencias
+        $params['AG'] = Auth::guard('agency')->user()->agency_code;
         if ($request->has('DESDEF') && $request->DESDEF !== null) {
             $params['DESDEF'] = $request->DESDEF;
         }
@@ -719,7 +782,13 @@ class AgencyUserController extends Controller
         $url = $this->get_url();
         $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");
         if ($response->successful()) {
-            return $response->json();
+            $data = $response->json();
+            // Verificar que la reserva pertenece a la agencia autenticada
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+            if (isset($data['AGENCIA']) && (string) $data['AGENCIA'] !== (string) $agency_code) {
+                return response()->json(['message' => 'No se ha encontrado la reserva.'], 404);
+            }
+            return $data;
         } else {
             return $response->throw();
         }

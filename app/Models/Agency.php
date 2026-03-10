@@ -16,6 +16,8 @@ class Agency extends Model
         "email_integration_notification"
     ];
 
+    protected $hidden = ['api_key'];
+
     protected $casts = [
         'configurations' => 'array'
     ];

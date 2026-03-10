@@ -23,7 +23,6 @@ use App\Http\Controllers\PdfCleanupController;
 use App\Http\Controllers\PictureExcurtionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReservationStatusController;
-use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReservationController;
 use App\Mail\ContactForm;
@@ -111,17 +110,11 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
 
-    Route::post('tickets', [TicketController::class, 'store']);
-    Route::post('tickets/message', [TicketController::class, 'message']);
-    Route::post('tickets/change/status', [TicketController::class, 'change_status']);
-
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);
     Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
     Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 });
-
-Route::get('tickets', [TicketController::class, 'index']);
 
 Route::post('create/log', [LogController::class, 'store_log']);
 
@@ -137,7 +130,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/oferts', 'oferts');
     Route::get('/excursions', 'excursions');
     Route::get('/shifts', 'shifts');
-    Route::get('/ReservaxCodigo', 'ReservaxCodigo');
+    Route::get('/ReservaxCodigo', 'ReservaxCodigo')->middleware(['jwt.verify']);
     Route::post('/IniciaReserva', 'IniciaReserva');
     Route::post('/CancelaReserva', 'CancelaReserva');
     Route::post('/ConfirmaReserva', 'ConfirmaReserva');
@@ -145,22 +138,21 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/Promociones', 'Promociones');
     Route::get('/RecuperaPrecioReserva', 'RecuperaPrecioReserva');
     Route::post('/CreaSolicitudAG', 'CreaSolicitudAG');
-    Route::get('/SolicitudesAG', 'SolicitudesAG');
+    Route::get('/SolicitudesAG', 'SolicitudesAG')->middleware(['jwt.agency']);
     Route::get('/ValidaCupon', 'ValidaCupon');
-    Route::get('/CtaCteAG', 'CtaCteAG');
+    Route::get('/CtaCteAG', 'CtaCteAG')->middleware(['jwt.agency']);
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
     Route::get('/', 'index')->middleware(['jwt.verify']);
     Route::post('/', 'store');
-    Route::get('/{userReservation}', 'show');
+    Route::get('/{userReservation}', 'show')->middleware(['jwt.verify']);
     Route::get('/number/{reservationNumber}', 'getByReservationNumber');
     Route::get('/number/encrypted/{reservationNumber}', 'getByReservationNumberEncrypted');
     Route::put('/{id}', 'update');
-    Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.verify']);
+    Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.agency']);
 });
 
-Route::post('users_reservations2/', [UserReservationController::class, 'store']);
 
 Route::get('/lenguages/{locale}', function ($locale) {
     //1 => spanish
@@ -190,50 +182,12 @@ Route::get('/clear-cache', function () {
     return response()->json([
         "message" => "Cache cleared successfully"
     ]);
-});
+})->middleware(['jwt.verify']);
 
-Route::get('/clear-tokens', function () {
-    Artisan::call('passport:purge');
-    Artisan::call('passport:install');
-
-    return response()->json([
-        "message" => "Tokens config successfully"
-    ]);
-});
-
-Route::get('/storage-link', function () {
-    Artisan::call('storage:link');
-
-    return response()->json([
-        "message" => "The links have been created."
-    ]);
-});
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
 
-Route::get('test-mail', function () {
-    try {
-        $text = "Test de envio de mail Hielo y Aventura";
-        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
-        return 'Mail enviado';
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        return 'Mail no enviado';
-    }
-});
-
-Route::post('testeando-curl-post', function () {
-    try {
-        $text = "Test de envio de mail Hielo y Aventura";
-        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
-        return 'Mail enviado';
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        return 'Mail no enviado';
-    }
-});
-
-Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
-Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics']);
+Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store'])->middleware(['jwt.verify']);
+Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics'])->middleware(['jwt.verify']);
 Route::post('excurtion/pictures/manage/files', [PictureExcurtionController::class, 'manage']);
 Route::get('excurtion/{id}/pictures/files', [PictureExcurtionController::class, 'getByExcurtion']);
 
@@ -317,64 +271,6 @@ Route::post('web/general_configuration', [GeneralConfigurationsController::class
 Route::post('paxs', [PaxController::class, 'store']);
 Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
-Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
-
-Route::get('test-api-cr', function () {
-
-    $client = new Client();
-
-    $fields = json_encode(array("RSV" => "349268"));
-    $url = config('app.api_hya') . "/CancelaReservaM2";
-    $response = $client->post($url, [
-        'body' => $fields,
-        'headers' => [
-            'Content-Type' => 'application/json'
-        ]
-    ]);
-
-    $body = $response->getBody();
-
-    return $body;
-});
-
-Route::get('curl/test-api-cancelar/reserva', function () {
-
-    try {
-        $url = config('app.api_hya') . "/CancelaReservaM2";
-
-        $curl = curl_init();
-        $fields = json_encode(array("RSV" => "432837"));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $resp = curl_exec($curl);
-        curl_close($curl);
-
-        return "entre en try, resp: $resp";
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        // return $th->getMessage();
-        return "entre en catch";
-    }
-
-    // $url = config('app.api_hya')."/CancelaReservaM2";
-
-    // $curl = curl_init();
-    // $fields = json_encode( array("RSV" => "432837") );
-    // curl_setopt($curl, CURLOPT_URL, $url);
-    // curl_setopt($curl, CURLOPT_POST, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    // $resp = curl_exec($curl);
-    // curl_close($curl);
-
-    // return $resp;
-});
 
 Route::get('modules/user', [UserController::class, 'get_modules']);
 
@@ -385,11 +281,11 @@ Route::post('reservations/resend/email_voucher', [ReservationController::class, 
 Route::post('reservations/update/internal_closed/{id}', [ReservationController::class, 'update_internal_closed'])->middleware(['jwt.verify']);
 Route::post('reservations/new/observation', [ReservationController::class, 'new_observation'])->middleware(['jwt.verify']);
 
-// Agency users 
-Route::get('agency/users', [AgencyUserController::class, 'index']);
-Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency']);
-Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code']);
-Route::get('agency/modules', [AgencyModuleController::class, 'index']);
+// Agency users
+Route::get('agency/users', [AgencyUserController::class, 'index'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/modules', [AgencyModuleController::class, 'index'])->middleware(['jwt.admin_or_agency']);
 Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.verify']);
 
 // Agency user reservations
@@ -402,29 +298,31 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 // Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
 // Route::post('/publication/upload/invoice', [MercadoLibreController::class, 'upload_publication_invoice']);
 
+// Agency user self-update (uses ID from token, not from URL)
+Route::put('/agency/users/profile', [AgencyUserController::class, 'update_self'])->middleware(['jwt.agency']);
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.verify']);
-Route::get('/agency/hya/Agencias', [AgencyUserController::class, 'agencies']);
+Route::get('/agency/hya/Agencias', [AgencyUserController::class, 'agencies'])->middleware(['jwt.admin_or_agency']);
 Route::get('/agency/hya/Productos', [AgencyUserController::class, 'products']);
 Route::get('/agency/hya/TiposPasajeros', [AgencyUserController::class, 'passenger_types']);
 Route::get('/agency/hya/Naciones', [AgencyUserController::class, 'nationalities']);
 Route::get('/agency/hya/Hoteles', [AgencyUserController::class, 'hotels']);
 // Endpoint to receive group files from agencies and send them via email
-Route::post('agency/reservations/groups_by', [AgencyUserController::class, 'groups_by']);
+Route::post('agency/reservations/groups_by', [AgencyUserController::class, 'groups_by'])->middleware(['jwt.agency']);
 Route::get('/agency/hya/Turnos', [AgencyUserController::class, 'shifts']);
-Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation']);
-Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation']);
-Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation']);
-Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers']);
-Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG']);
-Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo']);
-Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request']);
-Route::get('/agency/reservation/{reservation}/requests', [AgencyUserController::class, 'get_reservation_requests']);
-Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG']);
-Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG']);
-Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios']);
-Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel']);
+Route::post('/agency/hya/IniciaReserva', [AgencyUserController::class, 'start_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/CancelaReserva', [AgencyUserController::class, 'cancel_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/ConfirmaReserva', [AgencyUserController::class, 'confirm_reservation'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/ConfirmaPasajeros', [AgencyUserController::class, 'confirm_passengers'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ReservasAG', [AgencyUserController::class, 'reservationsAG'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ReservaxCodigo', [AgencyUserController::class, 'ReservaxCodigo'])->middleware(['jwt.agency']);
+Route::post('/agency/users_reservations/request/change', [AgencyUserController::class, 'change_request'])->middleware(['jwt.agency']);
+Route::get('/agency/reservation/{reservation}/requests', [AgencyUserController::class, 'get_reservation_requests'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/ProductosAG', [AgencyUserController::class, 'ProductosAG'])->middleware(['jwt.agency']);
+Route::get('/agency/hya/TurnosAG', [AgencyUserController::class, 'TurnosAG'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/resumen_servicios_diarios', [AgencyUserController::class, 'resumen_servicios_diarios'])->middleware(['jwt.agency']);
+Route::post('/agency/hya/resumen_servicios_diarios/excel', [AgencyUserController::class, 'resumen_servicios_diarios_excel'])->middleware(['jwt.agency']);
 
 // External Agency HyA routes
 Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\Controllers\AgencyExternalHyAController::class)->group(function () {
@@ -453,8 +351,8 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
 
 Route::get('/users/types', [UserController::class, 'types_user']);
 
-Route::delete('/pdfs/delete-by-range', [PdfCleanupController::class, 'deleteByRange']);
-Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'deleteByRangeAgencies']);
+Route::delete('/pdfs/delete-by-range', [PdfCleanupController::class, 'deleteByRange'])->middleware(['jwt.verify']);
+Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'deleteByRangeAgencies'])->middleware(['jwt.verify']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
