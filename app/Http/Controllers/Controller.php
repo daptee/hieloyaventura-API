@@ -33,6 +33,23 @@ class Controller extends BaseController
     }
 
     /**
+     * Verifica que el usuario autenticado sea ADMIN y tenga AL MENOS UNO de los módulos indicados.
+     * Útil para endpoints compartidos entre secciones (ej: reservas web y reservas agencias).
+     */
+    protected function requireAdminAnyModule(array $moduleIds): ?JsonResponse
+    {
+        $user = Auth::user();
+        if ($user->user_type_id !== UserType::ADMIN) {
+            return response()->json(['message' => 'No tiene permisos para realizar esta acción.'], 403);
+        }
+        $hasAny = UserModule::where('user_id', $user->id)->whereIn('module_id', $moduleIds)->exists();
+        if (!$hasAny) {
+            return response()->json(['message' => 'No tiene permisos para realizar esta acción.'], 403);
+        }
+        return null;
+    }
+
+    /**
      * Verifica que el usuario autenticado sea ADMIN o EDITOR y tenga el módulo indicado.
      * (EDITOR tiene EXCURSIONES y CONFIGURACIONES asignados por defecto al crearse.)
      * Retorna una respuesta 403 si no cumple, o null si tiene permiso.

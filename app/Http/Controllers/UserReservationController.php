@@ -14,6 +14,7 @@ use App\Models\AuditReservation;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
 use App\Models\Pax;
+use App\Models\Module;
 use App\Models\RejectedReservation;
 use App\Models\ReservationPax;
 use App\Models\ReservationStatus;
@@ -194,6 +195,8 @@ class UserReservationController extends Controller
 
     public function store_type_agency(StoreUserReservationAgencyRequest $request)
     {
+        if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
@@ -256,6 +259,8 @@ class UserReservationController extends Controller
 
     public function path_pdf_reservation_agency(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+
         $userReservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
         // dd('reservation id' . $reservation_id);
 

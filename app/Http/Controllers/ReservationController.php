@@ -36,7 +36,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         // dd($request->all());
         $message = "Error al traer listado de {$this->sp}.";
@@ -144,7 +144,7 @@ class ReservationController extends Controller
      */
     public function show($id)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         $userReservation = $this->getAllReservation($id);
 
@@ -197,7 +197,7 @@ class ReservationController extends Controller
 
     public function resend_email_welcome(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         $userReservation = UserReservation::find($request->user_reservation_id);
 
@@ -227,7 +227,7 @@ class ReservationController extends Controller
 
     public function resend_email_voucher(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         $userReservation = UserReservation::find($request->user_reservation_id);
 
@@ -244,7 +244,7 @@ class ReservationController extends Controller
 
     public function update_internal_closed(Request $request, $id)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         $userReservation = UserReservation::find($id);
 
@@ -261,7 +261,7 @@ class ReservationController extends Controller
 
     public function new_observation(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_WEB)) return $error;
+        if ($error = $this->requireAdminAnyModule([Module::RESERVAS_WEB, Module::RESERVAS_AGENCIAS])) return $error;
 
         $request->validate([
             'user_reservation_id' => 'required',
