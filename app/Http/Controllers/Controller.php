@@ -11,6 +11,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Controller extends BaseController
 {
@@ -22,7 +23,7 @@ class Controller extends BaseController
      */
     protected function requireAdminModule(int $moduleId): ?JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::user() ?? JWTAuth::user();
         if ($user->user_type_id !== UserType::ADMIN) {
             return response()->json(['message' => 'No tiene permisos para realizar esta acción.'], 403);
         }
@@ -38,7 +39,7 @@ class Controller extends BaseController
      */
     protected function requireAdminAnyModule(array $moduleIds): ?JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::user() ?? JWTAuth::user();
         if ($user->user_type_id !== UserType::ADMIN) {
             return response()->json(['message' => 'No tiene permisos para realizar esta acción.'], 403);
         }
@@ -56,7 +57,7 @@ class Controller extends BaseController
      */
     protected function requireModule(int $moduleId): ?JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::user() ?? JWTAuth::user();
         if (!in_array($user->user_type_id, [UserType::ADMIN, UserType::EDITOR])) {
             return response()->json(['message' => 'No tiene permisos para realizar esta acción.'], 403);
         }
