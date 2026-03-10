@@ -19,6 +19,9 @@ class AdminOrAgencyMiddleware
         try {
             $user = JWTAuth::parseToken()->authenticate();
             if ($user) {
+                // Guardar el usuario en los atributos del request antes de que
+                // Auth::guard('agency') pueda interferir con el estado JWT
+                $request->attributes->set('authenticated_admin', $user);
                 return $next($request);
             }
         } catch (TokenExpiredException $e) {
