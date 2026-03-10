@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFaqRequest;
 use App\Http\Requests\UpdateFaqRequest;
 use App\Models\Faq;
+use App\Models\Module;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -41,6 +42,8 @@ class FaqController extends Controller
 
     public function store(StoreFaqRequest $request)
     {
+        if ($error = $this->requireModule(Module::CONFIGURACIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $data = $request->all();
 

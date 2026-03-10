@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCharacteristicTypeRequest;
 use App\Http\Requests\UpdateCharacteristicTypeRequest;
 use App\Models\CharacteristicType;
 use App\Models\Icon;
+use App\Models\Module;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -51,6 +52,8 @@ class CharacteristicTypeController extends Controller
      */
     public function create(StoreCharacteristicTypeRequest $request)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $data = $request->all();
 

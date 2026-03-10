@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
         }
     </style>
 </head>
+
 <body>
 
     @if (!empty($files) && count($files) > 0)
@@ -25,6 +27,7 @@
         <p>
             El usuario <strong>{{ $mailData['nombreUsuario'] ?? 'N/D' }}</strong>
             de la agencia <strong>{{ $mailData['nombreAgencia'] ?? 'N/D' }}</strong>
+            cuyo mail es: <strong>{{ $mailData['emailUsuarioAgencia'] ?? 'N/D' }}</strong>
             ha enviado una solicitud de grupos
             nro <strong>{{ $id_solicitud }}</strong>.
         </p>
@@ -49,4 +52,5 @@
     </p>
 
 </body>
+
 </html>

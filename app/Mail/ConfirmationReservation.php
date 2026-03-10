@@ -13,6 +13,9 @@ class ConfirmationReservation extends Mailable
     use Queueable, SerializesModels;
 
     public $data, $subject, $request, $turn;
+    public $agency_name;
+    public $reservation_name;
+    public $number_of_passengers;
 
     /**
      * Create a new message instance.
@@ -23,6 +26,19 @@ class ConfirmationReservation extends Mailable
     {
         $this->data = $data;
         $this->request = $request;
+        $this->agency_name = $request->agency_name ?? ($data->agency_name ?? null);
+        // Determine reservation name (prefer request->pax for agency flow)
+        $this->reservation_name = $request->pax ?? $request->reservation_name ?? ($data->contact_data->name ?? null);
+        // Determine passenger count: prefer request->paxs_reservation if present
+        if (isset($request->paxs_reservation) && is_array($request->paxs_reservation)) {
+            $this->number_of_passengers = count($request->paxs_reservation);
+        } elseif (isset($data->reservation_paxes) && is_array($data->reservation_paxes)) {
+            $this->number_of_passengers = count($data->reservation_paxes);
+        } elseif (isset($data->paxes) && is_array($data->paxes)) {
+            $this->number_of_passengers = count($data->paxes);
+        } else {
+            $this->number_of_passengers = $request->number_of_passengers ?? null;
+        }
         $this->data->meeting_point = $this->defineMeetingPoint($data);
         $this->turn = $request->turn ?? $data->turn->format('H:i\h\s');
         $this->subject = "Confirmacion reserva generada - Nro $data->reservation_number - Hielo & Aventura";
@@ -57,7 +73,7 @@ class ConfirmationReservation extends Mailable
             }
             return $data->hotel_name ?? '-';
         }
-        
+
         return 'Puerto "Bajo de las Sombras"';
     }
 }

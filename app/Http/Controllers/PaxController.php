@@ -72,8 +72,14 @@ class PaxController extends Controller
 
                 ini_set('memory_limit', '128M');
                 foreach ($paxs as $pax) {
+                    if (!is_array($pax)) {
+                        Log::warning(['message' => 'Skipping invalid pax entry (not array) in store()', 'nro_reserva' => $userReservation->reservation_number]);
+                        continue;
+                    }
+
                     $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                    if ($pax['files'] && count($pax['files']) != 0) {
+
+                    if (!empty($pax['files']) && is_array($pax['files']) && count($pax['files']) != 0) {
                         foreach ($pax['files'] as $file) {
                             if (is_a($file, 'Illuminate\Http\UploadedFile') && $file->isValid()) {
                                 $fileName = Str::random(5) . time() . '.' . $file->extension();
@@ -106,8 +112,12 @@ class PaxController extends Controller
 
             //Mandar email con el PDF adjunto
             $pathReservationPdf = $this->createPdf($userReservation);
-            // return $this->createPdf($userReservation);                                
-            $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            if (is_array($pathReservationPdf) && isset($pathReservationPdf['urlToSave'])) {
+                $userReservation->pdf = $pathReservationPdf['urlToSave'];
+            } else {
+                Log::error("createPdf returned invalid result in PaxController::store", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
+                $userReservation->pdf = null;
+            }
             $userReservation->save();
 
             $mailTo = $userReservation->contact_data->email;
@@ -125,7 +135,7 @@ class PaxController extends Controller
                     Mail::to("ventas@hieloyaventura.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));
                     // Mail::to("enzo100amarilla@gmail.com")->send(new UserReservationAttachedPassengerFiles($pathReservationZip, $reservation_number, $paxs));                        
                 } catch (Exception $error) {
-                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a ventas@hieloyaventura.com con adjunto ZIP", $error->getLine()],  true));
+                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a ventas@hieloyaventura.com con adjunto ZIP", $error->getLine()], true));
                 }
             }
 
@@ -138,14 +148,14 @@ class PaxController extends Controller
                 Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));
                 // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
             } catch (Exception $error) {
-                Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()],  true));
+                Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()], true));
                 return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
             }
             // });
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", "nro_reserva" => $userReservation->reservation_number, $th->getLine()],  true));
+            Log::debug(print_r([$th->getMessage() . " - error en proceso general de carga de pasajeros", "nro_reserva" => $userReservation->reservation_number, $th->getLine()], true));
 
             AuditReservation::store_audit_reservation($userReservation->id, ["operation" => "Error en carga de pasajeros", "status" => "Error"]);
 
@@ -160,8 +170,12 @@ class PaxController extends Controller
     {
         $userReservation = UserReservation::find($request->user_reservation_id);
 
-        if (Auth::guard('agency')->user()->agency_code != $userReservation->agency_id)
-            return response(["message" => "No puede realizar esta accion"], 400);
+        $datos = $request->all();
+
+        // if (!isset($datos['X-API-KEY'])) {
+        //     if (Auth::guard('agency')->user()->agency_code != $userReservation->agency_id)
+        //         return response(["message" => "No puede realizar esta accion"], 400);
+        // }
 
         if (!isset($userReservation))
             return response(["message" => "User Reservation ID Invalido."], 422);
@@ -169,16 +183,33 @@ class PaxController extends Controller
         $paxs = $request->paxs;
 
         try {
-            DB::transaction(function () use ($paxs, $request, $userReservation) {
+            DB::transaction(function () use ($paxs, $request, $userReservation, $datos) {
                 if (isset($paxs)) {
                     $paxFiles = [];
 
                     ini_set('memory_limit', '128M');
                     foreach ($paxs as $pax) {
+                        if (!is_array($pax)) {
+                            Log::warning(['message' => 'Skipping invalid pax entry (not array) in store_type_agency()', 'nro_reserva' => $userReservation->reservation_number]);
+                            continue;
+                        }
+
+                        if (!empty($pax['birthdate']) && is_string($pax['birthdate']) && str_contains($pax['birthdate'], '/')) {
+                            try {
+                                $pax['birthdate'] = Carbon::createFromFormat('d/m/Y', $pax['birthdate'])->format('Y-m-d');
+                            } catch (\Throwable $th) {
+                                try {
+                                    $pax['birthdate'] = Carbon::createFromFormat('d/m/y', $pax['birthdate'])->format('Y-m-d');
+                                } catch (\Throwable $th) {
+                                }
+                            }
+                        }
+
                         $new_pax = Pax::create($pax + ['user_reservation_id' => $request->user_reservation_id]);
-                        if ($pax['files'] && count($pax['files']) != 0) {
+
+                        if (!empty($pax['files']) && is_array($pax['files']) && count($pax['files']) != 0) {
                             foreach ($pax['files'] as $file) {
-                                $fileName   = Str::random(5) . time() . '.' . $file->extension();
+                                $fileName = Str::random(5) . time() . '.' . $file->extension();
                                 $file->move(public_path("paxs/files/$request->user_reservation_id"), $fileName);
                                 $path = "/paxs/files/$request->user_reservation_id/$fileName";
 
@@ -196,7 +227,12 @@ class PaxController extends Controller
                 }
 
                 $pathReservationPdf = $this->createPdf($userReservation, true);
-                $userReservation->pdf = $pathReservationPdf['urlToSave'];
+                if (is_array($pathReservationPdf) && isset($pathReservationPdf['urlToSave'])) {
+                    $userReservation->pdf = $pathReservationPdf['urlToSave'];
+                } else {
+                    Log::error("createPdf returned invalid result in PaxController::store_type_agency", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
+                    $userReservation->pdf = null;
+                }
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
 
@@ -205,14 +241,16 @@ class PaxController extends Controller
                 $user_reservation_status->user_reservation_id = $userReservation->id;
                 $user_reservation_status->save();
 
-                try {
-                    Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($userReservation, $request));
-                } catch (\Throwable $th) {
-                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                if (!isset($datos['X-API-KEY'])) {
+                    try {
+                        Mail::to(Auth::guard('agency')->user()->email)->send(new ConfirmationReservation($userReservation, $request));
+                    } catch (\Throwable $th) {
+                        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
+                    }
                 }
             });
         } catch (\Throwable $th) {
-            Log::debug(print_r([$th->getMessage() . "error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine()],  true));
+            Log::error(print_r([$th->getMessage() . " error en proceso general de carga de pasajeros (agencia)", "nro_reserva" => $userReservation->reservation_number, $th->getLine(), $th->getTraceAsString()], true));
             return response(["error" => $th->getMessage()], 500);
         }
 
@@ -311,14 +349,12 @@ class PaxController extends Controller
 
                 if (!is_dir('reservations/agencies'))
                     mkdir(public_path("reservations/agencies"));
-
             } else {
 
                 if (!is_dir('reservations'))
-                    mkdir(public_path("reservations"));                
-
+                    mkdir(public_path("reservations"));
             }
-    
+
             $date = $newUserReservation->date;
             $paxes = $newUserReservation->paxes;
             $paxes_name = "";
@@ -444,25 +480,24 @@ class PaxController extends Controller
             }
 
             //Textos
-            $thanks                  = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
-            $reservationNumber       = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
+            $thanks = iconv('UTF-8', 'ISO-8859-1', $traduccionesPDF[$languageToPdf]['thanks']);
+            $reservationNumber = iconv('UTF-8', 'cp1250', "#$newUserReservation->reservation_number");
             // $contactFullName         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name . " " . $newUserReservation->contact_data->lastname);
-            $contactName             = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name ?? null);
-            $withTranslation         = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer == 1 ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
+            $contactName = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->contact_data->name ?? null);
+            $withTranslation = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->is_transfer == 1 ? ' ' . $traduccionesPDF[$languageToPdf]['withTranslation'] : '');
             $amountPaxesWithDeatails = iconv('UTF-8', 'cp1250', "|  " . $quantity_paxes . "x $excurtionName");
-            $reservationDate         = iconv('UTF-8', 'cp1250', $dateFormated);
-            $reservationTurn         = iconv('UTF-8', 'cp1250', $turnFormated);
-            $hotelName               = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->hotel_name);
-            $details                 = iconv('UTF-8', 'cp1250', $details);
-            $excurtionName           = iconv('UTF-8', 'cp1250', $excurtionName);
-            $namePdf                 = "reservation-$newUserReservation->id" . "-$newUserReservation->reservation_number.pdf";
+            $reservationDate = iconv('UTF-8', 'cp1250', $dateFormated);
+            $reservationTurn = iconv('UTF-8', 'cp1250', $turnFormated);
+            $hotelName = iconv('UTF-8', 'ISO-8859-1', $newUserReservation->hotel_name);
+            $details = iconv('UTF-8', 'cp1250', $details);
+            $excurtionName = iconv('UTF-8', 'cp1250', $excurtionName);
+            $namePdf = "reservation-$newUserReservation->id" . "-$newUserReservation->reservation_number.pdf";
             if ($onlySave) {
                 $pathToSavePdf = public_path("reservations/agencies/$namePdf");
-                $urlToSave     = url("reservations/agencies/$namePdf");
+                $urlToSave = url("reservations/agencies/$namePdf");
             } else {
                 $pathToSavePdf = public_path("reservations/$namePdf");
-                $urlToSave     = url("reservations/$namePdf");
-
+                $urlToSave = url("reservations/$namePdf");
             }
 
             // now write some text above the imported page
@@ -583,6 +618,10 @@ class PaxController extends Controller
             $pdf->Output($pathToSavePdf, "F");
 
             // return $pdf->Output();
+            Log::debug(print_r([
+                'urlToSave' => $urlToSave,
+                'pathToSavePdf' => $pathToSavePdf
+            ], true));
 
             return [
                 'urlToSave' => $urlToSave,

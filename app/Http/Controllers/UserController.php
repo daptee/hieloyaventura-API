@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Mail\recoverPasswordMailable;
 use App\Mail\UserReservation;
 use App\Models\AgencyUser;
+use App\Models\AgencyUserType;
 use App\Models\Module;
 use App\Models\User;
 use App\Models\UserModule;
@@ -40,6 +41,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::USUARIOS)) return $error;
+
         $query = User::with($this->model::INDEX)->when($request->user_type_id, function ($query) use ($request) {
             return $query->where('user_type_id', $request->user_type_id);
         })
@@ -62,6 +65,8 @@ class UserController extends Controller
 
     public function get_all_with_out_filters()
     {
+        if ($error = $this->requireAdminModule(Module::USUARIOS)) return $error;
+
         $users = User::with($this->model::INDEX)->get();
         return response(compact("users"));
     }
@@ -92,6 +97,9 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $request->validate([
             "name" => 'required',
             "email" => 'required|unique:users',
@@ -202,6 +210,9 @@ class UserController extends Controller
 
     public function update_admin(Request $request, $id)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $user = User::find($id);
 
         if (!isset($user))
@@ -322,7 +333,8 @@ class UserController extends Controller
     {
         $user = AgencyUser::where('email', $request->email)->first();
 
-        if (!$user)
+        // Validar que el usuario exista y esté activo
+        if (!$user || $user->active == 0)
             return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
 
         try {
@@ -355,7 +367,7 @@ class UserController extends Controller
         if (!$user)
             return response(["message" => "ID Usuario invalido."], 422);
 
-        if (Auth::user()->type_user == UserType::ADMIN)
+        if (Auth::user()->user_type_id != UserType::ADMIN)
             return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
 
         $count_user_reservations = ModelsUserReservation::where('user_id', $id)->count();

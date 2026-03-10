@@ -13,6 +13,7 @@ class AgencyUserType extends Model
 
     const ADMIN = 1;
     const VENDEDOR = 2;
+    const COMERCIAL = 3;
 
     protected $hidden = ['created_at', 'updated_at'];
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCharacteristicRequest;
 use App\Http\Requests\UpdateCharacteristicRequest;
 use App\Models\Characteristic;
 use App\Models\ExcurtionCharacteristic;
+use App\Models\Module;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -53,6 +54,8 @@ class CharacteristicController extends Controller
      */
     public function store(StoreCharacteristicRequest $request)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
@@ -96,6 +99,8 @@ class CharacteristicController extends Controller
 
     public function arrayAddToExcurtion(Request $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
         try {
@@ -113,6 +118,8 @@ class CharacteristicController extends Controller
     }
     public function storeArray(Request $request)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
         $result = [];
@@ -136,6 +143,7 @@ class CharacteristicController extends Controller
     }
     public function updateArray(Request $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
 
         $message = "Error al editar {$this->s}.";
         $datos = $request->all();
@@ -167,6 +175,8 @@ class CharacteristicController extends Controller
      */
     public function update(UpdateCharacteristicRequest $request, $id)
     {
+        if ($error = $this->requireModule(Module::EXCURSIONES)) return $error;
+
         $message = "Error al editar {$this->s}.";
         $datos = $request->all();
 

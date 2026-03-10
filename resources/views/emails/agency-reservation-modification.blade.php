@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Confirmación de Reserva - Hielo & Aventura</title>
+    <title>Pedido de Modificación de Reserva - Hielo & Aventura</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,57 +40,40 @@
             color: #333333;
             margin-bottom: 6px;
         }
-        .agency-name {
+        .recipient-name {
             font-size: 20px;
             font-weight: 700;
             color: #3686C3;
             margin-bottom: 18px;
         }
-        .intro-bold {
-            font-size: 15px;
+        .subject-title {
+            font-size: 16px;
             font-weight: 700;
             color: #333333;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
         .intro-text {
             font-size: 14px;
             font-weight: 400;
             color: #555555;
-            margin-bottom: 24px;
             line-height: 1.6;
+            margin-bottom: 20px;
         }
-        /* DATA SECTION */
-        .section-title {
-            font-size: 15px;
-            font-weight: 700;
+        /* DATA */
+        .data-line {
+            font-size: 14px;
             color: #333333;
             margin-bottom: 8px;
-        }
-        .divider {
-            border: none;
-            border-top: 1px solid #e0e0e0;
-            margin-bottom: 0;
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .data-table tr {
-            border-bottom: 1px solid #eeeeee;
-        }
-        .data-table td {
-            padding: 10px 4px;
-            font-size: 14px;
             line-height: 1.5;
         }
-        .data-table td.label {
+        .data-line strong {
             font-weight: 700;
-            width: 40%;
-            color: #333333;
         }
-        .data-table td.value {
-            font-weight: 400;
+        .urgency-text {
+            font-size: 14px;
             color: #555555;
+            margin-top: 20px;
+            line-height: 1.5;
         }
         /* NOTICE BOX */
         .notice-box {
@@ -100,39 +83,17 @@
             margin: 24px 0;
             font-size: 13px;
             color: #666666;
-            font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.6;
         }
-        /* CONTACT */
-        .contact-section {
-            border-top: 1px solid #e0e0e0;
-            padding-top: 20px;
-            margin-top: 20px;
-        }
-        .contact-text {
-            font-size: 14px;
-            color: #555555;
-            margin-bottom: 10px;
-        }
-        .contact-detail {
-            font-size: 14px;
-            color: #333333;
-            margin-bottom: 4px;
-        }
-        .contact-detail strong {
+        .notice-box a {
+            color: #3686C3;
+            text-decoration: none;
             font-weight: 700;
-        }
-        .rates-notice {
-            font-size: 13px;
-            color: #888888;
-            margin-top: 12px;
         }
         /* THANKS & BUTTON */
         .thanks-section {
-            border-top: 1px solid #e0e0e0;
-            margin-top: 24px;
-            padding-top: 24px;
             text-align: center;
+            margin-top: 24px;
         }
         .thanks-text {
             font-size: 15px;
@@ -205,70 +166,32 @@
         <div class="card">
 
             <p class="greeting">Hola, 👋</p>
-            <p class="agency-name">{{ $agency_name ?? 'Agencia' }}</p>
+            <p class="recipient-name">Equipo de Reservas</p>
 
-            <p class="intro-bold">Este es un correo automático con la confirmación de tu reserva.</p>
+            <p class="subject-title">Pedido de Modificación de Reserva</p>
+
             <p class="intro-text">
                 Se ha recibido una notificación mediante integración de API de la agencia
-                <strong>{{ $agency_name ?? 'la agencia' }}</strong> con la confirmación de los siguientes datos:
+                <strong>{{ $agencyName }}</strong> pidiendo modificación de los siguientes datos:
             </p>
 
-            {{-- DATA TABLE --}}
-            <p class="section-title">Datos de la reserva</p>
-            <hr class="divider">
-            <table class="data-table">
-                <tr>
-                    <td class="label">Agencia:</td>
-                    <td class="value">{{ $agency_name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Excursión:</td>
-                    <td class="value">{{ $data->excurtion->name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nro reserva:</td>
-                    <td class="value">{{ $data->reservation_number ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Fecha y hora:</td>
-                    <td class="value">
-                        {{ isset($data->date) ? $data->date->format('d/m/Y') : '-' }}
-                        @if($turn) – {{ $turn }}@endif
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">Traslado:</td>
-                    <td class="value">{{ $data->is_transfer ? 'Sí' : 'No' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nombre:</td>
-                    <td class="value">{{ $reservation_name ?? $request->contact_name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Pasajeros:</td>
-                    <td class="value">{{ $number_of_passengers ?? $request->paxs_cant ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Hotel:</td>
-                    <td class="value">{{ $data->is_transfer ? ($data->hotel_name ?? '-') : '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Punto de encuentro:</td>
-                    <td class="value">{{ $data->meeting_point ?? '-' }}</td>
-                </tr>
-            </table>
+            {{-- REQUEST DATA --}}
+            @foreach($formattedData as $field)
+                <p class="data-line">
+                    <strong>{{ $field['label'] }}:</strong> {{ $field['value'] }}
+                </p>
+            @endforeach
+
+            <p class="data-line" style="margin-top: 12px;">
+                <strong>Número de Reserva:</strong> {{ $reservationNumber }}
+            </p>
+
+            <p class="urgency-text">Por favor, procese esta solicitud a la brevedad posible.</p>
 
             {{-- NOTICE --}}
             <div class="notice-box">
-                Tarifa vigente al momento de confirmar la reserva. Puede sufrir cambios sin previo aviso.
-            </div>
-
-            {{-- CONTACT --}}
-            <div class="contact-section">
-                <p class="contact-text">Cualquier duda puede contactarse con nosotros.</p>
-                <p class="contact-detail"><strong>Contacto:</strong> reservas@hieloyaventura.com</p>
-                <p class="contact-detail"><strong>Teléfono:</strong> +54-2902-492205 o 2902-490205 de 7 a 20:00hs.</p>
-                <p class="rates-notice">Las tarifas están sujetas a cambios SIN previo aviso.</p>
+                Este es un correo automático generado por el sistema de integración de API.<br>
+                <a href="{{ config('app.url_agencies', 'https://agencias.hieloyaventura.com') }}">Hielo y Aventura</a> - Sistema de Gestión de Reservas
             </div>
 
             {{-- THANKS & BUTTON --}}

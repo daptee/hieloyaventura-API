@@ -144,7 +144,7 @@ class AuthController extends Controller{
         // User agency 
         $user_to_validate = AgencyUser::where('email', $request->email)->first();
 
-        if(!isset($user_to_validate) || !in_array($user_to_validate->agency_user_type_id, [AgencyUserType::ADMIN, AgencyUserType::VENDEDOR]) || $user_to_validate->active == 0)
+        if(!isset($user_to_validate) || $user_to_validate->active == 0)
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         
         $credentials = $request->only('email', 'password');

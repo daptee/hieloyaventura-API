@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Spatie\FlareClient\Truncation\TruncationStrategy;
 
@@ -202,7 +203,9 @@ class HyAController extends Controller
     {
 
         $url = $this->get_url();
-        $response = Http::get("$url/SolicitudesAG?DESDEF=$request->DESDEF&HASTF=$request->HASTAF&AG=$request->AG");
+        // Forzar AG al código de la agencia autenticada para prevenir IDOR
+        $ag = Auth::guard('agency')->user()->agency_code;
+        $response = Http::get("$url/SolicitudesAG?DESDEF=$request->DESDEF&HASTF=$request->HASTAF&AG=$ag");
         if ($response->successful()) {
             return $response->json();
         } else {
@@ -252,4 +255,21 @@ class HyAController extends Controller
             return $response->throw();
         }
     }
+
+    public function CtaCteAG(Request $request)
+    {
+        $url = $this->get_url();
+        // Forzar AG al código de la agencia autenticada para prevenir IDOR
+        $params = $request->except(['AG', 'ag']);
+        $params['AG'] = Auth::guard('agency')->user()->agency_code;
+        $query = http_build_query($params);
+        $response = Http::get("$url/CtaCteAG?$query");
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            return $response->throw();
+        }
+    }
+
 }

@@ -1,0 +1,398 @@
+{
+  "info": {
+    "_postman_id": "e6ff8e5c-0163-4afe-a12d-be506a104643",
+    "name": "Hielo & Aventura - API para Agencias Externas (v1) 🚢",
+    "description": "API REST oficial de **Hielo & Aventura** para la integración de agencias externas. Permite consultar disponibilidad en tiempo real, gestionar reservas y acceder a catálogos de servicios.\n\n---\n\n### 🌍 Ambientes Disponibles\n\n| Ambiente | URL Base | Uso |\n|---|---|---|\n| 🛠️ Development | `https://api-dev.hieloyaventura.com` | Pruebas de integración sin afectar datos reales |\n| 🚀 Production | `https://api.hieloyaventura.com` | Operaciones comerciales reales |\n\n---\n\n### 🔐 Autenticación\nTodas las peticiones requieren la cabecera `X-API-KEY` con el token provisto por Hielo & Aventura. El código de agencia se deriva automáticamente del API Key — no es necesario enviarlo en ninguna petición.\n\n---\n\n### 🗺️ Catálogo de Excursiones\n\n| ID | Nombre |\n|---|---|\n| `1` | MINITREKKING |\n| `2` | BIGICE |\n| `3` | SAFARI AZUL |\n| `4` | SAFARI NAUTICO |\n| `5` | MINITREKKING 2 |\n\n> El `excursion_id` se utiliza en los endpoints de **Disponibilidad** y **Generar Reserva**. Los permisos habilitados para cada excursión dependen del contrato de integración de la agencia.\n\n---\n\n### 🔄 Flujo de Integración Recomendado\n\nPara crear una reserva correctamente, seguir estos pasos en orden:\n\n1. **(Opcional, una vez)** `GET /hotels` — Obtener el catálogo de hoteles y guardar los IDs localmente.\n2. **(Opcional, una vez)** `GET /nationalities` — Obtener el catálogo de nacionalidades y guardar los IDs localmente.\n3. `GET /availability` — Consultar disponibilidad para la excursión y fecha deseada. Validar que `available_spots > 0` (o `available_spots_with_transfer > 0` si se requiere transfer).\n4. `POST /reservation` — Crear la reserva con los datos del turno seleccionado en el paso anterior. **Este endpoint aplica múltiples validaciones y puede retornar distintos errores según la causa del rechazo. Es importante leer y manejar correctamente el campo `message` (y el cuerpo completo de la respuesta) para informar al usuario final.**\n5. **(Si se necesita cambiar algo)** `PUT /reservation/{number}` — Enviar una solicitud de modificación al equipo de operaciones. Esta petición sirve para solicitar cualquier cambio necesario sobre la reserva (fecha, turno, pasajeros, transfer, etc.). El cambio **no es inmediato** — es revisado manualmente por el equipo de Hielo & Aventura.\n\n---\n\n### 📝 Formatos de Datos\n- **📅 Fechas**: `DD/MM/YYYY` (ej: `25/12/2026`)\n- **⏰ Horarios**: `HH:mm` (ej: `09:30`)\n- **✅ Booleanos**: `true` / `false` (en minúsculas, sin comillas)\n- **🔢 IDs numéricos**: Pueden enviarse como número entero o string (ej: `4` o `\"4\"`)\n\n---\n\n### ⚠️ Manejo de Errores\nLa API utiliza códigos de estado HTTP estándar. Todos los errores incluyen un campo `message` con la descripción del problema.\n\n> 💡 **Importante:** Ante un error, revisar el **cuerpo JSON completo** de la respuesta, no solo el campo `message`. Algunos errores retornan información adicional (por ejemplo, un campo `error` con el detalle técnico o un campo `errors` con validaciones por campo) que puede ser útil para diagnosticar o informar al usuario final.\n\n| Código | Significado |\n|---|---|\n| `200 OK` | ✅ Operación exitosa |\n| `400 Bad Request` | ❌ Error en los parámetros enviados o validación comercial |\n| `401 Unauthorized` | 🔑 API Key inválida, expirada o ausente |\n| `403 Forbidden` | 🚫 Sin permisos para la acción o excursión solicitada |\n| `404 Not Found` | 🔍 El recurso solicitado no existe |\n| `500 Internal Server Error` | 🔥 Error inesperado en el servidor — contactar a soporte |\n\n---\n\n### 📄 Términos y Condiciones\nEl uso de esta API implica la aceptación de los Términos y Condiciones de uso para agencias, incluyendo las **políticas de cancelación** vigentes. Consultar el documento completo en: https://agencias.hieloyaventura.com/agencias-terminos-y-condiciones.pdf",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1349716",
+    "_collection_link": "https://go.postman.co/collection/1349716-e6ff8e5c-0163-4afe-a12d-be506a104643?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Disponibilidad",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "🔍 **Consulta de Disponibilidad**\n\nObtiene la disponibilidad en tiempo real de los turnos para la excursión solicitada, dentro del rango de fechas solicitado. Este es el paso previo obligatorio para validar la factibilidad de una reserva.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*date_from`: Fecha de inicio (DD/MM/YYYY).\n- `*date_to`: Fecha de fin (DD/MM/YYYY).\n- `*excursion_id`: ID de la excursión.\n\n### 📦 Estructura de la Respuesta\nRetorna un objeto con `excursion_id`, `excursion_name` y un array `turns` con los turnos disponibles. Cada turno contiene:\n- `date`: Fecha del turno (DD/MM/YYYY).\n- `turn`: Horario del turno (HH:mm).\n- `pickup_turn`: Horario de pickup/traslado (HH:mm).\n- `available_spots`: Lugares disponibles **sin** transfer.\n- `available_spots_with_transfer`: Lugares disponibles **con** transfer.\n- `value`: Precio base del turno.\n- `transfer_value`: Costo adicional del traslado (se suma a `value` si `is_transfer = true`).\n- `value_offer`: Precio en oferta. **Si es distinto de `0`, reemplaza obligatoriamente a `value`.**\n- `transfer_value_offer`: Precio de traslado en oferta. **Si es distinto de `0`, reemplaza obligatoriamente a `transfer_value`.**\n- `offer_name`: Nombre de la oferta activa, si aplica.\n\n### 💡 Lógica de Precios\n- Precio final sin transfer: `value_offer > 0 ? value_offer : value`\n- Precio final con transfer: `(value_offer > 0 ? value_offer : value) + (transfer_value_offer > 0 ? transfer_value_offer : transfer_value)`\n- Los campos `*_offer` nunca son opcionales: si vienen con un valor mayor a `0`, **deben usarse** en lugar del precio base.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/availability?date_from=20/01/2026&date_to=21/02/2026&excursion_id=5",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "availability"
+          ],
+          "query": [
+            {
+              "key": "date_from",
+              "value": "20/01/2026",
+              "description": "📅 Fecha inicio (DD/MM/YYYY)"
+            },
+            {
+              "key": "date_to",
+              "value": "21/02/2026",
+              "description": "📅 Fecha fin (DD/MM/YYYY)"
+            },
+            {
+              "key": "excursion_id",
+              "value": "5",
+              "description": "🆔 ID Excursión"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Hoteles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "🏨 **Catálogo de Hoteles (Puntos de Pickup)**\n\nRetorna el listado completo de hoteles habilitados como puntos de recogida para el servicio de traslado.\n\n### 📦 Estructura de la Respuesta\nArray de objetos con:\n- `id`: Identificador único del hotel. Usar como `hotel_id` al crear una reserva.\n- `name`: Nombre del hotel.\n\n### 🔑 Importante\n- El campo `hotel_id` es **obligatorio** al crear una reserva, independientemente de si se solicita traslado o no.\n- Si `is_transfer = false`, el hotel igualmente debe indicarse pero no afecta la operación.\n- Se recomienda **cachear** este listado en el sistema de la agencia, ya que raramente cambia.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/hotels",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "hotels"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Nacionalidades",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "🌎 **Catálogo de Nacionalidades**\n\nRetorna el listado completo de países y nacionalidades disponibles en el sistema.\n\n### 📦 Estructura de la Respuesta\nArray de objetos con:\n- `id`: Identificador único. Usar como `nationality_id` dentro de cada pasajero en `paxs_information` al crear una reserva.\n- `name.es`: Nombre del país en español.\n- `name.en`: Nombre del país en inglés.\n\n### 🔑 Importante\n- Se recomienda **cachear** este listado en el sistema de la agencia, ya que no varía con frecuencia.\n- Si no se dispone del ID exacto, se puede buscar por coincidencia en `name.es` o `name.en`.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/nationalities",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "nationalities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listado de Reservas",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "📋 **Listado de Reservas de la Agencia**\n\nRetorna el listado de reservas asociadas a la agencia autenticada. El código de agencia se obtiene automáticamente del API Key — no es necesario enviarlo.\n\n### 📋 Parámetros Opcionales (query params)\n- `date_from`: Fecha de inicio (DD/MM/YYYY). Filtra reservas desde esta fecha.\n- `date_to`: Fecha de fin (DD/MM/YYYY). Filtra reservas hasta esta fecha.\n- `reservation_number`: Número de reserva específica. Si se envía, los filtros de fecha son ignorados.\n\n### 📦 Estructura de la Respuesta\nArray de objetos dentro de `data`, cada uno con:\n- `reservation_number`: Número de reserva.\n- `excursion_name`: Nombre de la excursión.\n- `turn`: Horario del turno (HH:mm).\n- `pickup_turn`: Horario de pickup/traslado (HH:mm), si aplica.\n- `created_at`: Fecha de creación de la reserva.\n- `paxs_cant`: Cantidad total de pasajeros.\n- `is_transfer`: `true` si **todos** los pasajeros tienen traslado incluido.\n- `contact_name`: Nombre del titular de la reserva.\n- `contact_email`: Email de contacto.\n- `contact_phone`: Teléfono de contacto.\n- `hotel.id` / `hotel.name`: Hotel de pickup asignado.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservations?date_from=01/01/2026&date_to=31/03/2026",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservations"
+          ],
+          "query": [
+            {
+              "key": "date_from",
+              "value": "01/01/2026",
+              "description": "📅 Fecha inicio (DD/MM/YYYY)"
+            },
+            {
+              "key": "date_to",
+              "value": "31/03/2026",
+              "description": "📅 Fecha fin (DD/MM/YYYY)"
+            },
+            {
+              "key": "reservation_number",
+              "value": "",
+              "description": "🔢 Número de reserva específica",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar Reserva",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "description": "📖 **Consulta de Reserva por Número**\n\nObtiene la información detallada de una reserva existente perteneciente a la agencia autenticada. Solo se retornan reservas propias — intentar consultar una reserva de otra agencia devuelve `404`.\n\n### 📦 Estructura de la Respuesta\nObjeto dentro de `data` con:\n- `reservation_number`: Número de reserva.\n- `excursion_name`: Nombre de la excursión.\n- `turn` / `pickup_turn`: Horarios del turno y del traslado.\n- `created_at`: Fecha de creación.\n- `paxs_cant`: Cantidad total de pasajeros.\n- `is_transfer`: `true` si todos los pasajeros tienen traslado.\n- `contact_name` / `contact_email` / `contact_phone`: Datos del titular.\n- `observations`: Observaciones registradas al crear la reserva.\n- `hotel.id`: ID del hotel de pickup. **Nota:** el nombre del hotel no está disponible en esta consulta.\n- `paxs_information`: Array con el detalle de cada pasajero registrado:\n  - `name`: Nombre completo.\n  - `dni`: Documento de identidad.\n  - `birthdate`: Fecha de nacimiento (DD/MM/YYYY).\n  - `nationality.id` / `nationality.name`: Nacionalidad.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservation/:reservation_number",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservation",
+            ":reservation_number"
+          ],
+          "variable": [
+            {
+              "key": "reservation_number",
+              "value": "647773",
+              "description": "🔢 Número de reserva"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Generar Reserva",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"date\": \"28/02/2026\",\n  \"excursion_id\": 1,\n  \"hotel_id\": \"4\",\n  \"paxs_cant\": 1,\n  \"contact_name\": \"Nombre del Titular\",\n  \"contact_email\": \"contacto@agencia.com\",\n  \"is_transfer\": true,\n  \"contact_phone\": \"1120202020\",\n  \"observations\": \"Pedido especial de pickup\",\n  \"turn\": \"10:00\",\n  \"paxs_information\": [\n    {\n      \"birthdate\": \"22/03/1992\",\n      \"dni\": \"12345678\",\n      \"name\": \"Juan Perez\",\n      \"nationality_id\": \"11\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "✨ **Creación de Nueva Reserva**\n\nCrea y confirma una reserva en el sistema de Hielo & Aventura. El código de agencia se obtiene automáticamente del API Key — no es necesario enviarlo.\n\n> ⚡ **Recomendación**: Verificar disponibilidad con `GET /availability` antes de crear la reserva. Los valores de `date` y `turn` deben corresponder exactamente a un turno disponible retornado por ese endpoint.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*date`: Fecha de la excursión (DD/MM/YYYY).\n- `*turn`: Horario del turno (HH:mm). Debe coincidir con un valor de `turn` retornado por el endpoint de disponibilidad.\n- `*excursion_id`: ID de la excursión (ver catálogo en la descripción general).\n- `*hotel_id`: ID del hotel de pickup. Obligatorio siempre, incluso si `is_transfer = false` (usar `GET /hotels` para obtener el listado).\n- `*paxs_cant`: Cantidad total de pasajeros (número entero, mínimo 1).\n- `*contact_name`: Nombre del titular o contacto de la reserva.\n- `*contact_email`: Email de contacto. Se envía la confirmación a esta dirección.\n- `*contact_phone`: Teléfono de contacto.\n- `*is_transfer`: `true` si se requiere servicio de traslado desde el hotel, `false` si los pasajeros llegan por sus propios medios.\n\n### 📋 Parámetros Opcionales\n- `observations`: Observaciones o pedidos especiales (texto libre).\n- `paxs_information`: Array con el detalle de cada pasajero. **Si se envía**, la cantidad de elementos debe coincidir exactamente con `paxs_cant`. Cada pasajero contiene:\n  - `name`: Nombre completo (obligatorio dentro del array).\n  - `dni`: Documento de identidad.\n  - `birthdate`: Fecha de nacimiento (DD/MM/YYYY). Requerida para la validación de edades.\n  - `nationality_id`: ID de nacionalidad (ver `GET /nationalities`).\n\n### 🔞 Restricciones de Edad por Excursión\nLas edades se calculan al **momento de la excursión** (no al momento de la reserva). Si `paxs_information` se envía y la agencia tiene habilitada la validación de edades, los pasajeros que no cumplan el rango serán rechazados.\n\n| Excursión | Min. | Máx. |\n|---|---|---|\n| `1` MINITREKKING | 8 años | 65 años |\n| `2` BIGICE | 18 años | 50 años |\n| `3` SAFARI AZUL | 6 años | 70 años |\n| `4` SAFARI NAUTICO | Sin restricción | — |\n| `5` MINITREKKING 2 | 18 años | 55 años |\n\n### 📦 Respuesta exitosa (`200`)\n- `reservation_number`: Número de reserva generado. Guardarlo para consultas, modificaciones y cancelaciones futuras.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservation",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Solicitar Modificar Reserva",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"request\": \"Solicitud detallada del cambio (ej: cambio de fecha al 30/03/2026)\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "🛠️ **Solicitud de Modificación de Reserva**\n\nEnvía una solicitud de cambio para una reserva existente. Solo se pueden solicitar modificaciones sobre reservas propias de la agencia autenticada.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*request`: Descripción detallada del cambio solicitado (texto libre). Ser lo más específico posible para agilizar el procesamiento. Ejemplos:\n  - `\"Cambio de fecha al 30/03/2026, mismo turno\"`\n  - `\"Cambio de turno al de 14:00 del mismo día\"`\n  - `\"Agregar transfer para todos los pasajeros, hotel id 12\"`\n\n### 🛠️ Proceso de Revisión\n- Las solicitudes de modificación **no se aplican automáticamente**. Son revisadas manualmente por el equipo de operaciones de Hielo & Aventura.\n- Se envía una notificación por email al equipo de operaciones con los detalles de la solicitud.\n- **No se garantiza** que el cambio sea aprobado si no hay disponibilidad en el nuevo turno/fecha solicitado.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservation/:reservation_number",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservation",
+            ":reservation_number"
+          ],
+          "variable": [
+            {
+              "key": "reservation_number",
+              "value": "647773",
+              "description": "🔢 Número de reserva"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Configuración de Integración",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email_integration_notification\": \"notificaciones@agencia.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "description": "⚙️ **Configuración de la Integración**\n\nPermite configurar parámetros de la integración para la agencia autenticada. Actualmente soporta configurar el email de notificaciones. Si el registro no existe, se crea; si ya existe, se actualiza (upsert).\n\n> Este endpoint puede ejecutarse en cualquier momento, incluso antes de realizar la primera reserva. Se recomienda configurarlo como parte del proceso inicial de integración.\n\n### 📋 Parámetros Obligatorios (`*`)\n- `*email_integration_notification`: Dirección de email a la que se enviarán las notificaciones automáticas de la integración. Debe ser un email válido.\n\n### ⚠️ Importante\nSi no se configura un email de notificación, **el resumen de confirmación de cada reserva creada no llegará a ninguna casilla**. Se recomienda configurar este campo antes de comenzar a operar.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/settings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "settings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancelar Reserva",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "X-API-KEY",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "description": "🗑️ **Cancelación de Reserva**\n\nCancela definitivamente una reserva existente perteneciente a la agencia autenticada, siempre y cuando se cumplan los requisitos de cancelación.\n\n> 📄 Asegurarse de leer y conocer las **políticas de cancelación vigentes** antes de proceder. Consultar los Términos y Condiciones de uso para agencias: https://agencias.hieloyaventura.com/agencias-terminos-y-condiciones.pdf\n\n### ⚠️ Advertencia\n- La cancelación es una acción **irreversible**. Una vez procesada, no puede deshacerse.\n- Confirmar la solicitud con el pasajero/cliente antes de ejecutar esta acción.\n- Si lo que se desea es un cambio de fecha, turno u otro ajuste, usar `PUT /reservation/{number}` en su lugar.\n\n### 📦 Respuesta exitosa (`200`)\n- `message`: Confirmación de que la reserva fue cancelada con éxito.",
+        "url": {
+          "raw": "{{base_url}}/api/agencies/v1/reservation/:reservation_number",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "agencies",
+            "v1",
+            "reservation",
+            ":reservation_number"
+          ],
+          "variable": [
+            {
+              "key": "reservation_number",
+              "value": "647773",
+              "description": "🔢 Número de reserva"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "test-key",
+      "type": "string"
+    }
+  ]
+}

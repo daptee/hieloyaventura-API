@@ -14,6 +14,7 @@ use App\Models\AuditReservation;
 use App\Models\BillingDataReservation;
 use App\Models\ContactDataReservation;
 use App\Models\Pax;
+use App\Models\Module;
 use App\Models\RejectedReservation;
 use App\Models\ReservationPax;
 use App\Models\ReservationStatus;
@@ -133,7 +134,7 @@ class UserReservationController extends Controller
                 try {
                     Mail::to($datos['contact_data']['email'])->send(new RegistrationPassword($datos['contact_data']['email'], $pass, $datos['language_id']));
                 } catch (\Throwable $th) {
-                    Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                    Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                 }
                 //
                 //Buscar los user_reservations donde el user_id sea NULL y el contact_data (realicion en la otra tabla) tiene el email del $datos['contact_data']['email']
@@ -194,48 +195,76 @@ class UserReservationController extends Controller
 
     public function store_type_agency(StoreUserReservationAgencyRequest $request)
     {
+        if (!Auth::guard('agency')->check()) {
+            if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        }
+
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
 
-        // validar token -> agency
-        if (Auth::guard('agency')->user()->agency_code != $request->agency_code)
-            return response(["message" => "agency_id invalido"], 400);
-
         try {
             DB::beginTransaction();
-            //Creo el registro en user_reservations
-            $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED]);
+
+            // Convierte la fecha a formato Y-m-d si viene separada por '/'
+            if (isset($datos['date']) && str_contains($datos['date'], '/')) {
+                try {
+                    $datos['date'] = Carbon::createFromFormat('d/m/Y', $datos['date'])->format('Y-m-d');
+                } catch (\Throwable $th) {
+                    try {
+                        $datos['date'] = Carbon::createFromFormat('d/m/y', $datos['date'])->format('Y-m-d');
+                    } catch (\Throwable $th) {
+                    }
+                }
+            }
+
+            // Crear la reserva
+            $newUserReservation = new $this->model($datos + ["reservation_status_id" => ReservationStatus::STARTED, "agency_code" => $request->agency_code]);
             $newUserReservation->user_id = null;
+            $newUserReservation->excurtion_id = $request->excurtion_id ?? $request->excursion_id ?? null;
             $newUserReservation->agency_id = $request->agency_code;
-            $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id;
+            $newUserReservation->user_agency_id = Auth::guard('agency')->user()->id ?? null;
             $newUserReservation->language_id = 1;
             $newUserReservation->save();
 
-            // Guardo status en historial
+            // Guardar datos de contacto (PAX de referencia)
+            $contactData = [
+                'user_reservation_id' => $newUserReservation->id,
+                'name' => $request->full_name ?? $request->pax ?? 'Sin Nombre',
+                'email' => $request->email ?? $request->contact_email ?? '',
+                'phone' => $request->phone ?? $request->contact_phone ?? '',
+            ];
+            \App\Models\ContactDataReservation::create($contactData);
+
+            // Guardar historial
             UserReservation::store_user_reservation_status_history(ReservationStatus::STARTED, $newUserReservation->id);
-            //
 
             DB::commit();
         } catch (ModelNotFoundException $error) {
             DB::rollBack();
-            $nro_reserva = $datos['reservation_number'];
-            Log::debug(print_r(["Error al crear la reserva (agencia) (1er catch, detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'] ?? 'N/A';
+            Log::debug("Error al crear la reserva (agencia) (ModelNotFound): " . $error->getMessage() . " nro_reserva: $nro_reserva");
             return response(["message" => "No se encontraron {$this->prp} {$this->sp}.", "error" => $error->getMessage()], 404);
         } catch (Exception $error) {
             DB::rollBack();
-            $nro_reserva = $datos['reservation_number'];
-            Log::debug(print_r(["Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva", $error->getLine()], true));
+            $nro_reserva = $datos['reservation_number'] ?? 'N/A';
+            Log::debug("Error al crear la reserva (agencia), detalle: " . $error->getMessage() . " nro_reserva: $nro_reserva");
             return response(["message" => $message, "error" => "URC0001"], 500);
         }
 
-        $message = "Se ha creado {$this->pr} {$this->s} correctamente.";
         $newUserReservation = $this->model::with($this->model::SHOW)->findOrFail($newUserReservation->id);
 
-        return response(compact("message", "newUserReservation"));
+        return response()->json([
+            'message' => "Se ha creado {$this->pr} {$this->s} correctamente.",
+            'newUserReservation' => $newUserReservation
+        ], 200);
     }
 
     public function path_pdf_reservation_agency(Request $request)
     {
+        if (!Auth::guard('agency')->check()) {
+            if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        }
+
         $userReservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
         // dd('reservation id' . $reservation_id);
 
@@ -258,6 +287,10 @@ class UserReservationController extends Controller
 
         if (is_null($userReservation))
             return response(["message" => "No se ha encontrado una reserva para este ID"], 422);
+
+        // Verificar que la reserva pertenece al usuario autenticado
+        if ($userReservation->user_id !== auth()->user()->id)
+            return response(["message" => "No autorizado"], 403);
 
         $userReservation->encrypted_reservation_number = Crypt::encryptString($userReservation->reservation_number);
         return $userReservation;
@@ -339,8 +372,8 @@ class UserReservationController extends Controller
                     $userReservation->reservation_status_id = $status_id;
 
                     RejectedReservation::create([
-                        'user_reservation_id'   => $userReservation->id,
-                        'data'                  => $datos['payment_details']
+                        'user_reservation_id' => $userReservation->id,
+                        'data' => $datos['payment_details']
                     ]);
                     break;
                 case ReservationStatus::AUTOMATIC_CANCELED:
@@ -360,11 +393,11 @@ class UserReservationController extends Controller
                     $userReservation->is_paid = 0;
                     $status_id = ReservationStatus::RESERVATION_CONFIRMED_INAPE_ERROR;
                     $userReservation->reservation_status_id = $status_id;
-                    
+
                     // Incrementar contador de intentos fallidos
                     $userReservation->confirmation_attempts = ($userReservation->confirmation_attempts ?? 0) + 1;
-                    
-                    Log::debug([
+
+                    Log::debug('Detalle de error en confirmación INAPE:', [
                         "Response confirma reserva" => $request->response_cp,
                         "Comportamiento funcion" => $request->funcion_part,
                         "Nro de reserva" => $userReservation->reservation_number,
@@ -379,7 +412,7 @@ class UserReservationController extends Controller
                                     Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                     Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                 } catch (Exception $error) {
-                                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                                    Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()], true));
                                 }
                             }
                         } else {
@@ -387,11 +420,11 @@ class UserReservationController extends Controller
                                 Mail::to("sistemas@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                                 Mail::to("online@hieloyaventura.com")->send(new NotificationErrorConfirmationInape($userReservation->reservation_number, $userReservation->confirmation_attempts));
                             } catch (Exception $error) {
-                                Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()],  true));
+                                Log::debug(print_r([$error->getMessage() . " error en envio de mail a sistemas@hieloyaventura.com INAPE ERROR", $error->getLine()], true));
                             }
                         }
                     } catch (\Throwable $th) {
-                        Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+                        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
                     }
                     //
 
@@ -506,9 +539,13 @@ class UserReservationController extends Controller
         $message = "Error al traer listado de {$this->sp}.";
         $data = null;
         try {
+            // Forzar agency_id al del usuario de agencia autenticado para prevenir acceso a datos de otras agencias
+            $agency_id = Auth::guard('agency')->user()->agency_code;
+
             $data = UserReservation::with(['paxes.diseases.disease', 'userAgency'])
                 ->select(['id', 'reservation_number', 'date', 'turn', 'user_agency_id'])
                 ->where('excurtion_id', 2)
+                ->where('agency_id', $agency_id)
                 ->when($request->user_id !== null, function ($query) use ($request) {
                     return $query->where('user_agency_id', $request->user_id);
                 })
@@ -517,9 +554,6 @@ class UserReservationController extends Controller
                 })
                 ->when($request->date_to !== null, function ($query) use ($request) {
                     return $query->where('date', '<=', $request->date_to);
-                })
-                ->when($request->agency_id !== null, function ($query) use ($request) {
-                    return $query->where('agency_id', $request->agency_id);
                 })
                 ->orderBy('id', 'desc')
                 ->get()

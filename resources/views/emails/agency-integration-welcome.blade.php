@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Confirmación de Reserva - Hielo & Aventura</title>
+    <title>Bienvenido a la integración por API - Hielo & Aventura</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +19,6 @@
             max-width: 600px;
             margin: 0 auto;
         }
-        /* HEADER - Logo */
         .email-header {
             text-align: center;
             padding: 0 0 24px 0;
@@ -28,7 +27,6 @@
             height: 60px;
             width: auto;
         }
-        /* CARD */
         .card {
             background-color: #ffffff;
             border-radius: 10px;
@@ -59,7 +57,6 @@
             margin-bottom: 24px;
             line-height: 1.6;
         }
-        /* DATA SECTION */
         .section-title {
             font-size: 15px;
             font-weight: 700;
@@ -91,8 +88,47 @@
         .data-table td.value {
             font-weight: 400;
             color: #555555;
+            word-break: break-all;
         }
-        /* NOTICE BOX */
+        .env-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .env-production {
+            background-color: #e6f4ea;
+            color: #2d7a3a;
+        }
+        .env-development {
+            background-color: #fff3e0;
+            color: #b45309;
+        }
+        .apikey-box {
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #333333;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+        .apikey-box strong {
+            display: block;
+            font-size: 12px;
+            color: #888888;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .apikey-value {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #3686C3;
+            font-weight: 700;
+        }
         .notice-box {
             background-color: #f5f5f5;
             border-radius: 6px;
@@ -100,10 +136,8 @@
             margin: 24px 0;
             font-size: 13px;
             color: #666666;
-            font-weight: 400;
-            line-height: 1.5;
+            line-height: 1.6;
         }
-        /* CONTACT */
         .contact-section {
             border-top: 1px solid #e0e0e0;
             padding-top: 20px;
@@ -122,12 +156,6 @@
         .contact-detail strong {
             font-weight: 700;
         }
-        .rates-notice {
-            font-size: 13px;
-            color: #888888;
-            margin-top: 12px;
-        }
-        /* THANKS & BUTTON */
         .thanks-section {
             border-top: 1px solid #e0e0e0;
             margin-top: 24px;
@@ -152,7 +180,6 @@
             padding: 13px 60px;
             border-radius: 30px;
         }
-        /* FOOTER */
         .email-footer {
             text-align: center;
             padding: 28px 0 10px 0;
@@ -204,77 +231,72 @@
         {{-- CARD --}}
         <div class="card">
 
-            <p class="greeting">Hola, 👋</p>
-            <p class="agency-name">{{ $agency_name ?? 'Agencia' }}</p>
+            <p class="greeting">Hola,</p>
+            <p class="agency-name">{{ $agencyName }}</p>
 
-            <p class="intro-bold">Este es un correo automático con la confirmación de tu reserva.</p>
+            <p class="intro-bold">¡Bienvenido a la integración por API de Hielo & Aventura!</p>
             <p class="intro-text">
-                Se ha recibido una notificación mediante integración de API de la agencia
-                <strong>{{ $agency_name ?? 'la agencia' }}</strong> con la confirmación de los siguientes datos:
+                Tu agencia ha sido activada para utilizar nuestra integración por API. A continuación encontrarás
+                los datos necesarios para comenzar a operar.
             </p>
 
             {{-- DATA TABLE --}}
-            <p class="section-title">Datos de la reserva</p>
+            <p class="section-title">Datos de acceso</p>
             <hr class="divider">
             <table class="data-table">
                 <tr>
                     <td class="label">Agencia:</td>
-                    <td class="value">{{ $agency_name ?? '-' }}</td>
+                    <td class="value">{{ $agencyName }}</td>
                 </tr>
                 <tr>
-                    <td class="label">Excursión:</td>
-                    <td class="value">{{ $data->excurtion->name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nro reserva:</td>
-                    <td class="value">{{ $data->reservation_number ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Fecha y hora:</td>
+                    <td class="label">Ambiente:</td>
                     <td class="value">
-                        {{ isset($data->date) ? $data->date->format('d/m/Y') : '-' }}
-                        @if($turn) – {{ $turn }}@endif
+                        @if($environment === 'production')
+                            <span class="env-badge env-production">Producción</span>
+                        @else
+                            <span class="env-badge env-development">Desarrollo</span>
+                        @endif
                     </td>
                 </tr>
                 <tr>
-                    <td class="label">Traslado:</td>
-                    <td class="value">{{ $data->is_transfer ? 'Sí' : 'No' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nombre:</td>
-                    <td class="value">{{ $reservation_name ?? $request->contact_name ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Pasajeros:</td>
-                    <td class="value">{{ $number_of_passengers ?? $request->paxs_cant ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Hotel:</td>
-                    <td class="value">{{ $data->is_transfer ? ($data->hotel_name ?? '-') : '-' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Punto de encuentro:</td>
-                    <td class="value">{{ $data->meeting_point ?? '-' }}</td>
+                    <td class="label">Documentación:</td>
+                    <td class="value">
+                        <a href="{{ $documentationUrl }}" style="color: #3686C3; text-decoration: underline;">
+                            Ver documentación en Postman
+                        </a>
+                    </td>
                 </tr>
             </table>
 
+            {{-- API KEY BOX --}}
+            <div class="apikey-box">
+                <strong>Tu API Key</strong>
+                <span class="apikey-value">{{ $apiKey }}</span>
+            </div>
+
             {{-- NOTICE --}}
             <div class="notice-box">
-                Tarifa vigente al momento de confirmar la reserva. Puede sufrir cambios sin previo aviso.
+                Guardá tu API Key en un lugar seguro. Esta clave es personal e intransferible y permite
+                identificar a tu agencia en cada solicitud.
+                @if($environment !== 'production')
+                    <br><br>
+                    <strong>Nota:</strong> Estás dado de alta en el ambiente de <strong>Desarrollo</strong>.
+                    El link de documentación es el mismo para ambos ambientes, pero el API Key cambia entre
+                    Desarrollo y Producción.
+                @endif
             </div>
 
             {{-- CONTACT --}}
             <div class="contact-section">
-                <p class="contact-text">Cualquier duda puede contactarse con nosotros.</p>
+                <p class="contact-text">Ante cualquier consulta sobre la integración, no dudes en contactarnos.</p>
                 <p class="contact-detail"><strong>Contacto:</strong> reservas@hieloyaventura.com</p>
                 <p class="contact-detail"><strong>Teléfono:</strong> +54-2902-492205 o 2902-490205 de 7 a 20:00hs.</p>
-                <p class="rates-notice">Las tarifas están sujetas a cambios SIN previo aviso.</p>
             </div>
 
-            {{-- THANKS & BUTTON --}}
+            {{-- THANKS --}}
             <div class="thanks-section">
                 <p class="thanks-text">¡Muchas gracias por elegir Hielo y Aventura!</p>
-                <a href="{{ config('app.url_agencies', 'https://agencias.hieloyaventura.com') }}" class="btn-web">IR A LA WEB</a>
+                <a href="{{ $documentationUrl }}" class="btn-web">VER DOCUMENTACIÓN</a>
             </div>
 
         </div>
