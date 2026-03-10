@@ -259,7 +259,9 @@ class HyAController extends Controller
     public function CtaCteAG(Request $request)
     {
         $url = $this->get_url();
-        $params = $request->all();
+        // Forzar AG al código de la agencia autenticada para prevenir IDOR
+        $params = $request->except(['AG', 'ag']);
+        $params['AG'] = Auth::guard('agency')->user()->agency_code;
         $query = http_build_query($params);
         $response = Http::get("$url/CtaCteAG?$query");
 

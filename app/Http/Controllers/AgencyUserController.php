@@ -44,7 +44,15 @@ class AgencyUserController extends Controller
 
     public function index()
     {
-        $users = $this->model::with($this->model::SHOW)->get();
+        // Admin: ve todos los usuarios de todas las agencias
+        // Usuario de agencia: solo ve los usuarios de su propia agencia
+        if (Auth::guard('agency')->check()) {
+            $users = $this->model::with($this->model::SHOW)
+                ->where('agency_code', Auth::guard('agency')->user()->agency_code)
+                ->get();
+        } else {
+            $users = $this->model::with($this->model::SHOW)->get();
+        }
 
         return response(compact("users"));
     }
@@ -246,9 +254,16 @@ class AgencyUserController extends Controller
 
     public function filter_code(Request $request)
     {
+        // Si el caller es un usuario de agencia, forzar agency_code al propio
+        if (Auth::guard('agency')->check()) {
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+        } else {
+            $agency_code = $request->agency_code;
+        }
+
         $query = $this->model::with($this->model::SHOW)
-            ->when($request->agency_code, function ($query) use ($request) {
-                return $query->where('agency_code', 'LIKE', '%' . $request->agency_code . '%');
+            ->when($agency_code, function ($query) use ($agency_code) {
+                return $query->where('agency_code', 'LIKE', '%' . $agency_code . '%');
             })
             ->orderBy('id', 'desc');
 
@@ -756,7 +771,13 @@ class AgencyUserController extends Controller
         $url = $this->get_url();
         $response = Http::get("$url/ReservaxCodigo?RSV=$request->RSV");
         if ($response->successful()) {
-            return $response->json();
+            $data = $response->json();
+            // Verificar que la reserva pertenece a la agencia autenticada
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+            if (isset($data['AGENCIA']) && (string) $data['AGENCIA'] !== (string) $agency_code) {
+                return response()->json(['message' => 'No se ha encontrado la reserva.'], 404);
+            }
+            return $data;
         } else {
             return $response->throw();
         }
