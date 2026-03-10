@@ -298,6 +298,8 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 // Route::post('/publication/update/stock', [MercadoLibreController::class, 'update_publication_stock']);
 // Route::post('/publication/upload/invoice', [MercadoLibreController::class, 'upload_publication_invoice']);
 
+// Agency user self-update (uses ID from token, not from URL)
+Route::put('/agency/users/profile', [AgencyUserController::class, 'update_self'])->middleware(['jwt.agency']);
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.verify']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.verify']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.verify']);

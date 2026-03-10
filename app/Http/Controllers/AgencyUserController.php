@@ -154,6 +154,44 @@ class AgencyUserController extends Controller
         return response(compact("user", "message"));
     }
 
+    public function update_self(Request $request)
+    {
+        $id = Auth::guard('agency')->user()->id;
+
+        $request->validate([
+            "name" => 'required',
+            "last_name" => 'required',
+            "email" => 'required|unique:agency_users,email,' . $id,
+        ]);
+
+        $user = AgencyUser::find($id);
+        $user->user = $request->user;
+        $user->name = $request->name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->can_view_all_sales = $request->can_view_all_sales;
+
+        if ($request->password)
+            $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        if ($request->modules) {
+            AgencyUserModule::where('agency_user_id', $id)->delete();
+            foreach ($request->modules as $module_id) {
+                AgencyUserModule::create([
+                    'agency_user_id' => $user->id,
+                    'agency_module_id' => $module_id
+                ]);
+            }
+        }
+
+        $user = AgencyUser::getAllDataUser($user->id);
+        $message = "Usuario actualizado con exito";
+
+        return response(compact("user", "message"));
+    }
+
     public function terms_and_conditions()
     {
         if (Auth::guard('agency')->user()->agency_user_type_id == AgencyUserType::ADMIN) {
