@@ -15,6 +15,7 @@ use App\Models\ChangeRequest;
 use App\Models\ChangeRequestFile;
 use App\Models\User;
 use App\Models\UserReservation;
+use App\Models\UserType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,6 +80,9 @@ class AgencyUserController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $request->validate([
             "agency_user_type_id" => 'required',
             "user" => 'required',
@@ -119,8 +123,8 @@ class AgencyUserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // if(!isset(Auth::guard('agency')->user()->agency_code) && !isset(Auth::user()->id))
-        //     return response()->json(['message' => 'Token is invalid.'], 400);
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
 
         $request->validate([
             // "agency_user_type_id" => 'required',
@@ -335,11 +339,18 @@ class AgencyUserController extends Controller
     {
         $params = [];
 
-        if ($request->has('DESDE') && $request->DESDE !== null) {
-            $params['DESDE'] = $request->DESDE;
-        }
-        if ($request->has('HASTA') && $request->HASTA !== null) {
-            $params['HASTA'] = $request->HASTA;
+        if (Auth::guard('agency')->check()) {
+            // Agency users can only see their own agency
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+            $params['DESDE'] = $agency_code;
+            $params['HASTA'] = $agency_code;
+        } else {
+            if ($request->has('DESDE') && $request->DESDE !== null) {
+                $params['DESDE'] = $request->DESDE;
+            }
+            if ($request->has('HASTA') && $request->HASTA !== null) {
+                $params['HASTA'] = $request->HASTA;
+            }
         }
 
         $url = $this->get_url();

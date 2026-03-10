@@ -93,6 +93,9 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $request->validate([
             "name" => 'required',
             "email" => 'required|unique:users',
@@ -203,6 +206,9 @@ class UserController extends Controller
 
     public function update_admin(Request $request, $id)
     {
+        if (Auth::user()->user_type_id != UserType::ADMIN)
+            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+
         $user = User::find($id);
 
         if (!isset($user))
