@@ -199,7 +199,7 @@ class AgencyController extends Controller
                 ], 404);
             }
 
-            return response()->json($agency, 200);
+            return response()->json($agency->makeVisible('api_key'), 200);
         } catch (Exception $e) {
             Log::error("Error fetching agency: " . $e->getMessage());
             return response()->json([
