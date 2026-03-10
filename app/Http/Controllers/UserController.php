@@ -323,8 +323,8 @@ class UserController extends Controller
     {
         $user = AgencyUser::where('email', $request->email)->first();
 
-        // Validar que el usuario exista, sea de tipo válido y esté activo
-        if (!$user || !in_array($user->agency_user_type_id, [AgencyUserType::ADMIN, AgencyUserType::VENDEDOR]) || $user->active == 0)
+        // Validar que el usuario exista y esté activo
+        if (!$user || $user->active == 0)
             return response()->json(['message' => 'No existe un usuario con el mail solicitado.'], 402);
 
         try {
