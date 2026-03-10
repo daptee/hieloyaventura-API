@@ -137,7 +137,7 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/oferts', 'oferts');
     Route::get('/excursions', 'excursions');
     Route::get('/shifts', 'shifts');
-    Route::get('/ReservaxCodigo', 'ReservaxCodigo');
+    Route::get('/ReservaxCodigo', 'ReservaxCodigo')->middleware(['jwt.verify']);
     Route::post('/IniciaReserva', 'IniciaReserva');
     Route::post('/CancelaReserva', 'CancelaReserva');
     Route::post('/ConfirmaReserva', 'ConfirmaReserva');
@@ -145,9 +145,9 @@ Route::prefix('hya')->controller(HyAController::class)->group(function () {
     Route::get('/Promociones', 'Promociones');
     Route::get('/RecuperaPrecioReserva', 'RecuperaPrecioReserva');
     Route::post('/CreaSolicitudAG', 'CreaSolicitudAG');
-    Route::get('/SolicitudesAG', 'SolicitudesAG');
+    Route::get('/SolicitudesAG', 'SolicitudesAG')->middleware(['jwt.agency']);
     Route::get('/ValidaCupon', 'ValidaCupon');
-    Route::get('/CtaCteAG', 'CtaCteAG');
+    Route::get('/CtaCteAG', 'CtaCteAG')->middleware(['jwt.agency']);
 });
 
 Route::prefix('users_reservations')->controller(UserReservationController::class)->group(function () {
@@ -232,8 +232,8 @@ Route::post('testeando-curl-post', function () {
     }
 });
 
-Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store']);
-Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics']);
+Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store'])->middleware(['jwt.verify']);
+Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics'])->middleware(['jwt.verify']);
 Route::post('excurtion/pictures/manage/files', [PictureExcurtionController::class, 'manage']);
 Route::get('excurtion/{id}/pictures/files', [PictureExcurtionController::class, 'getByExcurtion']);
 
