@@ -357,7 +357,7 @@ class UserController extends Controller
         if (!$user)
             return response(["message" => "ID Usuario invalido."], 422);
 
-        if (Auth::user()->type_user == UserType::ADMIN)
+        if (Auth::user()->user_type_id != UserType::ADMIN)
             return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta modificacion."], 422);
 
         $count_user_reservations = ModelsUserReservation::where('user_id', $id)->count();

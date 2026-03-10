@@ -17,7 +17,7 @@ class ValidateAgencyApiKey
      */
     public function handle(Request $request, Closure $next)
     {
-        $apiKey = $request->header('X-API-KEY') ?? $request->input('api_key');
+        $apiKey = $request->header('X-API-KEY');
 
         if (!$apiKey) {
             return response()->json([

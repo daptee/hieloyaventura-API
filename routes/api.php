@@ -121,7 +121,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 });
 
-Route::get('tickets', [TicketController::class, 'index']);
+Route::get('tickets', [TicketController::class, 'index'])->middleware(['jwt.verify']);
 
 Route::post('create/log', [LogController::class, 'store_log']);
 
@@ -160,7 +160,6 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.agency']);
 });
 
-Route::post('users_reservations2/', [UserReservationController::class, 'store']);
 
 Route::get('/lenguages/{locale}', function ($locale) {
     //1 => spanish
@@ -190,7 +189,7 @@ Route::get('/clear-cache', function () {
     return response()->json([
         "message" => "Cache cleared successfully"
     ]);
-});
+})->middleware(['jwt.verify']);
 
 Route::get('/clear-tokens', function () {
     Artisan::call('passport:purge');
@@ -199,7 +198,7 @@ Route::get('/clear-tokens', function () {
     return response()->json([
         "message" => "Tokens config successfully"
     ]);
-});
+})->middleware(['jwt.verify']);
 
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
@@ -207,30 +206,8 @@ Route::get('/storage-link', function () {
     return response()->json([
         "message" => "The links have been created."
     ]);
-});
+})->middleware(['jwt.verify']);
 // Route::get('test/{trf}/{excursion}', [UserReservationController::class, 'testpdf']);
-
-Route::get('test-mail', function () {
-    try {
-        $text = "Test de envio de mail Hielo y Aventura";
-        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
-        return 'Mail enviado';
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        return 'Mail no enviado';
-    }
-});
-
-Route::post('testeando-curl-post', function () {
-    try {
-        $text = "Test de envio de mail Hielo y Aventura";
-        Mail::to("enzo100amarilla@gmail.com")->send(new TestMail("enzo100amarilla@gmail.com", $text));
-        return 'Mail enviado';
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        return 'Mail no enviado';
-    }
-});
 
 Route::post('excurtion-characteristics/{id}', [ExcurtionCharacteristicController::class, 'store'])->middleware(['jwt.verify']);
 Route::post('excurtion/characteristics/{id}', [ExcurtionCharacteristicController::class, 'store_excurtion_characteristics'])->middleware(['jwt.verify']);
@@ -317,64 +294,7 @@ Route::post('web/general_configuration', [GeneralConfigurationsController::class
 Route::post('paxs', [PaxController::class, 'store']);
 Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
 
-Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva']);
-
-Route::get('test-api-cr', function () {
-
-    $client = new Client();
-
-    $fields = json_encode(array("RSV" => "349268"));
-    $url = config('app.api_hya') . "/CancelaReservaM2";
-    $response = $client->post($url, [
-        'body' => $fields,
-        'headers' => [
-            'Content-Type' => 'application/json'
-        ]
-    ]);
-
-    $body = $response->getBody();
-
-    return $body;
-});
-
-Route::get('curl/test-api-cancelar/reserva', function () {
-
-    try {
-        $url = config('app.api_hya') . "/CancelaReservaM2";
-
-        $curl = curl_init();
-        $fields = json_encode(array("RSV" => "432837"));
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $resp = curl_exec($curl);
-        curl_close($curl);
-
-        return "entre en try, resp: $resp";
-    } catch (\Throwable $th) {
-        Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
-        // return $th->getMessage();
-        return "entre en catch";
-    }
-
-    // $url = config('app.api_hya')."/CancelaReservaM2";
-
-    // $curl = curl_init();
-    // $fields = json_encode( array("RSV" => "432837") );
-    // curl_setopt($curl, CURLOPT_URL, $url);
-    // curl_setopt($curl, CURLOPT_POST, true);
-    // curl_setopt($curl, CURLOPT_POSTFIELDS, $fields);
-    // curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-    // curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-    // $resp = curl_exec($curl);
-    // curl_close($curl);
-
-    // return $resp;
-});
+Route::get('test-cancelar-reserva', [UserReservationController::class, 'test_cancelar_reserva'])->middleware(['jwt.verify']);
 
 Route::get('modules/user', [UserController::class, 'get_modules']);
 
@@ -453,8 +373,8 @@ Route::prefix('agencies/v1')->middleware('agency.apikey')->controller(App\Http\C
 
 Route::get('/users/types', [UserController::class, 'types_user']);
 
-Route::delete('/pdfs/delete-by-range', [PdfCleanupController::class, 'deleteByRange']);
-Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'deleteByRangeAgencies']);
+Route::delete('/pdfs/delete-by-range', [PdfCleanupController::class, 'deleteByRange'])->middleware(['jwt.verify']);
+Route::delete('/pdfs/agencies/delete-by-range', [PdfCleanupController::class, 'deleteByRangeAgencies'])->middleware(['jwt.verify']);
 
 // Route::get('test-notification-user', function(){
 //     $r_10_min_data = [
