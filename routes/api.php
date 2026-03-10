@@ -268,7 +268,7 @@ Route::get('web/general_configuration', [GeneralConfigurationsController::class,
 Route::post('web/general_configuration', [GeneralConfigurationsController::class, 'store'])->middleware(['jwt.verify']);
 
 Route::post('paxs', [PaxController::class, 'store']);
-Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.verify']);
+Route::post('agency_paxs', [PaxController::class, 'store_type_agency'])->middleware(['jwt.admin_or_agency']);
 
 
 Route::get('modules/user', [UserController::class, 'get_modules']);
