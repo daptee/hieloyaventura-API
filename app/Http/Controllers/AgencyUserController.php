@@ -13,6 +13,7 @@ use App\Models\AgencyUserType;
 use App\Models\Audit;
 use App\Models\ChangeRequest;
 use App\Models\ChangeRequestFile;
+use App\Models\Module;
 use App\Models\User;
 use App\Models\UserReservation;
 use App\Models\UserType;
@@ -52,6 +53,7 @@ class AgencyUserController extends Controller
                 ->where('agency_code', Auth::guard('agency')->user()->agency_code)
                 ->get();
         } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
             $users = $this->model::with($this->model::SHOW)->get();
         }
 
@@ -60,6 +62,8 @@ class AgencyUserController extends Controller
 
     public function get_users_seller($agency_code)
     {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
         $users = $this->model::with($this->model::SHOW)
             ->where('agency_user_type_id', AgencyUserType::VENDEDOR)
             ->where('agency_code', $agency_code)
@@ -70,6 +74,8 @@ class AgencyUserController extends Controller
 
     public function get_users_no_admin($agency_code)
     {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
         $users = $this->model::with($this->model::SHOW)
             ->where('agency_user_type_id', '!=', AgencyUserType::ADMIN)
             ->where('agency_code', $agency_code)
@@ -236,6 +242,8 @@ class AgencyUserController extends Controller
 
     public function active_inactive(Request $request)
     {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
         $request->validate([
             "user_id" => ['required', 'integer', Rule::exists('agency_users', 'id')],
             "active" => ['required', 'in:0,1']
@@ -252,6 +260,10 @@ class AgencyUserController extends Controller
 
     public function types_user_agency(Request $request)
     {
+        if (!Auth::guard('agency')->check()) {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        }
+
         $types_user = AgencyUserType::all();
         return response(compact("types_user"));
     }
@@ -262,6 +274,7 @@ class AgencyUserController extends Controller
         if (Auth::guard('agency')->check()) {
             $agency_code = Auth::guard('agency')->user()->agency_code;
         } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
             $agency_code = $request->agency_code;
         }
 
@@ -345,6 +358,7 @@ class AgencyUserController extends Controller
             $params['DESDE'] = $agency_code;
             $params['HASTA'] = $agency_code;
         } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
             if ($request->has('DESDE') && $request->DESDE !== null) {
                 $params['DESDE'] = $request->DESDE;
             }
