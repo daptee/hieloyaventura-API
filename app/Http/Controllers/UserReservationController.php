@@ -195,7 +195,9 @@ class UserReservationController extends Controller
 
     public function store_type_agency(StoreUserReservationAgencyRequest $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        if (!Auth::guard('agency')->check()) {
+            if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        }
 
         $message = "Error al crear en la {$this->s}.";
         $datos = $request->all();
@@ -259,7 +261,9 @@ class UserReservationController extends Controller
 
     public function path_pdf_reservation_agency(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        if (!Auth::guard('agency')->check()) {
+            if ($error = $this->requireAdminModule(Module::RESERVAS_AGENCIAS)) return $error;
+        }
 
         $userReservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
         // dd('reservation id' . $reservation_id);

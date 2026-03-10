@@ -62,7 +62,12 @@ class AgencyUserController extends Controller
 
     public function get_users_seller($agency_code)
     {
-        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        if (Auth::guard('agency')->check()) {
+            // Un usuario de agencia solo puede ver los vendedores de su propia agencia
+            $agency_code = Auth::guard('agency')->user()->agency_code;
+        } else {
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        }
 
         $users = $this->model::with($this->model::SHOW)
             ->where('agency_user_type_id', AgencyUserType::VENDEDOR)

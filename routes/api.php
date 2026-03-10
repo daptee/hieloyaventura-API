@@ -104,7 +104,6 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     });
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
-    Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller']);
     Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
@@ -283,13 +282,14 @@ Route::post('reservations/new/observation', [ReservationController::class, 'new_
 
 // Agency users
 Route::get('agency/users', [AgencyUserController::class, 'index'])->middleware(['jwt.admin_or_agency']);
+Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller'])->middleware(['jwt.admin_or_agency']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency'])->middleware(['jwt.admin_or_agency']);
 Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code'])->middleware(['jwt.admin_or_agency']);
 Route::get('agency/modules', [AgencyModuleController::class, 'index'])->middleware(['jwt.admin_or_agency']);
-Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.verify']);
+Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.admin_or_agency']);
 
 // Agency user reservations
-Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.verify']);
+Route::post('agency/users_reservations', [UserReservationController::class, 'store_type_agency'])->middleware(['jwt.admin_or_agency']);
 
 // Webhook Mercado Libre
 Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notificationWebHook']);
