@@ -58,11 +58,11 @@ Frontend Web / Admin / Agencias
 
 Existen **dos tipos de usuario** con flujos JWT separados:
 
-### Guard `web` (por defecto) — Usuarios admin/staff
+### Guard `web` (por defecto) — Usuarios admin/staff/web
 
 - **Tabla**: `users`
 - **Modelo**: `App\Models\User`
-- **Login**: `POST /api/login/admin`
+- **Login**: flujo en **dos pasos** (ver 2FA más abajo)
 - **Driver**: sesión (pero JWT se maneja manualmente con `JWTAuth::parseToken()->authenticate()`)
 - **Middleware**: `jwt.verify` → `JwtMiddleware`
 - **Recuperación en controladores**: `getAuthenticatedAdmin()` (lee de `request()->attributes` para evitar colisión de singleton JWT)
@@ -76,6 +76,28 @@ Existen **dos tipos de usuario** con flujos JWT separados:
 - **Middleware**: `jwt.agency` → `AgencyJwtMiddleware`
 - **Recuperación en controladores**: `Auth::guard('agency')->user()`
 
+### Flujo de login con 2FA — Web / Admin
+
+El login web y admin requiere verificación en dos pasos. El JWT **no se emite** hasta completar ambos:
+
+```
+Paso 1: POST /api/login           (web)
+        POST /api/login/admin     (admin)
+        { email, password }
+        → verifica password_expired (si true → 400 con password_expired: true)
+        → valida credenciales
+        → genera OTP de 6 dígitos (expira en 10 min)
+        → envía OTP al correo del usuario
+        → responde: { pending_2fa: true }
+
+Paso 2: POST /api/login/verify-otp
+        { email, otp }
+        → valida OTP
+        → emite JWT
+        → limpia otp_code y otp_expires_at de la DB
+        → responde: { access_token, data: { user } }
+```
+
 ### Flujo de login con 2FA — Agencias
 
 El login de agencias requiere verificación en dos pasos. El JWT **no se emite** hasta completar ambos:
@@ -83,12 +105,13 @@ El login de agencias requiere verificación en dos pasos. El JWT **no se emite**
 ```
 Paso 1: POST /api/login/agency/user
         { email, password }
+        → verifica password_expired (si true → 400 con password_expired: true)
         → valida credenciales
         → genera OTP de 6 dígitos (expira en 10 min)
         → envía OTP al correo del usuario
         → responde: { pending_2fa: true }
 
-Paso 2: POST /api/agency/verify-otp
+Paso 2: POST /api/login/agency/verify-otp
         { email, otp }
         → valida OTP
         → emite JWT
@@ -264,14 +287,17 @@ En varios endpoints de agencias, se fuerza el parámetro `AG` (código de agenci
 ### 7.1 Web pública (sin autenticación o con jwt.verify para el usuario web)
 
 **Auth**
-- `POST /api/login` — Login usuario web
+- `POST /api/login` — Login usuario web (paso 1: valida credenciales, envía OTP)
+- `POST /api/login/verify-otp` — Verificar OTP y recibir JWT (paso 2 del login web y admin)
 - `POST /api/register` — Registro usuario web
-- `POST /api/recover-password` — Recuperar contraseña usuario web
-- `POST /api/agency-recover-password-user` — Recuperar contraseña usuario agencia
+- `POST /api/recover-password` — Recuperar contraseña usuario web (limpia `password_expired`)
+- `POST /api/agency-recover-password-user` — Recuperar contraseña usuario agencia (limpia `password_expired`)
 
 **Perfil de usuario web** *(jwt.verify)*
-- `PUT /api/user_edit` — Editar perfil
-- `PUT /api/new_password` — Cambiar contraseña
+- `PUT /api/user_edit` — Editar perfil. Si se envía nuevo email → inicia OTP. No permite cambiar email y contraseña en la misma request.
+- `POST /api/user_edit/confirm-email-change` — Confirmar cambio de email con OTP
+- `PUT /api/new_password` — Cambiar contraseña (valida contraseña actual, luego envía OTP)
+- `POST /api/new_password/confirm` — Confirmar cambio de contraseña con OTP
 - `POST /api/logout` — Logout
 
 **Excursiones y contenido**
@@ -379,7 +405,8 @@ En varios endpoints de agencias, se fuerza el parámetro `AG` (código de agenci
 ### 7.3 Panel Admin *(jwt.verify — usuario tipo ADMIN o EDITOR con módulo habilitado)*
 
 **Auth admin**
-- `POST /api/login/admin` — Login admin
+- `POST /api/login/admin` — Login admin (paso 1: valida credenciales, envía OTP)
+- `POST /api/login/verify-otp` — Verificar OTP y recibir JWT (paso 2, compartido con login web)
 
 **Usuarios** *(Módulo: USUARIOS)*
 - `GET /api/users` — Listar usuarios
@@ -473,6 +500,12 @@ Endpoints pensados para que agencias externas integren directamente sus sistemas
 Campos principales: `name`, `email`, `password`, `password_expired`, `user_type_id`, `active`
 Relaciones: `user_type`, `modules` (vía `user_modules`)
 
+**Campos de seguridad:**
+- `otp_code` — código OTP de 6 dígitos (login 2FA, cambio de email, cambio de contraseña)
+- `otp_expires_at` — expiración del OTP (10 minutos)
+- `pending_email` — email nuevo pendiente de confirmar via OTP. Si está seteado junto con `otp_code`, el OTP es para cambio de email. Si está null, el OTP es para cambio de contraseña.
+- `password_expired` — flag booleano. `true` indica contraseña reseteada de forma forzada. El front detecta este campo en la respuesta del login (400) y muestra el aviso para que el usuario use recuperación de contraseña.
+
 ### Usuarios de agencia (`agency_users`)
 Campos principales: `user` (username), `name`, `last_name`, `email`, `password`, `password_expired`, `agency_code`, `agency_user_type_id`, `can_view_all_sales`, `active`, `terms_and_conditions`, `otp_code`, `otp_expires_at`, `pending_email`
 Relaciones: `user_type` (AgencyUserType), `modules` (AgencyUserModule)
@@ -501,33 +534,56 @@ Las reservas en el sistema de escritorio HyA se manejan directamente a través d
 
 Configurado en `RouteServiceProvider::configureRateLimiting()`. Al superar el límite se devuelve **429** y se envía alerta por email a `SECURITY_ALERT_EMAILS`.
 
-| Endpoint | Límite |
-|----------|--------|
-| `POST /api/login/admin` | 5 intentos / minuto por IP |
-| `POST /api/login` (web) | 10 intentos / minuto por IP |
-| `POST /api/login/agency/user` | 10 intentos / minuto por IP |
+| Endpoint | Límite | Clave |
+|----------|--------|-------|
+| `POST /api/login/admin` | 5 intentos / minuto | por email |
+| `POST /api/login` (web) | 10 intentos / minuto | por email |
+| `POST /api/login/agency/user` | 10 intentos / minuto | por email |
+| `POST /api/login/verify-otp` | 10 intentos / minuto | por email |
+| `POST /api/login/agency/verify-otp` | 10 intentos / minuto | por email |
+
+> **Importante**: la clave del rate limit es el **email**, no la IP. Esto impide la evasión del límite mediante rotación de IPs (patrón detectado en producción).
 
 Variable de entorno requerida:
 ```
 SECURITY_ALERT_EMAILS=sistemas@ejemplo.com,otro@ejemplo.com
 ```
 
-### 2FA para usuarios de agencia
+### 2FA en logins
 
-Ver flujo completo en [Sección 3](#3-autenticación-y-guards-jwt). El OTP se limpia de la DB en todos los casos: éxito, expiración o verificación del OTP (el campo queda null después de cada uso).
+Todos los logins requieren verificación en dos pasos. Ver flujo completo en [Sección 3](#3-autenticación-y-guards-jwt). El OTP se limpia de la DB en todos los casos: éxito, expiración o verificación del OTP (el campo queda null después de cada uso).
 
-### Protección de cambios sensibles en el perfil de agencia
+| Guard | Paso 1 | Paso 2 |
+|-------|--------|--------|
+| Web/Admin | `POST /api/login` o `/api/login/admin` | `POST /api/login/verify-otp` |
+| Agencias | `POST /api/login/agency/user` | `POST /api/login/agency/verify-otp` |
 
-Tanto el cambio de email como el cambio de contraseña requieren verificación OTP antes de aplicarse:
+### Protección de cambios sensibles en el perfil
 
-**Cambio de email:**
+Tanto el cambio de email como el cambio de contraseña requieren verificación OTP antes de aplicarse. Aplica a **todos los tipos de usuario** (web, admin y agencias).
+
+**Cambio de email — web/admin:**
+```
+PUT /api/user_edit  { email: "nuevo@mail.com" }
+→ OTP al correo actual
+→ POST /api/user_edit/confirm-email-change  { otp }
+```
+
+**Cambio de contraseña — web/admin:**
+```
+PUT /api/new_password  { current_password }
+→ OTP al correo
+→ POST /api/new_password/confirm  { otp, password, password_confirmation }
+```
+
+**Cambio de email — agencias:**
 ```
 PUT /api/agency/users/profile  { email: "nuevo@mail.com" }
 → OTP al correo actual
 → POST /api/agency/users/profile/confirm-email-change  { otp }
 ```
 
-**Cambio de contraseña:**
+**Cambio de contraseña — agencias:**
 ```
 PUT /api/agency/users/profile  { password, password_confirmation }
 → OTP al correo
@@ -560,7 +616,7 @@ Presente en `users` y `agency_users`. Se setea en `true` al ejecutar un emergenc
 
 Se limpia a `false` cuando el usuario cambia su contraseña a través de:
 - Flujo de recuperación de contraseña (`recover_password_user` / `agency_recover_password_user`)
-- Cambio de contraseña desde perfil + OTP (`confirm_password_change`) — solo agencias
+- Cambio de contraseña desde perfil + OTP (`confirm_password_change`) — web, admin y agencias
 
 ### Invalidación masiva de tokens JWT
 
@@ -643,7 +699,9 @@ Esto centralizaría el manejo de errores de la API externa y evitaría código d
 - [x] ~~**Headers de seguridad HTTP** en todas las respuestas.~~ *(implementado)*
 - [x] ~~**Límite de tamaño de requests** (413).~~ *(implementado)*
 - [x] ~~**2FA para login de agencias**.~~ *(implementado)*
+- [x] ~~**2FA para login de admin y web**.~~ *(implementado)*
 - [x] ~~**OTP para cambio de email y contraseña** desde perfil de agencias.~~ *(implementado)*
+- [x] ~~**OTP para cambio de email y contraseña** desde perfil de web/admin.~~ *(implementado)*
 - [x] ~~**Audit log de accesos autenticados**.~~ *(implementado)*
 - [x] ~~**Flag `password_expired`** para forzar cambio de contraseña.~~ *(implementado)*
 - [x] ~~**Emergency password reset** para agencias y usuarios.~~ *(implementado)*
@@ -653,7 +711,7 @@ Esto centralizaría el manejo de errores de la API externa y evitaría código d
   - `POST /agency_paxs` — verificar que la agencia del pax corresponda al usuario autenticado
   - `POST /agency/users/seller_load` — verificar validación
 - [x] ~~`POST /agency/users/terms_and_conditions` — middleware corregido a `jwt.agency`~~ *(corregido)*
-- [ ] **2FA para login de admin** (panel de administración)
+- [x] ~~**2FA para login de admin** (panel de administración)~~ *(implementado)*
 - [ ] **Lista blanca de IPs para acceso al panel admin**
 - [ ] **Actualizar dependencias con vulnerabilidades conocidas**: `laravel/framework` (CVE-2024-52301), `symfony/http-foundation`, `symfony/process` (CVE-2024-51736, crítico en Windows), `league/commonmark`
 
