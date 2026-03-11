@@ -48,5 +48,32 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
+
+        // Login web y agencias: 10 intentos por minuto por IP
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip())->response(function () {
+                return response()->json([
+                    'message' => 'Demasiados intentos de inicio de sesión. Por favor, intentá de nuevo en un minuto.'
+                ], 429);
+            });
+        });
+
+        // Login admin: más estricto, 5 intentos por minuto por IP
+        RateLimiter::for('admin-login', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip())->response(function () {
+                return response()->json([
+                    'message' => 'Demasiados intentos de inicio de sesión. Por favor, intentá de nuevo en un minuto.'
+                ], 429);
+            });
+        });
+
+        // Recuperación de contraseña: 5 intentos por minuto por IP
+        RateLimiter::for('password-recovery', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip())->response(function () {
+                return response()->json([
+                    'message' => 'Demasiadas solicitudes de recuperación de contraseña. Por favor, intentá de nuevo en un minuto.'
+                ], 429);
+            });
+        });
     }
 }

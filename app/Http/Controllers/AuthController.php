@@ -26,17 +26,20 @@ class AuthController extends Controller{
         try{
             $user = User::where('email' , $credentials['email'])->get();
 
-            if($user->count() == 0)
+            if($user->count() == 0) {
+                $this->logFailedLogin('web', $request, 'email no encontrado');
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
+            }
 
-            if (! $token = JWTAuth::attempt($credentials))
+            if (! $token = JWTAuth::attempt($credentials)) {
+                $this->logFailedLogin('web', $request, 'contraseña incorrecta');
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
+            }
 
         }catch (JWTException $e) {
           return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
 
-// Session::put('applocale', $request);
         return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
     }
 
@@ -115,21 +118,19 @@ class AuthController extends Controller{
             'password' => 'required',
         ]);
 
-        // User admin 
         $user_to_validate = User::where('email', $request->email)->first();
-        
-        if(!isset($user_to_validate) || $user_to_validate->user_type_id == UserType::CLIENTE)
+
+        if(!isset($user_to_validate) || $user_to_validate->user_type_id == UserType::CLIENTE) {
+            $this->logFailedLogin('admin', $request, 'email no encontrado o usuario no admin');
             return response()->json(['message' => 'Email no existente o usuario no admin.'], 400);
-        
+        }
+
         $credentials = $request->only('email', 'password');
 
-        if (! $token = JWTAuth::attempt($credentials))
+        if (! $token = JWTAuth::attempt($credentials)) {
+            $this->logFailedLogin('admin', $request, 'contraseña incorrecta');
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
-
-        // if (!Auth::attempt($credentials)) 
-            // return response()->json(['message' => 'El usuario o la contraseña son invalidos.'], 400);
-        
-        // $token = Auth::user()->createToken('auth_token')->plainTextToken;
+        }
 
         return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
     }
@@ -141,17 +142,38 @@ class AuthController extends Controller{
             'password' => 'required',
         ]);
 
-        // User agency 
         $user_to_validate = AgencyUser::where('email', $request->email)->first();
 
-        if(!isset($user_to_validate) || $user_to_validate->active == 0)
+        if(!isset($user_to_validate) || $user_to_validate->active == 0) {
+            $this->logFailedLogin('agency', $request, 'email no encontrado o usuario inactivo');
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
-        
+        }
+
         $credentials = $request->only('email', 'password');
 
-        if (! $token = Auth::guard('agency')->attempt($credentials))
+        if (! $token = Auth::guard('agency')->attempt($credentials)) {
+            $this->logFailedLogin('agency', $request, 'contraseña incorrecta');
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
+        }
 
         return $this->respondWithTokenAgency($token, $user_to_validate->id);
+    }
+
+    private function logFailedLogin(string $type, Request $request, string $reason): void
+    {
+        $logPath = storage_path('logs/security/failed-logins-' . now()->format('Y-m') . '.log');
+        $logger = Log::build([
+            'driver' => 'single',
+            'path'   => $logPath,
+            'level'  => 'warning',
+        ]);
+        $logger->warning('Login fallido', [
+            'type'       => $type,
+            'reason'     => $reason,
+            'email'      => $request->input('email'),
+            'ip'         => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'timestamp'  => now()->toDateTimeString(),
+        ]);
     }
 }

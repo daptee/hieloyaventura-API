@@ -42,9 +42,9 @@ use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('login/admin', 'login_admin');
-    Route::post('login/agency/user', 'login_agency_user');
+    Route::post('login', 'login')->middleware('throttle:login');
+    Route::post('login/admin', 'login_admin')->middleware('throttle:admin-login');
+    Route::post('login/agency/user', 'login_agency_user')->middleware('throttle:login');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
@@ -260,8 +260,8 @@ Route::post('online-return', function (Request $request) {
 
 Route::post('group-excurtion', [GroupExcurtionController::class, 'group_excurtion']);
 
-Route::post('recover-password', [UserController::class, 'recover_password_user']);
-Route::post('agency-recover-password-user', [UserController::class, 'agency_recover_password_user']);
+Route::post('recover-password', [UserController::class, 'recover_password_user'])->middleware('throttle:password-recovery');
+Route::post('agency-recover-password-user', [UserController::class, 'agency_recover_password_user'])->middleware('throttle:password-recovery');
 
 
 Route::get('web/general_configuration', [GeneralConfigurationsController::class, 'get_configurations']);
