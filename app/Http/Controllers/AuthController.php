@@ -225,7 +225,7 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Código inválido o expirado.'], 400);
         }
 
-        if ($user->otp_expires_at < now()) {
+        if (\Carbon\Carbon::parse($user->otp_expires_at)->lt(now())) {
             $user->otp_code       = null;
             $user->otp_expires_at = null;
             $user->save();
@@ -263,7 +263,7 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Código inválido o expirado.'], 400);
         }
 
-        if ($user->otp_expires_at < now()) {
+        if (\Carbon\Carbon::parse($user->otp_expires_at)->lt(now())) {
             $user->otp_code       = null;
             $user->otp_expires_at = null;
             $user->save();

@@ -239,7 +239,7 @@ class UserController extends Controller
             return response()->json(['message' => 'No hay un cambio de email pendiente.'], 400);
         }
 
-        if ($user->otp_expires_at < now()) {
+        if (\Carbon\Carbon::parse($user->otp_expires_at)->lt(now())) {
             $user->otp_code       = null;
             $user->otp_expires_at = null;
             $user->pending_email  = null;
@@ -275,7 +275,7 @@ class UserController extends Controller
             return response()->json(['message' => 'No hay un cambio de contraseña pendiente.'], 400);
         }
 
-        if ($user->otp_expires_at < now()) {
+        if (\Carbon\Carbon::parse($user->otp_expires_at)->lt(now())) {
             $user->otp_code       = null;
             $user->otp_expires_at = null;
             $user->save();
