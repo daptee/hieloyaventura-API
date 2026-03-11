@@ -61,7 +61,6 @@ class ModulePermissionsTest extends TestCase
         $agency = Agency::create([
             'agency_code' => 'TST001',
             'api_key'     => 'secret-api-key-12345',
-            'name'        => 'Agencia Test',
         ]);
 
         $response = $this->getJson('/api/agencies/' . $agency->agency_code, $this->authHeaders($token));
@@ -74,7 +73,7 @@ class ModulePermissionsTest extends TestCase
     {
         ['token' => $token] = $this->createAdminWithModules([Module::RESERVAS_WEB]);
 
-        Agency::create(['agency_code' => 'TST002', 'api_key' => 'key', 'name' => 'Test']);
+        Agency::create(['agency_code' => 'TST002', 'api_key' => 'key']);
 
         $this->getJson('/api/agencies/TST002', $this->authHeaders($token))
              ->assertStatus(403);

@@ -11,8 +11,8 @@ return new class extends Migration
     {
         if (!Schema::hasTable('agency_user_types')) {
             Schema::create('agency_user_types', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
+                $table->integer('id')->autoIncrement();
+                $table->string('name')->nullable();
                 $table->timestamps();
             });
 

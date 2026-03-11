@@ -10,13 +10,11 @@ return new class extends Migration
     {
         if (!Schema::hasTable('agencies')) {
             Schema::create('agencies', function (Blueprint $table) {
-                $table->id();
-                $table->string('agency_code')->unique();
-                $table->string('api_key')->unique()->nullable();
-                $table->string('name')->nullable();
-                $table->json('configurations')->nullable();
+                $table->integer('id')->autoIncrement();
+                $table->string('agency_code', 100)->nullable();
+                $table->string('api_key')->nullable();
+                $table->text('configurations')->nullable();
                 $table->string('email_integration_notification')->nullable();
-                $table->boolean('active')->default(1);
                 $table->timestamps();
             });
         }

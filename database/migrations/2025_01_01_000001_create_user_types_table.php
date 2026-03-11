@@ -11,8 +11,8 @@ return new class extends Migration
     {
         if (!Schema::hasTable('user_types')) {
             Schema::create('user_types', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
+                $table->integer('id')->autoIncrement();
+                $table->string('name')->nullable();
                 $table->timestamps();
             });
 

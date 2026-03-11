@@ -11,19 +11,18 @@ return new class extends Migration
     {
         if (!Schema::hasTable('modules')) {
             Schema::create('modules', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->boolean('status')->default(1);
+                $table->integer('id')->autoIncrement();
+                $table->string('name')->nullable();
                 $table->timestamps();
             });
 
             DB::table('modules')->insert([
-                ['id' => 1, 'name' => 'Usuarios',           'status' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 2, 'name' => 'Reservas Web',       'status' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 3, 'name' => 'Configuraciones',    'status' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 4, 'name' => 'Agencias',           'status' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 5, 'name' => 'Excursiones',        'status' => 1, 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 6, 'name' => 'Reservas Agencias',  'status' => 1, 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 1, 'name' => 'Usuarios',           'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'name' => 'Reservas Web',       'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'name' => 'Configuraciones',    'created_at' => now(), 'updated_at' => now()],
+                ['id' => 4, 'name' => 'Agencias',           'created_at' => now(), 'updated_at' => now()],
+                ['id' => 5, 'name' => 'Excursiones',        'created_at' => now(), 'updated_at' => now()],
+                ['id' => 6, 'name' => 'Reservas Agencias',  'created_at' => now(), 'updated_at' => now()],
             ]);
         }
     }
