@@ -12,7 +12,11 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    /**
+     * Cloudflare actúa como proxy inverso; confiar en todas sus IPs para que
+     * $request->ip() devuelva la IP real del cliente (via X-Forwarded-For / CF-Connecting-IP).
+     */
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

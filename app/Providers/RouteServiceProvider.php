@@ -91,9 +91,10 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
-        // Login web y agencias: 10 intentos por minuto por IP
+        // Login web y agencias: 10 intentos por minuto por EMAIL (no por IP para evitar evasión via IP rotation)
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(10)->by($request->ip())->response(function () use ($request) {
+            $key = strtolower($request->input('email', '')) ?: $request->ip();
+            return Limit::perMinute(10)->by($key)->response(function () use ($request) {
                 $this->logRateLimited('login', $request);
                 return response()->json([
                     'message' => 'Demasiados intentos de inicio de sesión. Por favor, intentá de nuevo en un minuto.'
@@ -101,9 +102,10 @@ class RouteServiceProvider extends ServiceProvider
             });
         });
 
-        // Login admin: más estricto, 5 intentos por minuto por IP
+        // Login admin: más estricto, 5 intentos por minuto por EMAIL
         RateLimiter::for('admin-login', function (Request $request) {
-            return Limit::perMinute(5)->by($request->ip())->response(function () use ($request) {
+            $key = strtolower($request->input('email', '')) ?: $request->ip();
+            return Limit::perMinute(5)->by($key)->response(function () use ($request) {
                 $this->logRateLimited('admin', $request);
                 return response()->json([
                     'message' => 'Demasiados intentos de inicio de sesión. Por favor, intentá de nuevo en un minuto.'
@@ -111,9 +113,10 @@ class RouteServiceProvider extends ServiceProvider
             });
         });
 
-        // Recuperación de contraseña: 5 intentos por minuto por IP
+        // Recuperación de contraseña: 5 intentos por minuto por EMAIL
         RateLimiter::for('password-recovery', function (Request $request) {
-            return Limit::perMinute(5)->by($request->ip())->response(function () use ($request) {
+            $key = strtolower($request->input('email', '')) ?: $request->ip();
+            return Limit::perMinute(5)->by($key)->response(function () use ($request) {
                 $this->logRateLimited('password-recovery', $request);
                 return response()->json([
                     'message' => 'Demasiadas solicitudes de recuperación de contraseña. Por favor, intentá de nuevo en un minuto.'
