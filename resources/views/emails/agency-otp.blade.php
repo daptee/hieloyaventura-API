@@ -173,6 +173,13 @@
                     Para confirmar el cambio, ingresá el código de verificación que figura a continuación.
                     Si no realizaste esta solicitud, podés ignorar este mensaje y tu correo no será modificado.
                 </p>
+            @elseif($type === 'password_change')
+                <p class="intro-text">
+                    Recibimos una solicitud para <strong>cambiar la contraseña</strong> de tu cuenta
+                    de agencia en Hielo &amp; Aventura.<br><br>
+                    Para confirmar el cambio, ingresá el código de verificación que figura a continuación.
+                    Si no realizaste esta solicitud, contactanos de inmediato.
+                </p>
             @else
                 <p class="intro-text">
                     Estás iniciando sesión en el sistema de agencias de Hielo &amp; Aventura.
@@ -192,6 +199,8 @@
             <div class="notice-box">
                 @if($type === 'email_change')
                     Si no solicitaste este cambio, no es necesario que hagas nada. Tu correo actual seguirá siendo el mismo.
+                @elseif($type === 'password_change')
+                    Si no solicitaste este cambio, contactanos de inmediato a través de los datos que figuran más abajo.
                 @else
                     Si no intentaste iniciar sesión, alguien podría estar intentando acceder a tu cuenta.
                     Te recomendamos cambiar tu contraseña por seguridad.

@@ -304,6 +304,7 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 // Agency user self-update (uses ID from token, not from URL)
 Route::put('/agency/users/profile', [AgencyUserController::class, 'update_self'])->middleware(['jwt.agency', 'audit.log']);
 Route::post('/agency/users/profile/confirm-email-change', [AgencyUserController::class, 'confirm_email_change'])->middleware(['jwt.agency', 'audit.log']);
+Route::post('/agency/users/profile/confirm-password-change', [AgencyUserController::class, 'confirm_password_change'])->middleware(['jwt.agency', 'audit.log']);
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.agency', 'audit.log']);

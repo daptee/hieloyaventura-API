@@ -207,15 +207,34 @@ class AgencyUserController extends Controller
             ]);
         }
 
+        // Si se envía nueva contraseña, iniciar flujo de verificación OTP
+        if ($request->filled('password')) {
+            $request->validate([
+                'password'              => 'required|string|min:8',
+                'password_confirmation' => 'required|same:password',
+            ]);
+
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp_code       = $otp;
+            $user->otp_expires_at = now()->addMinutes(10);
+            // pending_email null indica que el OTP es para cambio de contraseña
+            $user->pending_email  = null;
+            $user->save();
+
+            Mail::to($user->email)->send(new AgencyOtpMailable($otp, 'password_change'));
+
+            return response()->json([
+                'message'                 => 'Se envió un código de verificación a tu correo para confirmar el cambio de contraseña.',
+                'pending_password_change' => true,
+            ]);
+        }
+
         $user->user             = $request->user;
         $user->name             = $request->name;
         $user->last_name        = $request->last_name;
         if ($request->has('can_view_all_sales')) {
             $user->can_view_all_sales = $request->can_view_all_sales;
         }
-
-        if ($request->password)
-            $user->password = Hash::make($request->password);
 
         $user->save();
 
@@ -271,6 +290,46 @@ class AgencyUserController extends Controller
 
         $user    = AgencyUser::getAllDataUser($user->id);
         $message = "Email actualizado con éxito";
+
+        return response(compact("user", "message"));
+    }
+
+    /**
+     * Confirma el cambio de contraseña con el OTP enviado al correo del usuario.
+     */
+    public function confirm_password_change(Request $request)
+    {
+        $request->validate([
+            'otp'                   => 'required|string|size:6',
+            'password'              => 'required|string|min:8',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $id   = Auth::guard('agency')->user()->id;
+        $user = AgencyUser::find($id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || $user->pending_email !== null) {
+            return response()->json(['message' => 'No hay un cambio de contraseña pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Intentá cambiar la contraseña nuevamente.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->password       = Hash::make($request->password);
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Contraseña actualizada con éxito";
 
         return response(compact("user", "message"));
     }
