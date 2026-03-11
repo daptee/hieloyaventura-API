@@ -533,3 +533,69 @@ Esto centralizaría el manejo de errores de la API externa y evitaría código d
 ### Typo histórico `excurtion` vs `excursion`
 
 El modelo, tabla y muchos endpoints usan `excurtion` (sin la 's'). No corregir sin un plan de migración completo ya que afecta rutas, columnas DB, y todos los frontends.
+
+---
+
+## Tests automatizados
+
+### Cómo ejecutar los tests
+
+Los tests usan **SQLite en memoria** (configurado en `phpunit.xml`) para no depender de la base de datos MySQL de desarrollo.
+
+```bash
+# Ejecutar todos los tests
+php artisan test
+
+# Ejecutar solo una suite
+php artisan test --testsuite=Feature
+
+# Ejecutar un archivo específico
+php artisan test tests/Feature/Agency/AuthAgencyTwoFactorTest.php
+```
+
+> **Nota**: Los tests solo se pueden ejecutar localmente (donde hay acceso al servidor con PHP). No hay acceso SSH al servidor de producción/staging para ejecutarlos allí.
+
+### Estructura de tests
+
+```
+tests/
+└── Feature/
+    ├── Concerns/
+    │   └── CreatesUsers.php        ← helpers: createAdminWithModules(), createAgencyUser(), etc.
+    ├── Admin/
+    │   ├── AuthAdminTest.php        ← login admin: casos exitosos y de error
+    │   └── ModulePermissionsTest.php ← control de acceso por módulo (AGENCIAS, USUARIOS, etc.)
+    ├── Agency/
+    │   ├── AuthAgencyTwoFactorTest.php ← flujo 2FA: paso 1 (OTP) y paso 2 (JWT)
+    │   ├── AgencyProfileTest.php       ← edición de perfil + protección de cambio de email
+    │   └── AgencyIsolationTest.php     ← aislamiento cross-agency (agencia A no ve datos de B)
+    └── Web/
+        └── AuthWebTest.php             ← login web + verificación de que el token web no da acceso a admin/agencias
+```
+
+### Cobertura actual
+
+| Área | Test | Casos cubiertos |
+|------|------|-----------------|
+| Admin | `AuthAdminTest` | login OK, password incorrecto, email inexistente, usuario CLIENTE, campos faltantes, email inválido |
+| Admin | `ModulePermissionsTest` | con/sin módulo AGENCIAS, con/sin módulo USUARIOS, sin token, usuario CLIENTE con token |
+| Agencias | `AuthAgencyTwoFactorTest` | OTP enviado, usuario inactivo, password incorrecto, OTP correcto, OTP incorrecto, OTP expirado, sin OTP pendiente, no reutilizable |
+| Agencias | `AgencyProfileTest` | actualizar nombre, sin token, campos faltantes, cambio de email + OTP, email en uso, confirmar email OK, OTP incorrecto, OTP expirado, sin cambio pendiente |
+| Agencias | `AgencyIsolationTest` | ver solo usuarios propios, admin ve todos, vendedores de otra agencia, sin token, token agencia no pasa jwt.verify |
+| Web | `AuthWebTest` | login OK, admin en login web, password incorrecto, email inexistente, campos faltantes, token web no accede a admin, token web no accede a agencias |
+
+### Importante: reestructuración futura de la API
+
+Cuando se realice la reestructuración de rutas y controladores planificada en la [Sección 9](#9-estructura-propuesta-de-optimización), **los tests de feature deberán rehacerse en su mayoría** porque:
+
+- Los paths de los endpoints cambiarán (e.g., `/api/agencies` podría pasar a `/api/admin/agencies`).
+- Los controladores serán distintos (actualmente `AgencyUserController` concentra demasiada responsabilidad).
+- La separación de responsabilidades puede cambiar qué middleware aplica a qué ruta.
+
+En ese momento se recomienda aprovechar para también agregar tests de integración más completos, incluyendo los flujos del bridge con HyA (usando mocks de `Http::fake()`).
+
+### Consideraciones de infraestructura
+
+- **Sin acceso SSH a producción/staging**: no es posible ejecutar `php artisan migrate` ni `php artisan test` en esos servidores. Los deploys de migraciones se hacen mediante queries SQL ejecutados manualmente en phpMyAdmin.
+- **Clear-cache**: el endpoint de clear-cache (`/api/clear-cache`) es suficiente para que Laravel tome los cambios de código nuevos tras un `git pull`. No ejecuta migraciones.
+- **Tests en CI**: si en el futuro se configura un pipeline CI (GitHub Actions, etc.), los tests pueden ejecutarse automáticamente en cada push porque usan SQLite en memoria y no requieren infraestructura externa.
