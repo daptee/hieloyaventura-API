@@ -33,6 +33,13 @@ class AuthController extends Controller{
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
 
+            if ($user->first()->password_expired) {
+                return response()->json([
+                    'message'          => 'Usuario y/o clave no válidos.',
+                    'password_expired' => true,
+                ], 400);
+            }
+
             if (! $token = JWTAuth::attempt($credentials)) {
                 $this->logFailedLogin('web', $request, 'contraseña incorrecta');
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
@@ -109,6 +116,13 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email no existente o usuario no admin.'], 400);
         }
 
+        if ($user_to_validate->password_expired) {
+            return response()->json([
+                'message'          => 'Email y/o clave no válidos.',
+                'password_expired' => true,
+            ], 400);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (! $token = JWTAuth::attempt($credentials)) {
@@ -137,6 +151,13 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
+        if ($user_to_validate->password_expired) {
+            return response()->json([
+                'message'          => 'Email y/o clave no válidos.',
+                'password_expired' => true,
+            ], 400);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (!Auth::guard('agency')->attempt($credentials)) {
@@ -144,8 +165,10 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
-        // Credenciales correctas — cerrar sesión temporal y emitir OTP
+        // Credenciales correctas — cerrar sesión temporal
         Auth::guard('agency')->logout();
+
+        // Emitir OTP
 
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user_to_validate->otp_code       = $otp;
