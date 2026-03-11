@@ -180,6 +180,10 @@ Route::prefix('consults')->controller(ConsultController::class)->group(function 
     Route::post('/', 'store');
 });
 Route::get('/clear-cache', function () {
+    if (Auth::user()->user_type_id != \App\Models\UserType::ADMIN) {
+        return response()->json(['message' => 'No tenés permisos para realizar esta acción.'], 403);
+    }
+
     Artisan::call('config:clear');
     Artisan::call('route:clear');
     Artisan::call('view:clear');
