@@ -50,9 +50,7 @@ class AuthController extends Controller{
           return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
 
-        // Credenciales correctas — cerrar sesión temporal y emitir OTP
-        JWTAuth::invalidate($token);
-
+        // Credenciales correctas — emitir OTP (el token temporal nunca se envía al cliente)
         $userModel = $user->first();
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $userModel->otp_code       = $otp;
@@ -145,9 +143,7 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
-        // Credenciales correctas — cerrar sesión temporal y emitir OTP
-        JWTAuth::invalidate($token);
-
+        // Credenciales correctas — emitir OTP (el token temporal nunca se envía al cliente)
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user_to_validate->otp_code       = $otp;
         $user_to_validate->otp_expires_at = now()->addMinutes(10);
