@@ -7,19 +7,23 @@ return [
     | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
     |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
+    | Configurar CORS_ALLOWED_ORIGINS en .env con los dominios permitidos,
+    | separados por coma. Ejemplo:
+    |   CORS_ALLOWED_ORIGINS=https://hieloyaventura.com,https://admin.hieloyaventura.com,https://agencias.hieloyaventura.com
     |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    | En desarrollo se puede usar * para permitir cualquier origen.
+    | En producción SIEMPRE listar los dominios explícitamente.
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => array_map(
+        'trim',
+        explode(',', env('CORS_ALLOWED_ORIGINS', '*'))
+    ),
 
     'allowed_origins_patterns' => [],
 

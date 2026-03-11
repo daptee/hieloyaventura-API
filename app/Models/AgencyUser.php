@@ -26,7 +26,10 @@ class AgencyUser extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         "password",
-        "deleted_at"
+        "deleted_at",
+        "otp_code",
+        "otp_expires_at",
+        "pending_email",
     ];
 
     const SHOW = [
