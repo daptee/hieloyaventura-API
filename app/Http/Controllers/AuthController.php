@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AgencyOtpMailable;
+use App\Mail\UserOtpMailable;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserType;
 use Illuminate\Http\Request;
@@ -49,7 +50,21 @@ class AuthController extends Controller{
           return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
 
-        return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
+        // Credenciales correctas — cerrar sesión temporal y emitir OTP
+        JWTAuth::invalidate($token);
+
+        $userModel = $user->first();
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $userModel->otp_code       = $otp;
+        $userModel->otp_expires_at = now()->addMinutes(10);
+        $userModel->save();
+
+        Mail::to($userModel->email)->send(new UserOtpMailable($otp, 'login'));
+
+        return response()->json([
+            'message'     => 'Se envió un código de verificación a su correo electrónico.',
+            'pending_2fa' => true,
+        ]);
     }
 
     public function logout(){
@@ -130,7 +145,20 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
-        return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
+        // Credenciales correctas — cerrar sesión temporal y emitir OTP
+        JWTAuth::invalidate($token);
+
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $user_to_validate->otp_code       = $otp;
+        $user_to_validate->otp_expires_at = now()->addMinutes(10);
+        $user_to_validate->save();
+
+        Mail::to($user_to_validate->email)->send(new UserOtpMailable($otp, 'login'));
+
+        return response()->json([
+            'message'     => 'Se envió un código de verificación a su correo electrónico.',
+            'pending_2fa' => true,
+        ]);
     }
 
     /**
@@ -221,6 +249,44 @@ class AuthController extends Controller{
         $token = Auth::guard('agency')->login($user);
 
         return $this->respondWithTokenAgency($token, $user->id);
+    }
+
+    /**
+     * Paso 2 del login de web/admin: valida el OTP y entrega el JWT.
+     */
+    public function verify_user_otp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp'   => 'required|string|size:6',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !$user->otp_code || !$user->otp_expires_at) {
+            return response()->json(['message' => 'Código inválido o expirado.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Iniciá sesión nuevamente.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            $this->logFailedLogin('user-otp', $request, 'código OTP incorrecto');
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        // OTP correcto — limpiar y emitir JWT
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        $token = JWTAuth::fromUser($user);
+
+        return $this->respondWithToken($token, $user->user_type_id, $user->id);
     }
 
     private function logFailedLogin(string $type, Request $request, string $reason): void

@@ -37,7 +37,10 @@ class User extends Authenticatable implements JWTSubject
         "birth_date",
         "dni",
         "phone",
-        "password_expired"
+        "password_expired",
+        "otp_code",
+        "otp_expires_at",
+        "pending_email",
     ];
 
     /**
@@ -48,6 +51,9 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'otp_code',
+        'otp_expires_at',
+        'pending_email',
     ];
 
     /**

@@ -43,6 +43,7 @@ use GuzzleHttp\Client;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login')->middleware('throttle:login');
+    Route::post('login/verify-otp', 'verify_user_otp')->middleware('throttle:login');
     Route::post('login/admin', 'login_admin')->middleware('throttle:admin-login');
     Route::post('login/agency/user', 'login_agency_user')->middleware('throttle:login');
     Route::post('login/agency/verify-otp', 'verify_agency_otp')->middleware('throttle:login');
@@ -50,7 +51,9 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
     Route::put('user_edit', 'update')->middleware(['jwt.verify', 'audit.log']);
+    Route::post('user_edit/confirm-email-change', 'confirm_email_change')->middleware(['jwt.verify', 'audit.log']);
     Route::put('new_password', 'updatePassword')->middleware(['jwt.verify', 'audit.log']);
+    Route::post('new_password/confirm', 'confirm_password_change')->middleware(['jwt.verify', 'audit.log']);
 });
 Route::get('faqs', [FaqController::class, 'index']);
 Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {

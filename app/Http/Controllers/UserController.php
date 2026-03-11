@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Mail\recoverPasswordMailable;
+use App\Mail\UserOtpMailable;
 use App\Mail\UserReservation;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserType;
@@ -184,28 +185,114 @@ class UserController extends Controller
     {
         $user = auth()->user();
 
-        $datos = $request->only([
-            "name",
-            "email",
-            "nationality_id",
-            "dni",
-            "phone"
-            // "lenguage_id",
-            // "birth_date",
-        ]);
+        $wantsEmailChange    = $request->filled('email') && $request->email !== $user->email;
+        $wantsPasswordChange = $request->filled('password');
 
-        $user = $user->fill($datos);
+        if ($wantsEmailChange && $wantsPasswordChange) {
+            return response()->json([
+                'message' => 'No se puede cambiar el email y la contraseña en la misma solicitud. Realizá los cambios por separado.',
+            ], 422);
+        }
+
+        // Cambio de email → flujo OTP
+        if ($wantsEmailChange) {
+            $request->validate(['email' => 'email|unique:users,email']);
+
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp_code       = $otp;
+            $user->otp_expires_at = now()->addMinutes(10);
+            $user->pending_email  = $request->email;
+            $user->save();
+
+            Mail::to($user->email)->send(new UserOtpMailable($otp, 'email_change'));
+
+            return response()->json([
+                'message'              => 'Se envió un código de verificación al correo actual para confirmar el cambio.',
+                'pending_email_change' => true,
+            ]);
+        }
+
+        // Otros campos (name, nationality_id, dni, phone) → actualización directa
+        $datos = $request->only(["name", "nationality_id", "dni", "phone"]);
+        $user->fill($datos);
 
         try {
             DB::beginTransaction();
             $user->save();
             DB::commit();
         } catch (\Throwable $th) {
-            Log::debug(print_r([$th->getMessage(), $th->getLine()],  true));
+            Log::debug(print_r([$th->getMessage(), $th->getLine()], true));
             return response(["message" => "Error en el servidor al actualizar los datos del usuario", "error" => "UCU0001"], 500);
         }
 
         return response()->json($user);
+    }
+
+    public function confirm_email_change(Request $request)
+    {
+        $request->validate(['otp' => 'required|string|size:6']);
+
+        $user = auth()->user();
+        $user = User::find($user->id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || !$user->pending_email) {
+            return response()->json(['message' => 'No hay un cambio de email pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->pending_email  = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Volvé a solicitar el cambio.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->email          = $user->pending_email;
+        $user->pending_email  = null;
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        return response()->json(['message' => 'Email actualizado con éxito.', 'user' => $user]);
+    }
+
+    public function confirm_password_change(Request $request)
+    {
+        $request->validate([
+            'otp'                   => 'required|string|size:6',
+            'password'              => 'required|string|min:8',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $user = auth()->user();
+        $user = User::find($user->id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || $user->pending_email !== null) {
+            return response()->json(['message' => 'No hay un cambio de contraseña pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Volvé a solicitar el cambio.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->password         = Hash::make($request->password);
+        $user->password_expired = false;
+        $user->otp_code         = null;
+        $user->otp_expires_at   = null;
+        $user->save();
+
+        return response()->json(['message' => 'Contraseña actualizada con éxito.']);
     }
 
     public function update_admin(Request $request, $id)
@@ -277,30 +364,30 @@ class UserController extends Controller
         $user = auth()->user();
 
         $credentials = [
-            'email' => $user->email,
-            'password' => $request->current_password
+            'email'    => $user->email,
+            'password' => $request->current_password,
         ];
 
         try {
-            if ($token = JWTAuth::attempt($credentials)) {
-                DB::beginTransaction();
-                $new_password_hashed = Hash::make($request->new_password);
-                $user->password = $new_password_hashed;
-
-                $user->save();
-                DB::commit();
-            } else {
+            if (!JWTAuth::attempt($credentials)) {
                 return response()->json(['message' => 'Contraseña actual no válida.'], 422);
             }
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error(print_r($e->getMessage(), true));
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Error al validar credenciales.'], 500);
         }
 
+        // Contraseña actual correcta — emitir OTP para confirmar el cambio
+        $user   = User::find($user->id);
+        $otp    = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $user->otp_code       = $otp;
+        $user->otp_expires_at = now()->addMinutes(10);
+        $user->save();
+
+        Mail::to($user->email)->send(new UserOtpMailable($otp, 'password_change'));
+
         return response()->json([
-            'message' => 'La contraseña se actualizó con éxito',
-            'user' => $user,
-            'token' => $token
+            'message'                 => 'Se envió un código de verificación a su correo para confirmar el cambio de contraseña.',
+            'pending_password_change' => true,
         ]);
     }
 
