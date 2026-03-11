@@ -1333,7 +1333,7 @@ class AgencyUserController extends Controller
      * por fuera para evitar envíos masivos y posibles bloqueos del servidor).
      *
      * Solo puede ejecutarlo un admin con el módulo AGENCIAS habilitado.
-     * Requiere {"confirm": true} en el body para evitar ejecuciones accidentales.
+     * Requiere {"confirm": true, "admin_password": "..."} en el body.
      *
      * POST /api/agency/users/emergency-password-reset
      */
@@ -1345,6 +1345,12 @@ class AgencyUserController extends Controller
             return response()->json([
                 'message' => 'Debe confirmar la operación enviando {"confirm": true}.',
             ], 422);
+        }
+
+        if (!$request->filled('admin_password') || !Hash::check($request->admin_password, Auth::user()->password)) {
+            return response()->json([
+                'message' => 'Contraseña de administrador incorrecta.',
+            ], 403);
         }
 
         $users = AgencyUser::whereNull('deleted_at')->get();
