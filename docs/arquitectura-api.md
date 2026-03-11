@@ -10,8 +10,9 @@
 6. [Patrón Bridge — API externa HyA](#6-patrón-bridge--api-externa-hya)
 7. [Endpoints agrupados por consumidor](#7-endpoints-agrupados-por-consumidor)
 8. [Modelos de datos clave](#8-modelos-de-datos-clave)
-9. [Estructura propuesta de optimización](#9-estructura-propuesta-de-optimización)
-10. [Roadmap de mejoras](#10-roadmap-de-mejoras)
+9. [Seguridad implementada](#9-seguridad-implementada)
+10. [Estructura propuesta de optimización](#10-estructura-propuesta-de-optimización)
+11. [Roadmap de mejoras](#11-roadmap-de-mejoras)
 
 ---
 
@@ -70,10 +71,38 @@ Existen **dos tipos de usuario** con flujos JWT separados:
 
 - **Tabla**: `agency_users`
 - **Modelo**: `App\Models\AgencyUser`
-- **Login**: `POST /api/login/agency/user`
+- **Login**: flujo en **dos pasos** (ver 2FA más abajo)
 - **Driver**: JWT (`tymon/jwt-auth` con guard configurado explícitamente)
 - **Middleware**: `jwt.agency` → `AgencyJwtMiddleware`
 - **Recuperación en controladores**: `Auth::guard('agency')->user()`
+
+### Flujo de login con 2FA — Agencias
+
+El login de agencias requiere verificación en dos pasos. El JWT **no se emite** hasta completar ambos:
+
+```
+Paso 1: POST /api/login/agency/user
+        { email, password }
+        → valida credenciales
+        → genera OTP de 6 dígitos (expira en 10 min)
+        → envía OTP al correo del usuario
+        → responde: { pending_2fa: true }
+
+Paso 2: POST /api/agency/verify-otp
+        { email, otp }
+        → valida OTP
+        → emite JWT
+        → limpia otp_code y otp_expires_at de la DB
+        → responde: { access_token, data: { user } }
+```
+
+### TTL de tokens JWT
+
+Configurado en `config/jwt.php`:
+```php
+'ttl' => env('JWT_TTL', 60)  // 60 minutos
+```
+Se puede sobreescribir con la variable de entorno `JWT_TTL`. Aplica a **todos los guards**.
 
 ### Guard dual `jwt.admin_or_agency`
 
@@ -93,12 +122,28 @@ Algunos endpoints son compartidos entre admin y usuarios de agencia. El middlewa
 
 ## 4. Middleware disponibles
 
+### Autenticación
+
 | Alias | Clase | Uso |
 |-------|-------|-----|
 | `jwt.verify` | `JwtMiddleware` | Endpoints de admin/staff y web autenticados |
 | `jwt.agency` | `AgencyJwtMiddleware` | Endpoints exclusivos de portal de agencias |
 | `jwt.admin_or_agency` | `AdminOrAgencyMiddleware` | Endpoints compartidos admin + agencias |
 | `agency.apikey` | `ValidateAgencyApiKey` | Endpoints de integración v1 por API key |
+
+### Seguridad (globales — aplican a todas las requests)
+
+| Clase | Descripción |
+|-------|-------------|
+| `SecurityHeaders` | Agrega headers HTTP de seguridad: `X-Content-Type-Options`, `X-Frame-Options: DENY`, `X-XSS-Protection`, `Strict-Transport-Security`, `Referrer-Policy`, `Permissions-Policy` |
+| `RequestSizeLimit` | Rechaza con 413 requests que superen 1 MB (JSON) o 10 MB (multipart/form-data) |
+| `BotDetection` | Detecta y bloquea user-agents de bots conocidos y patrones de escaneo automático |
+
+### Auditoría
+
+| Alias | Clase | Descripción |
+|-------|-------|-------------|
+| `audit.log` | `AccessAuditLog` | Registra en `storage/logs/security/access-audit-YYYY-MM.log` todos los accesos autenticados: método, ruta, IP, usuario, status. Aplicado a todas las rutas con JWT. |
 
 ---
 
@@ -283,8 +328,14 @@ En varios endpoints de agencias, se fuerza el parámetro `AG` (código de agenci
 ### 7.2 Portal de agencias *(jwt.agency o jwt.admin_or_agency)*
 
 **Auth**
-- `POST /api/login/agency/user` — Login usuario agencia
-- `PUT /api/agency/users/profile` *(jwt.agency)* — Editar perfil propio
+- `POST /api/login/agency/user` — Login usuario agencia (paso 1: valida credenciales, envía OTP)
+- `POST /api/agency/verify-otp` — Verificar OTP y recibir JWT (paso 2 del login)
+- `POST /api/logout` *(jwt.admin_or_agency)* — Logout (válido para admin y agencias)
+
+**Perfil propio** *(jwt.agency)*
+- `PUT /api/agency/users/profile` — Editar perfil. Si se envía nuevo email → inicia OTP. Si se envía nueva contraseña → inicia OTP. No se pueden cambiar ambos en la misma request.
+- `POST /api/agency/users/profile/confirm-email-change` — Confirmar cambio de email con OTP
+- `POST /api/agency/users/profile/confirm-password-change` — Confirmar cambio de contraseña con OTP
 
 **Bridge HyA para agencias** *(jwt.agency)*
 - `GET /api/agency/hya/Agencias` *(jwt.admin_or_agency)* — Lista agencias
@@ -389,10 +440,14 @@ En varios endpoints de agencias, se fuerza el parámetro `AG` (código de agenci
 - `POST /api/agency/users` — Crear usuario agencia
 - `POST /api/agency/users/update/{id}` — Actualizar usuario agencia
 - `POST /api/agency/users/active_inactive` — Activar/desactivar usuario
+- `POST /api/agency/users/emergency-password-reset` — Reset masivo de contraseñas de agencias. Requiere `{ confirm: true, admin_password }`. Setea `password_expired = true`. Devuelve lista de nuevas contraseñas (visible una sola vez).
 - `GET /api/agencies/{agency_code}` — Ver agencia
 - `POST /api/agencies` — Crear/actualizar agencia
 - `PUT /api/agency/settings` — Actualizar configuración de agencia
 - `POST /api/admin/send-integration-api-welcome` — Enviar email bienvenida integración
+
+**Usuarios web/admin** *(Módulo: USUARIOS o solo ADMIN)*
+- `POST /api/users/emergency-password-reset` — Reset masivo de contraseñas de tabla `users`. Solo ADMIN. Requiere `{ confirm: true, admin_password }`. Setea `password_expired = true`. Devuelve lista de nuevas contraseñas (visible una sola vez).
 
 ---
 
@@ -415,12 +470,18 @@ Endpoints pensados para que agencias externas integren directamente sus sistemas
 ## 8. Modelos de datos clave
 
 ### Usuarios del sistema (`users`)
-Campos principales: `name`, `email`, `password`, `user_type_id`, `active`
+Campos principales: `name`, `email`, `password`, `password_expired`, `user_type_id`, `active`
 Relaciones: `user_type`, `modules` (vía `user_modules`)
 
 ### Usuarios de agencia (`agency_users`)
-Campos principales: `user` (username), `name`, `last_name`, `email`, `password`, `agency_code`, `agency_user_type_id`, `can_view_all_sales`, `active`, `terms_and_conditions`
+Campos principales: `user` (username), `name`, `last_name`, `email`, `password`, `password_expired`, `agency_code`, `agency_user_type_id`, `can_view_all_sales`, `active`, `terms_and_conditions`, `otp_code`, `otp_expires_at`, `pending_email`
 Relaciones: `user_type` (AgencyUserType), `modules` (AgencyUserModule)
+
+**Campos de seguridad:**
+- `otp_code` — código OTP de 6 dígitos (login 2FA, cambio de email, cambio de contraseña)
+- `otp_expires_at` — expiración del OTP (10 minutos)
+- `pending_email` — email nuevo pendiente de confirmar via OTP. Si está seteado junto con `otp_code`, el OTP es para cambio de email. Si está null, el OTP es para cambio de contraseña.
+- `password_expired` — flag booleano. `true` indica que la contraseña fue reseteada de forma forzada por un admin. El front debe mostrar aviso al usuario para que use el flujo de recuperación de contraseña.
 
 ### Agencias (`agencies`)
 Campos principales: `agency_code`, `api_key`, `configurations`, `email_integration_notification`
@@ -434,7 +495,91 @@ Las reservas en el sistema de escritorio HyA se manejan directamente a través d
 
 ---
 
-## 9. Estructura propuesta de optimización
+## 9. Seguridad implementada
+
+### Rate limiting en endpoints de login
+
+Configurado en `RouteServiceProvider::configureRateLimiting()`. Al superar el límite se devuelve **429** y se envía alerta por email a `SECURITY_ALERT_EMAILS`.
+
+| Endpoint | Límite |
+|----------|--------|
+| `POST /api/login/admin` | 5 intentos / minuto por IP |
+| `POST /api/login` (web) | 10 intentos / minuto por IP |
+| `POST /api/login/agency/user` | 10 intentos / minuto por IP |
+
+Variable de entorno requerida:
+```
+SECURITY_ALERT_EMAILS=sistemas@ejemplo.com,otro@ejemplo.com
+```
+
+### 2FA para usuarios de agencia
+
+Ver flujo completo en [Sección 3](#3-autenticación-y-guards-jwt). El OTP se limpia de la DB en todos los casos: éxito, expiración o verificación del OTP (el campo queda null después de cada uso).
+
+### Protección de cambios sensibles en el perfil de agencia
+
+Tanto el cambio de email como el cambio de contraseña requieren verificación OTP antes de aplicarse:
+
+**Cambio de email:**
+```
+PUT /api/agency/users/profile  { email: "nuevo@mail.com" }
+→ OTP al correo actual
+→ POST /api/agency/users/profile/confirm-email-change  { otp }
+```
+
+**Cambio de contraseña:**
+```
+PUT /api/agency/users/profile  { password, password_confirmation }
+→ OTP al correo
+→ POST /api/agency/users/profile/confirm-password-change  { otp, password, password_confirmation }
+```
+
+No se permite enviar email y contraseña nuevos en la misma request (devuelve 422).
+
+### Emergency password reset
+
+Endpoints para resetear masivamente las contraseñas ante un incidente de seguridad. Requieren autenticación admin + módulo AGENCIAS (para agencias) o solo ADMIN (para users) + confirmación con la contraseña del admin ejecutante.
+
+| Endpoint | Scope |
+|----------|-------|
+| `POST /api/agency/users/emergency-password-reset` | Todos los usuarios de `agency_users` |
+| `POST /api/users/emergency-password-reset` | Todos los usuarios de `users` |
+
+Body requerido:
+```json
+{ "confirm": true, "admin_password": "contraseña-del-admin-autenticado" }
+```
+
+Respuesta: lista con `id`, `name`, `email`, `password` nueva de cada usuario. **Mostrar una sola vez — no se vuelve a recuperar.**
+
+Al ejecutarse, setea `password_expired = true` en cada usuario.
+
+### Flag `password_expired`
+
+Presente en `users` y `agency_users`. Se setea en `true` al ejecutar un emergency reset. El front debe leer este campo en la respuesta del login y mostrar el aviso correspondiente.
+
+Se limpia a `false` cuando el usuario cambia su contraseña a través de:
+- Flujo de recuperación de contraseña (`recover_password_user` / `agency_recover_password_user`)
+- Cambio de contraseña desde perfil + OTP (`confirm_password_change`) — solo agencias
+
+### Invalidación masiva de tokens JWT
+
+Para cerrar todas las sesiones activas simultáneamente (todos los guards):
+1. Generar nuevo secret (en consola del navegador): `Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2,'0')).join('')`
+2. Reemplazar `JWT_SECRET=...` en el `.env` de producción via cPanel → File Manager
+3. Todos los tokens emitidos con el secret anterior quedan inválidos instantáneamente
+
+### Variables de entorno de seguridad
+
+```env
+JWT_TTL=60                                    # Expiración de tokens en minutos
+JWT_SECRET=<cadena aleatoria de 64+ chars>    # Secret de firma JWT
+SECURITY_ALERT_EMAILS=a@a.com,b@b.com         # Destinatarios de alertas de seguridad
+```
+
+---
+
+## 10. Estructura propuesta de optimización
 
 ### Problema actual
 
@@ -489,18 +634,28 @@ Esto centralizaría el manejo de errores de la API externa y evitaría código d
 
 ---
 
-## 10. Roadmap de mejoras
+## 11. Roadmap de mejoras
 
 ### Alta prioridad (seguridad)
 
 - [ ] **Revisar endpoints sin autenticación que exponen datos**: algunos endpoints del bridge HyA son públicos y podrían exponer información sensible según los datos que devuelva la API externa.
-- [ ] **Agregar rate limiting** en endpoints de login y recuperación de contraseña para prevenir brute force.
+- [x] ~~**Agregar rate limiting** en endpoints de login y recuperación de contraseña para prevenir brute force.~~ *(implementado)*
+- [x] ~~**Headers de seguridad HTTP** en todas las respuestas.~~ *(implementado)*
+- [x] ~~**Límite de tamaño de requests** (413).~~ *(implementado)*
+- [x] ~~**2FA para login de agencias**.~~ *(implementado)*
+- [x] ~~**OTP para cambio de email y contraseña** desde perfil de agencias.~~ *(implementado)*
+- [x] ~~**Audit log de accesos autenticados**.~~ *(implementado)*
+- [x] ~~**Flag `password_expired`** para forzar cambio de contraseña.~~ *(implementado)*
+- [x] ~~**Emergency password reset** para agencias y usuarios.~~ *(implementado)*
 - [ ] **Endpoints pendientes de revisión de seguridad**:
   - `DELETE /pdfs/delete-by-range` — operación destructiva, verificar validación de rangos
   - `GET /clear-cache` — solo debería ser accesible por ADMIN
   - `POST /agency_paxs` — verificar que la agencia del pax corresponda al usuario autenticado
   - `POST /agency/users/seller_load` — verificar validación
-  - `POST /agency/users/terms_and_conditions` — verificar que solo el admin de agencia pueda aceptar
+- [x] ~~`POST /agency/users/terms_and_conditions` — middleware corregido a `jwt.agency`~~ *(corregido)*
+- [ ] **2FA para login de admin** (panel de administración)
+- [ ] **Lista blanca de IPs para acceso al panel admin**
+- [ ] **Actualizar dependencias con vulnerabilidades conocidas**: `laravel/framework` (CVE-2024-52301), `symfony/http-foundation`, `symfony/process` (CVE-2024-51736, crítico en Windows), `league/commonmark`
 
 ### Media prioridad (calidad de código)
 
@@ -573,16 +728,19 @@ tests/
         └── AuthWebTest.php             ← login web + verificación de que el token web no da acceso a admin/agencias
 ```
 
-### Cobertura actual
+### Cobertura actual (64 tests)
 
 | Área | Test | Casos cubiertos |
 |------|------|-----------------|
 | Admin | `AuthAdminTest` | login OK, password incorrecto, email inexistente, usuario CLIENTE, campos faltantes, email inválido |
 | Admin | `ModulePermissionsTest` | con/sin módulo AGENCIAS, con/sin módulo USUARIOS, sin token, usuario CLIENTE con token |
-| Agencias | `AuthAgencyTwoFactorTest` | OTP enviado, usuario inactivo, password incorrecto, OTP correcto, OTP incorrecto, OTP expirado, sin OTP pendiente, no reutilizable |
+| Agencias | `AuthAgencyTwoFactorTest` | OTP enviado, usuario inactivo, password incorrecto, OTP correcto, OTP incorrecto, OTP expirado, sin OTP pendiente, no reutilizable, usuario eliminado (soft delete), OTP de usuario B no válido para usuario A |
 | Agencias | `AgencyProfileTest` | actualizar nombre, sin token, campos faltantes, cambio de email + OTP, email en uso, confirmar email OK, OTP incorrecto, OTP expirado, sin cambio pendiente |
 | Agencias | `AgencyIsolationTest` | ver solo usuarios propios, admin ve todos, vendedores de otra agencia, sin token, token agencia no pasa jwt.verify |
 | Web | `AuthWebTest` | login OK, admin en login web, password incorrecto, email inexistente, campos faltantes, token web no accede a admin, token web no accede a agencias |
+| Seguridad | `SecurityHeadersTest` | headers presentes en endpoints públicos, login, respuestas 401 |
+| Seguridad | `RequestSizeLimitTest` | request pequeño pasa, JSON >1MB devuelve 413, multipart >10MB devuelve 413 |
+| Seguridad | `RateLimitingTest` | 429 tras 5 intentos admin, 429 tras 10 intentos web, 429 tras 10 intentos agencia |
 
 ### Importante: reestructuración futura de la API
 
