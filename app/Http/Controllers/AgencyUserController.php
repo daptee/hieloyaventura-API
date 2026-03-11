@@ -330,9 +330,10 @@ class AgencyUserController extends Controller
             return response()->json(['message' => 'Código inválido.'], 400);
         }
 
-        $user->password       = Hash::make($request->password);
-        $user->otp_code       = null;
-        $user->otp_expires_at = null;
+        $user->password         = Hash::make($request->password);
+        $user->otp_code         = null;
+        $user->otp_expires_at   = null;
+        $user->password_expired = false;
         $user->save();
 
         $user    = AgencyUser::getAllDataUser($user->id);
@@ -1367,7 +1368,8 @@ class AgencyUserController extends Controller
 
             $newPassword = Str::random(12);
 
-            $user->password = Hash::make($newPassword);
+            $user->password         = Hash::make($newPassword);
+            $user->password_expired = true;
             $user->save();
 
             $results[] = [

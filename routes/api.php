@@ -111,6 +111,7 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
     Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
+    Route::post('users/emergency-password-reset', [UserController::class, 'emergency_password_reset']);
 
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);
