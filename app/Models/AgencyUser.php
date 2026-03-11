@@ -33,6 +33,10 @@ class AgencyUser extends Authenticatable implements JWTSubject
         "pending_email",
     ];
 
+    protected $casts = [
+        'otp_expires_at' => 'datetime',
+    ];
+
     const SHOW = [
         'user_type',
         'modules.agency_module'
