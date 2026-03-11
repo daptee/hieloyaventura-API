@@ -38,6 +38,14 @@ class AuthController extends Controller{
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
 
+            if (Auth::user()->password_expired) {
+                JWTAuth::invalidate(JWTAuth::getToken());
+                return response()->json([
+                    'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
+                    'password_expired' => true,
+                ], 401);
+            }
+
         }catch (JWTException $e) {
           return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
@@ -116,6 +124,14 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
+        if (Auth::user()->password_expired) {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json([
+                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
+                'password_expired' => true,
+            ], 401);
+        }
+
         return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
     }
 
@@ -144,8 +160,17 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
-        // Credenciales correctas — cerrar sesión temporal y emitir OTP
+        // Credenciales correctas — cerrar sesión temporal
         Auth::guard('agency')->logout();
+
+        if ($user_to_validate->password_expired) {
+            return response()->json([
+                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
+                'password_expired' => true,
+            ], 401);
+        }
+
+        // Emitir OTP
 
         $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user_to_validate->otp_code       = $otp;
