@@ -33,17 +33,16 @@ class AuthController extends Controller{
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
 
-            if (! $token = JWTAuth::attempt($credentials)) {
-                $this->logFailedLogin('web', $request, 'contraseña incorrecta');
-                return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
-            }
-
-            if (Auth::user()->password_expired) {
-                JWTAuth::invalidate(JWTAuth::getToken());
+            if ($user->first()->password_expired) {
                 return response()->json([
                     'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
                     'password_expired' => true,
                 ], 401);
+            }
+
+            if (! $token = JWTAuth::attempt($credentials)) {
+                $this->logFailedLogin('web', $request, 'contraseña incorrecta');
+                return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
 
         }catch (JWTException $e) {
@@ -117,19 +116,18 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email no existente o usuario no admin.'], 400);
         }
 
+        if ($user_to_validate->password_expired) {
+            return response()->json([
+                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
+                'password_expired' => true,
+            ], 401);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (! $token = JWTAuth::attempt($credentials)) {
             $this->logFailedLogin('admin', $request, 'contraseña incorrecta');
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
-        }
-
-        if (Auth::user()->password_expired) {
-            JWTAuth::invalidate(JWTAuth::getToken());
-            return response()->json([
-                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
-                'password_expired' => true,
-            ], 401);
         }
 
         return $this->respondWithToken($token,Auth::user()->user_type_id, Auth::user()->id);
@@ -153,6 +151,13 @@ class AuthController extends Controller{
             return response()->json(['message' => 'Email y/o clave no válidos.'], 400);
         }
 
+        if ($user_to_validate->password_expired) {
+            return response()->json([
+                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
+                'password_expired' => true,
+            ], 401);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (!Auth::guard('agency')->attempt($credentials)) {
@@ -162,13 +167,6 @@ class AuthController extends Controller{
 
         // Credenciales correctas — cerrar sesión temporal
         Auth::guard('agency')->logout();
-
-        if ($user_to_validate->password_expired) {
-            return response()->json([
-                'message'          => 'Tu contraseña ha expirado. Debés generar una nueva mediante la recuperación de contraseña.',
-                'password_expired' => true,
-            ], 401);
-        }
 
         // Emitir OTP
 
