@@ -191,6 +191,13 @@ class AgencyUserController extends Controller
 
         $user = AgencyUser::find($id);
 
+        // No se permite cambiar email y contraseña en la misma request
+        if ($request->email !== $user->email && $request->filled('password')) {
+            return response()->json([
+                'message' => 'No se puede cambiar el email y la contraseña al mismo tiempo. Realizá los cambios por separado.',
+            ], 422);
+        }
+
         // Si el email cambia, iniciar flujo de verificación OTP
         if ($request->email !== $user->email) {
             $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
