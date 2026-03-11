@@ -200,4 +200,47 @@ class AuthAgencyTwoFactorTest extends TestCase
             'otp'   => '123456',
         ])->assertStatus(400);
     }
+
+    // -------------------------------------------------------------------------
+    // Seguridad adicional: usuario eliminado y OTP cruzado entre usuarios
+    // -------------------------------------------------------------------------
+
+    public function test_usuario_agencia_eliminado_no_puede_hacer_login(): void
+    {
+        $user = AgencyUser::factory()->create([
+            'password' => bcrypt('password'),
+        ]);
+
+        // Soft-delete del usuario
+        $user->delete();
+
+        $this->postJson($this->loginEndpoint, [
+            'email'    => $user->email,
+            'password' => 'password',
+        ])->assertStatus(400)
+          ->assertJsonFragment(['message' => 'Email y/o clave no válidos.']);
+    }
+
+    public function test_usuario_a_no_puede_usar_otp_de_usuario_b(): void
+    {
+        $userA = AgencyUser::factory()->create(['password' => bcrypt('password')]);
+        $userB = AgencyUser::factory()->create([
+            'password'       => bcrypt('password'),
+            'otp_code'       => '999999',
+            'otp_expires_at' => now()->addMinutes(10),
+        ]);
+
+        // Usuario A intenta verificar con el OTP del usuario B (usando el email de A)
+        // El OTP de A no es 999999, por lo que debe fallar
+        $this->postJson($this->verifyOtpEndpoint, [
+            'email' => $userA->email,
+            'otp'   => '999999',
+        ])->assertStatus(400);
+
+        // El OTP del usuario B sigue siendo válido para B
+        $this->postJson($this->verifyOtpEndpoint, [
+            'email' => $userB->email,
+            'otp'   => '999999',
+        ])->assertStatus(200);
+    }
 }
