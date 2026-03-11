@@ -313,7 +313,8 @@ class UserController extends Controller
 
         try {
             $new_password = Str::random(16);
-            $user->password = Hash::make($new_password);
+            $user->password          = Hash::make($new_password);
+            $user->password_expired  = false;
             $user->save();
 
             $data = [
@@ -339,7 +340,8 @@ class UserController extends Controller
 
         try {
             $new_password = Str::random(16);
-            $user->password = Hash::make($new_password);
+            $user->password         = Hash::make($new_password);
+            $user->password_expired = false;
             $user->save();
 
             $data = [
@@ -353,6 +355,77 @@ class UserController extends Controller
         }
 
         return response()->json(['message' => 'Correo enviado con exito.'], 200);
+    }
+
+    /**
+     * Restablece la contraseña de TODOS los usuarios web y admin activos.
+     * Genera una contraseña aleatoria por usuario, la hashea, la guarda en la DB
+     * y marca password_expired = true para forzar el cambio en el próximo login.
+     *
+     * Solo puede ejecutarlo un admin.
+     * Requiere {"confirm": true, "admin_password": "..."} en el body.
+     *
+     * POST /api/users/emergency-password-reset
+     */
+    public function emergency_password_reset(Request $request)
+    {
+        if (Auth::user()->user_type_id != UserType::ADMIN) {
+            return response()->json(['message' => 'No tenés permisos para realizar esta acción.'], 403);
+        }
+
+        if (!$request->boolean('confirm')) {
+            return response()->json([
+                'message' => 'Debe confirmar la operación enviando {"confirm": true}.',
+            ], 422);
+        }
+
+        if (!$request->filled('admin_password') || !Hash::check($request->admin_password, Auth::user()->password)) {
+            return response()->json(['message' => 'Contraseña de administrador incorrecta.'], 403);
+        }
+
+        $users = User::all();
+
+        $reset   = 0;
+        $skipped = 0;
+        $results = [];
+
+        foreach ($users as $user) {
+            if (empty($user->email)) {
+                $skipped++;
+                continue;
+            }
+
+            $newPassword = Str::random(12);
+
+            $user->password         = Hash::make($newPassword);
+            $user->password_expired = true;
+            $user->save();
+
+            $results[] = [
+                'id'       => $user->id,
+                'name'     => $user->name,
+                'email'    => $user->email,
+                'type'     => $user->user_type_id,
+                'password' => $newPassword,
+            ];
+
+            $reset++;
+        }
+
+        Log::warning('emergency_password_reset (users) ejecutado', [
+            'admin_user_id' => Auth::id(),
+            'total'         => $users->count(),
+            'reset'         => $reset,
+            'skipped'       => $skipped,
+        ]);
+
+        return response()->json([
+            'message' => 'Proceso completado. Guardá o descargá estos datos — no se volverán a mostrar.',
+            'total'   => $users->count(),
+            'reset'   => $reset,
+            'skipped' => $skipped,
+            'users'   => $results,
+        ]);
     }
 
     public function get_modules()

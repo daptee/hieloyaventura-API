@@ -14,6 +14,7 @@ return new class extends Migration
                 $table->integer('agency_user_type_id')->nullable();
                 $table->string('user')->nullable();
                 $table->string('password')->nullable();
+                $table->boolean('password_expired')->default(false);
                 $table->string('name')->nullable();
                 $table->string('last_name')->nullable();
                 $table->string('email')->nullable();
