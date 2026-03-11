@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Recuperación de contraseña - Hielo & Aventura</title>
+    <title>Restablecimiento de contraseña - Hielo & Aventura</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -52,6 +52,15 @@
             line-height: 1.6;
             margin-bottom: 24px;
         }
+        .steps {
+            background-color: #f5f8fd;
+            border-radius: 6px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .steps-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 10px; }
+        .steps ol { padding-left: 18px; }
+        .steps li { font-size: 13px; color: #555555; line-height: 1.8; }
         .divider { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
         .contact-text { font-size: 14px; color: #555555; margin-bottom: 10px; }
         .contact-detail { font-size: 14px; color: #333333; margin-bottom: 4px; }
@@ -86,25 +95,36 @@
         {{-- CARD --}}
         <div class="card">
 
-            <p class="greeting">Hola, {{ $data['name'] }}.</p>
+            <p class="greeting">Hola, {{ $user_name }}.</p>
 
             <p class="intro-text">
-                Recibimos una solicitud para restablecer la contraseña de tu cuenta en
-                <strong>Hielo &amp; Aventura</strong>.<br><br>
-                A continuación encontrás tu nueva contraseña temporal. Te recomendamos
-                cambiarla lo antes posible una vez que hayas ingresado.
+                Por motivos de seguridad, el equipo de <strong>Hielo &amp; Aventura</strong> ha restablecido
+                la contraseña de tu cuenta de acceso al sistema de agencias.<br><br>
+                A continuación encontrás tu nueva contraseña temporal. Por favor, ingresá con ella
+                y cambiala lo antes posible desde tu perfil.
             </p>
 
             {{-- PASSWORD --}}
             <div class="password-container">
                 <p class="password-label">Tu nueva contraseña temporal</p>
-                <div class="password-box">{{ $data['password'] }}</div>
+                <div class="password-box">{{ $new_password }}</div>
             </div>
 
             {{-- WARNING --}}
             <div class="notice-box">
-                <strong>⚠ Importante:</strong> Si no solicitaste este cambio de contraseña,
-                por favor contactanos de inmediato a través de los datos que figuran más abajo.
+                <strong>⚠ Importante:</strong> Esta contraseña es temporal. Te recomendamos cambiarla
+                inmediatamente después de ingresar al sistema desde <em>Mi Perfil → Cambiar contraseña</em>.
+            </div>
+
+            {{-- STEPS --}}
+            <div class="steps">
+                <p class="steps-title">Pasos para ingresar:</p>
+                <ol>
+                    <li>Accedé a <strong>agencias.hieloyaventura.com</strong></li>
+                    <li>Ingresá tu email y la contraseña temporal indicada arriba</li>
+                    <li>Verificá tu identidad con el código que recibirás por email (2FA)</li>
+                    <li>Desde tu perfil, cambiá tu contraseña por una propia</li>
+                </ol>
             </div>
 
             {{-- CONTACT --}}

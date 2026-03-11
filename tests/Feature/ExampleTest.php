@@ -7,6 +7,8 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic test example.
      *
@@ -14,7 +16,8 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response()
     {
-        $response = $this->get('/');
+        // El endpoint público de FAQs es accesible sin autenticación y no depende de APIs externas
+        $response = $this->get('/api/faqs');
 
         $response->assertStatus(200);
     }

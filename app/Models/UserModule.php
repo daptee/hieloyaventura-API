@@ -11,6 +11,8 @@ class UserModule extends Model
 
     protected $table = 'user_modules';
 
+    protected $fillable = ['user_id', 'module_id'];
+
     public function module()
     {
         return $this->hasOne(Module::class, 'id', 'module_id');

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ServiciosDiariosExport;
+use App\Mail\AgencyOtpMailable;
+use Illuminate\Support\Str;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Mail\ReservationGroups;
@@ -182,20 +184,64 @@ class AgencyUserController extends Controller
         $id = Auth::guard('agency')->user()->id;
 
         $request->validate([
-            "name" => 'required',
+            "name"  => 'required',
             "last_name" => 'required',
-            "email" => 'required|unique:agency_users,email,' . $id,
+            "email" => 'required|email|unique:agency_users,email,' . $id,
         ]);
 
         $user = AgencyUser::find($id);
-        $user->user = $request->user;
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->can_view_all_sales = $request->can_view_all_sales;
 
-        if ($request->password)
-            $user->password = Hash::make($request->password);
+        // No se permite cambiar email y contraseña en la misma request
+        if ($request->email !== $user->email && $request->filled('password')) {
+            return response()->json([
+                'message' => 'No se puede cambiar el email y la contraseña al mismo tiempo. Realizá los cambios por separado.',
+            ], 422);
+        }
+
+        // Si el email cambia, iniciar flujo de verificación OTP
+        if ($request->email !== $user->email) {
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp_code       = $otp;
+            $user->otp_expires_at = now()->addMinutes(10);
+            $user->pending_email  = $request->email;
+            $user->save();
+
+            Mail::to($user->email)->send(new AgencyOtpMailable($otp, 'email_change'));
+
+            return response()->json([
+                'message'              => 'Se envió un código al correo actual para confirmar el cambio de email.',
+                'pending_email_change' => true,
+            ]);
+        }
+
+        // Si se envía nueva contraseña, iniciar flujo de verificación OTP
+        if ($request->filled('password')) {
+            $request->validate([
+                'password'              => 'required|string|min:8',
+                'password_confirmation' => 'required|same:password',
+            ]);
+
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp_code       = $otp;
+            $user->otp_expires_at = now()->addMinutes(10);
+            // pending_email null indica que el OTP es para cambio de contraseña
+            $user->pending_email  = null;
+            $user->save();
+
+            Mail::to($user->email)->send(new AgencyOtpMailable($otp, 'password_change'));
+
+            return response()->json([
+                'message'                 => 'Se envió un código de verificación a tu correo para confirmar el cambio de contraseña.',
+                'pending_password_change' => true,
+            ]);
+        }
+
+        $user->user             = $request->user;
+        $user->name             = $request->name;
+        $user->last_name        = $request->last_name;
+        if ($request->has('can_view_all_sales')) {
+            $user->can_view_all_sales = $request->can_view_all_sales;
+        }
 
         $user->save();
 
@@ -203,14 +249,94 @@ class AgencyUserController extends Controller
             AgencyUserModule::where('agency_user_id', $id)->delete();
             foreach ($request->modules as $module_id) {
                 AgencyUserModule::create([
-                    'agency_user_id' => $user->id,
+                    'agency_user_id'  => $user->id,
                     'agency_module_id' => $module_id
                 ]);
             }
         }
 
-        $user = AgencyUser::getAllDataUser($user->id);
-        $message = "Usuario actualizado con exito";
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Usuario actualizado con éxito";
+
+        return response(compact("user", "message"));
+    }
+
+    /**
+     * Confirma el cambio de email con el OTP enviado al correo anterior.
+     */
+    public function confirm_email_change(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $id   = Auth::guard('agency')->user()->id;
+        $user = AgencyUser::find($id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || !$user->pending_email) {
+            return response()->json(['message' => 'No hay un cambio de email pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->pending_email  = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Intentá editar el email nuevamente.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->email          = $user->pending_email;
+        $user->pending_email  = null;
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Email actualizado con éxito";
+
+        return response(compact("user", "message"));
+    }
+
+    /**
+     * Confirma el cambio de contraseña con el OTP enviado al correo del usuario.
+     */
+    public function confirm_password_change(Request $request)
+    {
+        $request->validate([
+            'otp'                   => 'required|string|size:6',
+            'password'              => 'required|string|min:8',
+            'password_confirmation' => 'required|same:password',
+        ]);
+
+        $id   = Auth::guard('agency')->user()->id;
+        $user = AgencyUser::find($id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || $user->pending_email !== null) {
+            return response()->json(['message' => 'No hay un cambio de contraseña pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Intentá cambiar la contraseña nuevamente.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->password       = Hash::make($request->password);
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Contraseña actualizada con éxito";
 
         return response(compact("user", "message"));
     }
@@ -1197,6 +1323,70 @@ class AgencyUserController extends Controller
             'message' => 'Archivo generado exitosamente.',
             'path' => 'excels/' . $filename,
             'url' => asset('excels/' . $filename),
+        ]);
+    }
+
+    /**
+     * Restablece la contraseña de TODOS los usuarios de agencia activos.
+     * Genera una contraseña temporal aleatoria por usuario, la hashea y la
+     * guarda en la DB. No envía emails (el aviso a los usuarios se gestiona
+     * por fuera para evitar envíos masivos y posibles bloqueos del servidor).
+     *
+     * Solo puede ejecutarlo un admin con el módulo AGENCIAS habilitado.
+     * Requiere {"confirm": true} en el body para evitar ejecuciones accidentales.
+     *
+     * POST /api/agency/users/emergency-password-reset
+     */
+    public function emergency_password_reset(Request $request)
+    {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
+        if (!$request->boolean('confirm')) {
+            return response()->json([
+                'message' => 'Debe confirmar la operación enviando {"confirm": true}.',
+            ], 422);
+        }
+
+        $users = AgencyUser::whereNull('deleted_at')->get();
+
+        $reset   = 0;
+        $skipped = 0;
+        $results = [];
+
+        foreach ($users as $user) {
+            if (empty($user->email)) {
+                $skipped++;
+                continue;
+            }
+
+            $newPassword = Str::random(12);
+
+            $user->password = Hash::make($newPassword);
+            $user->save();
+
+            $results[] = [
+                'id'       => $user->id,
+                'name'     => trim($user->name . ' ' . $user->last_name),
+                'email'    => $user->email,
+                'password' => $newPassword,
+            ];
+
+            $reset++;
+        }
+
+        Log::warning('emergency_password_reset ejecutado', [
+            'admin_user_id' => Auth::id(),
+            'total'         => $users->count(),
+            'reset'         => $reset,
+            'skipped'       => $skipped,
+        ]);
+
+        return response()->json([
+            'message' => 'Proceso completado. Guardá o descargá estos datos — no se volverán a mostrar.',
+            'total'   => $users->count(),
+            'reset'   => $reset,
+            'skipped' => $skipped,
+            'users'   => $results,
         ]);
     }
 }

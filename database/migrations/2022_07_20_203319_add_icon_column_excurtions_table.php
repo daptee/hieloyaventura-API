@@ -15,7 +15,9 @@ return new class extends Migration
     {
         if (!Schema::hasColumn('excurtions', 'icon')) {
             Schema::table('excurtions', function (Blueprint $table) {
-                $table->dropForeign('excurtions_icon_id_foreign');
+                if (\Illuminate\Support\Facades\DB::getDriverName() !== 'sqlite') {
+                    $table->dropForeign('excurtions_icon_id_foreign');
+                }
                 $table->dropColumn('icon_id');
                 $table->string('icon', 20)->nullable();
             });
