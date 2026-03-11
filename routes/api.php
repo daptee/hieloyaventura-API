@@ -45,6 +45,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login')->middleware('throttle:login');
     Route::post('login/admin', 'login_admin')->middleware('throttle:admin-login');
     Route::post('login/agency/user', 'login_agency_user')->middleware('throttle:login');
+    Route::post('login/agency/verify-otp', 'verify_agency_otp')->middleware('throttle:login');
 });
 Route::controller(UserController::class)->group(function () {
     Route::post('register', 'register');
@@ -300,6 +301,7 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 
 // Agency user self-update (uses ID from token, not from URL)
 Route::put('/agency/users/profile', [AgencyUserController::class, 'update_self'])->middleware(['jwt.agency']);
+Route::post('/agency/users/profile/confirm-email-change', [AgencyUserController::class, 'confirm_email_change'])->middleware(['jwt.agency']);
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.admin_or_agency']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.admin_or_agency']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.verify']);

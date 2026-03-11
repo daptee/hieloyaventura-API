@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\ServiciosDiariosExport;
+use App\Mail\AgencyOtpMailable;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Mail\ReservationGroups;
@@ -182,16 +183,32 @@ class AgencyUserController extends Controller
         $id = Auth::guard('agency')->user()->id;
 
         $request->validate([
-            "name" => 'required',
+            "name"  => 'required',
             "last_name" => 'required',
-            "email" => 'required|unique:agency_users,email,' . $id,
+            "email" => 'required|email|unique:agency_users,email,' . $id,
         ]);
 
         $user = AgencyUser::find($id);
-        $user->user = $request->user;
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
+
+        // Si el email cambia, iniciar flujo de verificación OTP
+        if ($request->email !== $user->email) {
+            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+            $user->otp_code       = $otp;
+            $user->otp_expires_at = now()->addMinutes(10);
+            $user->pending_email  = $request->email;
+            $user->save();
+
+            Mail::to($user->email)->send(new AgencyOtpMailable($otp, 'email_change'));
+
+            return response()->json([
+                'message'              => 'Se envió un código al correo actual para confirmar el cambio de email.',
+                'pending_email_change' => true,
+            ]);
+        }
+
+        $user->user             = $request->user;
+        $user->name             = $request->name;
+        $user->last_name        = $request->last_name;
         $user->can_view_all_sales = $request->can_view_all_sales;
 
         if ($request->password)
@@ -203,14 +220,54 @@ class AgencyUserController extends Controller
             AgencyUserModule::where('agency_user_id', $id)->delete();
             foreach ($request->modules as $module_id) {
                 AgencyUserModule::create([
-                    'agency_user_id' => $user->id,
+                    'agency_user_id'  => $user->id,
                     'agency_module_id' => $module_id
                 ]);
             }
         }
 
-        $user = AgencyUser::getAllDataUser($user->id);
-        $message = "Usuario actualizado con exito";
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Usuario actualizado con éxito";
+
+        return response(compact("user", "message"));
+    }
+
+    /**
+     * Confirma el cambio de email con el OTP enviado al correo anterior.
+     */
+    public function confirm_email_change(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|string|size:6',
+        ]);
+
+        $id   = Auth::guard('agency')->user()->id;
+        $user = AgencyUser::find($id);
+
+        if (!$user->otp_code || !$user->otp_expires_at || !$user->pending_email) {
+            return response()->json(['message' => 'No hay un cambio de email pendiente.'], 400);
+        }
+
+        if ($user->otp_expires_at < now()) {
+            $user->otp_code       = null;
+            $user->otp_expires_at = null;
+            $user->pending_email  = null;
+            $user->save();
+            return response()->json(['message' => 'El código ha expirado. Intentá editar el email nuevamente.'], 400);
+        }
+
+        if (!hash_equals($user->otp_code, $request->otp)) {
+            return response()->json(['message' => 'Código inválido.'], 400);
+        }
+
+        $user->email          = $user->pending_email;
+        $user->pending_email  = null;
+        $user->otp_code       = null;
+        $user->otp_expires_at = null;
+        $user->save();
+
+        $user    = AgencyUser::getAllDataUser($user->id);
+        $message = "Email actualizado con éxito";
 
         return response(compact("user", "message"));
     }
