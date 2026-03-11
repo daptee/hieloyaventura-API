@@ -60,6 +60,29 @@ class RouteServiceProvider extends ServiceProvider
             'user_agent' => $request->userAgent(),
             'timestamp'  => now()->toDateTimeString(),
         ]);
+
+        // Email alert
+        $alertEmails = array_filter(array_map('trim',
+            explode(',', env('SECURITY_ALERT_EMAILS', ''))
+        ));
+
+        if (!empty($alertEmails)) {
+            $subject = "[HyA Security] Rate limit superado - $type login";
+            $body    = "Se detectaron demasiados intentos de login de tipo '$type'.\n\n"
+                     . "IP: " . $request->ip() . "\n"
+                     . "User-Agent: " . $request->userAgent() . "\n"
+                     . "Timestamp: " . now()->toDateTimeString() . "\n";
+
+            foreach ($alertEmails as $email) {
+                try {
+                    \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($email, $subject) {
+                        $msg->to($email)->subject($subject);
+                    });
+                } catch (\Throwable $e) {
+                    // No interrumpir el flujo si falla el envío de email
+                }
+            }
+        }
     }
 
     protected function configureRateLimiting()

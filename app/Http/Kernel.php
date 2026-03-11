@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\SecurityHeaders::class,
+        \App\Http\Middleware\RequestSizeLimit::class,
         \App\Http\Middleware\BotDetection::class,
     ];
 
@@ -69,5 +70,6 @@ class Kernel extends HttpKernel
         'jwt.agency' => \App\Http\Middleware\AgencyJwtMiddleware::class,
         'jwt.admin_or_agency' => \App\Http\Middleware\AdminOrAgencyMiddleware::class,
         'agency.apikey' => \App\Http\Middleware\ValidateAgencyApiKey::class,
+        'audit.log' => \App\Http\Middleware\AccessAuditLog::class,
     ];
 }

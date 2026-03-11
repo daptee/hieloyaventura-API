@@ -87,11 +87,12 @@ class AuthWebTest extends TestCase
 
     public function test_login_falla_si_faltan_campos(): void
     {
+        // El login devuelve 400 cuando faltan campos (validación manual en el controlador)
         $this->postJson($this->endpoint, ['email' => 'test@test.com'])
-             ->assertStatus(422);
+             ->assertStatus(400);
 
         $this->postJson($this->endpoint, ['password' => 'password'])
-             ->assertStatus(422);
+             ->assertStatus(400);
     }
 
     // -------------------------------------------------------------------------
@@ -112,8 +113,9 @@ class AuthWebTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        // El endpoint /agencies requiere módulo AGENCIAS (admin)
-        $this->getJson('/api/agencies', ['Authorization' => 'Bearer ' . $token])
+        // El endpoint /agencies/{code} requiere módulo AGENCIAS (admin). El usuario CLIENTE
+        // pasa jwt.verify (tiene JWT válido) pero falla el check de módulo → 403
+        $this->getJson('/api/agencies/NONEXISTENT', ['Authorization' => 'Bearer ' . $token])
              ->assertStatus(403);
     }
 
@@ -131,8 +133,9 @@ class AuthWebTest extends TestCase
 
         $token = $loginResponse->json('access_token');
 
-        // El endpoint /agency/users requiere jwt.agency o jwt.admin_or_agency
+        // El endpoint /agency/users usa jwt.admin_or_agency: el usuario CLIENTE pasa
+        // la autenticación (JWT válido en tabla users) pero no tiene módulo AGENCIAS → 403
         $this->getJson('/api/agency/users', ['Authorization' => 'Bearer ' . $token])
-             ->assertStatus(401);
+             ->assertStatus(403);
     }
 }

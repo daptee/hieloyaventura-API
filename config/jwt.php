@@ -101,7 +101,9 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 525600),
+    // Tiempo de expiración del token en minutos. 60 minutos recomendado para seguridad.
+    // Para agencias y admin: el front debe renovar el token antes de que expire.
+    'ttl' => env('JWT_TTL', 60),
 
     /*
     |--------------------------------------------------------------------------

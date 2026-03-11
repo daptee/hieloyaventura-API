@@ -27,11 +27,16 @@ class ModulePermissionsTest extends TestCase
     // Módulo AGENCIAS — GET /api/agencies
     // -------------------------------------------------------------------------
 
+    // Nota: GET /api/agencies (list) no existe como ruta independiente.
+    // Se usa GET /api/agencies/{code} para testear el middleware (corre antes del controlador).
+
     public function test_admin_con_modulo_agencias_puede_listar_agencias(): void
     {
         ['token' => $token] = $this->createAdminWithModules([Module::AGENCIAS]);
 
-        $this->getJson('/api/agencies', $this->authHeaders($token))
+        $agency = Agency::create(['agency_code' => 'TST001', 'api_key' => 'key-test']);
+
+        $this->getJson('/api/agencies/' . $agency->agency_code, $this->authHeaders($token))
              ->assertStatus(200);
     }
 
@@ -39,14 +44,14 @@ class ModulePermissionsTest extends TestCase
     {
         ['token' => $token] = $this->createAdminWithModules([]);  // sin módulos
 
-        $this->getJson('/api/agencies', $this->authHeaders($token))
+        $this->getJson('/api/agencies/NONEXISTENT', $this->authHeaders($token))
              ->assertStatus(403)
              ->assertJsonFragment(['message' => 'No tiene permisos para realizar esta acción.']);
     }
 
     public function test_request_sin_token_recibe_401(): void
     {
-        $this->getJson('/api/agencies')
+        $this->getJson('/api/agencies/NONEXISTENT')
              ->assertStatus(401);
     }
 
@@ -107,7 +112,7 @@ class ModulePermissionsTest extends TestCase
     {
         ['token' => $token] = $this->createWebUser();
 
-        $this->getJson('/api/agencies', $this->authHeaders($token))
+        $this->getJson('/api/agencies/NONEXISTENT', $this->authHeaders($token))
              ->assertStatus(403);
     }
 }

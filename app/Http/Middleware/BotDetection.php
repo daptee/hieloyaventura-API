@@ -87,5 +87,33 @@ class BotDetection
             'query'      => $request->query() ?: null,
             'timestamp'  => now()->toDateTimeString(),
         ]);
+
+        // Email alert solo para bots conocidos (nivel warning)
+        if ($level === 'warning') {
+            $alertEmails = array_filter(array_map('trim',
+                explode(',', env('SECURITY_ALERT_EMAILS', ''))
+            ));
+
+            if (!empty($alertEmails)) {
+                $subject = "[HyA Security] Bot/scraper detectado";
+                $body    = "Se detectó actividad sospechosa de bot o scraper.\n\n"
+                         . "Razón: " . $reason . "\n"
+                         . "IP: " . $request->ip() . "\n"
+                         . "User-Agent: " . $request->userAgent() . "\n"
+                         . "Método: " . $request->method() . "\n"
+                         . "Path: " . $request->path() . "\n"
+                         . "Timestamp: " . now()->toDateTimeString() . "\n";
+
+                foreach ($alertEmails as $email) {
+                    try {
+                        \Illuminate\Support\Facades\Mail::raw($body, function ($msg) use ($email, $subject) {
+                            $msg->to($email)->subject($subject);
+                        });
+                    } catch (\Throwable $e) {
+                        // No interrumpir el flujo si falla el envío de email
+                    }
+                }
+            }
+        }
     }
 }

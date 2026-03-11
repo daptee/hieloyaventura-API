@@ -38,7 +38,7 @@ class AgencyIsolationTest extends TestCase
 
         $response->assertStatus(200);
 
-        $ids = collect($response->json())->pluck('id')->toArray();
+        $ids = collect($response->json('users'))->pluck('id')->toArray();
 
         $this->assertContains($agencyA_user->id,  $ids, 'Debe ver usuarios de su propia agencia');
         $this->assertContains($agencyA_user2->id, $ids, 'Debe ver usuarios de su propia agencia');
@@ -57,7 +57,7 @@ class AgencyIsolationTest extends TestCase
         $response->assertStatus(200);
 
         // El admin ve al menos 2 usuarios (los creados arriba)
-        $this->assertGreaterThanOrEqual(2, count($response->json()));
+        $this->assertGreaterThanOrEqual(2, count($response->json('users')));
     }
 
     // -------------------------------------------------------------------------
@@ -113,7 +113,8 @@ class AgencyIsolationTest extends TestCase
         $token      = \Auth::guard('agency')->login($agencyUser);
 
         // Un token de agencia NO puede pasar el middleware jwt.verify (admin)
-        $this->getJson('/api/agencies', $this->authHeaders($token))
+        // Usamos GET /api/agencies/{code} ya que es el endpoint show protegido con jwt.verify
+        $this->getJson('/api/agencies/NONEXISTENT', $this->authHeaders($token))
              ->assertStatus(401);
     }
 }

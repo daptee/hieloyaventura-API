@@ -209,7 +209,9 @@ class AgencyUserController extends Controller
         $user->user             = $request->user;
         $user->name             = $request->name;
         $user->last_name        = $request->last_name;
-        $user->can_view_all_sales = $request->can_view_all_sales;
+        if ($request->has('can_view_all_sales')) {
+            $user->can_view_all_sales = $request->can_view_all_sales;
+        }
 
         if ($request->password)
             $user->password = Hash::make($request->password);

@@ -26,7 +26,7 @@ class AuthController extends Controller{
 
         $credentials = $request->only('email', 'password');
         try{
-            $user = User::where('email' , $credentials['email'])->get();
+            $user = User::where('email', $credentials['email'] ?? '')->get();
 
             if($user->count() == 0) {
                 $this->logFailedLogin('web', $request, 'email no encontrado');

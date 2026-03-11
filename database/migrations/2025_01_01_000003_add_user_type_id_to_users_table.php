@@ -39,7 +39,9 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             foreach (['user_type_id', 'lenguage_id', 'nationality_id', 'birth_date', 'dni', 'phone'] as $col) {
                 if (Schema::hasColumn('users', $col)) {
-                    $table->dropColumn($col);
+                    if (\Illuminate\Support\Facades\DB::getDriverName() !== 'sqlite') {
+                        $table->dropColumn($col);
+                    }
                 }
             }
         });
