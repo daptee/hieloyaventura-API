@@ -60,9 +60,10 @@ Route::prefix('excurtions')->controller(ExcurtionController::class)->group(funct
     Route::get('/by-external-id/{id}', 'showByExternalId');
 });
 
+Route::post('logout', [AuthController::class, 'logout'])->middleware(['jwt.admin_or_agency', 'audit.log']);
+
 Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     Route::post('faqs', [FaqController::class, 'store']);
-    Route::post('logout', [AuthController::class, 'logout']);
 
     Route::prefix('consults')->controller(ConsultController::class)->group(function () {
         Route::get('/', 'index');
@@ -109,6 +110,7 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     Route::post('agency/users', [AgencyUserController::class, 'store']);
     Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
+    Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
 
     Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
     Route::post('agencies', [AgencyController::class, 'store']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ServiciosDiariosExport;
 use App\Mail\AgencyOtpMailable;
+use Illuminate\Support\Str;
 use App\Mail\ReservationRequestChange;
 use App\Mail\ReservationRequestChange2;
 use App\Mail\ReservationGroups;
@@ -1256,6 +1257,70 @@ class AgencyUserController extends Controller
             'message' => 'Archivo generado exitosamente.',
             'path' => 'excels/' . $filename,
             'url' => asset('excels/' . $filename),
+        ]);
+    }
+
+    /**
+     * Restablece la contraseña de TODOS los usuarios de agencia activos.
+     * Genera una contraseña temporal aleatoria por usuario, la hashea y la
+     * guarda en la DB. No envía emails (el aviso a los usuarios se gestiona
+     * por fuera para evitar envíos masivos y posibles bloqueos del servidor).
+     *
+     * Solo puede ejecutarlo un admin con el módulo AGENCIAS habilitado.
+     * Requiere {"confirm": true} en el body para evitar ejecuciones accidentales.
+     *
+     * POST /api/agency/users/emergency-password-reset
+     */
+    public function emergency_password_reset(Request $request)
+    {
+        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+
+        if (!$request->boolean('confirm')) {
+            return response()->json([
+                'message' => 'Debe confirmar la operación enviando {"confirm": true}.',
+            ], 422);
+        }
+
+        $users = AgencyUser::whereNull('deleted_at')->get();
+
+        $reset   = 0;
+        $skipped = 0;
+        $results = [];
+
+        foreach ($users as $user) {
+            if (empty($user->email)) {
+                $skipped++;
+                continue;
+            }
+
+            $newPassword = Str::random(12);
+
+            $user->password = Hash::make($newPassword);
+            $user->save();
+
+            $results[] = [
+                'id'       => $user->id,
+                'name'     => trim($user->name . ' ' . $user->last_name),
+                'email'    => $user->email,
+                'password' => $newPassword,
+            ];
+
+            $reset++;
+        }
+
+        Log::warning('emergency_password_reset ejecutado', [
+            'admin_user_id' => Auth::id(),
+            'total'         => $users->count(),
+            'reset'         => $reset,
+            'skipped'       => $skipped,
+        ]);
+
+        return response()->json([
+            'message' => 'Proceso completado. Guardá o descargá estos datos — no se volverán a mostrar.',
+            'total'   => $users->count(),
+            'reset'   => $reset,
+            'skipped' => $skipped,
+            'users'   => $results,
         ]);
     }
 }
