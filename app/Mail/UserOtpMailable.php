@@ -33,6 +33,6 @@ class UserOtpMailable extends Mailable
 
         return $this->from(config('mail.from.address'), config('mail.from.name'))
                     ->subject($subject)
-                    ->view('emails.agency-otp');
+                    ->view('emails.user-otp');
     }
 }

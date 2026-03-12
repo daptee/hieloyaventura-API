@@ -381,6 +381,7 @@ class UserController extends Controller
         $otp    = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $user->otp_code       = $otp;
         $user->otp_expires_at = now()->addMinutes(10);
+        $user->pending_email  = null;
         $user->save();
 
         Mail::to($user->email)->send(new UserOtpMailable($otp, 'password_change'));
