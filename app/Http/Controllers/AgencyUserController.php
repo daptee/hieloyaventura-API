@@ -93,8 +93,22 @@ class AgencyUserController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::user()->user_type_id != UserType::ADMIN)
-            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+        $isSystemAdmin = Auth::guard('web')->check();
+        $isAgencyAdmin = Auth::guard('agency')->check();
+
+        if ($isSystemAdmin) {
+            if (Auth::guard('web')->user()->user_type_id != UserType::ADMIN)
+                return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+        } elseif ($isAgencyAdmin) {
+            $caller = Auth::guard('agency')->user();
+            if ($caller->agency_user_type_id != AgencyUserType::ADMIN)
+                return response(["message" => "No tenés permisos para gestionar usuarios."], 403);
+            if ($request->agency_user_type_id == AgencyUserType::ADMIN)
+                return response(["message" => "No podés crear usuarios administradores."], 403);
+            $request->merge(['agency_code' => $caller->agency_code]);
+        } else {
+            return response(["message" => "No autorizado."], 401);
+        }
 
         $request->validate([
             "agency_user_type_id" => 'required',
@@ -136,8 +150,24 @@ class AgencyUserController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (Auth::user()->user_type_id != UserType::ADMIN)
-            return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+        $isSystemAdmin = Auth::guard('web')->check();
+        $isAgencyAdmin = Auth::guard('agency')->check();
+
+        if ($isSystemAdmin) {
+            if (Auth::guard('web')->user()->user_type_id != UserType::ADMIN)
+                return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+        } elseif ($isAgencyAdmin) {
+            $caller = Auth::guard('agency')->user();
+            if ($caller->agency_user_type_id != AgencyUserType::ADMIN)
+                return response(["message" => "No tenés permisos para gestionar usuarios."], 403);
+            $target = AgencyUser::find($id);
+            if (!$target || $target->agency_code != $caller->agency_code)
+                return response(["message" => "No podés editar usuarios de otra agencia."], 403);
+            if ($target->agency_user_type_id == AgencyUserType::ADMIN)
+                return response(["message" => "No podés editar usuarios administradores."], 403);
+        } else {
+            return response(["message" => "No autorizado."], 401);
+        }
 
         $request->validate([
             // "agency_user_type_id" => 'required',

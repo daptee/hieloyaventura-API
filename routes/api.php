@@ -111,8 +111,6 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
     Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
-    Route::post('agency/users', [AgencyUserController::class, 'store']);
-    Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update']);
     Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
     Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
     Route::post('users/emergency-password-reset', [UserController::class, 'emergency_password_reset']);
@@ -293,6 +291,8 @@ Route::post('reservations/update/internal_closed/{id}', [ReservationController::
 Route::post('reservations/new/observation', [ReservationController::class, 'new_observation'])->middleware(['jwt.verify', 'audit.log']);
 
 // Agency users
+Route::post('agency/users', [AgencyUserController::class, 'store'])->middleware(['jwt.admin_or_agency', 'audit.log']);
+Route::post('agency/users/update/{id}', [AgencyUserController::class, 'update'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/users', [AgencyUserController::class, 'index'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency'])->middleware(['jwt.admin_or_agency', 'audit.log']);
