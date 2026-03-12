@@ -855,7 +855,7 @@ class AgencyExternalHyAController extends Controller
                 }
 
                 if ($notificationEmail) {
-                    Mail::to($notificationEmail)->send(new ConfirmationReservation($internalRes, $request));
+                    Mail::to($notificationEmail)->send(new ConfirmationReservation($internalRes, $request, 'api'));
                 } else {
                     $this->logIntegration("Paso 5 SKIP: No se encontró ningún email de notificación para la agencia");
                 }
