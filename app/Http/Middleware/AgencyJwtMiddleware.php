@@ -15,14 +15,14 @@ class AgencyJwtMiddleware
     {
         try {
             if (!Auth::guard('agency')->check()) {
-                return response()->json(['status' => 'Authorization Token not found'], 401);
+                return response()->json(['message' => 'Authorization Token not found'], 401);
             }
         } catch (TokenExpiredException $e) {
-            return response()->json(['status' => 'Token is Expired'], 401);
+            return response()->json(['message' => 'Token is Expired'], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json(['status' => 'Token is Invalid'], 401);
+            return response()->json(['message' => 'Token is Invalid'], 401);
         } catch (Exception $e) {
-            return response()->json(['status' => 'Authorization Token not found'], 401);
+            return response()->json(['message' => 'Authorization Token not found'], 401);
         }
 
         return $next($request);

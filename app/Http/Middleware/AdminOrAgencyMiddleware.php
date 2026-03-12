@@ -25,12 +25,12 @@ class AdminOrAgencyMiddleware
                 return $next($request);
             }
         } catch (TokenExpiredException $e) {
-            return response()->json(['status' => 'Token is Expired'], 401);
+            return response()->json(['message' => 'Token is Expired'], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json(['status' => 'Token is Invalid'], 401);
+            return response()->json(['message' => 'Token is Invalid'], 401);
         } catch (JWTException $e) {
             // No hay token en el request
-            return response()->json(['status' => 'Authorization Token not found'], 401);
+            return response()->json(['message' => 'Authorization Token not found'], 401);
         } catch (Exception $e) {
             // El token es válido pero el usuario no existe en la tabla users.
             // Puede ser un token de agencia; se intenta con el guard agency.
@@ -42,13 +42,13 @@ class AdminOrAgencyMiddleware
                 return $next($request);
             }
         } catch (TokenExpiredException $e) {
-            return response()->json(['status' => 'Token is Expired'], 401);
+            return response()->json(['message' => 'Token is Expired'], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json(['status' => 'Token is Invalid'], 401);
+            return response()->json(['message' => 'Token is Invalid'], 401);
         } catch (Exception $e) {
             // ignore
         }
 
-        return response()->json(['status' => 'Authorization Token not found'], 401);
+        return response()->json(['message' => 'Authorization Token not found'], 401);
     }
 }
