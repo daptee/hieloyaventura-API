@@ -99,6 +99,7 @@ class AgencyUserController extends Controller
         if ($isSystemAdmin) {
             if (Auth::guard('web')->user()->user_type_id != UserType::ADMIN)
                 return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
         } elseif ($isAgencyAdmin) {
             $caller = Auth::guard('agency')->user();
             if ($caller->agency_user_type_id != AgencyUserType::ADMIN)
@@ -156,6 +157,7 @@ class AgencyUserController extends Controller
         if ($isSystemAdmin) {
             if (Auth::guard('web')->user()->user_type_id != UserType::ADMIN)
                 return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
         } elseif ($isAgencyAdmin) {
             $caller = Auth::guard('agency')->user();
             if ($caller->agency_user_type_id != AgencyUserType::ADMIN)
