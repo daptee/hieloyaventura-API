@@ -41,6 +41,16 @@
             font-weight: 700;
             letter-spacing: 4px;
             color: #3686C3;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-break: break-all;
+        }
+        @media only screen and (max-width: 480px) {
+            .password-box {
+                font-size: 18px;
+                letter-spacing: 2px;
+                padding: 14px 16px;
+            }
         }
         .notice-box {
             background-color: #fff8e1;
@@ -147,11 +157,7 @@
                 <a href="https://www.facebook.com/hieloyaventura" target="_blank">Facebook</a>
                 <a href="https://www.youtube.com/hieloyaventura" target="_blank">YouTube</a>
             </div>
-            <p class="footer-text">
-                El uso de nuestro servicio y sitio web está sujeto a nuestros<br>
-                <a href="https://agencias.hieloyaventura.com/agencias-terminos-y-condiciones.pdf" class="footer-link">Términos de uso y Política de privacidad.</a>
-            </p>
-            <a href="https://www.hieloyaventura.com.ar" class="footer-site">www.hieloyaventura.com.ar</a>
+            <a href="https://www.hieloyaventura.com" class="footer-site">www.hieloyaventura.com</a>
             <p class="footer-dev">Desarrollado por <strong>Daptee</strong></p>
         </div>
 
