@@ -29,8 +29,8 @@ class AdminOrAgencyMiddleware
         } catch (TokenInvalidException $e) {
             return response()->json(['message' => 'Token is Invalid'], 401);
         } catch (JWTException $e) {
-            // No hay token en el request
-            return response()->json(['message' => 'Authorization Token not found'], 401);
+            // Puede ser token de agencia o simplemente no hay token.
+            // Se intenta con el guard agency antes de devolver 401.
         } catch (Exception $e) {
             // El token es válido pero el usuario no existe en la tabla users.
             // Puede ser un token de agencia; se intenta con el guard agency.
