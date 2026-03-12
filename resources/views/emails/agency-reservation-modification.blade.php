@@ -209,11 +209,7 @@
                 <a href="https://www.facebook.com/hieloyaventura" target="_blank">Facebook</a>
                 <a href="https://www.youtube.com/hieloyaventura" target="_blank">YouTube</a>
             </div>
-            <p class="footer-text">
-                El uso de nuestro servicio y sitio web está sujeto a nuestros<br>
-                <a href="https://agencias.hieloyaventura.com/agencias-terminos-y-condiciones.pdf" class="footer-link">Términos de uso y Política de privacidad.</a>
-            </p>
-            <a href="https://www.hieloyaventura.com.ar" class="footer-site">www.hieloyaventura.com.ar</a>
+            <a href="https://www.hieloyaventura.com" class="footer-site">www.hieloyaventura.com</a>
             <p class="footer-dev">Desarrollado por <strong>Daptee</strong></p>
         </div>
 

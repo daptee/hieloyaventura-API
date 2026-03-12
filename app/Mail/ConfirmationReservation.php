@@ -16,16 +16,18 @@ class ConfirmationReservation extends Mailable
     public $agency_name;
     public $reservation_name;
     public $number_of_passengers;
+    public $source;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data, $request)
+    public function __construct($data, $request, $source = 'portal')
     {
         $this->data = $data;
         $this->request = $request;
+        $this->source = $source;
         $this->agency_name = $request->agency_name ?? ($data->agency_name ?? null);
         // Determine reservation name (prefer request->pax for agency flow)
         $this->reservation_name = $request->pax ?? $request->reservation_name ?? ($data->contact_data->name ?? null);
