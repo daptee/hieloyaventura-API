@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class BotDetection
@@ -55,7 +56,7 @@ class BotDetection
         foreach ($this->knownBotPatterns as $pattern) {
             if (str_contains($ua, $pattern)) {
                 $this->log($request, "bot conocido: {$pattern}", 'warning');
-                return $next($request);
+                return response()->json(['message' => 'Forbidden'], 403);
             }
         }
 
@@ -88,8 +89,14 @@ class BotDetection
             'timestamp'  => now()->toDateTimeString(),
         ]);
 
-        // Email alert solo para bots conocidos (nivel warning)
+        // Email alert solo para bots conocidos (nivel warning), máximo 1 por patrón por hora
         if ($level === 'warning') {
+            $cacheKey = 'bot_alert_' . md5($reason);
+            if (Cache::has($cacheKey)) {
+                return;
+            }
+            Cache::put($cacheKey, true, now()->addHour());
+
             $alertEmails = array_filter(array_map('trim',
                 explode(',', env('SECURITY_ALERT_EMAILS', ''))
             ));
