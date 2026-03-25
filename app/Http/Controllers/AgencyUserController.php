@@ -406,7 +406,20 @@ class AgencyUserController extends Controller
 
     public function active_inactive(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        $isSystemAdmin = Auth::guard('web')->check();
+        $isAgencyAdmin = Auth::guard('agency')->check();
+
+        if ($isSystemAdmin) {
+            if (Auth::guard('web')->user()->user_type_id != UserType::ADMIN)
+                return response(["message" => "El usuario no tiene permisos de ADMIN para realizar esta accion."], 403);
+            if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        } elseif ($isAgencyAdmin) {
+            $caller = Auth::guard('agency')->user();
+            if ($caller->agency_user_type_id != AgencyUserType::ADMIN)
+                return response(["message" => "No tenés permisos para gestionar usuarios."], 403);
+        } else {
+            return response(["message" => "No autorizado."], 401);
+        }
 
         $request->validate([
             "user_id" => ['required', 'integer', Rule::exists('agency_users', 'id')],
@@ -414,6 +427,14 @@ class AgencyUserController extends Controller
         ]);
 
         $user = AgencyUser::find($request->user_id);
+
+        if ($isAgencyAdmin) {
+            if ($user->agency_code != $caller->agency_code)
+                return response(["message" => "No podés editar usuarios de otra agencia."], 403);
+            if ($user->agency_user_type_id == AgencyUserType::ADMIN)
+                return response(["message" => "No podés editar usuarios administradores."], 403);
+        }
+
         $user->active = $request->active;
         $user->save();
 
@@ -803,7 +824,6 @@ class AgencyUserController extends Controller
             }
 
             return response()->json(['message' => 'Mail enviado con éxito'], 200);
-
         } catch (\Throwable $th) {
 
             Log::error($th);
@@ -1065,7 +1085,6 @@ class AgencyUserController extends Controller
             DB::commit();
 
             return response(["message" => "Mail enviado con éxito!"], 200);
-
         } catch (\Throwable $th) {
 
             DB::rollBack();
@@ -1430,4 +1449,3 @@ class AgencyUserController extends Controller
         ]);
     }
 }
-

@@ -111,7 +111,6 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
     Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
-    Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive']);
     Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
     Route::post('users/emergency-password-reset', [UserController::class, 'emergency_password_reset']);
 
@@ -297,6 +296,7 @@ Route::get('agency/users', [AgencyUserController::class, 'index'])->middleware([
 Route::get('agency/users/seller/{agency_code}', [AgencyUserController::class, 'get_users_seller'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/users/types', [AgencyUserController::class, 'types_user_agency'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/users/filter/code', [AgencyUserController::class, 'filter_code'])->middleware(['jwt.admin_or_agency', 'audit.log']);
+Route::post('agency/users/active_inactive', [AgencyUserController::class, 'active_inactive'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/modules', [AgencyModuleController::class, 'index'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('agency/reservations/path_file', [UserReservationController::class, 'path_pdf_reservation_agency'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 
