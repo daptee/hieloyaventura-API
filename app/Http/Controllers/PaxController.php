@@ -145,7 +145,19 @@ class PaxController extends Controller
             DB::commit();
 
             try {
-                Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));
+                Mail::to($mailTo)->send(new MailUserReservation(
+                    $mailTo,
+                    $pathReservationPdf['pathToSavePdf'],
+                    $is_bigice,
+                    $hash_reservation_number,
+                    $reservation_number,
+                    $excurtion_name,
+                    $userReservation->language_id,
+                    $userReservation,
+                    $request->payment_method ?? null,
+                    $request->installments ?? null,
+                    $request->installment_surcharge ?? null
+                ));
                 // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
             } catch (Exception $error) {
                 Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()], true));
