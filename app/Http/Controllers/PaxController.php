@@ -159,9 +159,9 @@ class PaxController extends Controller
                     $request->installment_surcharge ?? null
                 ));
                 // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-            } catch (Exception $error) {
+            } catch (\Throwable $error) {
                 Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()], true));
-                return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
+                return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 500);
             }
             // });
 

@@ -253,19 +253,31 @@
 
             <table class="data-table">
                 @if($userReservation)
+                @php
+                $excurtionName = optional(optional($userReservation)->excurtion)->name ?? $excurtion_name ?? '-';
+                $dateValue = !empty($userReservation->date)
+                ? (method_exists($userReservation->date, 'format') ? $userReservation->date->format('d/m/Y') : $userReservation->date)
+                : '-';
+                $turnValue = !empty($userReservation->turn)
+                ? (method_exists($userReservation->turn, 'format') ? $userReservation->turn->format('H:i') : $userReservation->turn)
+                : null;
+                $paxsCount = isset($userReservation->paxes) && is_countable($userReservation->paxes)
+                ? count($userReservation->paxes)
+                : 0;
+                @endphp
                 <tr>
                     <td class="label">Nro. de reserva:</td>
                     <td class="value">{{ $userReservation->reservation_number ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="label">Excursión:</td>
-                    <td class="value">{{ $userReservation->excurtion->name ?? $excurtion_name ?? '-' }}</td>
+                    <td class="value">{{ $excurtionName }}</td>
                 </tr>
                 <tr>
                     <td class="label">Fecha y hora:</td>
                     <td class="value">
-                        {{ isset($userReservation->date) ? $userReservation->date->format('d/m/Y') : '-' }}
-                        @if($userReservation->turn) – {{ $userReservation->turn->format('H:i') }}hs @endif
+                        {{ $dateValue }}
+                        @if($turnValue) – {{ $turnValue }}hs @endif
                     </td>
                 </tr>
                 <tr>
@@ -278,7 +290,7 @@
                 </tr>
                 <tr>
                     <td class="label">Pasajeros:</td>
-                    <td class="value">{{ $userReservation->paxes->count() ?: '-' }}</td>
+                    <td class="value">{{ $paxsCount ?: '-' }}</td>
                 </tr>
                 @endif
                 @if($payment_method)
