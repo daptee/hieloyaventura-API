@@ -117,6 +117,8 @@ class PaxController extends Controller
             } else {
                 Log::error("createPdf returned invalid result in PaxController::store", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
                 $userReservation->pdf = null;
+                $pdfError = is_array($pathReservationPdf) ? ($pathReservationPdf['error'] ?? null) : null;
+                throw new Exception($pdfError ?: 'No se pudo generar el PDF de reserva. Verifique archivos base de PDF.');
             }
             $userReservation->save();
 
@@ -244,6 +246,8 @@ class PaxController extends Controller
                 } else {
                     Log::error("createPdf returned invalid result in PaxController::store_type_agency", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
                     $userReservation->pdf = null;
+                    $pdfError = is_array($pathReservationPdf) ? ($pathReservationPdf['error'] ?? null) : null;
+                    throw new Exception($pdfError ?: 'No se pudo generar el PDF de reserva para agencia. Verifique archivos base de PDF.');
                 }
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
@@ -639,8 +643,12 @@ class PaxController extends Controller
                 'urlToSave' => $urlToSave,
                 'pathToSavePdf' => $pathToSavePdf
             ];
-        } catch (Exception $error) {
+        } catch (\Throwable $error) {
             Log::debug(print_r(["Error al crear PDF, detalle: " . $error->getMessage(), ", nro de reserva: $newUserReservation->reservation_number", $error->getLine()], true));
+            return [
+                'error' => $error->getMessage(),
+                'line' => $error->getLine(),
+            ];
         }
     }
 
