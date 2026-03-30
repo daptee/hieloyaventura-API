@@ -151,7 +151,7 @@ Route::prefix('users_reservations')->controller(UserReservationController::class
     Route::get('/', 'index')->middleware(['jwt.verify', 'audit.log']);
     Route::post('/', 'store');
     Route::get('/{userReservation}', 'show')->middleware(['jwt.verify', 'audit.log']);
-    Route::get('/number/{reservationNumber}', 'getByReservationNumber')->middleware(['jwt.verify', 'audit.log']);
+    Route::get('/number/{reservationNumber}', 'getByReservationNumber');
     Route::get('/number/encrypted/{reservationNumber}', 'getByReservationNumberEncrypted');
     Route::put('/{id}', 'update');
     Route::get('/get/with_filters', 'get_with_filters')->middleware(['jwt.agency', 'audit.log']);
