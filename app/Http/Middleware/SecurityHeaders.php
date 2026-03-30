@@ -29,6 +29,12 @@ class SecurityHeaders
         // Deshabilita features del navegador que no necesita esta API
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 
-        return $response;
+    // Oculta detalles de la infraestructura (previene fingerprinting)
+    $response->headers->remove('Server');
+    $response->headers->remove('X-Powered-By');
+    $response->headers->remove('X-AspNet-Version');
+    $response->headers->set('Server', 'Web Server');
+
+    return $response;
     }
 }
