@@ -29,6 +29,11 @@ class BotDetection
         'nmap',
         'zgrab',
         'go-http-client',   // cliente Go genérico usado frecuentemente en scraping masivo
+        'curl/',            // scanner masivo identificado en logs (185.177.72.x)
+        'python-requests',  // scraper automatizado
+        'python-urllib',    // scraper automatizado
+        'libwww-perl',      // scraper automatizado
+        'okhttp',           // cliente Android usado en scrapers
     ];
 
     /**
@@ -36,12 +41,7 @@ class BotDetection
      * Se loguean con severidad menor.
      */
     protected array $suspiciousPatterns = [
-        'python-requests',
-        'python-urllib',
-        'java/',
-        'curl/',
-        'libwww-perl',
-        'okhttp',
+        'java/',  // puede ser SDK de Android legítimo; solo se loguea
     ];
 
     public function handle(Request $request, Closure $next)
@@ -50,7 +50,7 @@ class BotDetection
 
         if (empty($ua)) {
             $this->log($request, 'sin user-agent', 'warning');
-            return $next($request);
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
         foreach ($this->knownBotPatterns as $pattern) {
