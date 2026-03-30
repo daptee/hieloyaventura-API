@@ -49,20 +49,20 @@ class BotDetection
         $ua = strtolower($request->userAgent() ?? '');
 
         if (empty($ua)) {
-            $this->log($request, 'sin user-agent', 'warning');
+            $this->log($request, 'sin user-agent', 'warning', true);
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
         foreach ($this->knownBotPatterns as $pattern) {
             if (str_contains($ua, $pattern)) {
-                $this->log($request, "bot conocido: {$pattern}", 'warning');
+                $this->log($request, "bot conocido: {$pattern}", 'warning', true);
                 return response()->json(['message' => 'Forbidden'], 403);
             }
         }
 
         foreach ($this->suspiciousPatterns as $pattern) {
             if (str_contains($ua, $pattern)) {
-                $this->log($request, "cliente sospechoso: {$pattern}", 'info');
+                $this->log($request, "cliente sospechoso: {$pattern}", 'info', false);
                 return $next($request);
             }
         }
@@ -70,9 +70,9 @@ class BotDetection
         return $next($request);
     }
 
-    private function log(Request $request, string $reason, string $level): void
+    private function log(Request $request, string $reason, string $level, bool $blocked = true): void
     {
-        $logPath = storage_path('logs/security/bot-detections-' . now()->format('Y-m') . '.log');
+        $logPath = storage_path('logs/security/bot-detections-' . now()->format('Y-m-d') . '.log');
         $logger  = Log::build([
             'driver' => 'single',
             'path'   => $logPath,
@@ -80,13 +80,20 @@ class BotDetection
         ]);
 
         $logger->{$level}('Bot/scraper detectado', [
-            'reason'     => $reason,
-            'ip'         => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'method'     => $request->method(),
-            'path'       => $request->path(),
-            'query'      => $request->query() ?: null,
-            'timestamp'  => now()->toDateTimeString(),
+            'reason'         => $reason,
+            'blocked'        => $blocked,
+            'ip'             => $request->ip(),
+            'x_forwarded_for'=> $request->header('X-Forwarded-For'),
+            'user_agent'     => $request->userAgent(),
+            'method'         => $request->method(),
+            'protocol'       => $request->getScheme(),
+            'host'           => $request->getHost(),
+            'path'           => $request->path(),
+            'query'          => $request->query() ?: null,
+            'referer'        => $request->header('Referer'),
+            'accept'         => $request->header('Accept'),
+            'headers_count'  => count($request->headers->all()),
+            'timestamp'      => now()->toDateTimeString(),
         ]);
 
         // Email alert solo para bots conocidos (nivel warning), máximo 1 por patrón por hora
@@ -97,19 +104,20 @@ class BotDetection
             }
             Cache::put($cacheKey, true, now()->addHour());
 
-            $alertEmails = array_filter(array_map('trim',
+            $alertEmails = array_filter(array_map(
+                'trim',
                 explode(',', env('SECURITY_ALERT_EMAILS', ''))
             ));
 
             if (!empty($alertEmails)) {
                 $subject = "[HyA Security] Bot/scraper detectado";
                 $body    = "Se detectó actividad sospechosa de bot o scraper.\n\n"
-                         . "Razón: " . $reason . "\n"
-                         . "IP: " . $request->ip() . "\n"
-                         . "User-Agent: " . $request->userAgent() . "\n"
-                         . "Método: " . $request->method() . "\n"
-                         . "Path: " . $request->path() . "\n"
-                         . "Timestamp: " . now()->toDateTimeString() . "\n";
+                    . "Razón: " . $reason . "\n"
+                    . "IP: " . $request->ip() . "\n"
+                    . "User-Agent: " . $request->userAgent() . "\n"
+                    . "Método: " . $request->method() . "\n"
+                    . "Path: " . $request->path() . "\n"
+                    . "Timestamp: " . now()->toDateTimeString() . "\n";
 
                 foreach ($alertEmails as $email) {
                     try {
