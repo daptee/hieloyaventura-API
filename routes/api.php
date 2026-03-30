@@ -56,17 +56,30 @@ Route::controller(UserController::class)->group(function () {
     Route::put('new_password', 'updatePassword')->middleware(['jwt.verify', 'audit.log']);
     Route::post('new_password/confirm', 'confirm_password_change')->middleware(['jwt.verify', 'audit.log']);
 });
-Route::get('faqs', [FaqController::class, 'index']);
-Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::get('/{id}', 'show');
-    Route::get('/{id}/{language}', 'showByLanguage');
-    Route::get('/by-external-id/{id}', 'showByExternalId');
+// Rate limiting: 60 requests per minute per IP for public GET endpoints
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('faqs', [FaqController::class, 'index']);
+    Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{id}', 'show');
+        Route::get('/{id}/{language}', 'showByLanguage');
+        Route::get('/by-external-id/{id}', 'showByExternalId');
+    });
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 
 Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
+    // OpenAPI / Swagger Documentation - Protected with JWT
+    // Usuarios autenticados pueden acceder a la documentación completa de la API
+    Route::get('/docs/openapi.json', function () {
+        return response()->file(public_path('docs/openapi.json'), [
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
+    })->middleware('jwt.verify')->name('openapi.spec');
+
+    Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     Route::post('faqs', [FaqController::class, 'store']);
 
     Route::prefix('consults')->controller(ConsultController::class)->group(function () {

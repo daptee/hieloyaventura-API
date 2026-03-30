@@ -20,10 +20,27 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => array_map(
-        'trim',
-        explode(',', env('CORS_ALLOWED_ORIGINS', '*'))
-    ),
+    'allowed_origins' => (function () {
+        $origins = env('CORS_ALLOWED_ORIGINS');
+        
+        // OBLIGATORIO en producción y staging
+        if (in_array(app()->environment(), ['production', 'staging'])) {
+            if (empty($origins)) {
+                throw new \Exception(
+                    'CORS_ALLOWED_ORIGINS está vacío o no configurado. '
+                    . 'En ' . app()->environment() . ' DEBE estar explícitamente en .env. '
+                    . 'Ejemplo: CORS_ALLOWED_ORIGINS=https://hieloyaventura.com,https://admin.hieloyaventura.com'
+                );
+            }
+        }
+        
+        // En desarrollo, si está vacío, permitir *
+        if (empty($origins)) {
+            return ['*'];
+        }
+        
+        return array_map('trim', explode(',', $origins));
+    })(),
 
     'allowed_origins_patterns' => [],
 
