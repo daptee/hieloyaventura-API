@@ -117,6 +117,8 @@ class PaxController extends Controller
             } else {
                 Log::error("createPdf returned invalid result in PaxController::store", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
                 $userReservation->pdf = null;
+                $pdfError = is_array($pathReservationPdf) ? ($pathReservationPdf['error'] ?? null) : null;
+                throw new Exception($pdfError ?: 'No se pudo generar el PDF de reserva. Verifique archivos base de PDF.');
             }
             $userReservation->save();
 
@@ -145,11 +147,23 @@ class PaxController extends Controller
             DB::commit();
 
             try {
-                Mail::to($mailTo)->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));
+                Mail::to($mailTo)->send(new MailUserReservation(
+                    $mailTo,
+                    $pathReservationPdf['pathToSavePdf'],
+                    $is_bigice,
+                    $hash_reservation_number,
+                    $reservation_number,
+                    $excurtion_name,
+                    $userReservation->language_id,
+                    $userReservation,
+                    $request->payment_method ?? null,
+                    $request->installments ?? null,
+                    $request->installment_surcharge ?? null
+                ));
                 // Mail::to("enzo100amarilla@gmail.com")->send(new MailUserReservation($mailTo, $pathReservationPdf['pathToSavePdf'], $is_bigice, $hash_reservation_number, $reservation_number, $excurtion_name, $userReservation->language_id));                        
-            } catch (Exception $error) {
+            } catch (\Throwable $error) {
                 Log::debug(print_r([$error->getMessage() . " error en envio de mail a cliente con voucher", $error->getLine()], true));
-                return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 600);
+                return response(["message" => "error en envio de mail a cliente con voucher", "error" => $error->getMessage()], 500);
             }
             // });
 
@@ -232,6 +246,8 @@ class PaxController extends Controller
                 } else {
                     Log::error("createPdf returned invalid result in PaxController::store_type_agency", ['reservation' => $userReservation->reservation_number, 'result' => $pathReservationPdf]);
                     $userReservation->pdf = null;
+                    $pdfError = is_array($pathReservationPdf) ? ($pathReservationPdf['error'] ?? null) : null;
+                    throw new Exception($pdfError ?: 'No se pudo generar el PDF de reserva para agencia. Verifique archivos base de PDF.');
                 }
                 $userReservation->reservation_status_id = ReservationStatus::COMPLETED;
                 $userReservation->save();
@@ -627,8 +643,12 @@ class PaxController extends Controller
                 'urlToSave' => $urlToSave,
                 'pathToSavePdf' => $pathToSavePdf
             ];
-        } catch (Exception $error) {
+        } catch (\Throwable $error) {
             Log::debug(print_r(["Error al crear PDF, detalle: " . $error->getMessage(), ", nro de reserva: $newUserReservation->reservation_number", $error->getLine()], true));
+            return [
+                'error' => $error->getMessage(),
+                'line' => $error->getLine(),
+            ];
         }
     }
 

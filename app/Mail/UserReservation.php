@@ -18,12 +18,19 @@ class UserReservation extends Mailable
     public $hash_reservation_number;
     public $msg;
     public $msg_is_bigice;
+    public $excurtion_name;
+    public $userReservation;
+    public $payment_method;
+    public $installments;
+    public $installment_surcharge;
+    public $meeting_point;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $pathPdf, $is_bigice, $hash_number, $reservation_number, $excurtion_name, $language_id)
+    public function __construct($email, $pathPdf, $is_bigice, $hash_number, $reservation_number, $excurtion_name, $language_id, $userReservation = null, $payment_method = null, $installments = null, $installment_surcharge = null)
     {
         $this->email   = $email;
         $data_in_language = $this->get_data_in_language($language_id);
@@ -33,6 +40,12 @@ class UserReservation extends Mailable
         $this->bigice = $is_bigice;
         $this->hash_reservation_number = $hash_number;
         $this->subject = $data_in_language['subject'] . " " . $reservation_number;
+        $this->excurtion_name = $excurtion_name;
+        $this->userReservation = $userReservation;
+        $this->payment_method = $payment_method;
+        $this->installments = $installments;
+        $this->installment_surcharge = $installment_surcharge;
+        $this->meeting_point = $userReservation ? $this->defineMeetingPoint($userReservation) : null;
     }
 
     /**
@@ -43,16 +56,33 @@ class UserReservation extends Mailable
     public function build()
     {
         return $this->from('No-responder@hieloyaventura.com', 'Hielo & Aventura')
-                    ->attach($this->pathPdf)
-                    ->replyTo($this->email)
-                    ->subject($this->subject)
-                    ->view('emails.user-reservation')
-                    ->with([
-                        "msg" => $this->msg,
-                        "msg_is_bigice" => $this->msg_is_bigice,
-                        "bigice" => $this->bigice,
-                        "hash_reservation_number" => $this->hash_reservation_number
-                    ]);
+            ->attach($this->pathPdf)
+            ->replyTo($this->email)
+            ->subject($this->subject)
+            ->view('emails.user-reservation')
+            ->with([
+                "msg"                    => $this->msg,
+                "msg_is_bigice"          => $this->msg_is_bigice,
+                "bigice"                 => $this->bigice,
+                "hash_reservation_number" => $this->hash_reservation_number,
+                "excurtion_name"         => $this->excurtion_name,
+                "userReservation"        => $this->userReservation,
+                "payment_method"         => $this->payment_method,
+                "installments"           => $this->installments,
+                "installment_surcharge"  => $this->installment_surcharge,
+                "meeting_point"          => $this->meeting_point,
+            ]);
+    }
+
+    private function defineMeetingPoint($reservation)
+    {
+        if ($reservation->is_transfer) {
+            if (empty($reservation->hotel_name) && $reservation->hotel_id == 225) {
+                return 'Oficina H&A - Av. Libertador N°935';
+            }
+            return $reservation->hotel_name ?? '-';
+        }
+        return 'Puerto "Bajo de las Sombras"';
     }
 
     public function get_data_in_language($language_id)
@@ -84,6 +114,6 @@ class UserReservation extends Mailable
                 break;
         }
 
-        return [ 'message' => $message, 'msg_is_bigice' => $msg_is_bigice, 'subject' => $subject ];
+        return ['message' => $message, 'msg_is_bigice' => $msg_is_bigice, 'subject' => $subject];
     }
 }
