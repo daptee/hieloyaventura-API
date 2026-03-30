@@ -120,7 +120,7 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 });
 
-Route::post('create/log', [LogController::class, 'store_log']);
+Route::post('create/log', [LogController::class, 'store_log'])->middleware('throttle:20,1');
 
 Route::prefix('reservations_status')->controller(ReservationStatusController::class)->group(function () {
     Route::get('/', 'index');
@@ -202,12 +202,13 @@ Route::get('excurtion/{id}/pictures/files', [PictureExcurtionController::class, 
 Route::post('process-cv', function (Request $request) {
     try {
         $request->validate([
-            'nombre_y_apellido' => 'required',
-            'email' => 'required',
+            'nombre_y_apellido' => 'required|string|max:255',
+            'email'             => 'required|email|max:255',
+            'file'              => 'required|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         $cv = $request->file('file');
-        $fileName = time() . '.' . $cv->getClientOriginalExtension();
+        $fileName = time() . '_' . bin2hex(random_bytes(8)) . '.' . $cv->extension();
 
         Storage::putFileAs('public/process-cv', $cv, $fileName);
 
