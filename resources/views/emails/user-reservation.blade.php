@@ -313,9 +313,6 @@
                 <tr>
                     <td class="label">Cuotas:</td>
                     <td class="value">{{ $installments }} {{ $installments == 1 ? 'cuota' : 'cuotas' }}
-                        @if($installment_surcharge)
-                        <span style="color:#c0392b; font-size:13px;">(+{{ $installment_surcharge }}% de recargo)</span>
-                        @endif
                     </td>
                 </tr>
                 @endif
