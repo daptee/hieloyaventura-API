@@ -23,3 +23,7 @@ yarn-error.log
 composer.phar
 hya-db.sql
 /public/reservations
+/docs/seguridad-implementada.md
+/docs/checklist-seguridad-api.md
+/docs/
+/.claude/

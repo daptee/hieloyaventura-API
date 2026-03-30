@@ -83,7 +83,7 @@ class BotDetection
             'reason'         => $reason,
             'blocked'        => $blocked,
             'ip'             => $request->ip(),
-            'x_forwarded_for'=> $request->header('X-Forwarded-For'),
+            'x_forwarded_for' => $request->header('X-Forwarded-For'),
             'user_agent'     => $request->userAgent(),
             'method'         => $request->method(),
             'protocol'       => $request->getScheme(),
