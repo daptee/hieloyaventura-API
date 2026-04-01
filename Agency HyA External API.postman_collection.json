@@ -381,6 +381,36 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Me Agencia (Portal JWT)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_agency}}",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "description": "👤 **Perfil de Agencia autenticada (JWT)**\n\nRetorna la informacion del usuario de agencia autenticado en el portal usando el token JWT.\n\n### Campos esperados en `data.user`\n- Informacion general del usuario\n- `user_type`\n- `modules` (con `agency_module`)\n- `agency`\n- Flags como `password_expired`, `terms_and_conditions` y `can_view_all_sales`",
+        "url": {
+          "raw": "{{base_url}}/api/me",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "me"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
@@ -392,6 +422,11 @@
     {
       "key": "api_key",
       "value": "test-key",
+      "type": "string"
+    },
+    {
+      "key": "jwt_agency",
+      "value": "",
       "type": "string"
     }
   ]

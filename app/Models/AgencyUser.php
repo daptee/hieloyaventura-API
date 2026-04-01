@@ -61,6 +61,11 @@ class AgencyUser extends Authenticatable implements JWTSubject
         return $this->hasMany(AgencyUserModule::class, 'agency_user_id', 'id');
     }
 
+    public function agency()
+    {
+        return $this->hasOne(Agency::class, 'agency_code', 'agency_code');
+    }
+
     public static function getAllDataUser($id)
     {
         return self::with(self::SHOW)->find($id);

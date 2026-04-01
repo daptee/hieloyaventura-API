@@ -68,6 +68,7 @@ Route::middleware('throttle:60,1')->group(function () {
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware(['jwt.admin_or_agency', 'audit.log']);
+Route::get('me', [AuthController::class, 'me_agency'])->middleware(['jwt.agency', 'audit.log']);
 
 Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     // OpenAPI / Swagger Documentation - Protected with JWT
@@ -80,57 +81,58 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     })->middleware('jwt.verify')->name('openapi.spec');
 
     Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
-    Route::post('faqs', [FaqController::class, 'store']);
+        Route::post('faqs', [FaqController::class, 'store']);
 
-    Route::prefix('consults')->controller(ConsultController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/change', 'changeConsultEmail');
-    });
-    Route::prefix('lenguages')->controller(LenguageController::class)->group(function () {
-        Route::get('/', 'index');
-    });
-    Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
-        Route::post('/', 'store');
-        Route::post('/{id}', 'update');
-    });
-    Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
-        Route::post('/', 'store');
-        Route::post('/array', 'storeArray');
-        Route::post('/{id}/excurtion', 'arrayAddToExcurtion');
-        Route::get('/{id}', 'show');
-        Route::put('/{id}', 'update');
-        Route::put('/{id}/array', 'updateArray');
-    });
-    Route::prefix('icons')->controller(ExcurtionController::class)->group(function () {
-        Route::post('/', 'store');
-        Route::post('/{id}', 'update');
-    });
-    Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-    });
-    Route::prefix('nationalities')->controller(LenguageController::class)->group(function () {
-        Route::get('/', 'index');
-    });
-    Route::prefix('users')->controller(UserController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::get('/get_all/with_out_filters', 'get_all_with_out_filters');
-        Route::post('/', 'store');
-        // Route::post('/create/admin', 'store_admin');
-        Route::post('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-        Route::put('/{id}/admin', 'update_admin');
-    });
-    // Route::get('send-email-pdf', [PDFController::class, 'index']);
+        Route::prefix('consults')->controller(ConsultController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/change', 'changeConsultEmail');
+        });
+        Route::prefix('lenguages')->controller(LenguageController::class)->group(function () {
+            Route::get('/', 'index');
+        });
+        Route::prefix('excurtions')->controller(ExcurtionController::class)->group(function () {
+            Route::post('/', 'store');
+            Route::post('/{id}', 'update');
+        });
+        Route::prefix('characteristics')->controller(CharacteristicController::class)->group(function () {
+            Route::post('/', 'store');
+            Route::post('/array', 'storeArray');
+            Route::post('/{id}/excurtion', 'arrayAddToExcurtion');
+            Route::get('/{id}', 'show');
+            Route::put('/{id}', 'update');
+            Route::put('/{id}/array', 'updateArray');
+        });
+        Route::prefix('icons')->controller(ExcurtionController::class)->group(function () {
+            Route::post('/', 'store');
+            Route::post('/{id}', 'update');
+        });
+        Route::prefix('characteristics_types')->controller(CharacteristicTypeController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+        });
+        Route::prefix('nationalities')->controller(LenguageController::class)->group(function () {
+            Route::get('/', 'index');
+        });
+        Route::prefix('users')->controller(UserController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::get('/get_all/with_out_filters', 'get_all_with_out_filters');
+            Route::post('/', 'store');
+            // Route::post('/create/admin', 'store_admin');
+            Route::post('/{id}', 'update');
+            Route::delete('/{id}', 'destroy');
+            Route::put('/{id}/admin', 'update_admin');
+        });
+        // Route::get('send-email-pdf', [PDFController::class, 'index']);
 
-    Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
-    Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
-    Route::post('users/emergency-password-reset', [UserController::class, 'emergency_password_reset']);
+        Route::get('agency/users/no_admin/{agency_code}', [AgencyUserController::class, 'get_users_no_admin']);
+        Route::post('agency/users/emergency-password-reset', [AgencyUserController::class, 'emergency_password_reset']);
+        Route::post('users/emergency-password-reset', [UserController::class, 'emergency_password_reset']);
 
-    Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
-    Route::post('agencies', [AgencyController::class, 'store']);
-    Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
-    Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
+        Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
+        Route::post('agencies', [AgencyController::class, 'store']);
+        Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
+        Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
+    });
 });
 
 Route::post('create/log', [LogController::class, 'store_log'])->middleware('throttle:20,1');
