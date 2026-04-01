@@ -6,12 +6,13 @@ use App\Mail\AgencyOtpMailable;
 use App\Mail\UserOtpMailable;
 use App\Models\AgencyUser;
 use App\Models\AgencyUserType;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 // use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Log;
 use JWT;
 use App\Services\JwtService;
 use App\Models\User;
@@ -21,15 +22,17 @@ use Faker\Provider\UserAgent;
 use Illuminate\Support\Facades\Session;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class AuthController extends Controller{
+class AuthController extends Controller
+{
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
         $credentials = $request->only('email', 'password');
-        try{
+        try {
             $user = User::where('email', $credentials['email'] ?? '')->get();
 
-            if($user->count() == 0) {
+            if ($user->count() == 0) {
                 $this->logFailedLogin('web', $request, 'email no encontrado');
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
@@ -45,9 +48,8 @@ class AuthController extends Controller{
                 $this->logFailedLogin('web', $request, 'contraseña incorrecta');
                 return response()->json(['message' => 'Usuario y/o clave no válidos.'], 400);
             }
-
-        }catch (JWTException $e) {
-          return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'No fue posible crear el Token de Autenticación '], 500);
         }
 
         // Credenciales correctas — emitir OTP (el token temporal nunca se envía al cliente)
@@ -65,23 +67,25 @@ class AuthController extends Controller{
         ]);
     }
 
-    public function logout(){
-        try{
+    public function logout()
+    {
+        try {
             JWTAuth::invalidate(JWTAuth::getToken());
 
 
             return response()->json(['message' => 'Logout exitoso.']);
-        }catch (JWTException $e) {
+        } catch (JWTException $e) {
 
             return response()->json(['message' => $e->getMessage()])->setstatusCode(500);
-        }catch(Exception $e) {
+        } catch (Exception $e) {
 
             return response()->json(['message' => $e->getMessage()])->setstatusCode(500);
         }
     }
 
 
-    protected function respondWithToken($token,$type_user_id,$id){
+    protected function respondWithToken($token, $type_user_id, $id)
+    {
         $expire_in = config('jwt.ttl');
         // $user  = User::where('email' , $email )->first();
         $user = User::getAllDataUser($type_user_id, $id);
@@ -99,7 +103,8 @@ class AuthController extends Controller{
         ]);
     }
 
-    protected function respondWithTokenAgency($token, $id){
+    protected function respondWithTokenAgency($token, $id)
+    {
         $expire_in = config('jwt.ttl');
         $user = AgencyUser::getAllDataUser($id);
         $data = [
@@ -115,6 +120,25 @@ class AuthController extends Controller{
         ]);
     }
 
+    public function me_agency()
+    {
+        $authenticatedUser = Auth::guard('agency')->user();
+
+        if (!$authenticatedUser) {
+            return response()->json(['message' => 'Authorization Token not found'], 401);
+        }
+
+        $user = AgencyUser::with(array_merge(AgencyUser::SHOW, ['agency']))
+            ->find($authenticatedUser->id);
+
+        return response()->json([
+            'message' => 'Información del usuario obtenida con éxito.',
+            'data' => [
+                'user' => $user,
+            ],
+        ]);
+    }
+
     public function login_admin(Request $request)
     {
         $request->validate([
@@ -124,7 +148,7 @@ class AuthController extends Controller{
 
         $user_to_validate = User::where('email', $request->email)->first();
 
-        if(!isset($user_to_validate) || $user_to_validate->user_type_id == UserType::CLIENTE) {
+        if (!isset($user_to_validate) || $user_to_validate->user_type_id == UserType::CLIENTE) {
             $this->logFailedLogin('admin', $request, 'email no encontrado o usuario no admin');
             return response()->json(['message' => 'Email no existente o usuario no admin.'], 400);
         }
@@ -218,8 +242,8 @@ class AuthController extends Controller{
         ]);
 
         $user = AgencyUser::where('email', $request->email)
-                          ->where('active', 1)
-                          ->first();
+            ->where('active', 1)
+            ->first();
 
         if (!$user || !$user->otp_code || !$user->otp_expires_at) {
             return response()->json(['message' => 'Código inválido o expirado.'], 400);

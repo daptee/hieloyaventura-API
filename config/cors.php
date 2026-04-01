@@ -22,13 +22,14 @@ return [
 
     'allowed_origins' => (function () {
         $origins = env('CORS_ALLOWED_ORIGINS');
+        $appEnv = env('APP_ENV', 'production');
 
         // OBLIGATORIO en producción y staging
-        if (in_array(app()->environment(), ['production', 'staging'])) {
+        if (in_array($appEnv, ['production', 'staging'])) {
             if (empty($origins)) {
                 throw new \Exception(
                     'CORS_ALLOWED_ORIGINS está vacío o no configurado. '
-                        . 'En ' . app()->environment() . ' DEBE estar explícitamente en .env. '
+                        . 'En ' . $appEnv . ' DEBE estar explícitamente en .env. '
                         . 'Ejemplo: CORS_ALLOWED_ORIGINS=https://hieloyaventura.com,https://admin.hieloyaventura.com'
                 );
             }
