@@ -143,8 +143,12 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
     });
 });
 
-// Marcar notificación como leída (portal agencias — etapa 2)
-Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->middleware(['jwt.agency', 'audit.log']);
+// Notificaciones — portal agencias
+Route::prefix('agency/notifications')->middleware(['jwt.agency', 'audit.log'])->controller(NotificationController::class)->group(function () {
+    Route::get('/', 'agencyIndex');
+    Route::get('/{id}', 'agencyShow');
+    Route::post('/{id}/read', 'markAsRead');
+});
 
 Route::post('create/log', [LogController::class, 'store_log'])->middleware('throttle:20,1');
 

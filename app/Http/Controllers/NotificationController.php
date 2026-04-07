@@ -11,6 +11,7 @@ use App\Models\NotificationAgency;
 use App\Models\NotificationRead;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
@@ -213,6 +214,105 @@ class NotificationController extends Controller
         ]);
 
         return response(['message' => 'Notificación marcada como leída.']);
+    }
+
+    // -------------------------------------------------------------------------
+    // Endpoints para portal de agencias
+    // -------------------------------------------------------------------------
+
+    /**
+     * GET /api/agency/notifications
+     * Listado paginado de notificaciones para el usuario de agencia autenticado.
+     *
+     * Query params:
+     *   unread  bool  1 = solo no leídas, 0 u omitido = todas
+     *   page    int   Página (default: 1)
+     *
+     * Ordenamiento: no leídas primero, luego más nueva a más vieja.
+     * Cada item retorna: id, title, preview, created_at, read (bool), read_at.
+     */
+    public function agencyIndex(Request $request)
+    {
+        $agencyUser = Auth::guard('agency')->user();
+
+        $query = Notification::query()
+            ->select('notifications.*', 'notification_reads.read_at')
+            ->leftJoin('notification_reads', function ($join) use ($agencyUser) {
+                $join->on('notification_reads.notification_id', '=', 'notifications.id')
+                     ->where('notification_reads.agency_user_id', $agencyUser->id);
+            })
+            // Filtro por tipo de destinatario: vendedores/comerciales no ven las de solo admins
+            ->where(function ($q) use ($agencyUser) {
+                $q->where('notifications.recipients_type', 'all');
+                if ($agencyUser->agency_user_type_id === AgencyUserType::ADMIN) {
+                    $q->orWhere('notifications.recipients_type', 'admins');
+                }
+            })
+            // Filtro por agencia destinataria
+            ->where(function ($q) use ($agencyUser) {
+                $q->where('notifications.send_to_all_agencies', 1)
+                  ->orWhereExists(function ($sub) use ($agencyUser) {
+                      $sub->select(DB::raw(1))
+                          ->from('notification_agencies')
+                          ->whereColumn('notification_agencies.notification_id', 'notifications.id')
+                          ->where('notification_agencies.agency_code', $agencyUser->agency_code);
+                  });
+            })
+            // Filtro opcional: solo no leídas
+            ->when($request->unread, fn($q) => $q->whereNull('notification_reads.read_at'))
+            // No leídas primero (read_at IS NULL = 0 va antes que 1), luego más nueva
+            ->orderByRaw('(notification_reads.read_at IS NOT NULL) ASC')
+            ->orderBy('notifications.created_at', 'desc');
+
+        $total          = $query->count();
+        $total_per_page = 30;
+        $paginated      = $query->paginate($total_per_page);
+        $current_page   = $paginated->currentPage();
+        $last_page      = $paginated->lastPage();
+
+        $notifications = $paginated->getCollection()->map(function ($row) {
+            return [
+                'id'         => $row->id,
+                'title'      => $row->title,
+                'preview'    => $this->buildPreview($row->body),
+                'created_at' => $row->created_at,
+                'read'       => !is_null($row->read_at),
+                'read_at'    => $row->read_at,
+            ];
+        });
+
+        return response(compact('notifications', 'total', 'total_per_page', 'current_page', 'last_page'));
+    }
+
+    /**
+     * GET /api/agency/notifications/{id}
+     * Detalle de una notificación para el usuario de agencia autenticado.
+     * Retorna: id, title, body (HTML completo), created_at, read, read_at.
+     */
+    public function agencyShow(int $id)
+    {
+        $agencyUser = Auth::guard('agency')->user();
+
+        $notification = Notification::findOrFail($id);
+
+        if (!$this->notificationBelongsToUser($notification, $agencyUser)) {
+            return response(['message' => 'No tiene acceso a esta notificación.'], 403);
+        }
+
+        $read = NotificationRead::where('notification_id', $notification->id)
+            ->where('agency_user_id', $agencyUser->id)
+            ->first();
+
+        return response([
+            'notification' => [
+                'id'         => $notification->id,
+                'title'      => $notification->title,
+                'body'       => $notification->body,
+                'created_at' => $notification->created_at,
+                'read'       => !is_null($read),
+                'read_at'    => $read ? $read->read_at : null,
+            ],
+        ]);
     }
 
     // -------------------------------------------------------------------------
