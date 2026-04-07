@@ -15,4 +15,5 @@ class Module extends Model
     const AGENCIAS = 4;
     const EXCURSIONES = 5;
     const RESERVAS_AGENCIAS = 6;
+    const NOTIFICACIONES = 7;
 }

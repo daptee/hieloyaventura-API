@@ -5,6 +5,7 @@ use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\AgencyModuleController;
 use App\Http\Controllers\AgencyUserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\CharacteristicTypeController;
 use App\Http\Controllers\ConsultController;
@@ -132,8 +133,18 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
         Route::post('agencies', [AgencyController::class, 'store']);
         Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
         Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
+
+        // Notificaciones — portal administrador
+        Route::prefix('admin/notifications')->controller(NotificationController::class)->group(function () {
+            Route::post('/', 'store');
+            Route::get('/', 'index');
+            Route::get('/{id}', 'show');
+        });
     });
 });
+
+// Marcar notificación como leída (portal agencias — etapa 2)
+Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->middleware(['jwt.agency', 'audit.log']);
 
 Route::post('create/log', [LogController::class, 'store_log'])->middleware('throttle:20,1');
 
