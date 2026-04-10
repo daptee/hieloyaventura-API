@@ -18,7 +18,17 @@ class Agency extends Model
 
     protected $hidden = ['api_key'];
 
+    protected $appends = ['has_apikey'];
+
     protected $casts = [
         'configurations' => 'array'
     ];
+
+    /**
+     * Atributo accesible que indica si la agencia tiene una API key configurada
+     */
+    public function getHasApikeyAttribute()
+    {
+        return !is_null($this->api_key);
+    }
 }

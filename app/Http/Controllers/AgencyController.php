@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AgencyIntegrationWelcome;
 use App\Models\Agency;
+use App\Models\AgencyUserType;
 use App\Models\Module;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -61,7 +62,6 @@ class AgencyController extends Controller
                 'message' => 'Agencia guardada con éxito',
                 'data' => $agency
             ], 200);
-
         } catch (Exception $e) {
             Log::error("Error saving agency: " . $e->getMessage());
             return response()->json([
@@ -73,15 +73,26 @@ class AgencyController extends Controller
 
     public function updateSettings(Request $request)
     {
-        if ($error = $this->requireAdminModule(Module::AGENCIAS)) return $error;
+        $authenticatedUser = Auth::guard('agency')->user();
+
+        if (!$authenticatedUser) {
+            return response()->json(['message' => 'No autorizado'], 401);
+        }
+
+        // Solo ADMIN de agencia puede actualizar configuraciones
+        if ($authenticatedUser->agency_user_type_id != AgencyUserType::ADMIN) {
+            return response()->json(['message' => 'Solo administradores de agencia pueden actualizar configuraciones'], 403);
+        }
 
         try {
             $request->validate([
-                'agency_code' => 'required|string',
                 'email_integration_notification' => 'required|email|max:255',
+            ], [
+                'email_integration_notification.required' => 'El campo email_integration_notification es obligatorio.',
+                'email_integration_notification.email' => 'El valor de email_integration_notification debe ser un email válido.',
             ]);
 
-            $agency = Agency::where('agency_code', $request->agency_code)->first();
+            $agency = Agency::where('agency_code', $authenticatedUser->agency_code)->first();
 
             if (!$agency) {
                 return response()->json(['message' => 'Agencia no encontrada'], 404);
@@ -94,7 +105,6 @@ class AgencyController extends Controller
                 'message' => 'Configuración actualizada con éxito.',
                 'email_integration_notification' => $agency->email_integration_notification,
             ], 200);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'message' => 'Error en las validaciones',

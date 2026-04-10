@@ -131,7 +131,6 @@ Route::group(['middleware' => ['jwt.verify', 'audit.log']], function () {
 
         Route::get('agencies/{agency_code}', [AgencyController::class, 'show']);
         Route::post('agencies', [AgencyController::class, 'store']);
-        Route::put('agency/settings', [AgencyController::class, 'updateSettings']);
         Route::post('admin/send-integration-api-welcome', [AgencyController::class, 'sendIntegrationWelcome']);
 
         // Notificaciones — portal administrador
@@ -341,6 +340,10 @@ Route::post('/mercadopago/notification', [MercadoPagoController::class, 'notific
 Route::put('/agency/users/profile', [AgencyUserController::class, 'update_self'])->middleware(['jwt.agency', 'audit.log']);
 Route::post('/agency/users/profile/confirm-email-change', [AgencyUserController::class, 'confirm_email_change'])->middleware(['jwt.agency', 'audit.log']);
 Route::post('/agency/users/profile/confirm-password-change', [AgencyUserController::class, 'confirm_password_change'])->middleware(['jwt.agency', 'audit.log']);
+
+// Agency settings - only for ADMIN users of their own agency
+Route::put('/agency/settings', [AgencyController::class, 'updateSettings'])->middleware(['jwt.agency', 'audit.log']);
+
 Route::post('/agency/users/seller_load', [AgencyUserController::class, 'user_seller_load'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::get('/agency/users/seller_load/{agency_code}', [AgencyUserController::class, 'get_user_seller_load'])->middleware(['jwt.admin_or_agency', 'audit.log']);
 Route::post('agency/users/terms_and_conditions', [AgencyUserController::class, 'terms_and_conditions'])->middleware(['jwt.agency', 'audit.log']);
