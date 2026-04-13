@@ -36,6 +36,8 @@ class NotificationController extends Controller
             'agencies.*'           => 'string|exists:agencies,agency_code',
         ]);
 
+        $authUser = Auth::user();
+
         DB::beginTransaction();
         try {
             $notification = Notification::create([
@@ -43,6 +45,7 @@ class NotificationController extends Controller
                 'body'                 => $request->body,
                 'recipients_type'      => $request->recipients_type,
                 'send_to_all_agencies' => $request->send_to_all_agencies,
+                'user_id'              => $authUser->id,
             ]);
 
             if (!$request->send_to_all_agencies && !empty($request->agencies)) {
@@ -65,7 +68,19 @@ class NotificationController extends Controller
 
         return response([
             'message'      => 'Notificación creada exitosamente.',
-            'notification' => $notification,
+            'notification' => [
+                'id'         => $notification->id,
+                'title'      => $notification->title,
+                'body'       => $notification->body,
+                'recipients_type' => $notification->recipients_type,
+                'send_to_all_agencies' => $notification->send_to_all_agencies,
+                'created_at' => $notification->created_at,
+                'user'       => [
+                    'id'   => $authUser->id,
+                    'name' => $authUser->name,
+                ],
+                'agencies'   => $notification->agencies,
+            ],
         ], 201);
     }
 
@@ -172,6 +187,13 @@ class NotificationController extends Controller
             ];
         }
 
+        // Obtener los datos del usuario creador
+        $creator = $notification->user;
+        $creatorData = $creator ? [
+            'id'   => $creator->id,
+            'name' => $creator->name,
+        ] : null;
+
         return response([
             'notification' => [
                 'id'                   => $notification->id,
@@ -180,6 +202,7 @@ class NotificationController extends Controller
                 'recipients_type'      => $notification->recipients_type,
                 'send_to_all_agencies' => $notification->send_to_all_agencies,
                 'created_at'           => $notification->created_at,
+                'user'                 => $creatorData,
                 'agencies'             => $agencies_data,
             ],
         ]);
@@ -239,7 +262,7 @@ class NotificationController extends Controller
             ->select('notifications.*', 'notification_reads.read_at')
             ->leftJoin('notification_reads', function ($join) use ($agencyUser) {
                 $join->on('notification_reads.notification_id', '=', 'notifications.id')
-                     ->where('notification_reads.agency_user_id', $agencyUser->id);
+                    ->where('notification_reads.agency_user_id', $agencyUser->id);
             })
             // Filtro por tipo de destinatario: vendedores/comerciales no ven las de solo admins
             ->where(function ($q) use ($agencyUser) {
@@ -251,12 +274,12 @@ class NotificationController extends Controller
             // Filtro por agencia destinataria
             ->where(function ($q) use ($agencyUser) {
                 $q->where('notifications.send_to_all_agencies', 1)
-                  ->orWhereExists(function ($sub) use ($agencyUser) {
-                      $sub->select(DB::raw(1))
-                          ->from('notification_agencies')
-                          ->whereColumn('notification_agencies.notification_id', 'notifications.id')
-                          ->where('notification_agencies.agency_code', $agencyUser->agency_code);
-                  });
+                    ->orWhereExists(function ($sub) use ($agencyUser) {
+                        $sub->select(DB::raw(1))
+                            ->from('notification_agencies')
+                            ->whereColumn('notification_agencies.notification_id', 'notifications.id')
+                            ->where('notification_agencies.agency_code', $agencyUser->agency_code);
+                    });
             })
             // Filtro opcional: solo no leídas
             ->when($request->unread, fn($q) => $q->whereNull('notification_reads.read_at'))
@@ -363,8 +386,10 @@ class NotificationController extends Controller
     private function notificationBelongsToUser(Notification $notification, AgencyUser $agencyUser): bool
     {
         // Verificar tipo de destinatario
-        if ($notification->recipients_type === 'admins'
-            && $agencyUser->agency_user_type_id !== AgencyUserType::ADMIN) {
+        if (
+            $notification->recipients_type === 'admins'
+            && $agencyUser->agency_user_type_id !== AgencyUserType::ADMIN
+        ) {
             return false;
         }
 
