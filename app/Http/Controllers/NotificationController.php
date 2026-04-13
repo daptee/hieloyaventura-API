@@ -99,6 +99,7 @@ class NotificationController extends Controller
         if ($error = $this->requireModule(Module::NOTIFICACIONES)) return $error;
 
         $query = Notification::query()
+            ->with('user')
             ->when($request->q, fn($q) => $q->where('title', 'LIKE', '%' . $request->q . '%'))
             ->when($request->date_from, fn($q) => $q->whereDate('created_at', '>=', $request->date_from))
             ->when($request->date_to, fn($q) => $q->whereDate('created_at', '<=', $request->date_to))
@@ -114,6 +115,12 @@ class NotificationController extends Controller
             $recipients_count = $this->getRecipientsCount($notification);
             $reads_count      = NotificationRead::where('notification_id', $notification->id)->count();
 
+            $creator = $notification->user;
+            $creatorData = $creator ? [
+                'id'   => $creator->id,
+                'name' => $creator->name,
+            ] : null;
+
             return [
                 'id'               => $notification->id,
                 'title'            => $notification->title,
@@ -121,6 +128,7 @@ class NotificationController extends Controller
                 'created_at'       => $notification->created_at,
                 'recipients_count' => $recipients_count,
                 'reads_count'      => $reads_count,
+                'user'             => $creatorData,
             ];
         });
 
