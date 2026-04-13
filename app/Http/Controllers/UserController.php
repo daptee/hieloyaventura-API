@@ -128,20 +128,40 @@ class UserController extends Controller
         }
 
         if ($user->user_type_id == UserType::VENDEDOR) {
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::RESERVAS_WEB;
-            $user_module->save();
+            if ($request->modules) {
+                foreach ($request->modules as $module) {
+                    $user_module = new UserModule();
+                    $user_module->user_id = $user->id;
+                    $user_module->module_id = $module;
+                    $user_module->save();
+                }
+            } else {
+                // Si no se especifican módulos, asignar por defecto
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::RESERVAS_WEB;
+                $user_module->save();
+            }
         }
         if ($user->user_type_id == UserType::EDITOR) {
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::CONFIGURACIONES;
-            $user_module->save();
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::EXCURSIONES;
-            $user_module->save();
+            if ($request->modules) {
+                foreach ($request->modules as $module) {
+                    $user_module = new UserModule();
+                    $user_module->user_id = $user->id;
+                    $user_module->module_id = $module;
+                    $user_module->save();
+                }
+            } else {
+                // Si no se especifican módulos, asignar por defecto
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::CONFIGURACIONES;
+                $user_module->save();
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::EXCURSIONES;
+                $user_module->save();
+            }
         }
 
         $user = User::getAllDataUser($user->user_type_id, $user->id);
@@ -332,21 +352,41 @@ class UserController extends Controller
 
         if ($user->user_type_id == UserType::VENDEDOR) {
             UserModule::where('user_id', $id)->delete();
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::RESERVAS_WEB;
-            $user_module->save();
+            if ($request->modules) {
+                foreach ($request->modules as $module) {
+                    $user_module = new UserModule();
+                    $user_module->user_id = $user->id;
+                    $user_module->module_id = $module;
+                    $user_module->save();
+                }
+            } else {
+                // Si no se especifican módulos, asignar por defecto
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::RESERVAS_WEB;
+                $user_module->save();
+            }
         }
         if ($user->user_type_id == UserType::EDITOR) {
             UserModule::where('user_id', $id)->delete();
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::CONFIGURACIONES;
-            $user_module->save();
-            $user_module = new UserModule();
-            $user_module->user_id = $user->id;
-            $user_module->module_id = Module::EXCURSIONES;
-            $user_module->save();
+            if ($request->modules) {
+                foreach ($request->modules as $module) {
+                    $user_module = new UserModule();
+                    $user_module->user_id = $user->id;
+                    $user_module->module_id = $module;
+                    $user_module->save();
+                }
+            } else {
+                // Si no se especifican módulos, asignar por defecto
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::CONFIGURACIONES;
+                $user_module->save();
+                $user_module = new UserModule();
+                $user_module->user_id = $user->id;
+                $user_module->module_id = Module::EXCURSIONES;
+                $user_module->save();
+            }
         }
 
         $user->save();
