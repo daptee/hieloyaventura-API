@@ -13,6 +13,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -178,6 +180,7 @@ class NotificationController extends Controller
 
             $agencies_data[] = [
                 'agency_code'     => $agencyCode,
+                'agency_name'     => $this->getAgencyNameFromExternalAPI($agencyCode),
                 'total_users'     => $total_users,
                 'read_count'      => $read_count,
                 'read_percentage' => $read_percentage,
@@ -412,5 +415,35 @@ class NotificationController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Obtiene el nombre de una agencia desde la API externa de HyA.
+     * Retorna el nombre de la agencia si la encuentra, o una cadena vacía si falla o no existe.
+     */
+    private function getAgencyNameFromExternalAPI(string $agencyCode): string
+    {
+        try {
+            $appEnvironment = config("app.environment");
+            $apiUrl = ($appEnvironment === "DEV")
+                ? "https://apihya.hieloyaventura.com/apihya_dev"
+                : "https://apihya.hieloyaventura.com/apihya";
+
+            $response = Http::get("$apiUrl/Agencias", [
+                'DESDE' => $agencyCode,
+                'HASTA' => $agencyCode,
+            ]);
+
+            if ($response->successful()) {
+                $agencias = $response->json();
+                if (!empty($agencias) && !empty($agencias[0]['NOMBRE'])) {
+                    return $agencias[0]['NOMBRE'];
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning("getAgencyNameFromExternalAPI: Error obteniendo nombre de agencia $agencyCode: " . $e->getMessage());
+        }
+
+        return '';
     }
 }
