@@ -50,6 +50,6 @@ return [
 
     'wetravel' => [
         'refresh_token' => env('WETRAVEL_REFRESH_TOKEN'),
-        'api_url' => 'https://api.wetravel.com/v2',
+        'api_base_url' => env('WETRAVEL_API_BASE_URL', 'https://api.wetravel.com/v2'),
     ],
 ];

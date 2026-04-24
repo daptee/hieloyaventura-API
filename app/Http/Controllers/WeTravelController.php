@@ -13,13 +13,16 @@ class WeTravelController extends Controller
 {
   private $refresh_token;
   private $access_token;
-  private $api_base_url = 'https://api.wetravel.com/v2';
-  private $token_endpoint = 'https://api.wetravel.com/v2/auth/tokens/access';
-  private $payment_links_endpoint = 'https://api.wetravel.com/v2/payment_links';
+  private $api_base_url;
+  private $token_endpoint;
+  private $payment_links_endpoint;
 
   public function __construct()
   {
     $this->refresh_token = config('services.wetravel.refresh_token');
+    $this->api_base_url = config('services.wetravel.api_base_url');
+    $this->token_endpoint = $this->api_base_url . '/auth/tokens/access';
+    $this->payment_links_endpoint = $this->api_base_url . '/payment_links';
   }
 
   /**
@@ -137,12 +140,12 @@ class WeTravelController extends Controller
           ], 500);
         }
 
-                // Update reservation with payment information
-                $reservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
-                $reservation->payment_id = $payment_link_id;
-                $reservation->payment_method = 'wetravel';
-                $reservation->payment_status = 'pending';
-                $reservation->save();
+        // Update reservation with payment information
+        $reservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
+        $reservation->payment_id = $payment_link_id;
+        $reservation->payment_method = 'wetravel';
+        $reservation->payment_status = 'pending';
+        $reservation->save();
 
         return response()->json([
           'success' => true,
@@ -256,7 +259,7 @@ class WeTravelController extends Controller
 
     try {
       $data = $request->all();
-      
+
       // Extract payment information
       $payment_link_id = $data['payment_link_id'] ?? $data['data']['id'] ?? null;
       $status = $data['status'] ?? $data['data']['status'] ?? null;
@@ -270,8 +273,8 @@ class WeTravelController extends Controller
 
       // Find reservation by payment ID
       $reservation = UserReservation::where('payment_id', $payment_link_id)
-          ->where('payment_method', 'wetravel')
-          ->first();
+        ->where('payment_method', 'wetravel')
+        ->first();
 
       if (!$reservation) {
         Log::channel('wetravel_webhook')->warning('Webhook: Reservation not found for payment link', [
