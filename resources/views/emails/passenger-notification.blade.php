@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,12 @@
     <title>Notificación de Carga de Pasajeros - Hielo & Aventura</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             background-color: #f0f2f5;
             font-family: 'Nunito', Arial, sans-serif;
@@ -15,43 +21,51 @@
             margin: 0;
             padding: 0;
         }
+
         .wrapper {
             max-width: 600px;
             margin: 0 auto;
         }
+
         /* HEADER - Logo */
         .email-header {
             text-align: center;
             padding: 0 0 24px 0;
         }
+
         .email-header img {
             height: 60px;
             width: auto;
         }
+
         /* CARD */
         .card {
             background-color: #ffffff;
             border-radius: 10px;
             padding: 36px 40px;
         }
+
         .greeting {
             font-size: 18px;
             font-weight: 500;
             color: #333333;
             margin-bottom: 6px;
         }
+
         .agency-name {
             font-size: 20px;
             font-weight: 700;
             color: #3686C3;
             margin-bottom: 18px;
         }
+
         .intro-bold {
             font-size: 15px;
             font-weight: 700;
             color: #333333;
             margin-bottom: 10px;
         }
+
         .intro-text {
             font-size: 14px;
             font-weight: 400;
@@ -59,6 +73,7 @@
             margin-bottom: 24px;
             line-height: 1.6;
         }
+
         /* DATA SECTION */
         .section-title {
             font-size: 15px;
@@ -66,11 +81,13 @@
             color: #333333;
             margin-bottom: 8px;
         }
+
         .divider {
             border: none;
             border-top: 1px solid #e0e0e0;
             margin-bottom: 0;
         }
+
         .content-text {
             font-size: 14px;
             color: #555555;
@@ -78,6 +95,7 @@
             line-height: 1.6;
             white-space: pre-line;
         }
+
         /* NOTICE BOX */
         .notice-box {
             background-color: #f5f5f5;
@@ -89,25 +107,30 @@
             font-weight: 400;
             line-height: 1.5;
         }
+
         /* CONTACT */
         .contact-section {
             border-top: 1px solid #e0e0e0;
             padding-top: 20px;
             margin-top: 20px;
         }
+
         .contact-text {
             font-size: 14px;
             color: #555555;
             margin-bottom: 10px;
         }
+
         .contact-detail {
             font-size: 14px;
             color: #333333;
             margin-bottom: 4px;
         }
+
         .contact-detail strong {
             font-weight: 700;
         }
+
         /* THANKS & BUTTON */
         .thanks-section {
             border-top: 1px solid #e0e0e0;
@@ -115,12 +138,14 @@
             padding-top: 24px;
             text-align: center;
         }
+
         .thanks-text {
             font-size: 15px;
             font-weight: 500;
             color: #3686C3;
             margin-bottom: 20px;
         }
+
         .btn-web {
             display: inline-block;
             background-color: #E8B455;
@@ -133,14 +158,17 @@
             padding: 13px 60px;
             border-radius: 30px;
         }
+
         /* FOOTER */
         .email-footer {
             text-align: center;
             padding: 28px 0 10px 0;
         }
+
         .social-links {
             margin-bottom: 14px;
         }
+
         .social-links a {
             display: inline-block;
             margin: 0 8px;
@@ -148,16 +176,19 @@
             text-decoration: none;
             font-size: 13px;
         }
+
         .footer-text {
             font-size: 12px;
             color: #999999;
             margin-bottom: 6px;
             line-height: 1.5;
         }
+
         .footer-link {
             color: #3686C3;
             text-decoration: underline;
         }
+
         .footer-site {
             font-size: 13px;
             font-weight: 700;
@@ -166,20 +197,22 @@
             display: block;
             margin-bottom: 6px;
         }
+
         .footer-dev {
             font-size: 11px;
             color: #bbbbbb;
         }
     </style>
 </head>
+
 <body style="background-color: #f0f2f5; margin: 0; padding: 0;">
     <div class="wrapper" style="background-color: #f0f2f5; padding: 30px 15px;">
 
         {{-- LOGO --}}
         <div class="email-header">
             <img src="{{ config('app.url') }}/images/logo.png"
-                 alt="Hielo & Aventura"
-                 onerror="this.style.display='none'">
+                alt="Hielo & Aventura"
+                onerror="this.style.display='none'">
         </div>
 
         {{-- CARD --}}
@@ -231,4 +264,5 @@
 
     </div>
 </body>
+
 </html>
