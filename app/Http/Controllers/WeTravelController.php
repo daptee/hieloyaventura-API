@@ -76,7 +76,7 @@ class WeTravelController extends Controller
   {
     try {
       $request->validate([
-        'reservation_id' => 'required|exists:user_reservations,id',
+        'reservation_id' => 'required|exists:user_reservations,reservation_number',
         'external_reference' => 'required|string',
         'title' => 'required|string',
         'amount' => 'required|numeric|min:0.01',
@@ -137,12 +137,12 @@ class WeTravelController extends Controller
           ], 500);
         }
 
-// Update reservation with payment information
-                $reservation = UserReservation::find($request->reservation_id);
+                // Update reservation with payment information
+                $reservation = UserReservation::where('reservation_number', $request->reservation_id)->first();
                 $reservation->payment_id = $payment_link_id;
                 $reservation->payment_method = 'wetravel';
                 $reservation->payment_status = 'pending';
-        $reservation->save();
+                $reservation->save();
 
         return response()->json([
           'success' => true,
