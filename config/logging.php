@@ -135,6 +135,20 @@ return [
             'level' => 'debug',
             'days' => 30,
         ],
+
+        'wetravel' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/wetravel.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
+        'wetravel_webhook' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/wetravel_webhook.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 
 ];

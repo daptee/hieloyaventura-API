@@ -47,4 +47,9 @@ return [
     'notifications' => [
         'reservation_groups_email' => env('RESERVATION_GROUPS_EMAIL', 'reservas@hieloyaventura.com'),
     ],
+
+    'wetravel' => [
+        'refresh_token' => env('WETRAVEL_REFRESH_TOKEN'),
+        'api_url' => 'https://api.wetravel.com/v2',
+    ],
 ];

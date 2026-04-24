@@ -20,6 +20,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\MercadoLibreController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\WeTravelController;
 use App\Http\Controllers\PaxController;
 use App\Http\Controllers\PdfCleanupController;
 use App\Http\Controllers\PictureExcurtionController;
@@ -250,6 +251,11 @@ Route::post('process-cv', function (Request $request) {
 });
 
 Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'createPay']);
+
+// WeTravel Payment Integration
+Route::post('payment/wetravel/link', [WeTravelController::class, 'createPaymentLink']);
+Route::get('payment/wetravel/status', [WeTravelController::class, 'getPaymentLinkStatus']);
+Route::post('/wetravel/notification', [WeTravelController::class, 'webhookNotification']);
 
 Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
 
