@@ -137,10 +137,11 @@ class WeTravelController extends Controller
           ], 500);
         }
 
-        // Update reservation with WeTravel payment ID
-        $reservation = UserReservation::find($request->reservation_id);
-        $reservation->wetravel_payment_id = $payment_link_id;
-        $reservation->payment_method = 'wetravel';
+// Update reservation with payment information
+                $reservation = UserReservation::find($request->reservation_id);
+                $reservation->payment_id = $payment_link_id;
+                $reservation->payment_method = 'wetravel';
+                $reservation->payment_status = 'pending';
         $reservation->save();
 
         return response()->json([
@@ -255,15 +256,17 @@ class WeTravelController extends Controller
       $metadata = $data['metadata'] ?? $data['data']['metadata'] ?? null;
 
       if (!$payment_link_id) {
-        Log::channel('wetravel')->error('Webhook: No payment link ID found');
+        Log::channel('wetravel_webhook')->error('Webhook: No payment link ID found');
         return response()->json(['success' => false, 'message' => 'Missing payment link ID'], 400);
       }
 
-      // Find reservation by WeTravel payment ID
-      $reservation = UserReservation::where('wetravel_payment_id', $payment_link_id)->first();
+// Find reservation by payment ID
+            $reservation = UserReservation::where('payment_id', $payment_link_id)
+                ->where('payment_method', 'wetravel')
+                ->first();
 
       if (!$reservation) {
-        Log::channel('wetravel')->warning('Webhook: Reservation not found for payment link', [
+        Log::channel('wetravel_webhook')->warning('Webhook: Reservation not found for payment link', [
           'payment_link_id' => $payment_link_id
         ]);
         return response()->json(['success' => false, 'message' => 'Reservation not found'], 404);
@@ -272,6 +275,7 @@ class WeTravelController extends Controller
       // Update reservation status based on payment status
       if ($paid && $status === 'completed') {
         $reservation->is_paid = true;
+        $reservation->payment_status = 'completed';
         $reservation->save();
 
         // Store status in history
@@ -280,23 +284,23 @@ class WeTravelController extends Controller
           $reservation->id
         );
 
-        Log::channel('wetravel')->info('Webhook: Payment completed', [
+        Log::channel('wetravel_webhook')->info('Webhook: Payment completed', [
           'reservation_id' => $reservation->id,
           'payment_link_id' => $payment_link_id
         ]);
       } else if ($status === 'cancelled' || $status === 'failed') {
-        Log::channel('wetravel')->warning('Webhook: Payment failed or cancelled', [
+        $reservation->payment_status = $status === 'cancelled' ? 'cancelled' : 'failed';
+        $reservation->save();
+
+        Log::channel('wetravel_webhook')->warning('Webhook: Payment failed or cancelled', [
           'reservation_id' => $reservation->id,
           'status' => $status
         ]);
-
-        // Update reservation status to rejected if needed
-        // You might want to change this to a "payment failed" status
       }
 
       return response()->json(['success' => true, 'message' => 'Webhook processed'], 200);
     } catch (Exception $e) {
-      Log::channel('wetravel')->error('Webhook exception', [
+      Log::channel('wetravel_webhook')->error('Webhook exception', [
         'message' => $e->getMessage(),
         'line' => $e->getLine()
       ]);

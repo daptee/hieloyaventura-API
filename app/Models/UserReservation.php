@@ -65,8 +65,9 @@ class UserReservation extends Model
         'internal_closed',
         'reason_cancellation',
         'confirmation_attempts',
-        'wetravel_payment_id',
-        'payment_method'
+        'payment_id',
+        'payment_method',
+        'payment_status'
     ];
 
     public function user(): BelongsTo
