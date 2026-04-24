@@ -252,7 +252,15 @@ class WeTravelController extends Controller
    */
   public function webhookNotification(Request $request)
   {
-        Log::channel('wetravel_webhook')->info('Webhook notification received', ['data' => $request->all()]);
+    Log::channel('wetravel_webhook')->info('Webhook notification received', ['data' => $request->all()]);
+
+    try {
+      $data = $request->all();
+      
+      // Extract payment information
+      $payment_link_id = $data['payment_link_id'] ?? $data['data']['id'] ?? null;
+      $status = $data['status'] ?? $data['data']['status'] ?? null;
+      $paid = $data['paid'] ?? $data['data']['paid'] ?? false;
       $metadata = $data['metadata'] ?? $data['data']['metadata'] ?? null;
 
       if (!$payment_link_id) {
@@ -260,10 +268,10 @@ class WeTravelController extends Controller
         return response()->json(['success' => false, 'message' => 'Missing payment link ID'], 400);
       }
 
-// Find reservation by payment ID
-            $reservation = UserReservation::where('payment_id', $payment_link_id)
-                ->where('payment_method', 'wetravel')
-                ->first();
+      // Find reservation by payment ID
+      $reservation = UserReservation::where('payment_id', $payment_link_id)
+          ->where('payment_method', 'wetravel')
+          ->first();
 
       if (!$reservation) {
         Log::channel('wetravel_webhook')->warning('Webhook: Reservation not found for payment link', [
