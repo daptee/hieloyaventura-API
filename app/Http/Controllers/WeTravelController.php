@@ -139,9 +139,9 @@ class WeTravelController extends Controller
         $data = $response->json();
         Log::channel('wetravel')->info('Payment link created successfully', ['response' => $data]);
 
-        // Extract payment link ID and URL
-        $payment_link_id = $data['data']['id'] ?? $data['id'] ?? null;
-        $payment_link_url = $data['data']['link'] ?? $data['link'] ?? null;
+        // Extract payment link ID and URL from trip object
+        $payment_link_id = $data['data']['trip']['uuid'] ?? null;
+        $payment_link_url = $data['data']['trip']['url'] ?? null;
 
         if (!$payment_link_id || !$payment_link_url) {
           Log::channel('wetravel')->error('Missing payment link data', ['response' => $data]);
