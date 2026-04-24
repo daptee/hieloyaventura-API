@@ -231,6 +231,15 @@
             <hr class="divider">
             <div class="content-text">{{ $data['msg'] ?? '' }}</div>
 
+            {{-- ACTION LINK/BUTTON --}}
+            @if(isset($data['link']) && $data['link'])
+                <div style="text-align: center; margin: 24px 0;">
+                    <a href="{{ $data['link'] }}" class="btn-web" style="display: inline-block;">
+                        {{ $data['link_text'] ?? 'Acceder' }}
+                    </a>
+                </div>
+            @endif
+
             {{-- NOTICE --}}
             <div class="notice-box">
                 Este es un correo automático enviado desde el sistema de Hielo & Aventura. Por favor, no respondas a este correo.
@@ -246,7 +255,6 @@
             {{-- THANKS & BUTTON --}}
             <div class="thanks-section">
                 <p class="thanks-text">¡Muchas gracias por elegir Hielo y Aventura!</p>
-                <a href="{{ config('app.url', 'https://www.hieloyaventura.com') }}" class="btn-web">IR A LA WEB</a>
             </div>
 
         </div>
