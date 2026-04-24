@@ -82,6 +82,8 @@ class WeTravelController extends Controller
         'reservation_id' => 'required|exists:user_reservations,reservation_number',
         'external_reference' => 'required|string',
         'title' => 'required|string',
+        'start_date' => 'required|date_format:Y-m-d',
+        'end_date' => 'nullable|date_format:Y-m-d|after_or_equal:start_date',
         'amount' => 'required|numeric|min:0.01',
         'currency' => 'required|string|in:USD,ARS,EUR',
         'payer_name' => 'required|string',
@@ -98,19 +100,28 @@ class WeTravelController extends Controller
         ], 401);
       }
 
-      // Prepare payment link payload
+      // Use same date for end_date if not provided (single day excursion)
+      $end_date = $request->end_date ?? $request->start_date;
+
+      // Prepare payment link payload according to WeTravel API spec
       $payload = [
         'data' => [
-          'title' => $request->title,
-          'amount' => (float)$request->amount,
-          'currency' => $request->currency,
-          'description' => 'Reservation #' . $request->external_reference,
+          'trip' => [
+            'title' => $request->title,
+            'start_date' => $request->start_date,
+            'end_date' => $end_date,
+            'currency' => $request->currency,
+            'participant_fees' => 'all'
+          ],
+          'pricing' => [
+            'price' => (float)$request->amount
+          ],
           'buyer_email' => $request->payer_email,
           'buyer_name' => $request->payer_name,
           'return_url' => $request->return_url,
+          'external_reference' => $request->external_reference,
           'metadata' => [
-            'reservation_id' => $request->reservation_id,
-            'external_reference' => $request->external_reference,
+            'reservation_number' => $request->reservation_id,
           ]
         ]
       ];
