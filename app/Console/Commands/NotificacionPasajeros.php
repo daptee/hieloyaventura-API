@@ -64,6 +64,8 @@ class NotificacionPasajeros extends Command
                             'email' => $r_10_min_email,
                             'subject' => $this->get_data_language_r_10($r_10_min->language_id, $array_data_function_language)['subject'] . $r_10_min_nroReserva,
                             'msg' => $this->get_data_language_r_10($r_10_min->language_id, $array_data_function_language)['msg'],
+                            'link' => $r_10_min_link,
+                            'link_text' => 'Completar datos de pasajeros',
                         ];
                         Mail::to($r_10_min_email)->send(new NotificacionPasajero($r_10_min_data));
                     } catch (Exception $error) {
@@ -92,6 +94,8 @@ class NotificacionPasajeros extends Command
                             'email' => $r_30_min_email,
                             'subject' => $this->get_data_language_r_30($r_30_min->language_id, $array_data_function_language)['subject'] . $r_30_min_nroReserva,
                             'msg' => $this->get_data_language_r_30($r_30_min->language_id, $array_data_function_language)['msg'],
+                            'link' => $r_30_min_link,
+                            'link_text' => 'Completar datos de pasajeros',
                         ];
                         Mail::to($r_30_min_email)->send(new NotificacionPasajero($r_30_min_data));
                     } catch (Exception $error) {
