@@ -269,20 +269,35 @@ class WeTravelController extends Controller
     try {
       $webhook_data = $request->all();
       
-      // Extract nested data from webhook
-      // WeTravel sends data nested: webhook -> data -> data
+      // Handle both webhook structures:
+      // Structure 1 (documented): { "data": {...}, "type": "..." }
+      // Structure 2 (received): { "data": { "data": {...}, "type": "..." } }
+      
       $payment_data = $webhook_data['data'] ?? [];
-      $inner_data = $payment_data['data'] ?? [];
-      $webhook_type = $payment_data['type'] ?? 'unknown';
+      $webhook_type = $webhook_data['type'] ?? null;
+      
+      // If payment_data contains nested data, unwrap it
+      if (!isset($webhook_data['type']) && isset($payment_data['data']) && isset($payment_data['type'])) {
+        $webhook_type = $payment_data['type'];
+        $payment_data = $payment_data['data'];
+      }
 
       // Extract payment information
-      // Trip UUID is what we stored as payment_link_id
-      $trip_uuid = $inner_data['trip']['uuid'] ?? null;
-      $payment_id = $inner_data['id'] ?? null;
-      $status = $inner_data['status'] ?? null;
+      $trip_uuid = $payment_data['trip']['uuid'] ?? null;
+      $payment_id = $payment_data['id'] ?? null;
+      $status = $payment_data['status'] ?? null;
       
-      // Map WeTravel status to our status (processed = completed)
-      $payment_status = $status === 'processed' ? 'completed' : $status;
+      // Map WeTravel status to our status
+      // pending = payment.created
+      // processed = payment.updated (completed)
+      $payment_status = match($status) {
+        'processed' => 'completed',
+        'pending' => 'pending',
+        'failed' => 'failed',
+        'cancelled' => 'cancelled',
+        'expired' => 'expired',
+        default => $status
+      };
 
       Log::channel('wetravel_webhook')->info('Webhook data extracted', [
         'webhook_type' => $webhook_type,
