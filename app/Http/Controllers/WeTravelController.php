@@ -267,46 +267,56 @@ class WeTravelController extends Controller
     Log::channel('wetravel_webhook')->info('Webhook notification received', ['data' => $request->all()]);
 
     try {
-      $data = $request->all();
+      $webhook_data = $request->all();
+      
+      // Extract nested data from webhook
+      // WeTravel sends data nested: webhook -> data -> data
+      $payment_data = $webhook_data['data'] ?? [];
+      $inner_data = $payment_data['data'] ?? [];
+      $webhook_type = $payment_data['type'] ?? 'unknown';
 
-      // Extract payment information from webhook
-      // WeTravel sends payment_link_id as the trip uuid
-      $payment_link_id = $data['payment_link_id'] ?? $data['data']['id'] ?? $data['id'] ?? null;
-      $status = $data['status'] ?? $data['data']['status'] ?? null;
-      $paid = $data['paid'] ?? $data['data']['paid'] ?? false;
+      // Extract payment information
+      // Trip UUID is what we stored as payment_link_id
+      $trip_uuid = $inner_data['trip']['uuid'] ?? null;
+      $payment_id = $inner_data['id'] ?? null;
+      $status = $inner_data['status'] ?? null;
+      
+      // Map WeTravel status to our status (processed = completed)
+      $payment_status = $status === 'processed' ? 'completed' : $status;
 
-      if (!$payment_link_id) {
-        Log::channel('wetravel_webhook')->error('Webhook: No payment link ID found');
-        return response()->json(['success' => false, 'message' => 'Missing payment link ID'], 400);
+      Log::channel('wetravel_webhook')->info('Webhook data extracted', [
+        'webhook_type' => $webhook_type,
+        'trip_uuid' => $trip_uuid,
+        'payment_id' => $payment_id,
+        'status' => $status,
+        'payment_status' => $payment_status
+      ]);
+
+      if (!$trip_uuid) {
+        Log::channel('wetravel_webhook')->error('Webhook: No trip UUID found');
+        return response()->json(['success' => false, 'message' => 'Missing trip UUID'], 400);
       }
 
-      // Find reservation by payment ID
-      $reservation = UserReservation::where('payment_id', $payment_link_id)
+      // Find reservation by payment_id (which is the trip uuid)
+      $reservation = UserReservation::where('payment_id', $trip_uuid)
         ->where('payment_method', 'wetravel')
         ->first();
 
       if (!$reservation) {
         Log::channel('wetravel_webhook')->warning('Webhook: Reservation not found for payment link', [
-          'payment_link_id' => $payment_link_id
+          'trip_uuid' => $trip_uuid,
+          'payment_id' => $payment_id
         ]);
         return response()->json(['success' => false, 'message' => 'Reservation not found'], 404);
       }
 
-      // Map WeTravel status to internal status
-      $payment_status = 'pending';
-      if ($paid || $status === 'completed' || $status === 'paid' || $status === 'success') {
-        $payment_status = 'completed';
-        $reservation->is_paid = true;
-      } elseif ($status === 'cancelled') {
-        $payment_status = 'cancelled';
-      } elseif ($status === 'failed') {
-        $payment_status = 'failed';
-      } elseif ($status === 'expired') {
-        $payment_status = 'expired';
-      }
-
-      // Update reservation
+      // Update reservation based on payment status
       $reservation->payment_status = $payment_status;
+      
+      if ($payment_status === 'completed') {
+        $reservation->is_paid = true;
+      }
+      
       $reservation->save();
 
       // If payment completed, store in history
@@ -321,10 +331,11 @@ class WeTravelController extends Controller
 
         Log::channel('wetravel_webhook')->info('Webhook: Payment completed', [
           'reservation_id' => $reservation->id,
-          'payment_link_id' => $payment_link_id
+          'trip_uuid' => $trip_uuid,
+          'payment_id' => $payment_id
         ]);
       } else {
-        Log::channel('wetravel_webhook')->warning('Webhook: Payment status updated', [
+        Log::channel('wetravel_webhook')->info('Webhook: Payment status updated', [
           'reservation_id' => $reservation->id,
           'status' => $payment_status
         ]);
