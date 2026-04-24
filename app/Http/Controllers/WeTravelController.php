@@ -268,14 +268,14 @@ class WeTravelController extends Controller
 
     try {
       $webhook_data = $request->all();
-      
+
       // Handle both webhook structures:
       // Structure 1 (documented): { "data": {...}, "type": "..." }
       // Structure 2 (received): { "data": { "data": {...}, "type": "..." } }
-      
+
       $payment_data = $webhook_data['data'] ?? [];
       $webhook_type = $webhook_data['type'] ?? null;
-      
+
       // If payment_data contains nested data, unwrap it
       if (!isset($webhook_data['type']) && isset($payment_data['data']) && isset($payment_data['type'])) {
         $webhook_type = $payment_data['type'];
@@ -286,11 +286,11 @@ class WeTravelController extends Controller
       $trip_uuid = $payment_data['trip']['uuid'] ?? null;
       $payment_id = $payment_data['id'] ?? null;
       $status = $payment_data['status'] ?? null;
-      
+
       // Map WeTravel status to our status
       // pending = payment.created
       // processed = payment.updated (completed)
-      $payment_status = match($status) {
+      $payment_status = match ($status) {
         'processed' => 'completed',
         'pending' => 'pending',
         'failed' => 'failed',
@@ -327,11 +327,11 @@ class WeTravelController extends Controller
 
       // Update reservation based on payment status
       $reservation->payment_status = $payment_status;
-      
+
       if ($payment_status === 'completed') {
         $reservation->is_paid = true;
       }
-      
+
       $reservation->save();
 
       // If payment completed, store in history
