@@ -190,63 +190,61 @@ class WeTravelController extends Controller
   }
 
   /**
-   * Get payment link status
+   * Get payment link status by reservation number
    * 
-   * @param Request $request
+   * @param string $blocking_id (reservation_number)
    * @return \Illuminate\Http\JsonResponse
    */
-  public function getPaymentLinkStatus(Request $request)
+  public function getPaymentLinkStatus($blocking_id)
   {
     try {
-      $request->validate([
-        'payment_link_id' => 'required|string'
+      Log::channel('wetravel')->info('Checking payment status', ['blocking_id' => $blocking_id]);
+
+      // Find reservation by blocking_id (reservation_number)
+      $reservation = UserReservation::where('reservation_number', $blocking_id)->first();
+
+      if (!$reservation) {
+        Log::channel('wetravel')->warning('Reservation not found', ['blocking_id' => $blocking_id]);
+        return response()->json([
+          'success' => false,
+          'message' => 'Reservation not found'
+        ], 404);
+      }
+
+      // Map payment status to frontend-friendly status
+      $status = $reservation->payment_status ?? 'pending';
+      $transaction_id = $reservation->payment_id ?? null;
+
+      // Map WeTravel statuses to frontend statuses
+      $status_map = [
+        'pending' => 'pending',
+        'completed' => 'approved',
+        'paid' => 'paid',
+        'success' => 'success',
+        'failed' => 'failed',
+        'cancelled' => 'cancelled',
+        'expired' => 'expired'
+      ];
+
+      $frontend_status = $status_map[$status] ?? $status;
+
+      Log::channel('wetravel')->info('Payment status retrieved', [
+        'blocking_id' => $blocking_id,
+        'status' => $status,
+        'frontend_status' => $frontend_status
       ]);
 
-      // Get access token
-      $access_token = $this->getAccessToken();
-      if (!$access_token) {
-        return response()->json([
-          'success' => false,
-          'message' => 'Failed to authenticate with WeTravel'
-        ], 401);
-      }
-
-      $payment_link_id = $request->payment_link_id;
-      $url = "{$this->payment_links_endpoint}/{$payment_link_id}";
-
-      Log::channel('wetravel')->info('Fetching payment link status', ['url' => $url]);
-
-      $response = Http::withHeaders([
-        'Authorization' => 'Bearer ' . $access_token,
-        'Accept' => 'application/json',
-      ])->get($url);
-
-      if ($response->successful()) {
-        $data = $response->json();
-        Log::channel('wetravel')->info('Payment link status retrieved', ['response' => $data]);
-
-        $status = $data['data']['status'] ?? $data['status'] ?? 'unknown';
-        $paid = $data['data']['paid'] ?? $data['paid'] ?? false;
-
-        return response()->json([
-          'success' => true,
-          'payment_link_id' => $payment_link_id,
-          'status' => $status,
-          'is_paid' => $paid,
-          'data' => $data
-        ], 200);
-      } else {
-        Log::channel('wetravel')->error('Failed to get payment link status', [
-          'status' => $response->status(),
-          'body' => $response->body()
-        ]);
-        return response()->json([
-          'success' => false,
-          'message' => 'Failed to get payment link status'
-        ], $response->status());
-      }
+      return response()->json([
+        'success' => true,
+        'blocking_id' => $blocking_id,
+        'status' => $frontend_status,
+        'transaction_id' => $transaction_id,
+        'payment_link_id' => $reservation->payment_id,
+        'provider' => 'wetravel',
+        'updated_at' => $reservation->updated_at->toIso8601String()
+      ], 200);
     } catch (Exception $e) {
-      Log::channel('wetravel')->error('Exception getting payment link status', [
+      Log::channel('wetravel')->error('Exception getting payment status', [
         'message' => $e->getMessage(),
         'line' => $e->getLine()
       ]);
@@ -271,11 +269,11 @@ class WeTravelController extends Controller
     try {
       $data = $request->all();
 
-      // Extract payment information
-      $payment_link_id = $data['payment_link_id'] ?? $data['data']['id'] ?? null;
+      // Extract payment information from webhook
+      // WeTravel sends payment_link_id as the trip uuid
+      $payment_link_id = $data['payment_link_id'] ?? $data['data']['id'] ?? $data['id'] ?? null;
       $status = $data['status'] ?? $data['data']['status'] ?? null;
       $paid = $data['paid'] ?? $data['data']['paid'] ?? false;
-      $metadata = $data['metadata'] ?? $data['data']['metadata'] ?? null;
 
       if (!$payment_link_id) {
         Log::channel('wetravel_webhook')->error('Webhook: No payment link ID found');
@@ -294,29 +292,41 @@ class WeTravelController extends Controller
         return response()->json(['success' => false, 'message' => 'Reservation not found'], 404);
       }
 
-      // Update reservation status based on payment status
-      if ($paid && $status === 'completed') {
+      // Map WeTravel status to internal status
+      $payment_status = 'pending';
+      if ($paid || $status === 'completed' || $status === 'paid' || $status === 'success') {
+        $payment_status = 'completed';
         $reservation->is_paid = true;
-        $reservation->payment_status = 'completed';
-        $reservation->save();
+      } elseif ($status === 'cancelled') {
+        $payment_status = 'cancelled';
+      } elseif ($status === 'failed') {
+        $payment_status = 'failed';
+      } elseif ($status === 'expired') {
+        $payment_status = 'expired';
+      }
 
-        // Store status in history
-        UserReservation::store_user_reservation_status_history(
-          $reservation->reservation_status_id,
-          $reservation->id
-        );
+      // Update reservation
+      $reservation->payment_status = $payment_status;
+      $reservation->save();
+
+      // If payment completed, store in history
+      if ($payment_status === 'completed') {
+        // Store status in history if method exists
+        if (method_exists(UserReservation::class, 'store_user_reservation_status_history')) {
+          UserReservation::store_user_reservation_status_history(
+            $reservation->reservation_status_id,
+            $reservation->id
+          );
+        }
 
         Log::channel('wetravel_webhook')->info('Webhook: Payment completed', [
           'reservation_id' => $reservation->id,
           'payment_link_id' => $payment_link_id
         ]);
-      } else if ($status === 'cancelled' || $status === 'failed') {
-        $reservation->payment_status = $status === 'cancelled' ? 'cancelled' : 'failed';
-        $reservation->save();
-
-        Log::channel('wetravel_webhook')->warning('Webhook: Payment failed or cancelled', [
+      } else {
+        Log::channel('wetravel_webhook')->warning('Webhook: Payment status updated', [
           'reservation_id' => $reservation->id,
-          'status' => $status
+          'status' => $payment_status
         ]);
       }
 
@@ -324,7 +334,8 @@ class WeTravelController extends Controller
     } catch (Exception $e) {
       Log::channel('wetravel_webhook')->error('Webhook exception', [
         'message' => $e->getMessage(),
-        'line' => $e->getLine()
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString()
       ]);
 
       return response()->json([

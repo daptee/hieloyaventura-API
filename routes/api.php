@@ -254,7 +254,7 @@ Route::post('payment/mercadopago/preference', [MercadoPagoController::class, 'cr
 
 // WeTravel Payment Integration
 Route::post('payment/wetravel/link', [WeTravelController::class, 'createPaymentLink']);
-Route::get('payment/wetravel/status', [WeTravelController::class, 'getPaymentLinkStatus']);
+Route::get('payment/wetravel/status/{blocking_id}', [WeTravelController::class, 'getPaymentLinkStatus']);
 Route::post('/wetravel/notification', [WeTravelController::class, 'webhookNotification']);
 
 Route::get('diseases/{language_id}', [MedicalRecordController::class, 'diseases']);
